@@ -1,0 +1,11 @@
+﻿<Placement>
+    <Place
+        Parts_EditorGroups = "Content: 5"
+        Parts_EditorGroups_Edit = "Content: 5"
+    />
+    <Match SiteArea="FrontEnd">
+        <Place
+            Parts_EditorGroups_Edit = "Content: 5;Shape=Test"
+        />
+    </Match>
+</Placement>

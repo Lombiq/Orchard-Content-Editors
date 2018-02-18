@@ -1,0 +1,13 @@
+﻿@model Lombiq.EditorGroups.Models.EditorGroupsPart
+
+<fieldset>
+    <legend>@T("EditorGroups")</legend>
+
+    <ol>
+        <li>
+          @Html.LabelFor(model => model.EditorGroupsSerialized, T("Editor Groups Serialized"))
+          @Html.TextBoxFor(model => model.EditorGroupsSerialized, new { @class = "text large" })
+          @Html.Hint(T(""))
+        </li>
+    </ol>
+</fieldset>
