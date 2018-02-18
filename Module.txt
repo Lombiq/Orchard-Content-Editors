@@ -1,10 +1,10 @@
-﻿Name: Lombiq.EditorGroups
-AntiForgery: enabled
-Author: The Orchard Team
-Website: http://orchardproject.net
+﻿AntiForgery: enabled
+Author: Lombiq Technologies Ltd.
+Website: https://lombiq.com
 Version: 1.0
-OrchardVersion: 1.0
-Description: Description for the module
+OrchardVersion: 1.10.2
 Features:
     Lombiq.EditorGroups:
-        Description: Description for feature Lombiq.EditorGroups.
+        Name: Editor Groups
+        Description: Managing advanced content editing processes based on editor groups.
+        Category: Content
