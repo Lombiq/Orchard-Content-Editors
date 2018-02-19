@@ -4,8 +4,8 @@
         Parts_EditorGroups_Edit = "Content: 5"
     />
     <Match SiteArea="FrontEnd">
-        <Place
-            Parts_EditorGroups_Edit = "Content: 5;Shape=Test"
+        <Place 
+            Parts_EditorGroups_Edit = "Content: 5;Shape=Lombiq_EditorGroups"
         />
     </Match>
 </Placement>
