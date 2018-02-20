@@ -1,11 +1,40 @@
 ﻿@using Orchard.ContentManagement
+@using Lombiq.EditorGroups.Constants
+@using Lombiq.EditorGroups.Models
 
-@{ 
+@{
     var contentItem = Model.ContentItem as ContentItem;
+    var editorGroupsPart = contentItem?.As<EditorGroupsPart>();
 
-    if (contentItem == null)
+    if (editorGroupsPart == null)
     {
         return;
     }
+
+    var jsonConverter = WorkContext.Resolve<Orchard.Services.IJsonConverter>();
+
+    string BlockName = "editorFor" + contentItem.ContentType;
 }
-YAYA
+
+@Display.Lombiq_EditorGroups_Resources()
+
+Here comes the magic...
+<div id="@BlockName"></div>
+
+
+@using (Script.Foot())
+{
+    <script type="text/javascript">
+        ; (function ($) {
+            $(function () {
+                $("#@BlockName").lombiq_EditorGroups({
+                    asyncEditorApiUrl: "@Url.Action("GetEditorGroup", "AsyncEditorGroup", new { Area = "Lombiq.EditorGroups" })",
+                    contentType: "@contentItem.ContentType",
+                    contentItemId: @contentItem.Id,
+                    availableEditorGroups: @Html.Raw(jsonConverter.Serialize(editorGroupsPart.AuthorizedEditorGroups.Select(group => group.Name))),
+                    editorGroupLinkElementClass: "js-@ElementNames.AsyncEditorPager.GroupEditorLinkElementName"
+                });
+            });
+        })(jQuery);
+    </script>
+}

@@ -40,20 +40,21 @@ namespace Lombiq.EditorGroups.Controllers
         {
             if (string.IsNullOrEmpty(group)) return ErrorResult(T("Group name cannot be empty."));
 
-            var contentItem = GetItem(contentItemId, contentType);
+            var part = GetEditorGroupsPart(contentItemId, contentType);
 
-            if (!_asyncEditorService.IsAuthorizedToEditGroup(contentItem, group))
+            if (!_asyncEditorService.IsAuthorizedToEditGroup(part, group))
             {
                 return ErrorResult(T("You don't have permission to edit this content item on this editor group."));
             }
 
-            var editorShape = _contentManager.BuildEditor(contentItem, group);
+            var editorShape = _asyncEditorService.BuildAsyncEditorShape(part, group);
+            var editorShapeHtml = _shapeDisplay.Display(editorShape);
 
-            return EditorGroupResult(editorShape);
+            return EditorGroupResult(editorShapeHtml);
         }
 
 
-        private EditorGroupsPart GetItem(int id, string contentType)
+        private EditorGroupsPart GetEditorGroupsPart(int id, string contentType)
         {
             var item = _contentManager.Get(id);
 
@@ -67,13 +68,13 @@ namespace Lombiq.EditorGroups.Controllers
             {
                 Success = false,
                 ErrorMessage = errorMessage.Text,
-            });
+            }, JsonRequestBehavior.AllowGet);
 
         private ActionResult EditorGroupResult(string editorShape) =>
             Json(new EditorGroupsResult
             {
                 Success = true,
                 EditorShape = editorShape,
-            });
+            }, JsonRequestBehavior.AllowGet);
     }
 }

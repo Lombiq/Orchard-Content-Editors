@@ -12,6 +12,11 @@
     var pluginName = "lombiq_EditorGroups";
 
     var defaults = {
+        asyncEditorApiUrl: "",
+        contentType: "",
+        contentItemId: 0,
+        availableEditorGroups: [],
+        editorGroupLinkElementClass: ""
     };
 
     function Plugin(element, options) {
@@ -24,12 +29,47 @@
     }
 
     $.extend(Plugin.prototype, {
+        editorContainerElement: null,
+        
         /**
          * Initializes the Lombiq EditorGroups plugin.
          */
         init: function () {
             var plugin = this;
+
+            if (plugin.settings.availableEditorGroups.length == 0) return;
+
+            plugin.editorContainerElement = plugin.element.find(plugin.settings.editorContainerCssClassName);
+
+            plugin.loadEditor();
         },
+
+        loadEditor: function (group) {
+            var plugin = this;
+
+            if (!group) {
+                group = plugin.settings.availableEditorGroups[0]
+            }
+
+            $.ajax({
+                type: "GET",
+                url: plugin.settings.asyncEditorApiUrl,
+                data: {
+                    contentItemId: plugin.settings.contentItemId,
+                    contentType: plugin.settings.contentType,
+                    group: group
+                },
+                success: function (response) {
+                    if (response.Success) {
+                        console.log("succes - ", response);
+                        plugin.element.html(response.EditorShape);
+                    }
+                    else {
+                        alert(response.ErrorMessage);
+                    }
+                }
+            });
+        }
     });
 
     $.fn[pluginName] = function (options) {

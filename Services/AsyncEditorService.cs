@@ -20,7 +20,7 @@ namespace Lombiq.EditorGroups.Services
         }
 
 
-        public dynamic GetAsyncEditorShape(EditorGroupsPart part, string group)
+        public dynamic BuildAsyncEditorShape(EditorGroupsPart part, string group)
         {
             Argument.ThrowIfNullOrEmpty(group, nameof(group));
 
@@ -34,13 +34,17 @@ namespace Lombiq.EditorGroups.Services
         {
             Argument.ThrowIfNullOrEmpty(group, nameof(group));
 
-            SetCurrentGroup(part, group);
+            //SetCurrentGroup(part, group);
 
             return _authorizer.Authorize(Permissions.EditContent, part);
         }
 
-        public EditorGroupDescriptor GetEditorGroupDescriptor(EditorGroupsPart part, string group) =>
-            part.EditorGroups.FirstOrDefault(editorGroup => editorGroup.Name == group);
+        public EditorGroupDescriptor GetEditorGroupDescriptor(EditorGroupsPart part, string group)
+        {
+            var currentGroup = part.EditorGroups.FirstOrDefault(editorGroup => editorGroup.Name == group);
+
+            return currentGroup;
+        }
 
 
         private void SetCurrentGroup(EditorGroupsPart part, string group) =>

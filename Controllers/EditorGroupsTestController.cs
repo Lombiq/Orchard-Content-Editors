@@ -25,21 +25,18 @@ namespace Lombiq.EditorGroups.Controllers
 
         public ActionResult Index(int id = 0)
         {
-            var testContentItemEditorShape = _contentManager.BuildEditor(GetItem(id, EditorGroupsTestConstants.TestContentTypeName, "Cica"), "Cica");
+            var testContentItemEditorShape = _contentManager.BuildEditor(GetItem(id, EditorGroupsTestConstants.TestContentTypeName));
 
             return View(testContentItemEditorShape);
         }
         
 
 
-        private ContentItem GetItem(int id, string contentType, string editorGroup)
+        private ContentItem GetItem(int id, string contentType)
         {
             var item = _contentManager.Get(id);
 
             item = item ?? _contentManager.New(contentType);
-
-            var part = item.As<EditorGroupsPart>();
-            part.AsyncEditorContext = true;
 
             return item;
         }

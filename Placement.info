@@ -4,8 +4,21 @@
         Parts_EditorGroups_Edit = "Content: 5"
     />
     <Match SiteArea="FrontEnd">
-        <Place 
+        <Place
             Parts_EditorGroups_Edit = "Content: 5;Shape=Lombiq_EditorGroups"
+            Content_SaveButton="-"
+            Content_PublishButton="-"
+            Content_CancelButton="-"
+            Parts_Common_Owner_Edit="-"
+            Parts_Common_Date_Edit="-"
+            Parts_Common_Container_Edit="-"
         />
+
+        <Match ContentType="EditorGroupTest">
+            <Place
+                Parts_Title_Edit="Content:1@TestGroup1"
+                Parts_Common_Body_Edit="Content:1@TestGroup2"
+             />
+        </Match>
     </Match>
 </Placement>

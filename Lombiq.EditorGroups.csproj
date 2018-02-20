@@ -97,6 +97,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants\EditorGroupsTestConstants.cs" />
+    <Compile Include="Constants\ElementNames.cs" />
     <Compile Include="Constants\ResourceNames.cs" />
     <Compile Include="Controllers\AsyncEditorGroupController.cs" />
     <Compile Include="Controllers\EditorGroupsTestController.cs" />
@@ -154,18 +155,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Lombiq.EditorGroups.Resources.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Lombiq.EditorGroups.AsyncGroupEditor.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Lombiq.EditorGroups.Pager.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Lombiq.EditorGroups.Actions.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Lombiq.EditorGroups.Header.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\AsyncEditor.Wrapper.cshtml" />

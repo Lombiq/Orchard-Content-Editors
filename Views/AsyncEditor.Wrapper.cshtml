@@ -1,4 +1,5 @@
 ﻿@using Orchard.ContentManagement
+@using Lombiq.EditorGroups.Constants
 @using Lombiq.EditorGroups.Models
 
 @{
@@ -10,9 +11,9 @@
         return;
     }
 
-    const string BlockName = "asyncEditorWrapper";
+    const string BlockName = ElementNames.AsyncEditorWrapper.BlockName;
     const string TitleElementName = BlockName + "__title";
-    const string EditorElementName = BlockName + "__editor";
+    const string EditorElementName = ElementNames.AsyncEditorWrapper.EditorElementName;
     const string ActionsElementName = BlockName + "__actions";
 }
 
@@ -20,7 +21,7 @@
     <div class="@TitleElementName">
         @Display.AsyncEditor_Title(ContentItem: contentItem)
     </div>
-    <div class="@EditorElementName">
+    <div class="@EditorElementName js-@EditorElementName">
         @Display(Model.Child)
     </div>
     <div class="@ActionsElementName">

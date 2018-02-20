@@ -1,4 +1,5 @@
 ﻿@using Orchard.ContentManagement
+@using Lombiq.EditorGroups.Constants
 @using Lombiq.EditorGroups.Models
 
 @{
@@ -12,10 +13,10 @@
 
     const string BlockName = "asyncEditorActions";
 
-    const string PagerBlockName = "asyncEditorPager";
+    const string PagerBlockName = ElementNames.AsyncEditorPager.BlockName;
     const string ListElementName = PagerBlockName + "__list";
     const string ListItemElementName = PagerBlockName + "__listItem";
-    const string EditorGroupLinkElementName = PagerBlockName + "__groupLink";
+    const string EditorGroupLinkElementName = ElementNames.AsyncEditorPager.GroupEditorLinkElementName;
     const string EditorGroupLinkElementNameWithCurrentModifier = EditorGroupLinkElementName + "_current";
     const string EditorGroupLinkElementNameWithFilledModifier = EditorGroupLinkElementName + "_filled";
     const string EditorGroupLinkElementNameWithUnfilledModifier = EditorGroupLinkElementName + "_unfilled";
