@@ -98,21 +98,28 @@
   <ItemGroup>
     <Compile Include="Constants\EditorGroupsTestConstants.cs" />
     <Compile Include="Constants\ResourceNames.cs" />
-    <Compile Include="Controllers\AsyncGroupEditorController.cs" />
+    <Compile Include="Controllers\AsyncEditorGroupController.cs" />
     <Compile Include="Controllers\EditorGroupsTestController.cs" />
     <Compile Include="Drivers\EditorGroupsPartDriver.cs" />
     <Compile Include="Handlers\EditorGroupsPartHandler.cs" />
     <Compile Include="Migrations\EditorGroupsTestMigrations.cs" />
+    <Compile Include="Models\IContentGroupEditorContext.cs" />
     <Compile Include="Models\EditorGroupDescriptor.cs" />
     <Compile Include="Models\EditorGroupsPart.cs" />
     <Compile Include="Models\EditorGroupsResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Providers\FrontEndEditorShapeTableProvider.cs" />
+    <Compile Include="Providers\AsyncEditorShapeTableProvider.cs" />
     <Compile Include="Providers\SiteAreaPlacementParseMatchProvider.cs" />
+    <Compile Include="Services\AsyncEditorService.cs" />
+    <Compile Include="Services\EditorGroupsProviderAccessor.cs" />
+    <Compile Include="Services\IAsyncEditorService.cs" />
+    <Compile Include="Services\IEditorGroupsProviderAccessor.cs" />
+    <Compile Include="Services\TestEditorGroupsProvider.cs" />
     <Content Include="Scripts\lombiq-editorgroups.js" />
     <Compile Include="ResourceManifest.cs" />
     <Compile Include="Services\AdminSiteAreaProvider.cs" />
     <Compile Include="Services\FrontEndSiteAreaProvider.cs" />
+    <Compile Include="Services\IEditorGroupsProvider.cs" />
     <Compile Include="Services\ISiteAreaProvider.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -138,7 +145,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Placement.info" />
-    <Content Include="Views\EditorTemplates\Parts\EditorGroups.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\EditorGroupsTest\Index.cshtml" />
@@ -148,6 +154,27 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Lombiq.EditorGroups.Resources.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Lombiq.EditorGroups.AsyncGroupEditor.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Lombiq.EditorGroups.Pager.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Lombiq.EditorGroups.Actions.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Lombiq.EditorGroups.Header.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\AsyncEditor.Wrapper.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\AsyncEditor.Title.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\AsyncEditor.Actions.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

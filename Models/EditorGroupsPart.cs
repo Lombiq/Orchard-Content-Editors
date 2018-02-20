@@ -6,11 +6,9 @@ namespace Lombiq.EditorGroups.Models
 {
     public class EditorGroupsPart : ContentPart
     {
-        public string EditorGroupsSerialized
-        {
-            get { return this.Retrieve(x => x.EditorGroupsSerialized); }
-            set { this.Store(x => x.EditorGroupsSerialized, value); }
-        }
+        public bool AsyncEditorContext { get; set; }
+        public EditorGroupDescriptor CurrentEditorGroup { get; set; }
+
 
         public string FilledEditorGroupNamesSerialized
         {
@@ -26,5 +24,9 @@ namespace Lombiq.EditorGroups.Models
         private readonly LazyField<IEnumerable<string>> _filledEditorGroupNames = new LazyField<IEnumerable<string>>();
         internal LazyField<IEnumerable<string>> FilledEditorGroupNamesField => _filledEditorGroupNames;
         public IEnumerable<string> FilledEditorGroupNames => _filledEditorGroupNames.Value;
+
+        private readonly LazyField<IEnumerable<EditorGroupDescriptor>> _authorizedEditorGroups = new LazyField<IEnumerable<EditorGroupDescriptor>>();
+        internal LazyField<IEnumerable<EditorGroupDescriptor>> AuthorizedEditorGroupsField { get { return _authorizedEditorGroups; } }
+        public IEnumerable<EditorGroupDescriptor> AuthorizedEditorGroups { get { return _authorizedEditorGroups.Value; } }
     }
 }

@@ -1,0 +1,29 @@
+﻿@using Orchard.ContentManagement
+@using Lombiq.EditorGroups.Models
+
+@{
+    var contentItem = Model.ContentItem as ContentItem;
+    var editorGroupsPart = contentItem?.As<EditorGroupsPart>();
+
+    if (!(editorGroupsPart?.AsyncEditorContext ?? false))
+    {
+        return;
+    }
+
+    const string BlockName = "asyncEditorWrapper";
+    const string TitleElementName = BlockName + "__title";
+    const string EditorElementName = BlockName + "__editor";
+    const string ActionsElementName = BlockName + "__actions";
+}
+
+<div class="asyncEditorWrapper">
+    <div class="@TitleElementName">
+        @Display.AsyncEditor_Title(ContentItem: contentItem)
+    </div>
+    <div class="@EditorElementName">
+        @Display(Model.Child)
+    </div>
+    <div class="@ActionsElementName">
+        @Display.AsyncEditor_Actions(ContentItem: contentItem)
+    </div>
+</div>

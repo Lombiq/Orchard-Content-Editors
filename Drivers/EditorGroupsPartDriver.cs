@@ -14,13 +14,6 @@ namespace Lombiq.EditorGroups.Drivers
                     Model: part,
                     Prefix: Prefix));
 
-        protected override DriverResult Editor(EditorGroupsPart part, IUpdateModel updater, dynamic shapeHelper)
-        {
-            updater.TryUpdateModel(part, Prefix, null, null);
-
-            return Editor(part, shapeHelper);
-        }
-
         protected override void Exporting(EditorGroupsPart part, ExportContentContext context) => 
             ExportInfoset(part, context);
 
