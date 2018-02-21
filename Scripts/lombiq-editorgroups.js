@@ -15,7 +15,8 @@
         asyncEditorApiUrl: "",
         contentType: "",
         contentItemId: 0,
-        availableEditorGroups: [],
+        processingIndicatorContent: "",
+        editorGroupName: "",
         editorGroupLinkElementClass: ""
     };
 
@@ -37,7 +38,7 @@
         init: function () {
             var plugin = this;
 
-            if (plugin.settings.availableEditorGroups.length == 0) return;
+            if (!plugin.settings.editorGroupName) return;
 
             plugin.editorContainerElement = plugin.element.find(plugin.settings.editorContainerCssClassName);
 
@@ -48,8 +49,11 @@
             var plugin = this;
 
             if (!group) {
-                group = plugin.settings.availableEditorGroups[0]
+                group = plugin.settings.editorGroupName
             }
+
+            plugin.element.empty();
+            plugin.element.html(plugin.settings.processingIndicatorContent);
 
             $.ajax({
                 type: "GET",
@@ -61,6 +65,7 @@
                 },
                 success: function (response) {
                     if (response.Success) {
+                        plugin.element.empty();
                         console.log("succes - ", response);
                         plugin.element.html(response.EditorShape);
                     }

@@ -31,8 +31,9 @@ Here comes the magic...
                     asyncEditorApiUrl: "@Url.Action("GetEditorGroup", "AsyncEditorGroup", new { Area = "Lombiq.EditorGroups" })",
                     contentType: "@contentItem.ContentType",
                     contentItemId: @contentItem.Id,
-                    availableEditorGroups: @Html.Raw(jsonConverter.Serialize(editorGroupsPart.AuthorizedEditorGroups.Select(group => group.Name))),
-                    editorGroupLinkElementClass: "js-@ElementNames.AsyncEditorPager.GroupEditorLinkElementName"
+                    editorGroupName: "@(editorGroupsPart.CurrentEditorGroup?.Name ?? editorGroupsPart.AuthorizedEditorGroups.FirstOrDefault().Name)",
+                    editorGroupLinkElementClass: "js-@ElementNames.AsyncEditorPager.GroupEditorLinkElementName",
+                    processingIndicatorContent: "@T("Loading editor...")"
                 });
             });
         })(jQuery);
