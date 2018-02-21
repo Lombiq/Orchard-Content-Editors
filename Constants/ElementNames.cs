@@ -2,9 +2,9 @@
 {
     public static class ElementNames
     {
-        public class AsyncEditorWrapper
+        public class AsyncEditor
         {
-            public const string BlockName = "asyncEditorWrapper";
+            public const string BlockName = "asyncEditor";
             public const string EditorElementName = BlockName + "__editor";
         }
 

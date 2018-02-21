@@ -47,6 +47,11 @@ namespace Lombiq.EditorGroups.Controllers
                 return ErrorResult(T("You don't have permission to edit this content item on this editor group."));
             }
 
+            if (!_asyncEditorService.EditorGroupAvailable(part, group))
+            {
+                return ErrorResult(T("Editor group is not available. Fill all the previous editor groups first."));
+            }
+
             var editorShape = _asyncEditorService.BuildAsyncEditorShape(part, group);
             var editorShapeHtml = _shapeDisplay.Display(editorShape);
 

@@ -47,6 +47,9 @@ namespace Lombiq.EditorGroups.Handlers
 
                     return jsonConverter.Deserialize<IEnumerable<string>>(part.FilledEditorGroupNamesSerialized);
                 });
+
+                part.UnfilledEditorGroupNamesField.Loader(() => 
+                    part.EditorGroups.Select(editorGroup => editorGroup.Name).Except(part.FilledEditorGroupNames));
             });
         }
     }

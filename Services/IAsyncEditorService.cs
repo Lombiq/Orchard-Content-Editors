@@ -9,5 +9,6 @@ namespace Lombiq.EditorGroups.Services
         bool IsAuthorizedToEditGroup(EditorGroupsPart part, string group);
         dynamic BuildAsyncEditorShape(EditorGroupsPart part, string group);
         EditorGroupDescriptor GetEditorGroupDescriptor(EditorGroupsPart part, string group);
+        bool EditorGroupAvailable(EditorGroupsPart part, string group);
     }
 }

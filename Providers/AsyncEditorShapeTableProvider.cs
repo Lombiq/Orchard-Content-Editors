@@ -29,7 +29,7 @@ namespace Lombiq.EditorGroups.Providers
                         stereotype = "Content";
                     }
 
-                    var asyncEditorShapeType = stereotype + "_Edit_AsyncEditor";
+                    var asyncEditorShapeType = stereotype + "_Edit_Async";
 
                     var editorGroupsPart = contentItem.As<EditorGroupsPart>();
                     if (editorGroupsPart == null || !editorGroupsPart.AsyncEditorContext) return;

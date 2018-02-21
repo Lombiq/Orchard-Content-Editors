@@ -157,13 +157,16 @@
     <Content Include="Views\Lombiq.EditorGroups.Resources.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\AsyncEditor.Wrapper.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\AsyncEditor.Title.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\AsyncEditor.Actions.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Content.Edit.Async.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\AsyncEditor.Pager.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

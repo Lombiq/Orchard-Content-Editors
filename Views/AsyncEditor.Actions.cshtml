@@ -12,45 +12,15 @@
     }
 
     const string BlockName = "asyncEditorActions";
-
-    const string PagerBlockName = ElementNames.AsyncEditorPager.BlockName;
-    const string ListElementName = PagerBlockName + "__list";
-    const string ListItemElementName = PagerBlockName + "__listItem";
-    const string EditorGroupLinkElementName = ElementNames.AsyncEditorPager.GroupEditorLinkElementName;
-    const string EditorGroupLinkElementNameWithCurrentModifier = EditorGroupLinkElementName + "_current";
-    const string EditorGroupLinkElementNameWithFilledModifier = EditorGroupLinkElementName + "_filled";
-    const string EditorGroupLinkElementNameWithUnfilledModifier = EditorGroupLinkElementName + "_unfilled";
+    const string PagerElementName = BlockName + "__pager";
+    const string NavigationButtonsElementName = BlockName + "__navigationButtons";
 }
 
 <div class="@BlockName">
-    <div class="@PagerBlockName">
-        <ol class="@ListElementName">
-            @foreach (var editorGroup in editorGroupsPart.AuthorizedEditorGroups)
-            {
-                <li class="@ListItemElementName">
-                    @if (editorGroup == editorGroupsPart.CurrentEditorGroup)
-                    {
-                        <div class="@EditorGroupLinkElementNameWithCurrentModifier">
-                            @editorGroup.Title
-                        </div>
-                    }
-                    else if (!editorGroupsPart.FilledEditorGroupNames.Contains(editorGroup.Name))
-                    {
-                        <div class="@EditorGroupLinkElementNameWithUnfilledModifier">
-                            @editorGroup.Title
-                        </div>
-                    }
-                    else
-                    {
-                        @Html.ActionLink(
-                            editorGroup.Title,
-                            "GetEditorGroup",
-                            "AsyncEditorGroup",
-                            new { Area = "Lombiq.EditorGroups", ContentItemId = editorGroupsPart.Id, Group = editorGroup.Name, ContentType = editorGroupsPart.ContentItem.ContentType },
-                            new { @class = string.Join(" ", EditorGroupLinkElementNameWithFilledModifier, "js-" + EditorGroupLinkElementNameWithFilledModifier) })
-                    }
-                </li>
-            }
-        </ol>
+    <div class="@PagerElementName">
+        @Display.AsyncEditor_Pager(ContentItem: contentItem)
+    </div>
+    <div class="@NavigationButtonsElementName">
+        Buttons go here...
     </div>
 </div>

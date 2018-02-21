@@ -46,6 +46,15 @@ namespace Lombiq.EditorGroups.Services
             return currentGroup;
         }
 
+        public bool EditorGroupAvailable(EditorGroupsPart part, string group)
+        {
+            if (!part.EditorGroups.Any(editorGroup => editorGroup.Name == group)) return false;
+
+            if (part.FilledEditorGroupNames.Contains(group)) return true;
+
+            return group == part.UnfilledEditorGroupNames.FirstOrDefault();
+        }
+
 
         private void SetCurrentGroup(EditorGroupsPart part, string group) =>
             part.CurrentEditorGroup = GetEditorGroupDescriptor(part, group);
