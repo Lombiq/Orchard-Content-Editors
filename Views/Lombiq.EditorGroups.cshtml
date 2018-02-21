@@ -11,14 +11,11 @@
         return;
     }
 
-    var jsonConverter = WorkContext.Resolve<Orchard.Services.IJsonConverter>();
-
     string BlockName = "editorFor" + contentItem.ContentType;
 }
 
 @Display.Lombiq_EditorGroups_Resources()
 
-Here comes the magic...
 <div id="@BlockName"></div>
 
 
@@ -32,7 +29,7 @@ Here comes the magic...
                     contentType: "@contentItem.ContentType",
                     contentItemId: @contentItem.Id,
                     editorGroupName: "@(editorGroupsPart.CurrentEditorGroup?.Name ?? editorGroupsPart.AuthorizedEditorGroups.FirstOrDefault().Name)",
-                    editorGroupLinkElementClass: "js-@ElementNames.AsyncEditorPager.GroupEditorLinkElementName",
+                    editorGroupLinkElementClass: ".js-@ElementNames.AsyncEditorPager.GroupEditorLinkElementName",
                     processingIndicatorContent: "@T("Loading editor...")"
                 });
             });

@@ -61,12 +61,8 @@ namespace Lombiq.EditorGroups.Services
             return authorizedEditorGroups;
         }
 
-        public EditorGroupDescriptor GetEditorGroupDescriptor(EditorGroupsPart part, string group)
-        {
-            var currentGroup = part.EditorGroups.FirstOrDefault(editorGroup => editorGroup.Name == group);
-
-            return currentGroup;
-        }
+        public EditorGroupDescriptor GetEditorGroupDescriptor(EditorGroupsPart part, string group) =>
+            part.EditorGroups.FirstOrDefault(editorGroup => editorGroup.Name == group);
 
         public bool EditorGroupAvailable(EditorGroupsPart part, string group)
         {

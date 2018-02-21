@@ -40,7 +40,7 @@
 
             if (!plugin.settings.editorGroupName) return;
 
-            plugin.editorContainerElement = plugin.element.find(plugin.settings.editorContainerCssClassName);
+            plugin.editorContainerElement = plugin.element.find(plugin.settings.editorContainerCssClassName).first();
 
             plugin.loadEditor();
         },
@@ -51,8 +51,7 @@
             if (!group) {
                 group = plugin.settings.editorGroupName
             }
-
-            plugin.element.empty();
+            
             plugin.element.html(plugin.settings.processingIndicatorContent);
 
             $.ajax({
@@ -65,12 +64,18 @@
                 },
                 success: function (response) {
                     if (response.Success) {
-                        plugin.element.empty();
                         console.log("succes - ", response);
+                        
                         plugin.element.html(response.EditorShape);
+
+                        plugin.element.find(plugin.settings.editorGroupLinkElementClass).on("click", function () {
+                            var groupName = $(this).attr("data-editorGroupName");
+
+                            if (groupName) plugin.loadEditor(groupName);
+                        });
                     }
                     else {
-                        alert(response.ErrorMessage);
+                        plugin.element.html(response.ErrorMessage);
                     }
                 }
             });

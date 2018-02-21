@@ -5,19 +5,20 @@
 @{
     var contentItem = Model.ContentItem as ContentItem;
     var editorGroupsPart = contentItem?.As<EditorGroupsPart>();
-    
+
     if (!(editorGroupsPart?.AsyncEditorContext ?? false))
     {
         return;
     }
-    
+
     const string BlockName = ElementNames.AsyncEditorPager.BlockName;
     const string ListElementName = BlockName + "__list";
     const string ListItemElementName = BlockName + "__listItem";
+    const string EditorGroupNameElementName = BlockName + "__groupName";
+    const string EditorGroupNameElementNameWithCurrentModifier = EditorGroupNameElementName + "_current";
+    const string EditorGroupNameElementNameWithCompleteModifier = EditorGroupNameElementName + "_complete";
+    const string EditorGroupNameElementNameWithIncompleteModifier = EditorGroupNameElementName + "_incomplete";
     const string EditorGroupLinkElementName = ElementNames.AsyncEditorPager.GroupEditorLinkElementName;
-    const string EditorGroupLinkElementNameWithCurrentModifier = EditorGroupLinkElementName + "_current";
-    const string EditorGroupLinkElementNameWithFilledModifier = EditorGroupLinkElementName + "_filled";
-    const string EditorGroupLinkElementNameWithUnfilledModifier = EditorGroupLinkElementName + "_unfilled";
 }
 
 <div class="@BlockName">
@@ -25,27 +26,25 @@
         @foreach (var editorGroup in editorGroupsPart.AuthorizedEditorGroups)
         {
             <li class="@ListItemElementName">
-                @if (editorGroup == editorGroupsPart.CurrentEditorGroup)
+                @*@if (editorGroup == editorGroupsPart.CurrentEditorGroup)
                 {
-                    <div class="@EditorGroupLinkElementNameWithCurrentModifier">
+                    <div class="@EditorGroupNameElementName @EditorGroupNameElementNameWithCurrentModifier">
                         @editorGroup.Title
                     </div>
                 }
                 else if (!editorGroupsPart.CompleteEditorGroupNames.Contains(editorGroup.Name))
                 {
-                    <div class="@EditorGroupLinkElementNameWithUnfilledModifier">
+                    <div class="@EditorGroupNameElementName @EditorGroupNameElementNameWithIncompleteModifier">
                         @editorGroup.Title
                     </div>
                 }
                 else
-                {
-                    @Html.ActionLink(
-                        editorGroup.Title,
-                        "GetEditorGroup",
-                        "AsyncEditorGroup",
-                        new { Area = "Lombiq.EditorGroups", ContentItemId = editorGroupsPart.Id, Group = editorGroup.Name, ContentType = editorGroupsPart.ContentItem.ContentType },
-                        new { @class = string.Join(" ", EditorGroupLinkElementNameWithFilledModifier, "js-" + EditorGroupLinkElementNameWithFilledModifier) })
-                }
+                {*@
+                    <div class="@EditorGroupNameElementName @EditorGroupNameElementNameWithCompleteModifier js-@EditorGroupLinkElementName"
+                         data-editorGroupName="@editorGroup.Name">
+                        @editorGroup.Title
+                    </div>
+                @*}*@
             </li>
         }
     </ol>
