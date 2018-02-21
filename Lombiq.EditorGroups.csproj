@@ -110,7 +110,7 @@
     <Compile Include="Models\EditorGroupsResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\AsyncEditorShapeTableProvider.cs" />
-    <Compile Include="Providers\SiteAreaPlacementParseMatchProvider.cs" />
+    <Compile Include="Providers\RenderContextPlacementParseMatchProvider.cs" />
     <Compile Include="Services\AsyncEditorService.cs" />
     <Compile Include="Services\EditorGroupsProviderAccessor.cs" />
     <Compile Include="Services\IAsyncEditorService.cs" />
@@ -118,10 +118,10 @@
     <Compile Include="Services\TestEditorGroupsProvider.cs" />
     <Content Include="Scripts\lombiq-editorgroups.js" />
     <Compile Include="ResourceManifest.cs" />
-    <Compile Include="Services\AdminSiteAreaProvider.cs" />
-    <Compile Include="Services\FrontEndSiteAreaProvider.cs" />
+    <Compile Include="Services\AdminRenderContextMatchProvider.cs" />
+    <Compile Include="Services\FrontEndRenderContextMatchProvider.cs" />
     <Compile Include="Services\IEditorGroupsProvider.cs" />
-    <Compile Include="Services\ISiteAreaProvider.cs" />
+    <Compile Include="Services\IRenderContextMatchProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

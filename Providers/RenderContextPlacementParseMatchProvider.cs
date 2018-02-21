@@ -6,22 +6,22 @@ using System.Linq;
 
 namespace Lombiq.EditorGroups.Providers
 {
-    public class SiteAreaPlacementParseMatchProvider : IPlacementParseMatchProvider
+    public class RenderContextPlacementParseMatchProvider : IPlacementParseMatchProvider
     {
-        private readonly IEnumerable<ISiteAreaProvider> _siteAreaProviders;
+        private readonly IEnumerable<IRenderContextMatchProvider> _siteAreaProviders;
 
 
-        public SiteAreaPlacementParseMatchProvider(IEnumerable<ISiteAreaProvider> siteAreaProviders)
+        public RenderContextPlacementParseMatchProvider(IEnumerable<IRenderContextMatchProvider> siteAreaProviders)
         {
             _siteAreaProviders = siteAreaProviders;
         }
 
 
-        public string Key => "SiteArea";
+        public string Key => "RenderContext";
 
         public bool Match(ShapePlacementContext context, string expression) =>
             _siteAreaProviders
                 .FirstOrDefault(siteAreaProvider => 
-                    siteAreaProvider.CanMatch(expression))?.SiteAreaMatched(context) ?? false;
+                    siteAreaProvider.CanMatch(expression))?.MatchRenderContext(context) ?? false;
     }
 }

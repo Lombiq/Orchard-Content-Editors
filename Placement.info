@@ -3,7 +3,7 @@
         Parts_EditorGroups = "Content: 5"
         Parts_EditorGroups_Edit = "Content: 5"
     />
-    <Match SiteArea="FrontEnd">
+    <Match RenderContext="FrontEnd">
         <Place
             Parts_EditorGroups_Edit = "Content: 5;Shape=Lombiq_EditorGroups"
             Content_SaveButton="-"
