@@ -10,10 +10,10 @@ namespace Lombiq.EditorGroups.Models
         public EditorGroupDescriptor CurrentEditorGroup { get; set; }
 
 
-        public string FilledEditorGroupNamesSerialized
+        public string CompleteEditorGroupNamesSerialized
         {
-            get { return this.Retrieve(x => x.FilledEditorGroupNamesSerialized); }
-            set { this.Store(x => x.FilledEditorGroupNamesSerialized, value); }
+            get { return this.Retrieve(x => x.CompleteEditorGroupNamesSerialized); }
+            set { this.Store(x => x.CompleteEditorGroupNamesSerialized, value); }
         }
 
 
@@ -21,13 +21,13 @@ namespace Lombiq.EditorGroups.Models
         internal LazyField<IEnumerable<EditorGroupDescriptor>> EditorGroupsField => _editorGroups;
         public IEnumerable<EditorGroupDescriptor> EditorGroups => _editorGroups.Value;
 
-        private readonly LazyField<IEnumerable<string>> _filledEditorGroupNames = new LazyField<IEnumerable<string>>();
-        internal LazyField<IEnumerable<string>> FilledEditorGroupNamesField => _filledEditorGroupNames;
-        public IEnumerable<string> FilledEditorGroupNames => _filledEditorGroupNames.Value;
+        private readonly LazyField<IEnumerable<string>> _completeEditorGroupNames = new LazyField<IEnumerable<string>>();
+        internal LazyField<IEnumerable<string>> CompleteEditorGroupNamesField => _completeEditorGroupNames;
+        public IEnumerable<string> CompleteEditorGroupNames => _completeEditorGroupNames.Value;
 
-        private readonly LazyField<IEnumerable<string>> _unfilledEditorGroupNames = new LazyField<IEnumerable<string>>();
-        internal LazyField<IEnumerable<string>> UnfilledEditorGroupNamesField { get { return _unfilledEditorGroupNames; } }
-        public IEnumerable<string> UnfilledEditorGroupNames { get { return _unfilledEditorGroupNames.Value; } }
+        private readonly LazyField<IEnumerable<string>> _incompleteEditorGroupNames = new LazyField<IEnumerable<string>>();
+        internal LazyField<IEnumerable<string>> IncompleteEditorGroupNamesField { get { return _incompleteEditorGroupNames; } }
+        public IEnumerable<string> IncompleteEditorGroupNames { get { return _incompleteEditorGroupNames.Value; } }
 
         private readonly LazyField<IEnumerable<EditorGroupDescriptor>> _authorizedEditorGroups = new LazyField<IEnumerable<EditorGroupDescriptor>>();
         internal LazyField<IEnumerable<EditorGroupDescriptor>> AuthorizedEditorGroupsField { get { return _authorizedEditorGroups; } }

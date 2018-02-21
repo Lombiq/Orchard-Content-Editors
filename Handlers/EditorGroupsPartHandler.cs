@@ -38,18 +38,18 @@ namespace Lombiq.EditorGroups.Handlers
                     return authorizedEditorGroups;
                 });
 
-                part.FilledEditorGroupNamesField.Loader(() =>
+                part.CompleteEditorGroupNamesField.Loader(() =>
                 {
-                    if (string.IsNullOrEmpty(part.FilledEditorGroupNamesSerialized))
+                    if (string.IsNullOrEmpty(part.CompleteEditorGroupNamesSerialized))
                     {
                         return Enumerable.Empty<string>();
                     }
 
-                    return jsonConverter.Deserialize<IEnumerable<string>>(part.FilledEditorGroupNamesSerialized);
+                    return jsonConverter.Deserialize<IEnumerable<string>>(part.CompleteEditorGroupNamesSerialized);
                 });
 
-                part.UnfilledEditorGroupNamesField.Loader(() => 
-                    part.EditorGroups.Select(editorGroup => editorGroup.Name).Except(part.FilledEditorGroupNames));
+                part.IncompleteEditorGroupNamesField.Loader(() => 
+                    part.EditorGroups.Select(editorGroup => editorGroup.Name).Except(part.CompleteEditorGroupNames));
             });
         }
     }

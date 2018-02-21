@@ -50,9 +50,9 @@ namespace Lombiq.EditorGroups.Services
         {
             if (!part.EditorGroups.Any(editorGroup => editorGroup.Name == group)) return false;
 
-            if (part.FilledEditorGroupNames.Contains(group)) return true;
+            if (part.CompleteEditorGroupNames.Contains(group)) return true;
 
-            return group == part.UnfilledEditorGroupNames.FirstOrDefault();
+            return group == part.IncompleteEditorGroupNames.FirstOrDefault();
         }
 
 
