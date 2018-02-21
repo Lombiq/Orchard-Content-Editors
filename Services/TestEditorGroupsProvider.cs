@@ -18,12 +18,16 @@ namespace Lombiq.EditorGroups.Services
 
         public bool CanProvideEditorGroups(string contentType) => contentType == EditorGroupsTestConstants.TestContentTypeName;
 
-        public IEnumerable<EditorGroupDescriptor> GetEditorGroups() => 
-            new[]
+        public EditorGroupsSettings GetEditorGroupsSettings() =>
+            new EditorGroupsSettings
             {
-                new EditorGroupDescriptor { Name = "TestGroup1", Title = T("Title").Text },
-                new EditorGroupDescriptor { Name = "TestGroup2", Title = T("Content").Text },
-                new EditorGroupDescriptor { Name = "TestGroup3", Title = T("Extra").Text },
+                EditorGroups = new[]
+                    {
+                        new EditorGroupDescriptor { Name = "TestGroup1", Title = T("Title").Text },
+                        new EditorGroupDescriptor { Name = "TestGroup2", Title = T("Content").Text },
+                        new EditorGroupDescriptor { Name = "TestGroup3", Title = T("Extra").Text },
+                    },
+                UnauthorizedEditorGroupBehavior = UnauthorizedEditorGroupBehavior.AllowEditingUntilFirstUnauthorizedGroup
             };
     }
 }

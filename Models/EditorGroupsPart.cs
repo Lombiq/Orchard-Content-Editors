@@ -17,6 +17,10 @@ namespace Lombiq.EditorGroups.Models
         }
 
 
+        private readonly LazyField<UnauthorizedEditorGroupBehavior> _unauthorizedEditorGroupBehavior = new LazyField<UnauthorizedEditorGroupBehavior>();
+        internal LazyField<UnauthorizedEditorGroupBehavior> UnauthorizedEditorGroupBehaviorField => _unauthorizedEditorGroupBehavior;
+        public UnauthorizedEditorGroupBehavior UnauthorizedEditorGroupBehavior => _unauthorizedEditorGroupBehavior.Value;
+
         private readonly LazyField<IEnumerable<EditorGroupDescriptor>> _editorGroups = new LazyField<IEnumerable<EditorGroupDescriptor>>();
         internal LazyField<IEnumerable<EditorGroupDescriptor>> EditorGroupsField => _editorGroups;
         public IEnumerable<EditorGroupDescriptor> EditorGroups => _editorGroups.Value;
@@ -26,11 +30,11 @@ namespace Lombiq.EditorGroups.Models
         public IEnumerable<string> CompleteEditorGroupNames => _completeEditorGroupNames.Value;
 
         private readonly LazyField<IEnumerable<string>> _incompleteEditorGroupNames = new LazyField<IEnumerable<string>>();
-        internal LazyField<IEnumerable<string>> IncompleteEditorGroupNamesField { get { return _incompleteEditorGroupNames; } }
-        public IEnumerable<string> IncompleteEditorGroupNames { get { return _incompleteEditorGroupNames.Value; } }
+        internal LazyField<IEnumerable<string>> IncompleteEditorGroupNamesField => _incompleteEditorGroupNames;
+        public IEnumerable<string> IncompleteEditorGroupNames => _incompleteEditorGroupNames.Value;
 
         private readonly LazyField<IEnumerable<EditorGroupDescriptor>> _authorizedEditorGroups = new LazyField<IEnumerable<EditorGroupDescriptor>>();
-        internal LazyField<IEnumerable<EditorGroupDescriptor>> AuthorizedEditorGroupsField { get { return _authorizedEditorGroups; } }
-        public IEnumerable<EditorGroupDescriptor> AuthorizedEditorGroups { get { return _authorizedEditorGroups.Value; } }
+        internal LazyField<IEnumerable<EditorGroupDescriptor>> AuthorizedEditorGroupsField => _authorizedEditorGroups;
+        public IEnumerable<EditorGroupDescriptor> AuthorizedEditorGroups => _authorizedEditorGroups.Value;
     }
 }

@@ -2,6 +2,7 @@
 using Lombiq.EditorGroups.Services;
 using Orchard.ContentManagement.Handlers;
 using Orchard.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -16,27 +17,14 @@ namespace Lombiq.EditorGroups.Handlers
         {
             OnActivated<EditorGroupsPart>((context, part) =>
             {
-                part.EditorGroupsField.Loader(() => 
-                {
-                    var provider = editorGroupProvidersAccessor.GetProvider(part.ContentItem.ContentType);
+                var editorGroupsSettingsLazy = new Lazy<EditorGroupsSettings>(() => 
+                    editorGroupProvidersAccessor.GetProvider(part.ContentItem.ContentType).GetEditorGroupsSettings());
 
-                    if (provider == null) return Enumerable.Empty<EditorGroupDescriptor>();
+                part.EditorGroupsField.Loader(() => editorGroupsSettingsLazy.Value.EditorGroups);
 
-                    return provider.GetEditorGroups();
-                });
+                part.UnauthorizedEditorGroupBehaviorField.Loader(() => editorGroupsSettingsLazy.Value.UnauthorizedEditorGroupBehavior);
 
-                part.AuthorizedEditorGroupsField.Loader(() =>
-                {
-                    var authorizedEditorGroups = new List<EditorGroupDescriptor>();
-                    foreach (var editorGroup in part.EditorGroups)
-                    {
-                        if (!asyncEditorService.IsAuthorizedToEditGroup(part, editorGroup.Name)) break;
-
-                        authorizedEditorGroups.Add(editorGroup);
-                    }
-
-                    return authorizedEditorGroups;
-                });
+                part.AuthorizedEditorGroupsField.Loader(() => asyncEditorService.GetAuthorizedGroups(part));
 
                 part.CompleteEditorGroupNamesField.Loader(() =>
                 {

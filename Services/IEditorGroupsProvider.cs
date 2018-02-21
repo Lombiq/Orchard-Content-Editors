@@ -7,6 +7,6 @@ namespace Lombiq.EditorGroups.Services
     public interface IEditorGroupsProvider : IDependency
     {
         bool CanProvideEditorGroups(string contentType);
-        IEnumerable<EditorGroupDescriptor> GetEditorGroups();
+        EditorGroupsSettings GetEditorGroupsSettings();
     }
 }

@@ -3,6 +3,7 @@ using Orchard.ContentManagement;
 using Orchard.Core.Contents;
 using Orchard.Security;
 using Orchard.Validation;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Lombiq.EditorGroups.Services
@@ -37,6 +38,27 @@ namespace Lombiq.EditorGroups.Services
             //SetCurrentGroup(part, group);
 
             return _authorizer.Authorize(Permissions.EditContent, part);
+        }
+
+        public IEnumerable<EditorGroupDescriptor> GetAuthorizedGroups(EditorGroupsPart part)
+        {
+            var authorizedEditorGroups = new List<EditorGroupDescriptor>();
+            foreach (var editorGroup in part.EditorGroups)
+            {
+                if (IsAuthorizedToEditGroup(part, editorGroup.Name))
+                {
+                    authorizedEditorGroups.Add(editorGroup);
+
+                    continue;
+                }
+
+                if (part.UnauthorizedEditorGroupBehavior == UnauthorizedEditorGroupBehavior.AllowEditingUntilFirstUnauthorizedGroup)
+                {
+                    break;
+                }
+            }
+
+            return authorizedEditorGroups;
         }
 
         public EditorGroupDescriptor GetEditorGroupDescriptor(EditorGroupsPart part, string group)

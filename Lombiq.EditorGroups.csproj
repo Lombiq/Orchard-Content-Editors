@@ -104,6 +104,7 @@
     <Compile Include="Drivers\EditorGroupsPartDriver.cs" />
     <Compile Include="Handlers\EditorGroupsPartHandler.cs" />
     <Compile Include="Migrations\EditorGroupsTestMigrations.cs" />
+    <Compile Include="Models\EditorGroupsSettings.cs" />
     <Compile Include="Models\IContentGroupEditorContext.cs" />
     <Compile Include="Models\EditorGroupDescriptor.cs" />
     <Compile Include="Models\EditorGroupsPart.cs" />
