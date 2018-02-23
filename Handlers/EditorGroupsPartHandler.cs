@@ -11,14 +11,13 @@ namespace Lombiq.EditorGroups.Handlers
     public class EditorGroupsPartHandler : ContentHandler
     {
         public EditorGroupsPartHandler(
-            IJsonConverter jsonConverter, 
-            IEditorGroupsProviderAccessor editorGroupProvidersAccessor,
+            IJsonConverter jsonConverter,
             IAsyncEditorService asyncEditorService)
         {
             OnActivated<EditorGroupsPart>((context, part) =>
             {
                 var editorGroupsSettingsLazy = new Lazy<EditorGroupsSettings>(() => 
-                    editorGroupProvidersAccessor.GetProvider(part.ContentItem.ContentType).GetEditorGroupsSettings());
+                    asyncEditorService.GetEditorGroupsSettings(part));
 
                 part.EditorGroupsField.Loader(() => editorGroupsSettingsLazy.Value.EditorGroups);
 

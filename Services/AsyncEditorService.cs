@@ -2,7 +2,6 @@
 using Orchard.ContentManagement;
 using Orchard.Core.Contents;
 using Orchard.Security;
-using Orchard.Services;
 using Orchard.Validation;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,12 +12,14 @@ namespace Lombiq.EditorGroups.Services
     {
         private readonly IAuthorizer _authorizer;
         private readonly IContentManager _contentManager;
+        private readonly IEditorGroupsProviderAccessor _editorGroupsProviderAccessor;
 
 
-        public AsyncEditorService(IAuthorizer authorizer, IContentManager contentManager)
+        public AsyncEditorService(IAuthorizer authorizer, IContentManager contentManager, IEditorGroupsProviderAccessor editorGroupsProviderAccessor)
         {
             _authorizer = authorizer;
             _contentManager = contentManager;
+            _editorGroupsProviderAccessor = editorGroupsProviderAccessor;
         }
 
 
@@ -36,6 +37,7 @@ namespace Lombiq.EditorGroups.Services
         {
             Argument.ThrowIfNullOrEmpty(group, nameof(group));
 
+            // Commented out temporary.
             //SetCurrentGroup(part, group);
 
             return _authorizer.Authorize(Permissions.EditContent, part);
@@ -44,7 +46,7 @@ namespace Lombiq.EditorGroups.Services
         public IEnumerable<EditorGroupDescriptor> GetAuthorizedGroups(EditorGroupsPart part)
         {
             var authorizedEditorGroups = new List<EditorGroupDescriptor>();
-            foreach (var editorGroup in part.EditorGroups)
+            foreach (var editorGroup in GetEditorGroupsSettings(part).EditorGroups)
             {
                 if (IsAuthorizedToEditGroup(part, editorGroup.Name))
                 {
@@ -53,7 +55,8 @@ namespace Lombiq.EditorGroups.Services
                     continue;
                 }
 
-                if (part.UnauthorizedEditorGroupBehavior == UnauthorizedEditorGroupBehavior.AllowEditingUntilFirstUnauthorizedGroup)
+                if (GetEditorGroupsSettings(part).UnauthorizedEditorGroupBehavior == 
+                    UnauthorizedEditorGroupBehavior.AllowEditingUntilFirstUnauthorizedGroup)
                 {
                     break;
                 }
@@ -63,30 +66,20 @@ namespace Lombiq.EditorGroups.Services
         }
 
         public EditorGroupDescriptor GetEditorGroupDescriptor(EditorGroupsPart part, string group) =>
-            part.EditorGroups.FirstOrDefault(editorGroup => editorGroup.Name == group);
+            GetEditorGroupsSettings(part).EditorGroups.FirstOrDefault(editorGroup => editorGroup.Name == group);
 
         public bool EditorGroupAvailable(EditorGroupsPart part, string group)
         {
-            if (!part.EditorGroups.Any(editorGroup => editorGroup.Name == group)) return false;
+            if (!GetEditorGroupsSettings(part).EditorGroups.Any(editorGroup => editorGroup.Name == group)) return false;
 
             if (part.CompleteEditorGroupNames.Contains(group)) return true;
 
             return group == part.IncompleteEditorGroupNames.FirstOrDefault();
         }
 
-        public EditorGroupDescriptor GetNextEditorGroupDescriptor(EditorGroupsPart part, string group = "")
+        public EditorGroupDescriptor GetNextEditorGroupDescriptor(EditorGroupsPart part, string group)
         {
-            var authorizedGroups = part.AuthorizedEditorGroups.ToList();
-
-            if (string.IsNullOrEmpty(group))
-            {
-                group = part.CompleteEditorGroupNames.LastOrDefault();
-
-                if (string.IsNullOrEmpty(group))
-                {
-                    return part.AuthorizedEditorGroups.FirstOrDefault();
-                }
-            }
+            var authorizedGroups = GetAuthorizedGroups(part).ToList();
 
             var lastCompleteGroupDescriptor = authorizedGroups
                 .FirstOrDefault(groupDescriptor => groupDescriptor.Name == group);
@@ -102,12 +95,15 @@ namespace Lombiq.EditorGroups.Services
 
         public void StoreCompleteEditorGroup(EditorGroupsPart part, string group)
         {
-            if (!part.EditorGroups.Any(editorGroup => editorGroup.Name == group)) return;
+            if (!GetEditorGroupsSettings(part).EditorGroups.Any(editorGroup => editorGroup.Name == group)) return;
 
             var completeGroups = part.CompleteEditorGroupNames.Union(new[] { group });
 
             part.CompleteEditorGroupNames = completeGroups;
         }
+
+        public EditorGroupsSettings GetEditorGroupsSettings(EditorGroupsPart part) =>
+            _editorGroupsProviderAccessor.GetProvider(part.ContentItem.ContentType)?.GetEditorGroupsSettings();
 
 
         private void SetCurrentGroup(EditorGroupsPart part, string group) =>
