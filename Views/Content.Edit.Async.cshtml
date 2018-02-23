@@ -1,5 +1,4 @@
 ﻿@using Orchard.ContentManagement
-@using Lombiq.EditorGroups.Constants
 @using Lombiq.EditorGroups.Models
 
 @{
@@ -11,40 +10,29 @@
         return;
     }
 
-    const string BlockName = ElementNames.AsyncEditor.BlockName;
-    const string TitleElementName = BlockName + "__title";
-    const string EditorElementName = ElementNames.AsyncEditor.EditorElementName;
+    const string BlockName = "asyncContentItemEditor";
     const string ContentZoneElementName = BlockName + "__contentZone";
     const string ActionsZoneElementName = BlockName + "__actionsZone";
     const string SidebarZoneElementName = BlockName + "__sidebarZone";
-    const string ActionsElementName = BlockName + "__actions";
 }
 
 <div class="@BlockName">
-    <div class="@TitleElementName">
-        @Display.AsyncEditor_Title(ContentItem: contentItem)
-    </div>
-    <div class="@EditorElementName">
-        @if (Model.Content != null)
-        {
-            <div class="@ContentZoneElementName">
-                @Display(Model.Content)
-            </div>
-        }
-        @if (Model.Actions != null)
-        {
-            <div class="@ActionsZoneElementName">
-                @Display(Model.Actions)
-            </div>
-        }
-        @if (Model.Sidebar != null)
-        {
-            <div class="@SidebarZoneElementName">
-                @Display(Model.Sidebar)
-            </div>
-        }
-    </div>
-    <div class="@ActionsElementName">
-        @Display.AsyncEditor_Actions(ContentItem: contentItem)
-    </div>
+    @if (Model.Content != null)
+    {
+        <div class="@ContentZoneElementName">
+            @Display(Model.Content)
+        </div>
+    }
+    @if (Model.Actions != null)
+    {
+        <div class="@ActionsZoneElementName">
+            @Display(Model.Actions)
+        </div>
+    }
+    @if (Model.Sidebar != null)
+    {
+        <div class="@SidebarZoneElementName">
+            @Display(Model.Sidebar)
+        </div>
+    }
 </div>

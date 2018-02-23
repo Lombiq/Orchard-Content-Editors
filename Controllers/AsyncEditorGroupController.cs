@@ -71,7 +71,7 @@ namespace Lombiq.EditorGroups.Controllers
             {
                 _transactionManager.Cancel();
 
-                return EditorGroupSaveResult(part, group);
+                return EditorGroupResult(part, group);
             }
 
             _asyncEditorService.StoreCompleteEditorGroup(part, group);
@@ -82,9 +82,9 @@ namespace Lombiq.EditorGroups.Controllers
             }
 
             var nextGroup = _asyncEditorService.GetNextEditorGroupDescriptor(part, group);
-            if (nextGroup == null) return EditorGroupSaveResult(part, group);
+            if (nextGroup == null) return EditorGroupResult(part, group);
 
-            return EditorGroupSaveResult(part, nextGroup.Name);
+            return EditorGroupResult(part, nextGroup.Name);
         }
 
 
@@ -100,10 +100,10 @@ namespace Lombiq.EditorGroups.Controllers
         private string GetEditorShapeHtml(EditorGroupsPart part, string group)
         {
             var editorShape = _asyncEditorService.BuildAsyncEditorShape(part, group);
-            var formShape = _shapeFactory.AsyncEditor_Form(
+            var formShape = _shapeFactory.AsyncEditor_Editor(
+                ValidationSummaryShape: _shapeFactory.AsyncEditor_ValidationSummary(ModelState: ModelState),
                 EditorShape: editorShape, 
-                ContentItemId: part.ContentItem.Id, 
-                ContentType: part.ContentItem.ContentType, 
+                ContentItem: part.ContentItem,
                 Group: group);
 
             return _shapeDisplay.Display(formShape);
@@ -117,9 +117,6 @@ namespace Lombiq.EditorGroups.Controllers
 
         private ActionResult GroupUnavailableResult() =>
             ErrorResult(T("Editor group is not available. Fill all the previous editor groups first."));
-
-        private string GetValidationSummaryShape() =>
-            _shapeDisplay.Display(_shapeFactory.AsyncEditor_ValidationSummary(ModelState: ModelState));
 
         private ActionResult ErrorResult(LocalizedString errorMessage) =>
             Json(new EditorGroupsResult
@@ -136,16 +133,6 @@ namespace Lombiq.EditorGroups.Controllers
                 EditorShape = GetEditorShapeHtml(part, group),
                 EditorGroup = group
             }, JsonRequestBehavior.AllowGet);
-
-        private ActionResult EditorGroupSaveResult(EditorGroupsPart part, string group) =>
-            Json(new EditorGroupsSaveResult
-            {
-                Success = true,
-                ContentItemId = part.ContentItem.Id,
-                EditorShape = GetEditorShapeHtml(part, group),
-                EditorGroup = group,
-                ValidationSummaryShape = !ModelState.IsValid ? GetValidationSummaryShape() : null
-            });
 
 
         #region IUpdateModel

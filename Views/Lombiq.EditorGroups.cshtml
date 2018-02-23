@@ -15,7 +15,6 @@
 
     string BlockName = "editorFor" + contentItem.ContentType;
     string ProcessingIndicatorElementName = BlockName + "__processingIndicator";
-    string ValidationSummaryPlaceholderElementName = BlockName + "__validationSummary";
     string EditorPlaceholderElementName = BlockName + "__editor";
 }
 
@@ -23,7 +22,6 @@
 
 <div id="@BlockName">
     <div class="@ProcessingIndicatorElementName js-@ProcessingIndicatorElementName" hidden>@T("Processing...")</div>
-    <div class="@ValidationSummaryPlaceholderElementName js-@ValidationSummaryPlaceholderElementName" hidden></div>
     <div class="@EditorPlaceholderElementName js-@EditorPlaceholderElementName" hidden></div>
 </div>
 
@@ -39,9 +37,8 @@
                     contentItemId: @contentItem.Id,
                     editorGroupName: "@(editorGroupsPart.CurrentEditorGroup?.Name ?? editorGroupsPart.AuthorizedEditorGroups.FirstOrDefault().Name)",
                     processingIndicatorElementClass: ".js-@ProcessingIndicatorElementName",
-                    validationSummaryPlaceholderElementClass: ".js-@ProcessingIndicatorElementName",
                     editorPlaceholderElementClass: ".js-@EditorPlaceholderElementName",
-                    formElementClass: ".js-@ElementNames.AsyncEditorForm.BlockName",
+                    formElementClass: ".js-@ElementNames.AsyncEditor.FormElementName",
                     loadEditorActionElementClass: ".js-@ElementNames.AsyncEditorActions.LoadEditorElementName",
                     postEditorActionElementClass: ".js-@ElementNames.AsyncEditorActions.PostEditorElementName",
                 });

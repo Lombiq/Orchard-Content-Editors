@@ -17,7 +17,6 @@
         contentItemId: 0,
         processingIndicatorElementClass: "",
         editorGroupName: "",
-        validationSummaryPlaceholderElementClass: "",
         editorPlaceholderElementClass: "",
         formElementClass: "",
         loadEditorActionElementClass: "",
@@ -36,7 +35,6 @@
     $.extend(Plugin.prototype, {
         editorContainerElement: null,
         processingIndicatorElement: null,
-        validationSummaryElement: null,
         currentGroup: "",
         currentContentItemId: 0,
 
@@ -50,7 +48,6 @@
 
             plugin.editorContainerElement = plugin.element.find(plugin.settings.editorPlaceholderElementClass).first();
             plugin.processingIndicatorElement = plugin.element.find(plugin.settings.processingIndicatorElementClass).first();
-            plugin.validationSummaryElement = plugin.element.find(plugin.settings.validationSummaryPlaceholderElementClass).first();
 
             plugin.loadEditor(plugin.settings.contentItemId, plugin.settings.editorGroupName);
         },
@@ -91,7 +88,6 @@
             plugin.currentContentItemId = response.ContentItemId;
 
             plugin.showProcessingIndicator(false);
-            plugin.showValidationSummary(response.ValidationSummaryShape);
         },
 
         showProcessingIndicator: function (show) {
@@ -107,23 +103,6 @@
             }
         },
 
-        showValidationSummary: function (content) {
-            var plugin = this;
-
-            if (!plugin.validationSummaryElement) return;
-
-            if (!content) {
-                plugin.validationSummaryElement.empty();
-                plugin.validationSummaryElement.hide();
-
-                return;
-            }
-
-            plugin.validationSummaryElement.html(content);
-
-            plugin.validationSummaryElement.show();
-        },
-
         showEditor: function (content) {
             var plugin = this;
 
@@ -137,14 +116,22 @@
 
             plugin.editorContainerElement.html(content);
 
-            plugin.editorContainerElement.find(plugin.settings.loadEditorActionElementClass).on("click", function () {
+            plugin.editorContainerElement
+                .find(plugin.settings.loadEditorActionElementClass)
+                .first()
+                .on("click", function () {
                 var groupName = $(this).attr("data-editorGroupName");
 
                 if (groupName) plugin.loadEditor(plugin.currentContentItemId, groupName);
             });
 
-            plugin.editorContainerElement.find(plugin.settings.postEditorActionElementClass).on("click", function () {
+            plugin.editorContainerElement
+                .find(plugin.settings.postEditorActionElementClass)
+                .first()
+                .on("click", function () {
                 console.log("posting...");
+                plugin.showProcessingIndicator(true);
+
                 var form = plugin.editorContainerElement.find("form");
 
                 form.submit(function (e) {
