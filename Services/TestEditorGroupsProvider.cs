@@ -25,7 +25,7 @@ namespace Lombiq.EditorGroups.Services
                     {
                         new EditorGroupDescriptor { Name = "TestGroup1", Title = T("Title").Text },
                         new EditorGroupDescriptor { Name = "TestGroup2", Title = T("Content").Text },
-                        new EditorGroupDescriptor { Name = "TestGroup3", Title = T("Extra").Text },
+                        new EditorGroupDescriptor { Name = "TestGroup3", Title = T("Extra").Text, PublishGroup = true },
                     },
                 UnauthorizedEditorGroupBehavior = UnauthorizedEditorGroupBehavior.AllowEditingUntilFirstUnauthorizedGroup
             };

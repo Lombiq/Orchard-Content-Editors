@@ -104,6 +104,7 @@
     <Compile Include="Drivers\EditorGroupsPartDriver.cs" />
     <Compile Include="Handlers\EditorGroupsPartHandler.cs" />
     <Compile Include="Migrations\EditorGroupsTestMigrations.cs" />
+    <Compile Include="Models\EditorGroupsSaveResult.cs" />
     <Compile Include="Models\EditorGroupsSettings.cs" />
     <Compile Include="Models\IContentGroupEditorContext.cs" />
     <Compile Include="Models\EditorGroupDescriptor.cs" />
@@ -168,6 +169,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\AsyncEditor.Pager.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\AsyncEditor.ValidationSummary.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\AsyncEditor.Form.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

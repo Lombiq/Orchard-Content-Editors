@@ -1,0 +1,36 @@
+﻿@{
+    var modelState = Model.ModelState as ModelStateDictionary;
+    var validationMessage = Model.ValidationMessage as string;
+
+    if ((modelState == null || modelState.IsValid) && string.IsNullOrEmpty(validationMessage))
+    {
+        return;
+    }
+
+    const string BlockName = "validationSummary";
+    const string ValidationMessageElementName = BlockName + "__validationMessage";
+    const string ErrorsElementName = BlockName + "__errors";
+    const string ErrorMessageElementName = BlockName + "__errorMessage";
+}
+
+<div class="@BlockName">
+    @if (!string.IsNullOrEmpty(validationMessage))
+    {
+        <div class="@ValidationMessageElementName">@validationMessage</div>
+    }
+
+    @if (modelState != null && !modelState.IsValid)
+    {
+        <ol class="@ErrorsElementName">
+            @foreach (var key in modelState.Keys)
+            {
+                foreach (var validationError in modelState[key].Errors)
+                {
+                    <li class="@ErrorMessageElementName">
+                        @validationError.ErrorMessage
+                    </li>
+                }
+            }
+        </ol>
+    }
+</div>

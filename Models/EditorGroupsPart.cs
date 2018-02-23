@@ -27,7 +27,11 @@ namespace Lombiq.EditorGroups.Models
 
         private readonly LazyField<IEnumerable<string>> _completeEditorGroupNames = new LazyField<IEnumerable<string>>();
         internal LazyField<IEnumerable<string>> CompleteEditorGroupNamesField => _completeEditorGroupNames;
-        public IEnumerable<string> CompleteEditorGroupNames => _completeEditorGroupNames.Value;
+        public IEnumerable<string> CompleteEditorGroupNames
+        {
+            get { return _completeEditorGroupNames.Value; }
+            set { _completeEditorGroupNames.Value = value; }
+        }
 
         private readonly LazyField<IEnumerable<string>> _incompleteEditorGroupNames = new LazyField<IEnumerable<string>>();
         internal LazyField<IEnumerable<string>> IncompleteEditorGroupNamesField => _incompleteEditorGroupNames;

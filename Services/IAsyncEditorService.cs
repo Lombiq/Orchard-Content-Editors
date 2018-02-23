@@ -13,6 +13,6 @@ namespace Lombiq.EditorGroups.Services
         EditorGroupDescriptor GetEditorGroupDescriptor(EditorGroupsPart part, string group);
         EditorGroupDescriptor GetNextEditorGroupDescriptor(EditorGroupsPart part, string group = "");
         bool EditorGroupAvailable(EditorGroupsPart part, string group);
-        void StoreCompleteEditorGroup(string group);
+        void StoreCompleteEditorGroup(EditorGroupsPart part, string group);
     }
 }

@@ -36,6 +36,13 @@ namespace Lombiq.EditorGroups.Handlers
                     return jsonConverter.Deserialize<IEnumerable<string>>(part.CompleteEditorGroupNamesSerialized);
                 });
 
+                part.CompleteEditorGroupNamesField.Setter(value =>
+                {
+                    part.CompleteEditorGroupNamesSerialized = jsonConverter.Serialize(value);
+
+                    return value;
+                });
+
                 part.IncompleteEditorGroupNamesField.Loader(() => 
                     part.EditorGroups.Select(editorGroup => editorGroup.Name).Except(part.CompleteEditorGroupNames));
             });

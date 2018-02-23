@@ -2,6 +2,7 @@
 using Orchard.ContentManagement;
 using Orchard.Core.Contents;
 using Orchard.Security;
+using Orchard.Services;
 using Orchard.Validation;
 using System.Collections.Generic;
 using System.Linq;
@@ -99,8 +100,13 @@ namespace Lombiq.EditorGroups.Services
             return authorizedGroups[indexOfLastCompleteGroup + 1];
         }
 
-        public void StoreCompleteEditorGroup(string group)
+        public void StoreCompleteEditorGroup(EditorGroupsPart part, string group)
         {
+            if (!part.EditorGroups.Any(editorGroup => editorGroup.Name == group)) return;
+
+            var completeGroups = part.CompleteEditorGroupNames.Union(new[] { group });
+
+            part.CompleteEditorGroupNames = completeGroups;
         }
 
 

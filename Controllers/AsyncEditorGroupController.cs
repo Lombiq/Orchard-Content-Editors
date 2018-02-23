@@ -9,6 +9,7 @@ using Orchard.Localization;
 using Orchard.Security;
 using Orchard.Themes;
 using System;
+using System.Collections.Generic;
 using System.Web.Mvc;
 
 namespace Lombiq.EditorGroups.Controllers
@@ -49,7 +50,7 @@ namespace Lombiq.EditorGroups.Controllers
 
             if (!_asyncEditorService.EditorGroupAvailable(part, group)) return GroupUnavailableResult();
 
-            return EditorGroupResult(GetEditorShapeHtml(part, group));
+            return EditorGroupResult(part, group);
         }
 
         [HttpPost, ActionName("EditGroup"), ValidateInput(false)]
@@ -64,23 +65,32 @@ namespace Lombiq.EditorGroups.Controllers
             if (!_asyncEditorService.EditorGroupAvailable(part, group)) return GroupUnavailableResult();
 
             _contentManager.Create(part.ContentItem, VersionOptions.Draft);
-
             _contentManager.UpdateEditor(part.ContentItem, this, group);
             
             if (!ModelState.IsValid)
             {
                 _transactionManager.Cancel();
 
-                return EditorGroupResult(GetEditorShapeHtml(part, group));
+                return EditorGroupSaveResult(part, group);
             }
 
-            return null;
+            _asyncEditorService.StoreCompleteEditorGroup(part, group);
+            
+            if (_asyncEditorService.GetEditorGroupDescriptor(part, group).PublishGroup)
+            {
+                _contentManager.Publish(part.ContentItem);
+            }
+
+            var nextGroup = _asyncEditorService.GetNextEditorGroupDescriptor(part, group);
+            if (nextGroup == null) return EditorGroupSaveResult(part, group);
+
+            return EditorGroupSaveResult(part, nextGroup.Name);
         }
 
 
         private EditorGroupsPart GetEditorGroupsPart(int id, string contentType)
         {
-            var item = _contentManager.Get(id);
+            var item = _contentManager.Get(id, VersionOptions.Latest);
 
             item = item ?? _contentManager.New(contentType);
 
@@ -90,8 +100,13 @@ namespace Lombiq.EditorGroups.Controllers
         private string GetEditorShapeHtml(EditorGroupsPart part, string group)
         {
             var editorShape = _asyncEditorService.BuildAsyncEditorShape(part, group);
+            var formShape = _shapeFactory.AsyncEditor_Form(
+                EditorShape: editorShape, 
+                ContentItemId: part.ContentItem.Id, 
+                ContentType: part.ContentItem.ContentType, 
+                Group: group);
 
-            return _shapeDisplay.Display(editorShape);
+            return _shapeDisplay.Display(formShape);
         }
 
         private ActionResult GroupNameCannotBeEmptyResult() =>
@@ -103,6 +118,9 @@ namespace Lombiq.EditorGroups.Controllers
         private ActionResult GroupUnavailableResult() =>
             ErrorResult(T("Editor group is not available. Fill all the previous editor groups first."));
 
+        private string GetValidationSummaryShape() =>
+            _shapeDisplay.Display(_shapeFactory.AsyncEditor_ValidationSummary(ModelState: ModelState));
+
         private ActionResult ErrorResult(LocalizedString errorMessage) =>
             Json(new EditorGroupsResult
             {
@@ -110,12 +128,24 @@ namespace Lombiq.EditorGroups.Controllers
                 ErrorMessage = errorMessage.Text,
             }, JsonRequestBehavior.AllowGet);
 
-        private ActionResult EditorGroupResult(string editorShape) =>
+        private ActionResult EditorGroupResult(EditorGroupsPart part, string group) =>
             Json(new EditorGroupsResult
             {
                 Success = true,
-                EditorShape = editorShape,
+                ContentItemId = part.ContentItem.Id,
+                EditorShape = GetEditorShapeHtml(part, group),
+                EditorGroup = group
             }, JsonRequestBehavior.AllowGet);
+
+        private ActionResult EditorGroupSaveResult(EditorGroupsPart part, string group) =>
+            Json(new EditorGroupsSaveResult
+            {
+                Success = true,
+                ContentItemId = part.ContentItem.Id,
+                EditorShape = GetEditorShapeHtml(part, group),
+                EditorGroup = group,
+                ValidationSummaryShape = !ModelState.IsValid ? GetValidationSummaryShape() : null
+            });
 
 
         #region IUpdateModel

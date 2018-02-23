@@ -14,6 +14,10 @@
     const string BlockName = "asyncEditorActions";
     const string PagerElementName = BlockName + "__pager";
     const string NavigationButtonsElementName = BlockName + "__navigationButtons";
+    const string SaveButtonElementName = BlockName + "__saveButton";
+    const string PublishButtonElementName = BlockName + "__publishButton";
+    const string NextButtonElementName = BlockName + "__nextButton";
+    const string PreviousButtonElementName = BlockName + "__previousButton";
 }
 
 <div class="@BlockName">
@@ -21,6 +25,6 @@
         @Display.AsyncEditor_Pager(ContentItem: contentItem)
     </div>
     <div class="@NavigationButtonsElementName">
-        Buttons go here...
+        <div class="btn button @SaveButtonElementName js-@ElementNames.AsyncEditorActions.PostEditorElementName">@T("Save")</div>
     </div>
 </div>
