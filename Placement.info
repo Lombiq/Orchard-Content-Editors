@@ -1,7 +1,6 @@
 ﻿<Placement>
     <Place
         Parts_AsyncEditor = "Content: 5"
-        Parts_AsyncEditor_Edit = "Content: 5"
     />
     <Match RenderContext="FrontEnd">
         <Place
@@ -14,7 +13,7 @@
             Parts_Common_Container_Edit="-"
         />
 
-        <Match ContentType="EditorGroupTest">
+        <Match ContentType="TestContentTypeWithGroups">
             <Place
                 Parts_Title_Edit="Content:1@TestGroup1"
                 Parts_Common_Body_Edit="Content:1@TestGroup2"

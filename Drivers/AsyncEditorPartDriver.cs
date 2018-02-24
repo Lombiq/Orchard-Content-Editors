@@ -8,9 +8,9 @@ namespace Lombiq.EditorGroups.Drivers
     public class AsyncEditorPartDriver : ContentPartDriver<AsyncEditorPart>
     {
         protected override DriverResult Editor(AsyncEditorPart part, dynamic shapeHelper) => 
-            ContentShape("Parts_EditorGroups_Edit",() => 
+            ContentShape("Parts_AsyncEditor_Edit", () => 
                 shapeHelper.EditorTemplate(
-                    TemplateName: "Parts/EditorGroups",
+                    TemplateName: "Parts/AsyncEditor",
                     Model: part,
                     Prefix: Prefix));
 

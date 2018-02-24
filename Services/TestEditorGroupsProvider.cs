@@ -16,7 +16,7 @@ namespace Lombiq.EditorGroups.Services
         }
 
 
-        public bool CanProvideEditorGroups(string contentType) => contentType == EditorGroupsTestConstants.TestContentTypeName;
+        public bool CanProvideEditorGroups(string contentType) => contentType == AsyncEditorTestConstants.TestContentTypeWithGroups;
 
         public EditorGroupsSettings GetEditorGroupsSettings() =>
             new EditorGroupsSettings

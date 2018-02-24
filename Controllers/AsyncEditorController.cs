@@ -79,7 +79,7 @@ namespace Lombiq.EditorGroups.Controllers
             {
                 _transactionManager.Cancel();
 
-                return EditorGroupResult(part, group);
+                return EditorGroupResult(part, group, false);
             }
 
             _asyncEditorService.StoreCompleteEditorGroup(part, group);
@@ -96,16 +96,17 @@ namespace Lombiq.EditorGroups.Controllers
                 _contentManager.New<AsyncEditorPart>(contentType) :
                 _contentManager.Get<AsyncEditorPart>(id, VersionOptions.Latest);
 
-        private string GetEditorShapeHtml(AsyncEditorPart part, string group)
+        private string GetEditorShapeHtml(AsyncEditorPart part, string group, bool contentCreated = true)
         {
             var editorShape = _asyncEditorService.BuildAsyncEditorShape(part, group);
-            var formShape = _shapeFactory.AsyncEditor_Editor(
+            var asyncEditorShape = _shapeFactory.AsyncEditor_Editor(
                 ValidationSummaryShape: _shapeFactory.AsyncEditor_ValidationSummary(ModelState: ModelState),
                 EditorShape: editorShape, 
                 ContentItem: part.ContentItem,
+                ContentCreated: contentCreated,
                 Group: group);
 
-            return _shapeDisplay.Display(formShape);
+            return _shapeDisplay.Display(asyncEditorShape);
         }
 
         private ActionResult ContentItemNotFoundResult() =>
@@ -127,12 +128,12 @@ namespace Lombiq.EditorGroups.Controllers
                 ErrorMessage = errorMessage.Text,
             }, JsonRequestBehavior.AllowGet);
 
-        private ActionResult EditorGroupResult(AsyncEditorPart part, string group) =>
+        private ActionResult EditorGroupResult(AsyncEditorPart part, string group, bool contentCreated = true) =>
             Json(new AsyncEditorResult
             {
                 Success = true,
-                ContentItemId = part.ContentItem.Id,
-                EditorShape = GetEditorShapeHtml(part, group),
+                ContentItemId = contentCreated ? part.ContentItem.Id : 0,
+                EditorShape = GetEditorShapeHtml(part, group, contentCreated),
                 EditorGroup = group
             }, JsonRequestBehavior.AllowGet);
         
@@ -166,7 +167,7 @@ namespace Lombiq.EditorGroups.Controllers
             {
                 _transactionManager.Cancel();
 
-                return EditorGroupResult(part, group);
+                return EditorGroupResult(part, group, false);
             }
 
             if (part.HasEditorGroups)

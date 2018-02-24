@@ -12,7 +12,8 @@
         return;
     }
 
-    var contentItemId = contentItem.Id;
+    var contentCreated = Model.ContentCreated as bool? ?? false;
+    var contentItemId = contentCreated ? contentItem.Id : 0;
     var group = asyncEditorPart.CurrentEditorGroup.Name as string;
     var contentType = contentItem.ContentType;
 
@@ -26,7 +27,10 @@
 
 <div class="@BlockName">
     @using (Html.BeginFormAntiForgeryPost(
-        Url.Action("Edit", "AsyncEditor", new { Area = "Lombiq.EditorGroups", ContentItemId = contentItemId, Group = group, ContentType = contentType }),
+        Url.Action(
+            "Edit", 
+            "AsyncEditor", 
+            new { Area = "Lombiq.EditorGroups", ContentItemId = contentItemId, Group = group, ContentType = contentType }),
         FormMethod.Post,
         new { @class = string.Join(" ", FormElementName, "js-" + FormElementName) }))
     {

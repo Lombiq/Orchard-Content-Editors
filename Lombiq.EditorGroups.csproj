@@ -96,14 +96,16 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Constants\EditorGroupsTestConstants.cs" />
+    <Compile Include="Constants\AsyncEditorTestConstants.cs" />
     <Compile Include="Constants\ElementNames.cs" />
     <Compile Include="Constants\ResourceNames.cs" />
     <Compile Include="Controllers\AsyncEditorController.cs" />
-    <Compile Include="Controllers\EditorGroupsTestController.cs" />
+    <Compile Include="Controllers\AsyncEditorTestController.cs" />
+    <Compile Include="Drivers\TestContentPartDriver.cs" />
     <Compile Include="Drivers\AsyncEditorPartDriver.cs" />
     <Compile Include="Handlers\AsyncEditorPartHandler.cs" />
-    <Compile Include="Migrations\EditorGroupsTestMigrations.cs" />
+    <Compile Include="Migrations\AsyncEditorTestMigrations.cs" />
+    <Compile Include="Models\TestContentPart.cs" />
     <Compile Include="Models\EditorGroupsSettings.cs" />
     <Compile Include="Models\EditorGroupDescriptor.cs" />
     <Compile Include="Models\AsyncEditorPart.cs" />
@@ -140,13 +142,23 @@
       <Name>Orchard.Core</Name>
       <Private>$(MvcBuildViews)</Private>
     </ProjectReference>
+    <ProjectReference Include="..\Orchard.Fields\Orchard.Fields.csproj">
+      <Project>{3787DDE5-E5C8-4841-BDA7-DCB325388064}</Project>
+      <Name>Orchard.Fields</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Piedone.HelpfulExtensions\Piedone.HelpfulExtensions.csproj">
+      <Project>{b5329406-c74a-4434-a54d-8b3047cfbf93}</Project>
+      <Name>Piedone.HelpfulExtensions</Name>
+    </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Views\AsyncEditorTest\TestWithoutGroups.cshtml" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="Placement.info" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\EditorGroupsTest\Index.cshtml" />
+    <Content Include="Views\AsyncEditorTest\TestWithGroups.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Lombiq.AsyncEditorLoader.cshtml" />
