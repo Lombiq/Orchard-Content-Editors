@@ -120,36 +120,39 @@
                 .find(plugin.settings.loadEditorActionElementClass)
                 .first()
                 .on("click", function () {
-                var groupName = $(this).attr("data-editorGroupName");
+                    var groupName = $(this).attr("data-editorGroupName");
 
-                if (groupName) plugin.loadEditor(plugin.currentContentItemId, groupName);
-            });
+                    if (groupName) plugin.loadEditor(plugin.currentContentItemId, groupName);
+                });
 
-            plugin.editorContainerElement
-                .find(plugin.settings.postEditorActionElementClass)
-                .first()
-                .on("click", function () {
-                console.log("posting...");
-                plugin.showProcessingIndicator(true);
+            var form = plugin.editorContainerElement
+                .find("form")
+                .first();
 
-                var form = plugin.editorContainerElement.find("form");
-
+            if (form) {
                 form.submit(function (e) {
                     e.preventDefault();
-                });
+                })
 
-                $.ajax({
-                    type: "POST",
-                    url: form.attr("action"),
-                    data: form.serialize(),
-                    success: function (response) {
-                        plugin.handleResponse(response)
-                    },
-                    fail: function () {
-                        plugin.showProcessingIndicator(false);
-                    }
-                });
-            });
+                form.find("input[type=submit]")
+                    .click(function () {
+
+                        plugin.showProcessingIndicator(true);
+
+                        $.ajax({
+                            type: "POST",
+                            url: form.attr("action"),
+                            data: form.serialize() + '&' + encodeURI($(this).attr('name')) + '=' + encodeURI($(this).attr('value')),
+                            success: function (response) {
+                                console.log(response);
+                                plugin.handleResponse(response)
+                            },
+                            fail: function () {
+                                plugin.showProcessingIndicator(false);
+                            }
+                        });
+                    });
+            }
 
             plugin.editorContainerElement.show();
         }

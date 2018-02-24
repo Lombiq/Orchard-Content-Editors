@@ -6,6 +6,7 @@ using Orchard.Core.Contents;
 using Orchard.Data;
 using Orchard.DisplayManagement;
 using Orchard.Localization;
+using Orchard.Mvc;
 using Orchard.Security;
 using Orchard.Themes;
 using System;
@@ -53,8 +54,9 @@ namespace Lombiq.EditorGroups.Controllers
             return EditorGroupResult(part, group);
         }
 
-        [HttpPost, ActionName("EditGroup"), ValidateInput(false)]
-        public ActionResult EditGroupPost(int contentItemId, string group, string contentType = "")
+        [HttpPost, ActionName("EditGroup")]
+        [FormValueRequired("submit.Save")]
+        public ActionResult SavePost(int contentItemId, string group, string contentType = "")
         {
             if (string.IsNullOrEmpty(group)) return GroupNameCannotBeEmptyResult();
 
@@ -76,6 +78,38 @@ namespace Lombiq.EditorGroups.Controllers
 
             _asyncEditorService.StoreCompleteEditorGroup(part, group);
             
+            if (_asyncEditorService.GetEditorGroupDescriptor(part, group).PublishGroup)
+            {
+                _contentManager.Publish(part.ContentItem);
+            }
+
+            return EditorGroupResult(part, group);
+        }
+
+        [HttpPost, ActionName("EditGroup")]
+        [FormValueRequired("submit.SaveAndNext")]
+        public ActionResult SaveAndNextPost(int contentItemId, string group, string contentType = "")
+        {
+            if (string.IsNullOrEmpty(group)) return GroupNameCannotBeEmptyResult();
+
+            var part = GetEditorGroupsPart(contentItemId, contentType);
+
+            if (!_asyncEditorService.IsAuthorizedToEditGroup(part, group)) return UnauthorizedGroupEditorResult();
+
+            if (!_asyncEditorService.EditorGroupAvailable(part, group)) return GroupUnavailableResult();
+
+            _contentManager.Create(part.ContentItem, VersionOptions.Draft);
+            _contentManager.UpdateEditor(part.ContentItem, this, group);
+
+            if (!ModelState.IsValid)
+            {
+                _transactionManager.Cancel();
+
+                return EditorGroupResult(part, group);
+            }
+
+            _asyncEditorService.StoreCompleteEditorGroup(part, group);
+
             if (_asyncEditorService.GetEditorGroupDescriptor(part, group).PublishGroup)
             {
                 _contentManager.Publish(part.ContentItem);

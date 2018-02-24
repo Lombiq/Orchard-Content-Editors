@@ -25,6 +25,7 @@
         @Display.AsyncEditor_Pager(ContentItem: contentItem)
     </div>
     <div class="@NavigationButtonsElementName">
-        <div class="btn button @SaveButtonElementName js-@ElementNames.AsyncEditorActions.PostEditorElementName">@T("Save")</div>
+        <input type="submit" name="submit.Save" class="btn button @SaveButtonElementName" value="@T("Save")" />
+        <input type="submit" name="submit.SaveAndNext" class="btn button @NextButtonElementName" value="@T("Next")" />
     </div>
 </div>
