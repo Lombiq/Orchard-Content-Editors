@@ -4,12 +4,12 @@ using Lombiq.EditorGroups.Models;
 
 namespace Lombiq.EditorGroups.Services
 {
-    public class EditorGroupsProviderAccessor : IEditorGroupsProviderAccessor
+    public class EditorGroupsSettingsProviderAccessor : IEditorGroupsProviderAccessor
     {
         private readonly IEnumerable<IEditorGroupsProvider> _editorGroupsProviders;
 
 
-        public EditorGroupsProviderAccessor(IEnumerable<IEditorGroupsProvider> editorGroupsProviders)
+        public EditorGroupsSettingsProviderAccessor(IEnumerable<IEditorGroupsProvider> editorGroupsProviders)
         {
             _editorGroupsProviders = editorGroupsProviders;
         }

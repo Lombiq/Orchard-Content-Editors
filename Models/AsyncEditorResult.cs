@@ -1,6 +1,6 @@
 ﻿namespace Lombiq.EditorGroups.Models
 {
-    public class EditorGroupsResult
+    public class AsyncEditorResult
     {
         public int ContentItemId { get; set; }
         public bool Success { get; set; }

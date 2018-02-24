@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Lombiq.EditorGroups.Models
 {
-    public class EditorGroupsPart : ContentPart
+    public class AsyncEditorPart : ContentPart
     {
         public bool AsyncEditorContext { get; set; }
         public EditorGroupDescriptor CurrentEditorGroup { get; set; }
@@ -16,6 +16,9 @@ namespace Lombiq.EditorGroups.Models
             set { this.Store(x => x.CompleteEditorGroupNamesSerialized, value); }
         }
 
+        private readonly LazyField<bool> _hasEditorGroups = new LazyField<bool>();
+        internal LazyField<bool> HasEditorGroupsField => _hasEditorGroups;
+        public bool HasEditorGroups => _hasEditorGroups.Value;
 
         private readonly LazyField<UnauthorizedEditorGroupBehavior> _unauthorizedEditorGroupBehavior = new LazyField<UnauthorizedEditorGroupBehavior>();
         internal LazyField<UnauthorizedEditorGroupBehavior> UnauthorizedEditorGroupBehaviorField => _unauthorizedEditorGroupBehavior;
@@ -42,11 +45,11 @@ namespace Lombiq.EditorGroups.Models
         public IEnumerable<EditorGroupDescriptor> AuthorizedEditorGroups => _authorizedEditorGroups.Value;
 
         private readonly LazyField<EditorGroupDescriptor> _nextEditorGroup = new LazyField<EditorGroupDescriptor>();
-        internal LazyField<EditorGroupDescriptor> NextEditorGroupField { get { return _nextEditorGroup; } }
-        public EditorGroupDescriptor NextEditorGroup { get { return _nextEditorGroup.Value; } }
+        internal LazyField<EditorGroupDescriptor> NextEditorGroupField => _nextEditorGroup;
+        public EditorGroupDescriptor NextEditorGroup => _nextEditorGroup.Value;
 
         private readonly LazyField<EditorGroupDescriptor> _previousEditorGroup = new LazyField<EditorGroupDescriptor>();
-        internal LazyField<EditorGroupDescriptor> PreviousEditorGroupField { get { return _previousEditorGroup; } }
-        public EditorGroupDescriptor PreviousEditorGroup { get { return _previousEditorGroup.Value; } }
+        internal LazyField<EditorGroupDescriptor> PreviousEditorGroupField => _previousEditorGroup;
+        public EditorGroupDescriptor PreviousEditorGroup => _previousEditorGroup.Value;
     }
 }

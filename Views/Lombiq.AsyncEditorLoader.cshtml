@@ -4,14 +4,14 @@
 
 @{
     var contentItem = Model.ContentItem as ContentItem;
-    var editorGroupsPart = contentItem?.As<EditorGroupsPart>();
+    var asyncEditorPart = contentItem?.As<AsyncEditorPart>();
 
-    if (editorGroupsPart == null)
+    if (asyncEditorPart == null)
     {
         return;
     }
 
-    var editGroupUrl = Url.Action("EditGroup", "AsyncEditorGroup", new { Area = "Lombiq.EditorGroups" });
+    var editGroupUrl = Url.Action("Edit", "AsyncEditor", new { Area = "Lombiq.EditorGroups" });
 
     string BlockName = "editorFor" + contentItem.ContentType;
     string ProcessingIndicatorElementName = BlockName + "__processingIndicator";
@@ -35,7 +35,7 @@
                     asyncEditorApiUrl: "@editGroupUrl",
                     contentType: "@contentItem.ContentType",
                     contentItemId: @contentItem.Id,
-                    editorGroupName: "@(editorGroupsPart.CurrentEditorGroup?.Name ?? editorGroupsPart.AuthorizedEditorGroups.FirstOrDefault().Name)",
+                    editorGroupName: "@(asyncEditorPart.CurrentEditorGroup?.Name ?? asyncEditorPart.AuthorizedEditorGroups.FirstOrDefault().Name)",
                     processingIndicatorElementClass: ".js-@ProcessingIndicatorElementName",
                     editorPlaceholderElementClass: ".js-@EditorPlaceholderElementName",
                     formElementClass: ".js-@ElementNames.AsyncEditor.FormElementName",

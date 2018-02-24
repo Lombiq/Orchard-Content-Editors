@@ -3,9 +3,9 @@
 
 @{
     var contentItem = Model.ContentItem as ContentItem;
-    var editorGroupsPart = contentItem?.As<EditorGroupsPart>();
+    var asyncEditorPart = contentItem?.As<AsyncEditorPart>();
 
-    if (!(editorGroupsPart?.AsyncEditorContext ?? false))
+    if (!(asyncEditorPart?.AsyncEditorContext ?? false))
     {
         return;
     }

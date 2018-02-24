@@ -18,7 +18,7 @@ namespace Lombiq.EditorGroups.Migrations
                     .WithPart("TitlePart")
                     .WithPart("CommonPart")
                     .WithPart("BodyPart")
-                    .WithPart(nameof(EditorGroupsPart))
+                    .WithPart(nameof(AsyncEditorPart))
                 );
 
             return 1;

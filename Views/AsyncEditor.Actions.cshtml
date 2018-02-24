@@ -4,9 +4,9 @@
 
 @{
     var contentItem = Model.ContentItem as ContentItem;
-    var editorGroupsPart = contentItem?.As<EditorGroupsPart>();
+    var asyncEditorPart = contentItem?.As<AsyncEditorPart>();
 
-    if (!(editorGroupsPart?.AsyncEditorContext ?? false))
+    if (!(asyncEditorPart?.AsyncEditorContext ?? false))
     {
         return;
     }
@@ -26,24 +26,24 @@
 }
 
 <div class="@BlockName">
-    @if (editorGroupsPart.PreviousEditorGroup != null)
+    @if (asyncEditorPart.PreviousEditorGroup != null)
     {
         <div class="btn button @PreviousButtonElementName js-@ElementNames.AsyncEditorActions.LoadEditorElementName"
-             data-editorGroupName="@editorGroupsPart.PreviousEditorGroup.Name">
+             data-editorGroupName="@asyncEditorPart.PreviousEditorGroup.Name">
             @T("Back")
         </div>
     }
     <ol class="@GroupListElementName">
-        @foreach (var editorGroup in editorGroupsPart.AuthorizedEditorGroups)
+        @foreach (var editorGroup in asyncEditorPart.AuthorizedEditorGroups)
         {
             <li class="@GroupListItemElementName">
-                @if (editorGroup == editorGroupsPart.CurrentEditorGroup)
+                @if (editorGroup == asyncEditorPart.CurrentEditorGroup)
                 {
                     <div class="@GroupNameElementName @GroupNameElementNameWithCurrentModifier">
                         @editorGroup.Title
                     </div>
                 }
-                else if (!editorGroupsPart.CompleteEditorGroupNames.Contains(editorGroup.Name))
+                else if (!asyncEditorPart.CompleteEditorGroupNames.Contains(editorGroup.Name))
                 {
                     <div class="@GroupNameElementName @GroupNameElementNameWithIncompleteModifier">
                         @editorGroup.Title
@@ -60,7 +60,7 @@
         }
     </ol>
     <div class="@NavigationButtonsElementName">
-        @if (editorGroupsPart.CurrentEditorGroup.PublishGroup)
+        @if (asyncEditorPart.CurrentEditorGroup.PublishGroup)
         {
             <input type="submit" name="submit.SaveAndNext" class="btn button @PublishButtonElementName" value="@T("Publish")" />
         }
@@ -69,7 +69,7 @@
             <input type="submit" name="submit.Save" class="btn button @SaveButtonElementName" value="@T("Save")" />
         }
         
-        @if (editorGroupsPart.NextEditorGroup != null)
+        @if (asyncEditorPart.NextEditorGroup != null)
         {
             <input type="submit" name="submit.SaveAndNext" class="btn button @NextButtonElementName" value="@T("Next")" />
         }

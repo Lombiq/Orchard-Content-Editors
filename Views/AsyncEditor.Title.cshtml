@@ -3,14 +3,14 @@
 
 @{ 
     var contentItem = Model.ContentItem as ContentItem;
-    var editorGroupsPart = contentItem?.As<EditorGroupsPart>();
+    var asyncEditorPart = contentItem?.As<AsyncEditorPart>();
 
-    if (!(editorGroupsPart?.AsyncEditorContext ?? false))
+    if (!(asyncEditorPart?.AsyncEditorContext ?? false))
     {
         return;
     }
 }
 
 <h2 class="asyncEditorTitle">
-    @T("{0} details", editorGroupsPart.CurrentEditorGroup.Title)
+    @T("{0} details", asyncEditorPart.CurrentEditorGroup.Title)
 </h2>

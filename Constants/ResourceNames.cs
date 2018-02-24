@@ -2,6 +2,6 @@
 {
     public static class ResourceNames
     {
-        public const string Lombiq_EditorGroups = "Lombiq.EditorGroups";
+        public const string Lombiq_AsyncEditor = "Lombiq.AsyncEditor";
     }
 }

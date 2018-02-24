@@ -8,22 +8,24 @@ using System.Linq;
 
 namespace Lombiq.EditorGroups.Handlers
 {
-    public class EditorGroupsPartHandler : ContentHandler
+    public class AsyncEditorPartHandler : ContentHandler
     {
-        public EditorGroupsPartHandler(
+        public AsyncEditorPartHandler(
             IJsonConverter jsonConverter,
             IAsyncEditorService asyncEditorService)
         {
-            OnActivated<EditorGroupsPart>((context, part) =>
+            OnActivated<AsyncEditorPart>((context, part) =>
             {
                 var editorGroupsSettingsLazy = new Lazy<EditorGroupsSettings>(() => 
                     asyncEditorService.GetEditorGroupsSettings(part));
+
+                part.HasEditorGroupsField.Loader(() => editorGroupsSettingsLazy.Value != null);
 
                 part.EditorGroupsField.Loader(() => editorGroupsSettingsLazy.Value.EditorGroups);
 
                 part.UnauthorizedEditorGroupBehaviorField.Loader(() => editorGroupsSettingsLazy.Value.UnauthorizedEditorGroupBehavior);
 
-                part.AuthorizedEditorGroupsField.Loader(() => asyncEditorService.GetAuthorizedGroups(part));
+                part.AuthorizedEditorGroupsField.Loader(() => asyncEditorService.GetAuthorizedEditorGroups(part));
 
                 part.CompleteEditorGroupNamesField.Loader(() =>
                 {

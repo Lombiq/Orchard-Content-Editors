@@ -5,19 +5,19 @@ using Orchard.ContentManagement.Handlers;
 
 namespace Lombiq.EditorGroups.Drivers
 {
-    public class EditorGroupsPartDriver : ContentPartDriver<EditorGroupsPart>
+    public class AsyncEditorPartDriver : ContentPartDriver<AsyncEditorPart>
     {
-        protected override DriverResult Editor(EditorGroupsPart part, dynamic shapeHelper) => 
+        protected override DriverResult Editor(AsyncEditorPart part, dynamic shapeHelper) => 
             ContentShape("Parts_EditorGroups_Edit",() => 
                 shapeHelper.EditorTemplate(
                     TemplateName: "Parts/EditorGroups",
                     Model: part,
                     Prefix: Prefix));
 
-        protected override void Exporting(EditorGroupsPart part, ExportContentContext context) => 
+        protected override void Exporting(AsyncEditorPart part, ExportContentContext context) => 
             ExportInfoset(part, context);
 
-        protected override void Importing(EditorGroupsPart part, ImportContentContext context) => 
+        protected override void Importing(AsyncEditorPart part, ImportContentContext context) => 
             ImportInfoset(part, context);
     }
 }

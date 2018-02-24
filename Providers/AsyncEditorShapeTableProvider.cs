@@ -31,8 +31,8 @@ namespace Lombiq.EditorGroups.Providers
 
                     var asyncEditorShapeType = stereotype + "_Edit_Async";
 
-                    var editorGroupsPart = contentItem.As<EditorGroupsPart>();
-                    if (editorGroupsPart == null || !editorGroupsPart.AsyncEditorContext) return;
+                    var asyncEditorPart = contentItem.As<AsyncEditorPart>();
+                    if (asyncEditorPart == null || !asyncEditorPart.AsyncEditorContext) return;
 
                     displaying.ShapeMetadata.Wrappers.Add("AsyncEditor_Wrapper");
 

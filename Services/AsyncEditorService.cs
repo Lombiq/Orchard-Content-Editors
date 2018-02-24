@@ -23,30 +23,29 @@ namespace Lombiq.EditorGroups.Services
         }
 
 
-        public dynamic BuildAsyncEditorShape(EditorGroupsPart part, string group)
+        public dynamic BuildAsyncEditorShape(AsyncEditorPart part, string group = "")
         {
-            Argument.ThrowIfNullOrEmpty(group, nameof(group));
-
             SetCurrentGroup(part, group);
             SetAsyncEditorContext(part);
 
             return _contentManager.BuildEditor(part, group);
         }
 
-        public bool IsAuthorizedToEditGroup(EditorGroupsPart part, string group)
+        public bool IsAuthorizedToEditGroup(AsyncEditorPart part, string group = "")
         {
-            Argument.ThrowIfNullOrEmpty(group, nameof(group));
-
             // Commented out temporary.
             //SetCurrentGroup(part, group);
 
             return _authorizer.Authorize(Permissions.EditContent, part);
         }
 
-        public IEnumerable<EditorGroupDescriptor> GetAuthorizedGroups(EditorGroupsPart part)
+        public IEnumerable<EditorGroupDescriptor> GetAuthorizedEditorGroups(AsyncEditorPart part)
         {
+            var editorGroups = GetEditorGroupsSettings(part);
+            if (editorGroups == null) return Enumerable.Empty<EditorGroupDescriptor>();
+
             var authorizedEditorGroups = new List<EditorGroupDescriptor>();
-            foreach (var editorGroup in GetEditorGroupsSettings(part).EditorGroups)
+            foreach (var editorGroup in editorGroups.EditorGroups)
             {
                 if (IsAuthorizedToEditGroup(part, editorGroup.Name))
                 {
@@ -65,21 +64,26 @@ namespace Lombiq.EditorGroups.Services
             return authorizedEditorGroups;
         }
 
-        public EditorGroupDescriptor GetEditorGroupDescriptor(EditorGroupsPart part, string group) =>
-            GetEditorGroupsSettings(part).EditorGroups.FirstOrDefault(editorGroup => editorGroup.Name == group);
+        public EditorGroupDescriptor GetEditorGroupDescriptor(AsyncEditorPart part, string group) =>
+            GetEditorGroupsSettings(part)?.EditorGroups.FirstOrDefault(editorGroup => editorGroup.Name == group);
 
-        public bool EditorGroupAvailable(EditorGroupsPart part, string group)
+        public bool EditorGroupAvailable(AsyncEditorPart part, string group)
         {
-            if (!GetEditorGroupsSettings(part).EditorGroups.Any(editorGroup => editorGroup.Name == group)) return false;
+            Argument.ThrowIfNullOrEmpty(group, nameof(group));
+            
+            if (!GetEditorGroupsSettings(part)?.EditorGroups.Any(editorGroup => editorGroup.Name == group) ?? false) return false;
 
             if (part.CompleteEditorGroupNames.Contains(group)) return true;
 
             return group == part.IncompleteEditorGroupNames.FirstOrDefault();
         }
 
-        public EditorGroupDescriptor GetNextAuthorizedGroupDescriptor(EditorGroupsPart part, string group)
+        public EditorGroupDescriptor GetNextAuthorizedGroupDescriptor(AsyncEditorPart part, string group)
         {
-            var authorizedGroups = GetAuthorizedGroups(part).ToList();
+            Argument.ThrowIfNullOrEmpty(group, nameof(group));
+
+            var authorizedGroups = GetAuthorizedEditorGroups(part).ToList();
+            if (!authorizedGroups.Any()) return null;
 
             var groupDescriptor = authorizedGroups.FirstOrDefault(editorGroup => editorGroup.Name == group);
             if (groupDescriptor == null) return null;
@@ -89,9 +93,12 @@ namespace Lombiq.EditorGroups.Services
                 authorizedGroups[authorizedGroups.IndexOf(groupDescriptor) + 1];
         }
 
-        public EditorGroupDescriptor GetPreviousAuthorizedGroupDescriptor(EditorGroupsPart part, string group)
+        public EditorGroupDescriptor GetPreviousAuthorizedGroupDescriptor(AsyncEditorPart part, string group)
         {
-            var authorizedGroups = GetAuthorizedGroups(part).ToList();
+            Argument.ThrowIfNullOrEmpty(group, nameof(group));
+
+            var authorizedGroups = GetAuthorizedEditorGroups(part).ToList();
+            if (!authorizedGroups.Any()) return null;
 
             var groupDescriptor = authorizedGroups.FirstOrDefault(editorGroup => editorGroup.Name == group);
             if (groupDescriptor == null) return null;
@@ -101,23 +108,25 @@ namespace Lombiq.EditorGroups.Services
                 authorizedGroups[authorizedGroups.IndexOf(groupDescriptor) - 1];
         }
 
-        public void StoreCompleteEditorGroup(EditorGroupsPart part, string group)
+        public void StoreCompleteEditorGroup(AsyncEditorPart part, string group)
         {
-            if (!GetEditorGroupsSettings(part).EditorGroups.Any(editorGroup => editorGroup.Name == group)) return;
+            Argument.ThrowIfNullOrEmpty(group, nameof(group));
+
+            if (!GetEditorGroupsSettings(part)?.EditorGroups.Any(editorGroup => editorGroup.Name == group) ?? false) return;
 
             var completeGroups = part.CompleteEditorGroupNames.Union(new[] { group });
 
             part.CompleteEditorGroupNames = completeGroups;
         }
 
-        public EditorGroupsSettings GetEditorGroupsSettings(EditorGroupsPart part) =>
+        public EditorGroupsSettings GetEditorGroupsSettings(AsyncEditorPart part) =>
             _editorGroupsProviderAccessor.GetProvider(part.ContentItem.ContentType)?.GetEditorGroupsSettings();
 
 
-        private void SetCurrentGroup(EditorGroupsPart part, string group) =>
+        private void SetCurrentGroup(AsyncEditorPart part, string group) =>
             part.CurrentEditorGroup = GetEditorGroupDescriptor(part, group);
 
-        private void SetAsyncEditorContext(EditorGroupsPart part) =>
+        private void SetAsyncEditorContext(AsyncEditorPart part) =>
             part.AsyncEditorContext = true;
     }
 }

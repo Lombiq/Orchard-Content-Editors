@@ -99,25 +99,24 @@
     <Compile Include="Constants\EditorGroupsTestConstants.cs" />
     <Compile Include="Constants\ElementNames.cs" />
     <Compile Include="Constants\ResourceNames.cs" />
-    <Compile Include="Controllers\AsyncEditorGroupController.cs" />
+    <Compile Include="Controllers\AsyncEditorController.cs" />
     <Compile Include="Controllers\EditorGroupsTestController.cs" />
-    <Compile Include="Drivers\EditorGroupsPartDriver.cs" />
-    <Compile Include="Handlers\EditorGroupsPartHandler.cs" />
+    <Compile Include="Drivers\AsyncEditorPartDriver.cs" />
+    <Compile Include="Handlers\AsyncEditorPartHandler.cs" />
     <Compile Include="Migrations\EditorGroupsTestMigrations.cs" />
     <Compile Include="Models\EditorGroupsSettings.cs" />
-    <Compile Include="Models\IContentGroupEditorContext.cs" />
     <Compile Include="Models\EditorGroupDescriptor.cs" />
-    <Compile Include="Models\EditorGroupsPart.cs" />
-    <Compile Include="Models\EditorGroupsResult.cs" />
+    <Compile Include="Models\AsyncEditorPart.cs" />
+    <Compile Include="Models\AsyncEditorResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\AsyncEditorShapeTableProvider.cs" />
     <Compile Include="Providers\RenderContextPlacementParseMatchProvider.cs" />
     <Compile Include="Services\AsyncEditorService.cs" />
-    <Compile Include="Services\EditorGroupsProviderAccessor.cs" />
+    <Compile Include="Services\EditorGroupsSettingsProviderAccessor.cs" />
     <Compile Include="Services\IAsyncEditorService.cs" />
     <Compile Include="Services\IEditorGroupsProviderAccessor.cs" />
     <Compile Include="Services\TestEditorGroupsProvider.cs" />
-    <Content Include="Scripts\lombiq-editorgroups.js" />
+    <Content Include="Scripts\lombiq-asynceditor.js" />
     <Compile Include="ResourceManifest.cs" />
     <Compile Include="Services\AdminRenderContextMatchProvider.cs" />
     <Compile Include="Services\FrontEndRenderContextMatchProvider.cs" />
@@ -142,9 +141,7 @@
       <Private>$(MvcBuildViews)</Private>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Views\Parts\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="Placement.info" />
   </ItemGroup>
@@ -152,10 +149,10 @@
     <Content Include="Views\EditorGroupsTest\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Lombiq.EditorGroups.cshtml" />
+    <Content Include="Views\Lombiq.AsyncEditorLoader.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Lombiq.EditorGroups.Resources.cshtml" />
+    <Content Include="Views\Lombiq.AsyncEditorLoader.Resources.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\AsyncEditor.Title.cshtml" />
