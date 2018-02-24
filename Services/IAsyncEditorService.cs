@@ -1,6 +1,5 @@
 ﻿using Lombiq.EditorGroups.Models;
 using Orchard;
-using Orchard.ContentManagement;
 using System.Collections.Generic;
 
 namespace Lombiq.EditorGroups.Services
@@ -11,7 +10,8 @@ namespace Lombiq.EditorGroups.Services
         IEnumerable<EditorGroupDescriptor> GetAuthorizedGroups(EditorGroupsPart part);
         dynamic BuildAsyncEditorShape(EditorGroupsPart part, string group);
         EditorGroupDescriptor GetEditorGroupDescriptor(EditorGroupsPart part, string group);
-        EditorGroupDescriptor GetNextEditorGroupDescriptor(EditorGroupsPart part, string group = "");
+        EditorGroupDescriptor GetNextAuthorizedGroupDescriptor(EditorGroupsPart part, string group = "");
+        EditorGroupDescriptor GetPreviousAuthorizedGroupDescriptor(EditorGroupsPart part, string group = "");
         bool EditorGroupAvailable(EditorGroupsPart part, string group);
         void StoreCompleteEditorGroup(EditorGroupsPart part, string group);
         EditorGroupsSettings GetEditorGroupsSettings(EditorGroupsPart part);

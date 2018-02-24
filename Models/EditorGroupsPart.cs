@@ -40,5 +40,13 @@ namespace Lombiq.EditorGroups.Models
         private readonly LazyField<IEnumerable<EditorGroupDescriptor>> _authorizedEditorGroups = new LazyField<IEnumerable<EditorGroupDescriptor>>();
         internal LazyField<IEnumerable<EditorGroupDescriptor>> AuthorizedEditorGroupsField => _authorizedEditorGroups;
         public IEnumerable<EditorGroupDescriptor> AuthorizedEditorGroups => _authorizedEditorGroups.Value;
+
+        private readonly LazyField<EditorGroupDescriptor> _nextEditorGroup = new LazyField<EditorGroupDescriptor>();
+        internal LazyField<EditorGroupDescriptor> NextEditorGroupField { get { return _nextEditorGroup; } }
+        public EditorGroupDescriptor NextEditorGroup { get { return _nextEditorGroup.Value; } }
+
+        private readonly LazyField<EditorGroupDescriptor> _previousEditorGroup = new LazyField<EditorGroupDescriptor>();
+        internal LazyField<EditorGroupDescriptor> PreviousEditorGroupField { get { return _previousEditorGroup; } }
+        public EditorGroupDescriptor PreviousEditorGroup { get { return _previousEditorGroup.Value; } }
     }
 }

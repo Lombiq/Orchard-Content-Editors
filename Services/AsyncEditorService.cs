@@ -77,20 +77,28 @@ namespace Lombiq.EditorGroups.Services
             return group == part.IncompleteEditorGroupNames.FirstOrDefault();
         }
 
-        public EditorGroupDescriptor GetNextEditorGroupDescriptor(EditorGroupsPart part, string group)
+        public EditorGroupDescriptor GetNextAuthorizedGroupDescriptor(EditorGroupsPart part, string group)
         {
             var authorizedGroups = GetAuthorizedGroups(part).ToList();
 
-            var lastCompleteGroupDescriptor = authorizedGroups
-                .FirstOrDefault(groupDescriptor => groupDescriptor.Name == group);
+            var groupDescriptor = authorizedGroups.FirstOrDefault(editorGroup => editorGroup.Name == group);
+            if (groupDescriptor == null) return null;
 
-            if (lastCompleteGroupDescriptor == null) return null;
+            return groupDescriptor == authorizedGroups.Last() ? 
+                null : 
+                authorizedGroups[authorizedGroups.IndexOf(groupDescriptor) + 1];
+        }
 
-            var indexOfLastCompleteGroup = authorizedGroups.IndexOf(lastCompleteGroupDescriptor);
+        public EditorGroupDescriptor GetPreviousAuthorizedGroupDescriptor(EditorGroupsPart part, string group)
+        {
+            var authorizedGroups = GetAuthorizedGroups(part).ToList();
 
-            if (indexOfLastCompleteGroup == authorizedGroups.Count - 1) return null;
+            var groupDescriptor = authorizedGroups.FirstOrDefault(editorGroup => editorGroup.Name == group);
+            if (groupDescriptor == null) return null;
 
-            return authorizedGroups[indexOfLastCompleteGroup + 1];
+            return groupDescriptor == authorizedGroups.First() ? 
+                null : 
+                authorizedGroups[authorizedGroups.IndexOf(groupDescriptor) - 1];
         }
 
         public void StoreCompleteEditorGroup(EditorGroupsPart part, string group)

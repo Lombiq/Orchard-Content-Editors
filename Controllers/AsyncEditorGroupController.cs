@@ -115,7 +115,7 @@ namespace Lombiq.EditorGroups.Controllers
                 _contentManager.Publish(part.ContentItem);
             }
 
-            var nextGroup = _asyncEditorService.GetNextEditorGroupDescriptor(part, group);
+            var nextGroup = _asyncEditorService.GetNextAuthorizedGroupDescriptor(part, group);
             if (nextGroup == null) return EditorGroupResult(part, group);
 
             return EditorGroupResult(part, nextGroup.Name);

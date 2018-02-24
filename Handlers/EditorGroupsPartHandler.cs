@@ -44,6 +44,16 @@ namespace Lombiq.EditorGroups.Handlers
 
                 part.IncompleteEditorGroupNamesField.Loader(() => 
                     part.EditorGroups.Select(editorGroup => editorGroup.Name).Except(part.CompleteEditorGroupNames));
+
+                part.NextEditorGroupField.Loader(() =>
+                    part.CurrentEditorGroup == null ?
+                        null :
+                        asyncEditorService.GetNextAuthorizedGroupDescriptor(part, part.CurrentEditorGroup.Name));
+
+                part.PreviousEditorGroupField.Loader(() =>
+                    part.CurrentEditorGroup == null ?
+                        null :
+                        asyncEditorService.GetPreviousAuthorizedGroupDescriptor(part, part.CurrentEditorGroup.Name));
             });
         }
     }

@@ -12,7 +12,12 @@
     }
 
     const string BlockName = "asyncEditorActions";
-    const string PagerElementName = BlockName + "__pager";
+    const string GroupListElementName = BlockName + "__groupList";
+    const string GroupListItemElementName = BlockName + "__groupListItem";
+    const string GroupNameElementName = BlockName + "__groupName";
+    const string GroupNameElementNameWithCurrentModifier = GroupNameElementName + "_current";
+    const string GroupNameElementNameWithCompleteModifier = GroupNameElementName + "_complete";
+    const string GroupNameElementNameWithIncompleteModifier = GroupNameElementName + "_incomplete";
     const string NavigationButtonsElementName = BlockName + "__navigationButtons";
     const string SaveButtonElementName = BlockName + "__saveButton";
     const string PublishButtonElementName = BlockName + "__publishButton";
@@ -21,11 +26,52 @@
 }
 
 <div class="@BlockName">
-    <div class="@PagerElementName">
-        @Display.AsyncEditor_Pager(ContentItem: contentItem)
-    </div>
+    @if (editorGroupsPart.PreviousEditorGroup != null)
+    {
+        <div class="btn button @PreviousButtonElementName js-@ElementNames.AsyncEditorActions.LoadEditorElementName"
+             data-editorGroupName="@editorGroupsPart.PreviousEditorGroup.Name">
+            @T("Back")
+        </div>
+    }
+    <ol class="@GroupListElementName">
+        @foreach (var editorGroup in editorGroupsPart.AuthorizedEditorGroups)
+        {
+            <li class="@GroupListItemElementName">
+                @if (editorGroup == editorGroupsPart.CurrentEditorGroup)
+                {
+                    <div class="@GroupNameElementName @GroupNameElementNameWithCurrentModifier">
+                        @editorGroup.Title
+                    </div>
+                }
+                else if (!editorGroupsPart.CompleteEditorGroupNames.Contains(editorGroup.Name))
+                {
+                    <div class="@GroupNameElementName @GroupNameElementNameWithIncompleteModifier">
+                        @editorGroup.Title
+                    </div>
+                }
+                else
+                {
+                    <div class="@GroupNameElementName @GroupNameElementNameWithCompleteModifier js-@ElementNames.AsyncEditorActions.LoadEditorElementName"
+                         data-editorGroupName="@editorGroup.Name">
+                        @editorGroup.Title
+                    </div>
+                }
+            </li>
+        }
+    </ol>
     <div class="@NavigationButtonsElementName">
-        <input type="submit" name="submit.Save" class="btn button @SaveButtonElementName" value="@T("Save")" />
-        <input type="submit" name="submit.SaveAndNext" class="btn button @NextButtonElementName" value="@T("Next")" />
+        @if (editorGroupsPart.CurrentEditorGroup.PublishGroup)
+        {
+            <input type="submit" name="submit.SaveAndNext" class="btn button @PublishButtonElementName" value="@T("Publish")" />
+        }
+        else
+        {
+            <input type="submit" name="submit.Save" class="btn button @SaveButtonElementName" value="@T("Save")" />
+        }
+        
+        @if (editorGroupsPart.NextEditorGroup != null)
+        {
+            <input type="submit" name="submit.SaveAndNext" class="btn button @NextButtonElementName" value="@T("Next")" />
+        }
     </div>
 </div>

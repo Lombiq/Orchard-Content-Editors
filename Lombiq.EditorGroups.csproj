@@ -167,9 +167,6 @@
     <Content Include="Views\Content.Edit.Async.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\AsyncEditor.Pager.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\AsyncEditor.ValidationSummary.cshtml" />
   </ItemGroup>
   <ItemGroup>
