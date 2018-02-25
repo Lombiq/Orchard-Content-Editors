@@ -39,7 +39,7 @@
         currentForm: null,
 
         /**
-         * Initializes the Lombiq EditorGroups plugin.
+         * Initializes the Lombiq Async Editor plugin.
          */
         init: function () {
             var plugin = this;
@@ -67,6 +67,11 @@
             plugin.loadEditor(plugin.settings.contentItemId, plugin.settings.editorGroupName, asyncEditorCallback);
         },
 
+        /**
+         * Loads the editor for the given content item ID and group async.
+         * @param {number} contentItemId ID that identifies the content item that the editor is generated for.
+         * @param {string} group Technical name of the group. Can be left empty.
+         */
         loadEditor: function (contentItemId, group) {
             var plugin = this;
 
@@ -99,6 +104,10 @@
             });
         },
 
+        /**
+         * Submits the currently loaded editor form.
+         * @param {JQuery} submitButtonElement JQuery element for the submit button. Its name and value is also posted to the server.
+         */
         postEditor: function (submitButtonElement) {
             var plugin = this;
 
@@ -128,6 +137,10 @@
             });
         },
 
+        /**
+         * Renders the given editor shape and also registers the necessary event listeners.
+         * @param {string} editorShape HTML content of the editor shape.
+         */
         renderEditorShape: function (editorShape) {
             var plugin = this;
 
@@ -167,6 +180,10 @@
             plugin.editorContainerElement.show();
         },
 
+        /**
+         * Displays or hides the processing indicator.
+         * @param {boolean} show Displays or hides the indicator depending on this value.
+         */
         showProcessingIndicator: function (show) {
             var plugin = this;
 
