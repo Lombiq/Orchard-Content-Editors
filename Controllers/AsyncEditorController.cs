@@ -129,6 +129,11 @@ namespace Lombiq.EditorGroups.Controllers
 
             if (!_asyncEditorService.AuthorizeToEdit(part, group)) return UnauthorizedGroupEditorResult();
 
+            if (publish && !_asyncEditorService.AuthorizeToPublish(part, group))
+            {
+                return ErrorResult(T("You are not authorized to publish this content item."));
+            }
+
             if (!string.IsNullOrEmpty(group) && 
                 !_asyncEditorService.EditorGroupAvailable(part, group)) return GroupUnavailableResult();
 
@@ -187,7 +192,7 @@ namespace Lombiq.EditorGroups.Controllers
             ErrorResult(T("Group name cannot be empty."));
 
         private ActionResult UnauthorizedGroupEditorResult() =>
-            ErrorResult(T("You don't have permission to edit this content item on this editor group."));
+            ErrorResult(T("You are not authorized to edit this content item on this editor group."));
 
         private ActionResult GroupUnavailableResult() =>
             ErrorResult(T("Editor group is not available. Fill all the previous editor groups first."));
