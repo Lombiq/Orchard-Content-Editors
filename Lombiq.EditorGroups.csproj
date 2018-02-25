@@ -111,8 +111,8 @@
     <Compile Include="Models\AsyncEditorPart.cs" />
     <Compile Include="Models\AsyncEditorResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Providers\AsyncEditorShapeTableProvider.cs" />
-    <Compile Include="Providers\RenderContextPlacementParseMatchProvider.cs" />
+    <Compile Include="Services\AsyncEditorShapeTableProvider.cs" />
+    <Compile Include="Services\RenderContextPlacementParseMatchProvider.cs" />
     <Compile Include="Services\AsyncEditorService.cs" />
     <Compile Include="Services\EditorGroupsSettingsProviderAccessor.cs" />
     <Compile Include="Services\IAsyncEditorService.cs" />

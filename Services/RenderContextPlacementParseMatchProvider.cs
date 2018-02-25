@@ -4,7 +4,7 @@ using Orchard.DisplayManagement.Descriptors.ShapePlacementStrategy;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Lombiq.EditorGroups.Providers
+namespace Lombiq.EditorGroups.Services
 {
     public class RenderContextPlacementParseMatchProvider : IPlacementParseMatchProvider
     {
