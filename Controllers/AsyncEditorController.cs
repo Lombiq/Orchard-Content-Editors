@@ -13,7 +13,6 @@ namespace Lombiq.EditorGroups.Controllers
     public class AsyncEditorController : Controller, IUpdateModel
     {
         private readonly IContentManager _contentManager;
-        private readonly IAuthorizer _authorizer;
         private readonly IShapeDisplay _shapeDisplay;
         private readonly dynamic _shapeFactory;
         private readonly IAsyncEditorService _asyncEditorService;
@@ -25,14 +24,12 @@ namespace Lombiq.EditorGroups.Controllers
 
         public AsyncEditorController(
             IContentManager contentManager, 
-            IAuthorizer authorizer,
             IShapeDisplay shapeDisplay,
             IShapeFactory shapeFactory,
             IAsyncEditorService asyncEditorService,
             ITransactionManager transactionManager)
         {
             _contentManager = contentManager;
-            _authorizer = authorizer;
             _shapeDisplay = shapeDisplay;
             _shapeFactory = shapeFactory;
             _asyncEditorService = asyncEditorService;

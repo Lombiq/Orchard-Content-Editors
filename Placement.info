@@ -4,7 +4,7 @@
     />
     <Match RenderContext="FrontEnd">
         <Place
-            Parts_AsyncEditor_Edit = "Content: 5;Shape=Lombiq_AsyncEditorLoader"
+            Parts_AsyncEditor_Edit = "Content: 5"
             Content_SaveButton="-"
             Content_PublishButton="-"
             Content_CancelButton="-"

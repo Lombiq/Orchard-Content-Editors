@@ -17,7 +17,11 @@ namespace Lombiq.EditorGroups.Services
         private readonly IJsonConverter _jsonConverter;
 
 
-        public AsyncEditorService(IAuthorizer authorizer, IContentManager contentManager, IEditorGroupsProviderAccessor editorGroupsProviderAccessor, IJsonConverter jsonConverter)
+        public AsyncEditorService(
+            IAuthorizer authorizer, 
+            IContentManager contentManager, 
+            IEditorGroupsProviderAccessor editorGroupsProviderAccessor, 
+            IJsonConverter jsonConverter)
         {
             _authorizer = authorizer;
             _contentManager = contentManager;

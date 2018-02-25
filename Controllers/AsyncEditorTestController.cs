@@ -14,14 +14,12 @@ namespace Lombiq.EditorGroups.Controllers
     public class AsyncEditorTestController : Controller
     {
         private readonly IContentManager _contentManager;
-        private readonly IAuthorizer _authorizer;
         private readonly dynamic _shapeFactory;
 
 
-        public AsyncEditorTestController(IContentManager contentManager, IAuthorizer authorizer, IShapeFactory shapeFactory)
+        public AsyncEditorTestController(IContentManager contentManager, IShapeFactory shapeFactory)
         {
             _contentManager = contentManager;
-            _authorizer = authorizer;
             _shapeFactory = shapeFactory;
         }
 
