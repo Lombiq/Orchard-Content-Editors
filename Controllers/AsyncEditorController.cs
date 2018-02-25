@@ -23,7 +23,13 @@ namespace Lombiq.EditorGroups.Controllers
         public Localizer T { get; set; }
 
 
-        public AsyncEditorController(IContentManager contentManager, IAuthorizer authorizer, IShapeDisplay shapeDisplay, IShapeFactory shapeFactory, IAsyncEditorService asyncEditorService, ITransactionManager transactionManager)
+        public AsyncEditorController(
+            IContentManager contentManager, 
+            IAuthorizer authorizer,
+            IShapeDisplay shapeDisplay,
+            IShapeFactory shapeFactory,
+            IAsyncEditorService asyncEditorService,
+            ITransactionManager transactionManager)
         {
             _contentManager = contentManager;
             _authorizer = authorizer;
@@ -38,17 +44,16 @@ namespace Lombiq.EditorGroups.Controllers
 
         public ActionResult Edit(int contentItemId, string group = "", string contentType = "")
         {
-            if (string.IsNullOrEmpty(group)) return GroupNameCannotBeEmptyResult();
-
             var part = GetAsyncEditorPart(contentItemId, contentType);
 
             if (part == null) return ContentItemNotFoundResult();
 
             if (part.HasEditorGroups && string.IsNullOrEmpty(group)) return GroupNameCannotBeEmptyResult();
 
-            if (!_asyncEditorService.IsAuthorizedToEditGroup(part, group)) return UnauthorizedGroupEditorResult();
+            if (!_asyncEditorService.AuthorizeToEdit(part, group)) return UnauthorizedGroupEditorResult();
 
-            if (!_asyncEditorService.EditorGroupAvailable(part, group)) return GroupUnavailableResult();
+            if (!string.IsNullOrEmpty(group) && 
+                !_asyncEditorService.EditorGroupAvailable(part, group)) return GroupUnavailableResult();
 
             return EditorGroupResult(part, group);
         }
@@ -59,6 +64,11 @@ namespace Lombiq.EditorGroups.Controllers
             SaveDraftOrPublishPost(contentItemId, group, contentType, false);
 
         [HttpPost, ActionName(nameof(AsyncEditorController.Edit))]
+        [FormValueRequired("submit.Publish")]
+        public ActionResult PublishPost(int contentItemId, string group = "", string contentType = "") =>
+            SaveDraftOrPublishPost(contentItemId, group, contentType, true);
+        
+        [HttpPost, ActionName(nameof(AsyncEditorController.Edit))]
         [FormValueRequired("submit.SaveAndNext")]
         public ActionResult SaveAndNextPost(int contentItemId, string group, string contentType = "")
         {
@@ -68,23 +78,23 @@ namespace Lombiq.EditorGroups.Controllers
 
             if (part == null || !part.HasEditorGroups) return ContentItemNotFoundResult();
 
-            if (!_asyncEditorService.IsAuthorizedToEditGroup(part, group)) return UnauthorizedGroupEditorResult();
+            if (!_asyncEditorService.AuthorizeToEdit(part, group)) return UnauthorizedGroupEditorResult();
 
             if (!_asyncEditorService.EditorGroupAvailable(part, group)) return GroupUnavailableResult();
 
-            _contentManager.Create(part.ContentItem, VersionOptions.Draft);
+            if (contentItemId == 0) _contentManager.Create(part.ContentItem, VersionOptions.Draft);
             _contentManager.UpdateEditor(part.ContentItem, this, group);
 
             if (!ModelState.IsValid)
             {
                 _transactionManager.Cancel();
 
-                return EditorGroupResult(part, group, false);
+                return EditorGroupResult(part, group, contentItemId != 0);
             }
 
             _asyncEditorService.StoreCompleteEditorGroup(part, group);
 
-            var nextGroup = _asyncEditorService.GetNextAuthorizedGroupDescriptor(part, group);
+            var nextGroup = _asyncEditorService.GetNextGroupDescriptor(part, group);
             if (nextGroup == null) return EditorGroupResult(part, group);
 
             return EditorGroupResult(part, nextGroup.Name);
@@ -109,17 +119,50 @@ namespace Lombiq.EditorGroups.Controllers
             return _shapeDisplay.Display(asyncEditorShape);
         }
 
-        private ActionResult ContentItemNotFoundResult() =>
-            ErrorResult(T("Content item has not found."));
+        private ActionResult SaveDraftOrPublishPost(int contentItemId, string group = "", string contentType = "", bool publish = false)
+        {
+            var part = GetAsyncEditorPart(contentItemId, contentType);
 
-        private ActionResult GroupNameCannotBeEmptyResult() =>
-            ErrorResult(T("Group name cannot be empty."));
+            if (part == null) return ContentItemNotFoundResult();
 
-        private ActionResult UnauthorizedGroupEditorResult() =>
-            ErrorResult(T("You don't have permission to edit this content item on this editor group."));
+            if (part.HasEditorGroups && string.IsNullOrEmpty(group)) return GroupNameCannotBeEmptyResult();
 
-        private ActionResult GroupUnavailableResult() =>
-            ErrorResult(T("Editor group is not available. Fill all the previous editor groups first."));
+            if (!_asyncEditorService.AuthorizeToEdit(part, group)) return UnauthorizedGroupEditorResult();
+
+            if (!string.IsNullOrEmpty(group) && 
+                !_asyncEditorService.EditorGroupAvailable(part, group)) return GroupUnavailableResult();
+
+            if (part.HasEditorGroups)
+            {
+                var currentEditorGroupDescriptor = _asyncEditorService.GetEditorGroupDescriptor(part, group);
+                if (publish && !currentEditorGroupDescriptor.PublishGroup)
+                {
+                    return ErrorResult(T("The current group is not a publish group. Editor hasn't been updated."));
+                }
+            }
+
+            if (contentItemId == 0) _contentManager.Create(part.ContentItem, VersionOptions.Draft);
+            _contentManager.UpdateEditor(part.ContentItem, this, group);
+
+            if (!ModelState.IsValid)
+            {
+                _transactionManager.Cancel();
+
+                return EditorGroupResult(part, group, contentItemId != 0);
+            }
+
+            if (part.HasEditorGroups)
+            {
+                _asyncEditorService.StoreCompleteEditorGroup(part, group);
+            }
+
+            if (publish)
+            {
+                _contentManager.Publish(part.ContentItem);
+            }
+
+            return EditorGroupResult(part, group);
+        }
 
         private ActionResult ErrorResult(LocalizedString errorMessage) =>
             Json(new AsyncEditorResult
@@ -136,52 +179,18 @@ namespace Lombiq.EditorGroups.Controllers
                 EditorShape = GetEditorShapeHtml(part, group, contentCreated),
                 EditorGroup = group
             }, JsonRequestBehavior.AllowGet);
-        
-        private ActionResult SaveDraftOrPublishPost(int contentItemId, string group = "", string contentType = "", bool publish = false)
-        {
-            if (string.IsNullOrEmpty(group)) return GroupNameCannotBeEmptyResult();
 
-            var part = GetAsyncEditorPart(contentItemId, contentType);
+        private ActionResult ContentItemNotFoundResult() =>
+            ErrorResult(T("Content item has not found."));
 
-            if (part == null) return ContentItemNotFoundResult();
+        private ActionResult GroupNameCannotBeEmptyResult() =>
+            ErrorResult(T("Group name cannot be empty."));
 
-            if (part.HasEditorGroups && string.IsNullOrEmpty(group)) return GroupNameCannotBeEmptyResult();
+        private ActionResult UnauthorizedGroupEditorResult() =>
+            ErrorResult(T("You don't have permission to edit this content item on this editor group."));
 
-            if (!_asyncEditorService.IsAuthorizedToEditGroup(part, group)) return UnauthorizedGroupEditorResult();
-
-            if (!_asyncEditorService.EditorGroupAvailable(part, group)) return GroupUnavailableResult();
-
-            if (part.HasEditorGroups)
-            {
-                var currentEditorGroupDescriptor = _asyncEditorService.GetEditorGroupDescriptor(part, group);
-                if (publish && !currentEditorGroupDescriptor.PublishGroup)
-                {
-                    return ErrorResult(T("The current group is not a publish group. Editor hasn't been updated."));
-                }
-            }
-
-            _contentManager.Create(part.ContentItem, VersionOptions.Draft);
-            _contentManager.UpdateEditor(part.ContentItem, this, group);
-
-            if (!ModelState.IsValid)
-            {
-                _transactionManager.Cancel();
-
-                return EditorGroupResult(part, group, false);
-            }
-
-            if (part.HasEditorGroups)
-            {
-                _asyncEditorService.StoreCompleteEditorGroup(part, group);
-            }
-
-            if (publish)
-            {
-                _contentManager.Publish(part.ContentItem);
-            }
-
-            return EditorGroupResult(part, group);
-        }
+        private ActionResult GroupUnavailableResult() =>
+            ErrorResult(T("Editor group is not available. Fill all the previous editor groups first."));
 
 
         #region IUpdateModel

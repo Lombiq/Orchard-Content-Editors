@@ -1,6 +1,8 @@
 ﻿@using Orchard.ContentManagement
+@using Orchard.Core.Contents.Settings
 @using Lombiq.EditorGroups.Constants
 @using Lombiq.EditorGroups.Models
+@using Lombiq.EditorGroups.Services
 
 @{
     var contentItem = Model.ContentItem as ContentItem;
@@ -11,13 +13,14 @@
         return;
     }
 
+    var asyncEditorService = WorkContext.Resolve<IAsyncEditorService>();
+
     const string BlockName = "asyncEditorActions";
     const string GroupListElementName = BlockName + "__groupList";
     const string GroupListItemElementName = BlockName + "__groupListItem";
     const string GroupNameElementName = BlockName + "__groupName";
     const string GroupNameElementNameWithCurrentModifier = GroupNameElementName + "_current";
     const string GroupNameElementNameWithCompleteModifier = GroupNameElementName + "_complete";
-    const string GroupNameElementNameWithIncompleteModifier = GroupNameElementName + "_incomplete";
     const string NavigationButtonsElementName = BlockName + "__navigationButtons";
     const string SaveButtonElementName = BlockName + "__saveButton";
     const string PublishButtonElementName = BlockName + "__publishButton";
@@ -26,10 +29,10 @@
 }
 
 <div class="@BlockName">
-    @if (asyncEditorPart.PreviousEditorGroup != null)
+    @if (asyncEditorPart.PreviousAuthorizedEditorGroup != null)
     {
         <div class="btn button @PreviousButtonElementName js-@ElementNames.AsyncEditorActions.LoadEditorElementName"
-             data-editorGroupName="@asyncEditorPart.PreviousEditorGroup.Name">
+             data-editorGroupName="@asyncEditorPart.PreviousAuthorizedEditorGroup.Name">
             @T("Back")
         </div>
     }
@@ -37,41 +40,46 @@
         @foreach (var editorGroup in asyncEditorPart.AuthorizedEditorGroups)
         {
             <li class="@GroupListItemElementName">
-                @if (editorGroup == asyncEditorPart.CurrentEditorGroup)
-                {
-                    <div class="@GroupNameElementName @GroupNameElementNameWithCurrentModifier">
-                        @editorGroup.Title
-                    </div>
+                @{ 
+                    var groupElementBuilder = new TagBuilder("div");
+                    groupElementBuilder.AddCssClass(GroupNameElementName);
+                    groupElementBuilder.InnerHtml = editorGroup.Title;
+
+                    var isCurrent = asyncEditorPart.CurrentEditorGroup.Equals(editorGroup);
+                    if (isCurrent)
+                    {
+                        groupElementBuilder.AddCssClass(GroupNameElementNameWithCurrentModifier);
+                    }
+
+                    if (asyncEditorPart.CompleteAuthorizedEditorGroups.Contains(editorGroup))
+                    {
+                        groupElementBuilder.AddCssClass(GroupNameElementNameWithCompleteModifier);
+                    }
+
+                    if (!isCurrent && asyncEditorPart.AvailableAuthorizedEditorGroups.Contains(editorGroup))
+                    {
+                        groupElementBuilder.AddCssClass("js-" + ElementNames.AsyncEditorActions.LoadEditorElementName);
+                        groupElementBuilder.Attributes.Add("data-editorGroupName", editorGroup.Name);
+                    }
                 }
-                else if (!asyncEditorPart.CompleteEditorGroupNames.Contains(editorGroup.Name))
-                {
-                    <div class="@GroupNameElementName @GroupNameElementNameWithIncompleteModifier">
-                        @editorGroup.Title
-                    </div>
-                }
-                else
-                {
-                    <div class="@GroupNameElementName @GroupNameElementNameWithCompleteModifier js-@ElementNames.AsyncEditorActions.LoadEditorElementName"
-                         data-editorGroupName="@editorGroup.Name">
-                        @editorGroup.Title
-                    </div>
-                }
+
+                @Html.Raw(groupElementBuilder.ToString(TagRenderMode.Normal))
             </li>
         }
     </ol>
     <div class="@NavigationButtonsElementName">
-        @if (asyncEditorPart.CurrentEditorGroup.PublishGroup)
+        <input type="submit" name="submit.Save" class="btn button @SaveButtonElementName" value="@T("Save Draft")" />
+
+        @if ((asyncEditorPart.CurrentEditorGroup?.PublishGroup ?? true) && 
+            asyncEditorPart.TypeDefinition.Settings.GetModel<ContentTypeSettings>().Draftable &&
+            asyncEditorService.AuthorizeToPublish(asyncEditorPart, asyncEditorPart.CurrentEditorGroup?.Name ?? ""))
         {
-            <input type="submit" name="submit.SaveAndNext" class="btn button @PublishButtonElementName" value="@T("Publish")" />
-        }
-        else
-        {
-            <input type="submit" name="submit.Save" class="btn button @SaveButtonElementName" value="@T("Save")" />
+            <input type="submit" name="submit.Publish" class="btn button @PublishButtonElementName" value="@T("Publish")" />
         }
         
-        @if (asyncEditorPart.NextEditorGroup != null)
+        @if (asyncEditorPart.NextAuthorizedEditorGroup != null)
         {
-            <input type="submit" name="submit.SaveAndNext" class="btn button @NextButtonElementName" value="@T("Next")" />
+            <input type="submit" name="submit.SaveAndNext" class="btn button @NextButtonElementName" value="@T("Save and Next")" />
         }
     </div>
 </div>

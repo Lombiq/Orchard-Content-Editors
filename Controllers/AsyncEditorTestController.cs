@@ -2,6 +2,7 @@
 using Lombiq.EditorGroups.Models;
 using Orchard.ContentManagement;
 using Orchard.Core.Contents;
+using Orchard.DisplayManagement;
 using Orchard.Localization;
 using Orchard.Security;
 using Orchard.Themes;
@@ -14,12 +15,14 @@ namespace Lombiq.EditorGroups.Controllers
     {
         private readonly IContentManager _contentManager;
         private readonly IAuthorizer _authorizer;
+        private readonly dynamic _shapeFactory;
 
 
-        public AsyncEditorTestController(IContentManager contentManager, IAuthorizer authorizer)
+        public AsyncEditorTestController(IContentManager contentManager, IAuthorizer authorizer, IShapeFactory shapeFactory)
         {
             _contentManager = contentManager;
             _authorizer = authorizer;
+            _shapeFactory = shapeFactory;
         }
 
 
@@ -32,9 +35,10 @@ namespace Lombiq.EditorGroups.Controllers
 
         public ActionResult TestWithoutGroups(int id = 0)
         {
-            var testContentItemEditorShape = _contentManager.BuildEditor(GetItem(id, AsyncEditorTestConstants.TestContentTypeWithoutGroups));
+            var item = GetItem(id, AsyncEditorTestConstants.TestContentTypeWithoutGroups);
+            var loaderShape = _shapeFactory.Lombiq_AsyncEditorLoader(ContentItem: item);
 
-            return View(testContentItemEditorShape);
+            return View(loaderShape);
         }
         
 

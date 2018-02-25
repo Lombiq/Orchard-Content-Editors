@@ -9,7 +9,7 @@
 ; (function ($, window, document, undefined) {
     "use strict";
 
-    var pluginName = "lombiq_EditorGroups";
+    var pluginName = "lombiq_AsyncEditor";
 
     var defaults = {
         asyncEditorApiUrl: "",
@@ -18,7 +18,6 @@
         processingIndicatorElementClass: "",
         editorGroupName: "",
         editorPlaceholderElementClass: "",
-        formElementClass: "",
         loadEditorActionElementClass: "",
         postEditorActionElementClass: "",
     };
@@ -37,6 +36,7 @@
         processingIndicatorElement: null,
         currentGroup: "",
         currentContentItemId: 0,
+        currentForm: null,
 
         /**
          * Initializes the Lombiq EditorGroups plugin.
@@ -44,12 +44,27 @@
         init: function () {
             var plugin = this;
 
-            if (!plugin.settings.editorGroupName) return;
-
             plugin.editorContainerElement = plugin.element.find(plugin.settings.editorPlaceholderElementClass).first();
             plugin.processingIndicatorElement = plugin.element.find(plugin.settings.processingIndicatorElementClass).first();
 
-            plugin.loadEditor(plugin.settings.contentItemId, plugin.settings.editorGroupName);
+            var asyncEditorCallback = function (response) {
+                console.log(response);
+
+                if (response.Success) {
+                    plugin.renderEditorShape(response.editorShape);
+                }
+                else {
+                    alert(response.ErrorMessage);
+                }
+
+                plugin.currentGroup = response.EditorGroup;
+                plugin.currentContentItemId = response.ContentItemId;
+
+                plugin.showProcessingIndicator(false);
+            };
+
+
+            plugin.loadEditor(plugin.settings.contentItemId, plugin.settings.editorGroupName, asyncEditorCallback);
         },
 
         loadEditor: function (contentItemId, group) {
@@ -66,7 +81,17 @@
                     group: group
                 },
                 success: function (response) {
-                    plugin.handleResponse(response)
+                    if (response.Success) {
+                        plugin.renderEditorShape(response.EditorShape);
+                    }
+                    else {
+                        alert(response.ErrorMessage);
+                    }
+
+                    plugin.currentGroup = response.EditorGroup;
+                    plugin.currentContentItemId = response.ContentItemId;
+
+                    plugin.showProcessingIndicator(false);
                 },
                 fail: function () {
                     plugin.showProcessingIndicator(false);
@@ -74,20 +99,72 @@
             });
         },
 
-        handleResponse: function (response) {
+        postEditor: function (submitButtonElement) {
             var plugin = this;
-            console.log(response);
-            if (response.Success) {
-                plugin.showEditor(response.EditorShape);
-            }
-            else {
-                alert(response.ErrorMessage);
+
+            plugin.showProcessingIndicator(true);
+
+            $.ajax({
+                type: "POST",
+                url: plugin.currentForm.attr("action"),
+                data: plugin.currentForm.serialize() + (submitButtonElement ?
+                    ("&" + encodeURI(submitButtonElement.attr("name")) + "=" + encodeURI(submitButtonElement.attr("value"))) : ""),
+                success: function (response) {
+                    if (response.Success) {
+                        plugin.renderEditorShape(response.EditorShape);
+                    }
+                    else {
+                        alert(response.ErrorMessage);
+                    }
+
+                    plugin.currentGroup = response.EditorGroup;
+                    plugin.currentContentItemId = response.ContentItemId;
+
+                    plugin.showProcessingIndicator(false);
+                },
+                fail: function () {
+                    plugin.showProcessingIndicator(false);
+                }
+            });
+        },
+
+        renderEditorShape: function (editorShape) {
+            var plugin = this;
+
+            if (!plugin.editorContainerElement) return;
+
+            if (!editorShape) {
+                plugin.editorContainerElement.hide();
+
+                return;
             }
 
-            plugin.currentGroup = response.EditorGroup;
-            plugin.currentContentItemId = response.ContentItemId;
+            plugin.editorContainerElement.html(editorShape);
 
-            plugin.showProcessingIndicator(false);
+            plugin.editorContainerElement
+                .find(plugin.settings.loadEditorActionElementClass)
+                .on("click", function () {
+                    var groupName = $(this).attr("data-editorGroupName");
+
+                    if (groupName) plugin.loadEditor(plugin.currentContentItemId, groupName);
+                });
+
+            plugin.currentForm = plugin.editorContainerElement
+                .find("form")
+                .first();
+
+            if (plugin.currentForm) {
+                plugin.currentForm.submit(function (e) {
+                    e.preventDefault();
+                });
+
+                plugin.currentForm.find("input[type=submit]")
+                    .click(function () {
+                        plugin.postEditor($(this));
+                    });
+            }
+
+            plugin.editorContainerElement.show();
         },
 
         showProcessingIndicator: function (show) {
@@ -101,60 +178,6 @@
             else {
                 plugin.processingIndicatorElement.hide();
             }
-        },
-
-        showEditor: function (content) {
-            var plugin = this;
-
-            if (!plugin.editorContainerElement) return;
-
-            if (!content) {
-                plugin.editorContainerElement.hide();
-
-                return;
-            }
-
-            plugin.editorContainerElement.html(content);
-
-            plugin.editorContainerElement
-                .find(plugin.settings.loadEditorActionElementClass)
-                .first()
-                .on("click", function () {
-                    var groupName = $(this).attr("data-editorGroupName");
-
-                    if (groupName) plugin.loadEditor(plugin.currentContentItemId, groupName);
-                });
-
-            var form = plugin.editorContainerElement
-                .find("form")
-                .first();
-
-            if (form) {
-                form.submit(function (e) {
-                    e.preventDefault();
-                })
-
-                form.find("input[type=submit]")
-                    .click(function () {
-
-                        plugin.showProcessingIndicator(true);
-
-                        $.ajax({
-                            type: "POST",
-                            url: form.attr("action"),
-                            data: form.serialize() + '&' + encodeURI($(this).attr('name')) + '=' + encodeURI($(this).attr('value')),
-                            success: function (response) {
-                                console.log(response);
-                                plugin.handleResponse(response)
-                            },
-                            fail: function () {
-                                plugin.showProcessingIndicator(false);
-                            }
-                        });
-                    });
-            }
-
-            plugin.editorContainerElement.show();
         }
     });
 

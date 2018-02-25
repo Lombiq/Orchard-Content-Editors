@@ -17,6 +17,8 @@
             <Place
                 Parts_Title_Edit="Content:1@TestGroup1"
                 Parts_Common_Body_Edit="Content:1@TestGroup2"
+                Fields_Input_Edit-TestField1="Content:1@TestGroup3"
+                Fields_Input_Edit-TestField2="Content:2@TestGroup3"
              />
         </Match>
     </Match>

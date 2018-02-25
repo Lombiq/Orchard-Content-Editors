@@ -12,5 +12,7 @@
 }
 
 <h2 class="asyncEditorTitle">
-    @T("{0} details", asyncEditorPart.CurrentEditorGroup.Title)
+    @T("{0} details", asyncEditorPart.CurrentEditorGroup != null ? 
+    asyncEditorPart.CurrentEditorGroup.Title :
+    asyncEditorPart.TypeDefinition.DisplayName)
 </h2>

@@ -16,20 +16,6 @@ namespace Lombiq.EditorGroups.Services
 
 
         public IEditorGroupsProvider GetProvider(string contentType) =>
-            _editorGroupsProviders.FirstOrDefault(provider => provider.CanProvideEditorGroups(contentType)) ?? 
-            new DefaultEditorGroupsProvider();
-
-
-
-        private class DefaultEditorGroupsProvider : IEditorGroupsProvider
-        {
-            public bool CanProvideEditorGroups(string contentType) => false;
-
-            public EditorGroupsSettings GetEditorGroupsSettings() =>
-                new EditorGroupsSettings
-                {
-                    EditorGroups = Enumerable.Empty<EditorGroupDescriptor>()
-                };
-        }
+            _editorGroupsProviders.FirstOrDefault(provider => provider.CanProvideEditorGroups(contentType));
     }
 }

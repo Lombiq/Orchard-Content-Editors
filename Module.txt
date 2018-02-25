@@ -8,3 +8,4 @@ Features:
         Name: Editor Groups
         Description: Managing advanced content editing processes based on editor groups.
         Category: Content
+		Dependencies: Orchard.Fields

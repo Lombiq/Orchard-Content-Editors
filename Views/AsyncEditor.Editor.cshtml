@@ -14,13 +14,13 @@
 
     var contentCreated = Model.ContentCreated as bool? ?? false;
     var contentItemId = contentCreated ? contentItem.Id : 0;
-    var group = asyncEditorPart.CurrentEditorGroup.Name as string;
+    var group = asyncEditorPart.CurrentEditorGroup?.Name ?? "";
     var contentType = contentItem.ContentType;
 
-    const string BlockName = ElementNames.AsyncEditor.BlockName;
+    const string BlockName = "asyncEditor";
     const string ValidationSummaryElementName = BlockName + "__validationSummary";
     const string TitleElementName = BlockName + "__title";
-    const string FormElementName = ElementNames.AsyncEditor.FormElementName;
+    const string FormElementName = BlockName + "__form";
     const string ActionsElementName = BlockName + "__actions";
 }
 
