@@ -68,6 +68,13 @@
         },
 
         /**
+         * Reloads the currently loaded editor.
+         */
+        reloadEditor: function () {
+            this.loadEditor(plugin.currentContentItemId, plugin.currentGroup);
+        },
+
+        /**
          * Loads the editor for the given content item ID and group async.
          * @param {number} contentItemId ID that identifies the content item that the editor is generated for.
          * @param {string} group Technical name of the group. Can be left empty.
@@ -88,17 +95,17 @@
                 success: function (response) {
                     if (response.Success) {
                         plugin.renderEditorShape(response.EditorShape);
+
+                        plugin.currentGroup = response.EditorGroup;
+                        plugin.currentContentItemId = response.ContentItemId;
                     }
                     else {
                         alert(response.ErrorMessage);
                     }
 
-                    plugin.currentGroup = response.EditorGroup;
-                    plugin.currentContentItemId = response.ContentItemId;
-
                     plugin.showProcessingIndicator(false);
                 },
-                fail: function () {
+                error: function () {
                     plugin.showProcessingIndicator(false);
                 }
             });
@@ -131,7 +138,7 @@
 
                     plugin.showProcessingIndicator(false);
                 },
-                fail: function () {
+                error: function () {
                     plugin.showProcessingIndicator(false);
                 }
             });
