@@ -13,35 +13,37 @@
 
     var editUrl = Url.Action("Edit", "AsyncEditor", new { Area = "Lombiq.EditorGroups" });
 
-    string BlockName = "editorFor" + contentItem.ContentType;
-    string ProcessingIndicatorElementName = BlockName + "__processingIndicator";
-    string EditorPlaceholderElementName = BlockName + "__editor";
+    const string BlockName = "asyncEditorLoader";
+    const string ProcessingIndicatorElementName = BlockName + "__processingIndicator";
+    const string EditorPlaceholderElementName = BlockName + "__editor";
+
+    string AsyncEditorLoaderElementId = "editorFor" + contentItem.ContentType;
 }
 
 @Display.Lombiq_AsyncEditorLoader_Resources()
 
-<div id="@BlockName">
+<div id="@AsyncEditorLoaderElementId" class="@BlockName js-@BlockName">
     <div class="@ProcessingIndicatorElementName js-@ProcessingIndicatorElementName" hidden>@T("Processing...")</div>
     <div class="@EditorPlaceholderElementName js-@EditorPlaceholderElementName" hidden></div>
 </div>
 
 
-@using (Script.Foot())
-{
-    <script type="text/javascript">
-        ; (function ($) {
-            $(function () {
-                $("#@BlockName").lombiq_AsyncEditor({
+<script type="text/javascript">
+    ; (function ($) {
+        $(function () {
+            console.log("BEFORE INIT @AsyncEditorLoaderElementId");
+
+                $("#@AsyncEditorLoaderElementId").lombiq_AsyncEditor({
                     asyncEditorApiUrl: "@editUrl",
                     contentType: "@contentItem.ContentType",
                     contentItemId: @contentItem.Id,
                     editorGroupName: "@(asyncEditorPart.CurrentEditorGroup?.Name ?? asyncEditorPart.AuthorizedEditorGroups.FirstOrDefault()?.Name)",
+                    asyncEditorLoaderElementClass: ".js-@BlockName",
                     processingIndicatorElementClass: ".js-@ProcessingIndicatorElementName",
                     editorPlaceholderElementClass: ".js-@EditorPlaceholderElementName",
                     loadEditorActionElementClass: ".js-@ElementNames.AsyncEditorActions.LoadEditorElementName",
                     postEditorActionElementClass: ".js-@ElementNames.AsyncEditorActions.PostEditorElementName",
                 });
-            });
-        })(jQuery);
-    </script>
-}
+        });
+    })(jQuery);
+</script>

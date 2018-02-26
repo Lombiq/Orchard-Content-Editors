@@ -23,9 +23,35 @@ namespace Lombiq.EditorGroups.Services
             {
                 EditorGroups = new[]
                     {
-                        new EditorGroupDescriptor { Name = "TestGroup1", Title = T("Title").Text },
-                        new EditorGroupDescriptor { Name = "TestGroup2", Title = T("Content").Text },
-                        new EditorGroupDescriptor { Name = "TestGroup3", Title = T("Extra").Text, PublishGroup = true },
+                        new EditorGroupDescriptor { Name = "TestForTitle", Title = T("Title").Text },
+                        //new EditorGroupDescriptor { Name = "TestForBody", Title = T("Body").Text },
+                        //new EditorGroupDescriptor { Name = "TestForFields", Title = T("Fields").Text },
+                        new EditorGroupDescriptor { Name = "TestForNested", Title = T("Nested").Text, PublishGroup = true },
+                    },
+                UnauthorizedEditorGroupBehavior = UnauthorizedEditorGroupBehavior.AllowEditingUntilFirstUnauthorizedGroup
+            };
+    }
+
+    public class TestEditorGroupsForNestingProvider : IEditorGroupsProvider
+    {
+        public Localizer T { get; set; }
+
+
+        public TestEditorGroupsForNestingProvider()
+        {
+            T = NullLocalizer.Instance;
+        }
+
+
+        public bool CanProvideEditorGroups(string contentType) => contentType == AsyncEditorTestConstants.TestContentTypeForNesting;
+
+        public EditorGroupsSettings GetEditorGroupsSettings() =>
+            new EditorGroupsSettings
+            {
+                EditorGroups = new[]
+                    {
+                        new EditorGroupDescriptor { Name = "TestForTitle", Title = T("Title").Text },
+                        new EditorGroupDescriptor { Name = "TestForBody", Title = T("Body").Text, PublishGroup = true },
                     },
                 UnauthorizedEditorGroupBehavior = UnauthorizedEditorGroupBehavior.AllowEditingUntilFirstUnauthorizedGroup
             };

@@ -17,6 +17,7 @@
         contentItemId: 0,
         processingIndicatorElementClass: "",
         editorGroupName: "",
+        asyncEditorLoaderElementClass: "",
         editorPlaceholderElementClass: "",
         loadEditorActionElementClass: "",
         postEditorActionElementClass: "",
@@ -43,6 +44,8 @@
          */
         init: function () {
             var plugin = this;
+
+            console.log("INIT FROM " + plugin.element.attr("id"));
 
             plugin.editorContainerElement = plugin.element.find(plugin.settings.editorPlaceholderElementClass).first();
             plugin.processingIndicatorElement = plugin.element.find(plugin.settings.processingIndicatorElementClass).first();
@@ -81,6 +84,7 @@
          */
         loadEditor: function (contentItemId, group) {
             var plugin = this;
+            console.log("LOAD FROM " + plugin.element.attr("id") + " ID: " + contentItemId + " GROUP: " + group + " TYPE: " + plugin.settings.contentType);
 
             plugin.showProcessingIndicator(true);
 
@@ -159,7 +163,7 @@
                 return;
             }
 
-            plugin.editorContainerElement.html(editorShape);
+            plugin.editorContainerElement.html($.parseHTML(editorShape, true));
 
             plugin.editorContainerElement
                 .find(plugin.settings.loadEditorActionElementClass)
@@ -206,12 +210,13 @@
     });
 
     $.fn[pluginName] = function (options) {
-        var plugin = new Plugin(this, options);
+        // "map" makes it possible to return the already existing or currently initialized plugin instances.
+        return this.map(function () {
+            if (!$.data(this, "plugin_" + pluginName)) {
+                $.data(this, "plugin_" + pluginName, new Plugin($(this), options));
+            }
 
-        if (!$.data(this, "plugin_" + pluginName)) {
-            $.data(this, "plugin_" + pluginName, plugin);
-        }
-
-        return plugin;
+            return $.data(this, "plugin_" + pluginName);
+        });
     };
 })(jQuery, window, document);

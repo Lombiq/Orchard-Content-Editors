@@ -43,9 +43,35 @@ namespace Lombiq.EditorGroups.Migrations
                     .WithPart(nameof(AsyncEditorPart))
                 );
 
-
-
+            ContentDefinitionManager.AlterTypeDefinition(AsyncEditorTestConstants.TestContentTypeForNesting,
+                cfg => cfg
+                    .Creatable()
+                    .Listable()
+                    .Draftable()
+                    .WithPart("TitlePart")
+                    .WithPart("CommonPart")
+                    .WithPart("BodyPart")
+                    .WithPart(nameof(AsyncEditorPart))
+                );
+            
             return 1;
+        }
+
+        public int UpdateFrom1()
+        {
+
+            ContentDefinitionManager.AlterTypeDefinition(AsyncEditorTestConstants.TestContentTypeForNesting,
+                cfg => cfg
+                    .Creatable()
+                    .Listable()
+                    .Draftable()
+                    .WithPart("TitlePart")
+                    .WithPart("CommonPart")
+                    .WithPart("BodyPart")
+                    .WithPart(nameof(AsyncEditorPart))
+                );
+
+            return 2;
         }
     }
 }
