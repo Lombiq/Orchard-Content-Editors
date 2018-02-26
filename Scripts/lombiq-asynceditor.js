@@ -38,6 +38,8 @@
         currentGroup: "",
         currentContentItemId: 0,
         currentForm: null,
+        parentPlugin: null,
+        childPlugin: null,
 
         /**
          * Initializes the Lombiq Async Editor plugin.
@@ -65,7 +67,15 @@
 
                 plugin.showProcessingIndicator(false);
             };
+            
+            var closestLoaderElement = plugin.element
+                .parent()
+                .closest(plugin.settings.asyncEditorLoaderElementClass);
 
+            if (closestLoaderElement.length > 0) {
+                plugin.parentPlugin = closestLoaderElement.lombiq_AsyncEditor()[0];
+                plugin.parentPlugin.setChildPlugin(plugin);
+            }
 
             plugin.loadEditor(plugin.settings.contentItemId, plugin.settings.editorGroupName, asyncEditorCallback);
         },
@@ -163,6 +173,8 @@
                 return;
             }
 
+            plugin.childPlugin = null;
+
             plugin.editorContainerElement.html($.parseHTML(editorShape, true));
 
             plugin.editorContainerElement
@@ -206,6 +218,10 @@
             else {
                 plugin.processingIndicatorElement.hide();
             }
+        },
+
+        setChildPlugin: function (childPlugin) {
+            this.childPlugin = childPlugin;
         }
     });
 

@@ -33,17 +33,17 @@
         $(function () {
             console.log("BEFORE INIT @AsyncEditorLoaderElementId");
 
-                $("#@AsyncEditorLoaderElementId").lombiq_AsyncEditor({
-                    asyncEditorApiUrl: "@editUrl",
-                    contentType: "@contentItem.ContentType",
-                    contentItemId: @contentItem.Id,
-                    editorGroupName: "@(asyncEditorPart.CurrentEditorGroup?.Name ?? asyncEditorPart.AuthorizedEditorGroups.FirstOrDefault()?.Name)",
-                    asyncEditorLoaderElementClass: ".js-@BlockName",
-                    processingIndicatorElementClass: ".js-@ProcessingIndicatorElementName",
-                    editorPlaceholderElementClass: ".js-@EditorPlaceholderElementName",
-                    loadEditorActionElementClass: ".js-@ElementNames.AsyncEditorActions.LoadEditorElementName",
-                    postEditorActionElementClass: ".js-@ElementNames.AsyncEditorActions.PostEditorElementName",
-                });
+            $("#@AsyncEditorLoaderElementId").lombiq_AsyncEditor({
+                asyncEditorApiUrl: "@editUrl",
+                contentType: "@contentItem.ContentType",
+                contentItemId: @contentItem.Id,
+                editorGroupName: "@(asyncEditorPart.CurrentEditorGroup?.Name ?? asyncEditorPart.AuthorizedEditorGroups.FirstOrDefault()?.Name)",
+                asyncEditorLoaderElementClass: ".js-@BlockName",
+                processingIndicatorElementClass: ".js-@ProcessingIndicatorElementName",
+                editorPlaceholderElementClass: ".js-@EditorPlaceholderElementName",
+                loadEditorActionElementClass: ".js-@ElementNames.AsyncEditorActions.LoadEditorElementName",
+                postEditorActionElementClass: ".js-@ElementNames.AsyncEditorActions.PostEditorElementName",
+            });
         });
     })(jQuery);
 </script>
