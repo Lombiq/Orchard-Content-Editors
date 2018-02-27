@@ -105,6 +105,7 @@
     <Compile Include="Drivers\AsyncEditorPartDriver.cs" />
     <Compile Include="Handlers\AsyncEditorPartHandler.cs" />
     <Compile Include="Migrations\AsyncEditorTestMigrations.cs" />
+    <Compile Include="Models\AsyncEditorSaveResult.cs" />
     <Compile Include="Models\TestContentPart.cs" />
     <Compile Include="Models\EditorGroupsSettings.cs" />
     <Compile Include="Models\EditorGroupDescriptor.cs" />

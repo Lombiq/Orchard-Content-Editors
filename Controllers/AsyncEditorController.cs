@@ -52,7 +52,7 @@ namespace Lombiq.EditorGroups.Controllers
             if (!string.IsNullOrEmpty(group) && 
                 !_asyncEditorService.EditorGroupAvailable(part, group)) return GroupUnavailableResult();
 
-            return EditorGroupResult(part, group);
+            return AsyncEditorResult(part, group);
         }
 
         [HttpPost, ActionName(nameof(AsyncEditorController.Edit))]
@@ -86,15 +86,15 @@ namespace Lombiq.EditorGroups.Controllers
             {
                 _transactionManager.Cancel();
 
-                return EditorGroupResult(part, group, contentItemId != 0);
+                return AsyncEditorSaveResult(part, group, contentItemId != 0);
             }
 
             _asyncEditorService.StoreCompleteEditorGroup(part, group);
 
             var nextGroup = _asyncEditorService.GetNextGroupDescriptor(part, group);
-            if (nextGroup == null) return EditorGroupResult(part, group);
+            if (nextGroup == null) return AsyncEditorResult(part, group);
 
-            return EditorGroupResult(part, nextGroup.Name);
+            return AsyncEditorSaveResult(part, nextGroup.Name);
         }
 
 
@@ -150,7 +150,7 @@ namespace Lombiq.EditorGroups.Controllers
             {
                 _transactionManager.Cancel();
 
-                return EditorGroupResult(part, group, contentItemId != 0);
+                return AsyncEditorSaveResult(part, group, contentItemId != 0);
             }
 
             if (part.HasEditorGroups)
@@ -163,7 +163,7 @@ namespace Lombiq.EditorGroups.Controllers
                 _contentManager.Publish(part.ContentItem);
             }
 
-            return EditorGroupResult(part, group);
+            return AsyncEditorSaveResult(part, group);
         }
 
         private ActionResult ErrorResult(LocalizedString errorMessage) =>
@@ -173,13 +173,23 @@ namespace Lombiq.EditorGroups.Controllers
                 ErrorMessage = errorMessage.Text,
             }, JsonRequestBehavior.AllowGet);
 
-        private ActionResult EditorGroupResult(AsyncEditorPart part, string group, bool contentCreated = true) =>
+        private ActionResult AsyncEditorResult(AsyncEditorPart part, string group, bool contentCreated = true) =>
             Json(new AsyncEditorResult
             {
                 Success = true,
                 ContentItemId = contentCreated ? part.ContentItem.Id : 0,
                 EditorShape = GetEditorShapeHtml(part, group, contentCreated),
                 EditorGroup = group
+            }, JsonRequestBehavior.AllowGet);
+
+        private ActionResult AsyncEditorSaveResult(AsyncEditorPart part, string group, bool contentCreated = true) =>
+            Json(new AsyncEditorSaveResult
+            {
+                Success = true,
+                ContentItemId = contentCreated ? part.ContentItem.Id : 0,
+                EditorShape = GetEditorShapeHtml(part, group, contentCreated),
+                EditorGroup = group,
+                HasValidationErrors = !ModelState.IsValid
             }, JsonRequestBehavior.AllowGet);
 
         private ActionResult ContentItemNotFoundResult() =>

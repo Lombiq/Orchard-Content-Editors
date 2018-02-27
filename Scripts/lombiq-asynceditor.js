@@ -21,6 +21,10 @@
         editorPlaceholderElementClass: "",
         loadEditorActionElementClass: "",
         postEditorActionElementClass: "",
+        defaultSubmitButtonNameValue: { name: "submit.Save", value: "Save" },
+        callbacks: {
+            parentPostRequestedCallback: function (context) { }
+        }
     };
 
     function Plugin(element, options) {
@@ -48,6 +52,8 @@
             var plugin = this;
 
             console.log("INIT FROM " + plugin.element.attr("id"));
+
+            plugin.events.plugin = this;
 
             plugin.editorContainerElement = plugin.element.find(plugin.settings.editorPlaceholderElementClass).first();
             plugin.processingIndicatorElement = plugin.element.find(plugin.settings.processingIndicatorElementClass).first();
@@ -129,16 +135,18 @@
          * Submits the currently loaded editor form.
          * @param {JQuery} submitButtonElement JQuery element for the submit button. Its name and value is also posted to the server.
          */
-        postEditor: function (submitButtonElement) {
+        postEditor: function (submitButtonNameValue, callback) {
             var plugin = this;
 
             plugin.showProcessingIndicator(true);
 
+            if (!submitButtonNameValue) submitButtonNameValue = plugin.settings.defaultSubmitButtonNameValue;
+
             $.ajax({
                 type: "POST",
                 url: plugin.currentForm.attr("action"),
-                data: plugin.currentForm.serialize() + (submitButtonElement ?
-                    ("&" + encodeURI(submitButtonElement.attr("name")) + "=" + encodeURI(submitButtonElement.attr("value"))) : ""),
+                data: plugin.currentForm.serialize() + (submitButtonNameValue ?
+                    ("&" + encodeURI(submitButtonNameValue.name) + "=" + encodeURI(submitButtonNameValue.value)) : ""),
                 success: function (response) {
                     if (response.Success) {
                         plugin.renderEditorShape(response.EditorShape);
@@ -151,6 +159,8 @@
                     plugin.currentContentItemId = response.ContentItemId;
 
                     plugin.showProcessingIndicator(false);
+
+                    if (callback) callback(response);
                 },
                 error: function () {
                     plugin.showProcessingIndicator(false);
@@ -196,7 +206,14 @@
 
                 plugin.currentForm.find("input[type=submit]")
                     .click(function () {
-                        plugin.postEditor($(this));
+                        var submitButtonNameValue = {
+                            name: $(this).attr("name"),
+                            value: $(this).attr("value")
+                        };
+
+                        plugin.events.parentPostRequested(plugin, function (success) {
+                            if (success) plugin.postEditor(submitButtonNameValue);
+                        });
                     });
             }
 
@@ -222,6 +239,44 @@
 
         setChildPlugin: function (childPlugin) {
             this.childPlugin = childPlugin;
+        },
+
+        events: {
+            plugin: null,
+
+            parentPostRequested: function (parentPlugin, callback) {
+                var plugin = this.plugin;
+
+                if (!parentPlugin || !callback) return;
+
+                var handleParentPostRequested = function () {
+                    var context = {
+                        plugin: parentPlugin,
+                        cancel: false,
+                        postAll: true
+                    };
+
+                    if (plugin.settings.callbacks.parentPostRequestedCallback) {
+                        plugin.settings.callbacks.parentPostRequestedCallback(context);
+                    }
+
+                    if (context.cancel) return callback(false);
+
+                    if (context.postAll) {
+                        plugin.postEditor(context.submitButtonNameValue, function (response) {
+                            return callback(response.Success && !response.HasValidationErrors);
+                        })
+                    }
+                }
+
+                if (!plugin.childPlugin) return handleParentPostRequested();
+
+                plugin.childPlugin.events.parentPostRequested(parentPlugin, function (success) {
+                    if (!success) return callback(false);
+
+                    handleParentPostRequested();
+                });
+            }
         }
     });
 
