@@ -14,9 +14,9 @@
     var defaults = {
         asyncEditorApiUrl: "",
         contentType: "",
-        contentItemId: 0,
+        initialContentItemId: 0,
+        initialEditorGroupName: "",
         processingIndicatorElementClass: "",
-        editorGroupName: "",
         asyncEditorLoaderElementClass: "",
         editorPlaceholderElementClass: "",
         loadEditorActionElementClass: "",
@@ -51,29 +51,10 @@
         init: function () {
             var plugin = this;
 
-            console.log("INIT FROM " + plugin.element.attr("id"));
-
             plugin.events.plugin = this;
 
             plugin.editorContainerElement = plugin.element.find(plugin.settings.editorPlaceholderElementClass).first();
             plugin.processingIndicatorElement = plugin.element.find(plugin.settings.processingIndicatorElementClass).first();
-
-            var asyncEditorCallback = function (response) {
-                console.log(response);
-
-                if (response.Success) {
-                    plugin.renderEditorShape(response.editorShape);
-                }
-
-                if (response.ResultMessage) {
-                    alert(response.ResultMessage);
-                }
-
-                plugin.currentGroup = response.EditorGroup;
-                plugin.currentContentItemId = response.ContentItemId;
-
-                plugin.setProcessingIndicatorVisibility(false);
-            };
             
             var closestLoaderElement = plugin.element
                 .parent()
@@ -84,7 +65,7 @@
                 plugin.parentPlugin.setChildPlugin(plugin);
             }
 
-            plugin.loadEditor(plugin.settings.contentItemId, plugin.settings.editorGroupName, asyncEditorCallback);
+            plugin.loadEditor(plugin.settings.initialContentItemId, plugin.settings.initialEditorGroupName);
         },
 
         /**
@@ -101,7 +82,6 @@
          */
         loadEditor: function (contentItemId, group) {
             var plugin = this;
-            console.log("LOAD FROM " + plugin.element.attr("id") + " ID: " + contentItemId + " GROUP: " + group + " TYPE: " + plugin.settings.contentType);
 
             plugin.setProcessingIndicatorVisibility(true);
 
@@ -114,18 +94,7 @@
                     group: group
                 },
                 success: function (response) {
-                    if (response.Success) {
-                        plugin.renderEditorShape(response.EditorShape);
-
-                        plugin.currentGroup = response.EditorGroup;
-                        plugin.currentContentItemId = response.ContentItemId;
-                    }
-
-                    if (response.ResultMessage) {
-                        alert(response.ResultMessage);
-                    }
-
-                    plugin.setProcessingIndicatorVisibility(false);
+                    plugin.evaluateApiResponse(response);
                 },
                 error: function () {
                     plugin.setProcessingIndicatorVisibility(false);
@@ -150,18 +119,7 @@
                 data: plugin.currentForm.serialize() + (submitButtonNameValue ?
                     ("&" + encodeURI(submitButtonNameValue.name) + "=" + encodeURI(submitButtonNameValue.value)) : ""),
                 success: function (response) {
-                    if (response.Success) {
-                        plugin.renderEditorShape(response.EditorShape);
-                    }
-
-                    if (response.ResultMessage) {
-                        alert(response.ResultMessage);
-                    }
-
-                    plugin.currentGroup = response.EditorGroup;
-                    plugin.currentContentItemId = response.ContentItemId;
-
-                    plugin.setProcessingIndicatorVisibility(false);
+                    plugin.evaluateApiResponse(response);
 
                     if (callback) callback(response);
                 },
@@ -221,6 +179,23 @@
             }
 
             plugin.editorContainerElement.show();
+        },
+
+        evaluateApiResponse: function (response) {
+            var plugin = this;
+
+            if (response.Success) {
+                plugin.renderEditorShape(response.EditorShape);
+
+                plugin.currentGroup = response.EditorGroup;
+                plugin.currentContentItemId = response.ContentItemId;
+            }
+
+            if (response.ResultMessage) {
+                alert(response.ResultMessage);
+            }
+
+            plugin.setProcessingIndicatorVisibility(false);
         },
 
         /**

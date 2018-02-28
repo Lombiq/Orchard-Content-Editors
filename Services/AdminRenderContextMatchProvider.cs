@@ -6,6 +6,9 @@ namespace Lombiq.EditorGroups.Services
 {
     public class AdminRenderContextMatchProvider : IRenderContextMatchProvider
     {
+        public const string RenderContext = "Admin";
+
+
         private readonly IHttpContextAccessor _hca;
 
 
@@ -15,7 +18,7 @@ namespace Lombiq.EditorGroups.Services
         }
 
 
-        public bool CanMatch(string renderContext) => renderContext == "Admin";
+        public bool CanMatch(string renderContext) => renderContext == RenderContext;
 
         public bool MatchesRenderContext(ShapePlacementContext context) => 
             AdminFilter.IsApplied(_hca.Current().Request.RequestContext);
