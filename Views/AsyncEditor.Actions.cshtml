@@ -68,18 +68,18 @@
         }
     </ol>
     <div class="@NavigationButtonsElementName">
-        <input type="submit" name="submit.Save" class="btn button @SaveButtonElementName" value="@T("Save Draft")" />
+        <input type="submit" name="submit.Save" data-submitContext="Save" class="btn button @SaveButtonElementName" value="@T("Save Draft")" />
 
         @if ((asyncEditorPart.CurrentEditorGroup?.IsPublishGroup ?? true) && 
             asyncEditorPart.TypeDefinition.Settings.GetModel<ContentTypeSettings>().Draftable &&
             asyncEditorService.IsAuthorizedToPublish(asyncEditorPart, asyncEditorPart.CurrentEditorGroup?.Name ?? ""))
         {
-            <input type="submit" name="submit.Publish" class="btn button @PublishButtonElementName" value="@T("Publish")" />
+            <input type="submit" name="submit.Publish" data-submitContext="Publish" class="btn button @PublishButtonElementName" value="@T("Publish")" />
         }
         
         @if (asyncEditorPart.NextAuthorizedEditorGroup != null)
         {
-            <input type="submit" name="submit.SaveAndNext" class="btn button @NextButtonElementName" value="@T("Save and Next")" />
+            <input type="submit" name="submit.SaveAndNext" data-submitContext="SaveAndNext" class="btn button @NextButtonElementName" value="@T("Save and Next")" />
         }
     </div>
 </div>

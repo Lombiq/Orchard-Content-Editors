@@ -11,6 +11,15 @@
 
     var pluginName = "lombiq_AsyncEditor";
 
+    // Define static variables accessible using the plugin name as an object.
+    $[pluginName] = {
+        submitContextNames: {
+            Save: "Save",
+            SaveAndNext: "SaveAndNext",
+            Publish: "Publish"
+        }
+    };
+
     var defaults = {
         asyncEditorApiUrl: "",
         contentType: "",
@@ -21,9 +30,10 @@
         editorPlaceholderElementClass: "",
         loadEditorActionElementClass: "",
         postEditorActionElementClass: "",
-        defaultSubmitButtonNameValue: { name: "submit.Save", value: "Save" },
         callbacks: {
-            parentPostRequestedCallback: function (context) { }
+            parentPostRequestedCallback: function (submitContext, eventContext) { },
+            editorLoadedCallback: function (apiResponse) { },
+            editorPostedCallback: function (submitContext, apiResponse) { }
         }
     };
 
@@ -95,6 +105,8 @@
                 },
                 success: function (response) {
                     plugin.evaluateApiResponse(response);
+
+                    plugin.events.editorLoaded(response);
                 },
                 error: function () {
                     plugin.setProcessingIndicatorVisibility(false);
@@ -102,26 +114,34 @@
             });
         },
 
+        createSubmitContext: function (submitButtonElement) {
+            return {
+                name: submitButtonElement.attr("data-submitContext"),
+                submitButtonName: submitButtonElement.attr("name"),
+                submitButtonValue: submitButtonElement.attr("value")
+            };
+        },
+
         /**
          * Submits the currently loaded editor form.
          * @param {JQuery} submitButtonElement JQuery element for the submit button. Its name and value is also posted to the server.
          */
-        postEditor: function (submitButtonNameValue, callback) {
+        postEditor: function (submitContext, callback) {
             var plugin = this;
 
             plugin.setProcessingIndicatorVisibility(true);
 
-            if (!submitButtonNameValue) submitButtonNameValue = plugin.settings.defaultSubmitButtonNameValue;
-
             $.ajax({
                 type: "POST",
                 url: plugin.currentForm.attr("action"),
-                data: plugin.currentForm.serialize() + (submitButtonNameValue ?
-                    ("&" + encodeURI(submitButtonNameValue.name) + "=" + encodeURI(submitButtonNameValue.value)) : ""),
+                data: plugin.currentForm.serialize() + (submitContext.submitButtonName && submitContext.submitButtonValue ?
+                    ("&" + encodeURI(submitContext.submitButtonName) + "=" + encodeURI(submitContext.submitButtonValue)) : ""),
                 success: function (response) {
                     plugin.evaluateApiResponse(response);
 
-                    if (callback) callback(response);
+                    plugin.events.editorPosted(submitContext, response);
+
+                    if (callback) callback(submitContext, response);
                 },
                 error: function () {
                     plugin.setProcessingIndicatorVisibility(false);
@@ -167,13 +187,10 @@
 
                 plugin.currentForm.find("input[type=submit]")
                     .click(function () {
-                        var submitButtonNameValue = {
-                            name: $(this).attr("name"),
-                            value: $(this).attr("value")
-                        };
+                        var submitContext = plugin.createSubmitContext($(this));
 
-                        plugin.events.parentPostRequested(plugin, function (success) {
-                            if (success) plugin.postEditor(submitButtonNameValue);
+                        plugin.events.parentPostRequested(submitContext, plugin, function (submitContext, success) {
+                            if (success) plugin.postEditor(submitContext);
                         });
                     });
             }
@@ -222,38 +239,54 @@
         events: {
             plugin: null,
 
-            parentPostRequested: function (parentPlugin, callback) {
+            parentPostRequested: function (submitContext, parentPlugin, callback) {
                 var plugin = this.plugin;
 
                 if (!parentPlugin || !callback) return;
 
                 var handleParentPostRequested = function () {
-                    var context = {
+                    var eventContext = {
                         plugin: parentPlugin,
                         cancel: false,
                         postAll: true
                     };
 
                     if (plugin.settings.callbacks.parentPostRequestedCallback) {
-                        plugin.settings.callbacks.parentPostRequestedCallback(context);
+                        plugin.settings.callbacks.parentPostRequestedCallback(submitContext, eventContext);
                     }
 
-                    if (context.cancel) return callback(false);
+                    if (eventContext.cancel) return callback(false);
 
-                    if (context.postAll) {
-                        plugin.postEditor(context.submitButtonNameValue, function (response) {
-                            return callback(response.Success && !response.HasValidationErrors);
+                    if (eventContext.postAll) {
+                        plugin.postEditor(submitContext, function (submitContext, response) {
+                            return callback(submitContext, response.Success && !response.HasValidationErrors);
                         })
                     }
                 }
 
                 if (!plugin.childPlugin) return handleParentPostRequested();
 
-                plugin.childPlugin.events.parentPostRequested(parentPlugin, function (success) {
+                plugin.childPlugin.events.parentPostRequested(submitContext, parentPlugin, function (success) {
                     if (!success) return callback(false);
 
                     handleParentPostRequested();
                 });
+            },
+
+            editorLoaded: function (apiResponse) {
+                var plugin = this.plugin;
+
+                if (plugin.settings.callbacks.editorLoadedCallback) {
+                    plugin.settings.callbacks.editorLoadedCallback(apiResponse);
+                }
+            },
+
+            editorPosted: function (submitContext, apiResponse) {
+                var plugin = this.plugin;
+
+                if (plugin.settings.callbacks.editorPostedCallback) {
+                    plugin.settings.callbacks.editorPostedCallback(submitContext, apiResponse);
+                }
             }
         }
     });

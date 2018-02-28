@@ -13,6 +13,7 @@
         {
             public const string BlockName = "asyncEditorLoader";
             public const string ProcessingIndicatorElementName = BlockName + "__processingIndicator";
+            public const string MessagePlaceholderElementName = BlockName + "__message";
             public const string EditorPlaceholderElementName = BlockName + "__editor";
         }
     }
