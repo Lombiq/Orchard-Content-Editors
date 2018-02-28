@@ -17,6 +17,6 @@ namespace Lombiq.EditorGroups.Services
         /// </summary>
         /// <param name="context">Placement context that needs to be evaluated.</param>
         /// <returns>True if the context matches.</returns>
-        bool MatchRenderContext(ShapePlacementContext context);
+        bool MatchesRenderContext(ShapePlacementContext context);
     }
 }

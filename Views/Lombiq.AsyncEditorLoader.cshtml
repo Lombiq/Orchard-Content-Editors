@@ -11,12 +11,12 @@
         return;
     }
 
+    Script.Require(Lombiq.EditorGroups.Constants.ResourceNames.Lombiq_AsyncEditor).AtHead();
+
     var editUrl = Url.Action("Edit", "AsyncEditor", new { Area = "Lombiq.EditorGroups" });
 
     string AsyncEditorLoaderId = "editorFor" + contentItem.ContentType;
 }
-
-@Display.Lombiq_AsyncEditorLoader_Resources()
 
 @Display.Lombiq_AsyncEditorLoader_Container(AsyncEditorLoaderId: AsyncEditorLoaderId)
 

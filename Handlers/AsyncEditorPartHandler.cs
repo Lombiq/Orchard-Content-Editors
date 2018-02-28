@@ -19,8 +19,8 @@ namespace Lombiq.EditorGroups.Handlers
 
                 part.AuthorizedEditorGroupsField.Loader(() => asyncEditorService.GetAuthorizedEditorGroups(part));
 
-                part.CompleteAuthorizedEditorGroupsField.Loader(() =>
-                    asyncEditorService.GetCompleteEditorGroups(part, true));
+                part.CompletedAuthorizedEditorGroupsField.Loader(() =>
+                    asyncEditorService.GetCompletedEditorGroups(part, true));
 
                 part.IncompleteAuthorizedEditorGroupsField.Loader(() => 
                     asyncEditorService.GetIncompleteEditorGroups(part, true));

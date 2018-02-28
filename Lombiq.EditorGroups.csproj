@@ -165,9 +165,6 @@
     <Content Include="Views\Lombiq.AsyncEditorLoader.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Lombiq.AsyncEditorLoader.Resources.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\AsyncEditor.Title.cshtml" />
   </ItemGroup>
   <ItemGroup>

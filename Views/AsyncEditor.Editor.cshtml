@@ -7,7 +7,7 @@
     var asyncEditorPart = contentItem?.As<AsyncEditorPart>();
     var editorShape = Model.EditorShape;
 
-    if (editorShape == null || !(asyncEditorPart?.AsyncEditorContext ?? false))
+    if (editorShape == null || !(asyncEditorPart?.IsAsyncEditorContext ?? false))
     {
         return;
     }

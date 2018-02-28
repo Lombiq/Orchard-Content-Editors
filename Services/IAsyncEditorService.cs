@@ -20,15 +20,15 @@ namespace Lombiq.EditorGroups.Services
         /// <param name="part">AsyncEditorPart of the content item.</param>
         /// <param name="group">Editor group to be authorized on.</param>
         /// <returns>True if the current user is authorized.</returns>
-        bool IsauthorizedToPublish(AsyncEditorPart part, string group = "");
+        bool IsAuthorizedToPublish(AsyncEditorPart part, string group = "");
 
         /// <summary>
-        /// Returns editor groups that are complete.
+        /// Returns editor groups that are completed.
         /// </summary>
         /// <param name="part">AsyncEditorPart of the content item.</param>
         /// <param name="authorizedOnly">If this is true, then it operates only with groups that the user is authorized to edit.</param>
-        /// <returns>Complete editor groups.</returns>
-        IEnumerable<EditorGroupDescriptor> GetCompleteEditorGroups(AsyncEditorPart part, bool authorizedOnly = false);
+        /// <returns>Completed editor groups.</returns>
+        IEnumerable<EditorGroupDescriptor> GetCompletedEditorGroups(AsyncEditorPart part, bool authorizedOnly = false);
 
         /// <summary>
         /// Returns editor groups that are incomplete.
@@ -93,14 +93,14 @@ namespace Lombiq.EditorGroups.Services
         /// <param name="part">AsyncEditorPart of the content item.</param>
         /// <param name="group">Name of the group that needs to be checked.</param>
         /// <returns>True if the editor group is available.</returns>
-        bool EditorGroupAvailable(AsyncEditorPart part, string group);
+        bool IsEditorGroupAvailable(AsyncEditorPart part, string group);
 
         /// <summary>
         /// Registers the given editor group as complete.
         /// </summary>
         /// <param name="part">AsyncEditorPart of the content item.</param>
         /// <param name="group">Name of the group that needs to be stored.</param>
-        void StoreCompleteEditorGroup(AsyncEditorPart part, string group);
+        void StoreCompletedEditorGroup(AsyncEditorPart part, string group);
 
         /// <summary>
         /// Returns the editor group settings including the available editor groups if there is any provider for the given content type.

@@ -8,7 +8,7 @@
     var contentItem = Model.ContentItem as ContentItem;
     var asyncEditorPart = contentItem?.As<AsyncEditorPart>();
 
-    if (!(asyncEditorPart?.AsyncEditorContext ?? false))
+    if (!(asyncEditorPart?.IsAsyncEditorContext ?? false))
     {
         return;
     }
@@ -20,7 +20,7 @@
     const string GroupListItemElementName = BlockName + "__groupListItem";
     const string GroupNameElementName = BlockName + "__groupName";
     const string GroupNameElementNameWithCurrentModifier = GroupNameElementName + "_current";
-    const string GroupNameElementNameWithCompleteModifier = GroupNameElementName + "_complete";
+    const string GroupNameElementNameWithCompletedModifier = GroupNameElementName + "_completed";
     const string NavigationButtonsElementName = BlockName + "__navigationButtons";
     const string SaveButtonElementName = BlockName + "__saveButton";
     const string PublishButtonElementName = BlockName + "__publishButton";
@@ -51,9 +51,9 @@
                         groupElementBuilder.AddCssClass(GroupNameElementNameWithCurrentModifier);
                     }
 
-                    if (asyncEditorPart.CompleteAuthorizedEditorGroups.Contains(editorGroup))
+                    if (asyncEditorPart.CompletedAuthorizedEditorGroups.Contains(editorGroup))
                     {
-                        groupElementBuilder.AddCssClass(GroupNameElementNameWithCompleteModifier);
+                        groupElementBuilder.AddCssClass(GroupNameElementNameWithCompletedModifier);
                     }
 
                     if (!isCurrent && asyncEditorPart.AvailableAuthorizedEditorGroups.Contains(editorGroup))
@@ -70,9 +70,9 @@
     <div class="@NavigationButtonsElementName">
         <input type="submit" name="submit.Save" class="btn button @SaveButtonElementName" value="@T("Save Draft")" />
 
-        @if ((asyncEditorPart.CurrentEditorGroup?.PublishGroup ?? true) && 
+        @if ((asyncEditorPart.CurrentEditorGroup?.IsPublishGroup ?? true) && 
             asyncEditorPart.TypeDefinition.Settings.GetModel<ContentTypeSettings>().Draftable &&
-            asyncEditorService.IsauthorizedToPublish(asyncEditorPart, asyncEditorPart.CurrentEditorGroup?.Name ?? ""))
+            asyncEditorService.IsAuthorizedToPublish(asyncEditorPart, asyncEditorPart.CurrentEditorGroup?.Name ?? ""))
         {
             <input type="submit" name="submit.Publish" class="btn button @PublishButtonElementName" value="@T("Publish")" />
         }

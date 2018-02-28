@@ -17,7 +17,7 @@ namespace Lombiq.EditorGroups.Services
 
         public bool CanMatch(string renderContext) => renderContext == "Admin";
 
-        public bool MatchRenderContext(ShapePlacementContext context) => 
+        public bool MatchesRenderContext(ShapePlacementContext context) => 
             AdminFilter.IsApplied(_hca.Current().Request.RequestContext);
     }
 }

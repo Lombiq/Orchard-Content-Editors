@@ -50,7 +50,7 @@ namespace Lombiq.EditorGroups.Controllers
             if (!_asyncEditorService.IsAuthorizedToEdit(part, group)) return UnauthorizedGroupEditorResult();
 
             if (!string.IsNullOrEmpty(group) && 
-                !_asyncEditorService.EditorGroupAvailable(part, group)) return GroupUnavailableResult();
+                !_asyncEditorService.IsEditorGroupAvailable(part, group)) return GroupUnavailableResult();
 
             return AsyncEditorResult(part, group);
         }
@@ -77,7 +77,7 @@ namespace Lombiq.EditorGroups.Controllers
 
             if (!_asyncEditorService.IsAuthorizedToEdit(part, group)) return UnauthorizedGroupEditorResult();
 
-            if (!_asyncEditorService.EditorGroupAvailable(part, group)) return GroupUnavailableResult();
+            if (!_asyncEditorService.IsEditorGroupAvailable(part, group)) return GroupUnavailableResult();
 
             if (contentItemId == 0) _contentManager.Create(part.ContentItem, VersionOptions.Draft);
             _contentManager.UpdateEditor(part.ContentItem, this, group);
@@ -89,7 +89,7 @@ namespace Lombiq.EditorGroups.Controllers
                 return AsyncEditorSaveResult(part, group, contentItemId != 0);
             }
 
-            _asyncEditorService.StoreCompleteEditorGroup(part, group);
+            _asyncEditorService.StoreCompletedEditorGroup(part, group);
 
             var nextGroup = _asyncEditorService.GetNextGroupDescriptor(part, group);
             if (nextGroup == null) return AsyncEditorResult(part, group);
@@ -127,13 +127,13 @@ namespace Lombiq.EditorGroups.Controllers
 
             if (!_asyncEditorService.IsAuthorizedToEdit(part, group)) return UnauthorizedGroupEditorResult();
 
-            if (publish && !_asyncEditorService.IsauthorizedToPublish(part, group))
+            if (publish && !_asyncEditorService.IsAuthorizedToPublish(part, group))
             {
                 return ErrorResult(T("You are not authorized to publish this content item."));
             }
 
             if (!string.IsNullOrEmpty(group) && 
-                !_asyncEditorService.EditorGroupAvailable(part, group)) return GroupUnavailableResult();
+                !_asyncEditorService.IsEditorGroupAvailable(part, group)) return GroupUnavailableResult();
 
             if (part.HasEditorGroups)
             {
@@ -156,7 +156,7 @@ namespace Lombiq.EditorGroups.Controllers
 
             if (part.HasEditorGroups)
             {
-                _asyncEditorService.StoreCompleteEditorGroup(part, group);
+                _asyncEditorService.StoreCompletedEditorGroup(part, group);
             }
 
             if (publish)

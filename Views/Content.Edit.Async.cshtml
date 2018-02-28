@@ -5,7 +5,7 @@
     var contentItem = Model.ContentItem as ContentItem;
     var asyncEditorPart = contentItem?.As<AsyncEditorPart>();
 
-    if (!(asyncEditorPart?.AsyncEditorContext ?? false))
+    if (!(asyncEditorPart?.IsAsyncEditorContext ?? false))
     {
         return;
     }

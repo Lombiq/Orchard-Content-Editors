@@ -22,6 +22,6 @@ namespace Lombiq.EditorGroups.Services
         public bool Match(ShapePlacementContext context, string expression) =>
             _siteAreaProviders
                 .FirstOrDefault(siteAreaProvider => 
-                    siteAreaProvider.CanMatch(expression))?.MatchRenderContext(context) ?? false;
+                    siteAreaProvider.CanMatch(expression))?.MatchesRenderContext(context) ?? false;
     }
 }

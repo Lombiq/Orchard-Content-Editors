@@ -78,7 +78,7 @@ namespace Lombiq.EditorGroups.Services
             if (contentItem == null) return null;
 
             var asyncEditorPart = contentItem.As<AsyncEditorPart>();
-            if (asyncEditorPart == null || !asyncEditorPart.AsyncEditorContext) return null;
+            if (asyncEditorPart == null || !asyncEditorPart.IsAsyncEditorContext) return null;
 
             return asyncEditorPart.ContentItem;
         }

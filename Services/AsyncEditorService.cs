@@ -46,7 +46,7 @@ namespace Lombiq.EditorGroups.Services
             return _authorizer.Authorize(Permissions.EditContent, part);
         }
 
-        public bool IsauthorizedToPublish(AsyncEditorPart part, string group = "")
+        public bool IsAuthorizedToPublish(AsyncEditorPart part, string group = "")
         {
             // Commented out temporary.
             //SetCurrentGroup(part, group);
@@ -79,13 +79,13 @@ namespace Lombiq.EditorGroups.Services
             return authorizedEditorGroups;
         }
 
-        public IEnumerable<EditorGroupDescriptor> GetCompleteEditorGroups(AsyncEditorPart part, bool authorizedOnly = false)
+        public IEnumerable<EditorGroupDescriptor> GetCompletedEditorGroups(AsyncEditorPart part, bool authorizedOnly = false)
         {
             var editorGroups = GetEditorGroupList(part, authorizedOnly);
             if (editorGroups == null) return Enumerable.Empty<EditorGroupDescriptor>();
 
-            var completeGroupNames = !string.IsNullOrEmpty(part.CompleteEditorGroupNamesSerialized) ?
-                _jsonConverter.Deserialize<IEnumerable<string>>(part.CompleteEditorGroupNamesSerialized) : 
+            var completeGroupNames = !string.IsNullOrEmpty(part.CompletedEditorGroupNamesSerialized) ?
+                _jsonConverter.Deserialize<IEnumerable<string>>(part.CompletedEditorGroupNamesSerialized) : 
                 Enumerable.Empty<string>();
 
             return completeGroupNames
@@ -98,7 +98,7 @@ namespace Lombiq.EditorGroups.Services
             var editorGroups = GetEditorGroupList(part, authorizedOnly);
             if (editorGroups == null) return Enumerable.Empty<EditorGroupDescriptor>();
 
-            return editorGroups.Except(GetCompleteEditorGroups(part));
+            return editorGroups.Except(GetCompletedEditorGroups(part));
         }
 
         public IEnumerable<EditorGroupDescriptor> GetAvailableEditorGroups(AsyncEditorPart part, bool authorizedOnly = false)
@@ -106,20 +106,20 @@ namespace Lombiq.EditorGroups.Services
             var editorGroups = GetEditorGroupList(part, authorizedOnly);
             if (editorGroups == null) return Enumerable.Empty<EditorGroupDescriptor>();
 
-            return editorGroups.Where(editorGroup => EditorGroupAvailable(part, editorGroup.Name));
+            return editorGroups.Where(editorGroup => IsEditorGroupAvailable(part, editorGroup.Name));
         }
 
         public EditorGroupDescriptor GetEditorGroupDescriptor(AsyncEditorPart part, string group) =>
             GetEditorGroupsSettings(part)?.EditorGroups.FirstOrDefault(editorGroup => editorGroup.Name == group);
 
-        public bool EditorGroupAvailable(AsyncEditorPart part, string group)
+        public bool IsEditorGroupAvailable(AsyncEditorPart part, string group)
         {
             Argument.ThrowIfNullOrEmpty(group, nameof(group));
 
             var editorGroup = GetEditorGroupDescriptor(part, group);
             if (editorGroup == null) return false;
 
-            if (GetCompleteEditorGroups(part).Contains(editorGroup)) return true;
+            if (GetCompletedEditorGroups(part).Contains(editorGroup)) return true;
 
             return editorGroup.Equals(GetIncompleteEditorGroups(part).FirstOrDefault());
         }
@@ -154,15 +154,15 @@ namespace Lombiq.EditorGroups.Services
                 editorGroups[editorGroups.IndexOf(groupDescriptor) - 1];
         }
 
-        public void StoreCompleteEditorGroup(AsyncEditorPart part, string group)
+        public void StoreCompletedEditorGroup(AsyncEditorPart part, string group)
         {
             Argument.ThrowIfNullOrEmpty(group, nameof(group));
 
             if (!GetEditorGroupsSettings(part)?.EditorGroups.Any(editorGroup => editorGroup.Name == group) ?? false) return;
 
-            var completeGroupNames = GetCompleteEditorGroups(part).Select(editorGroup => editorGroup.Name).Union(new[] { group });
+            var completeGroupNames = GetCompletedEditorGroups(part).Select(editorGroup => editorGroup.Name).Union(new[] { group });
 
-            part.CompleteEditorGroupNamesSerialized = _jsonConverter.Serialize(completeGroupNames);
+            part.CompletedEditorGroupNamesSerialized = _jsonConverter.Serialize(completeGroupNames);
         }
 
         public EditorGroupsSettings GetEditorGroupsSettings(AsyncEditorPart part) =>
@@ -173,7 +173,7 @@ namespace Lombiq.EditorGroups.Services
             part.CurrentEditorGroup = GetEditorGroupDescriptor(part, group);
 
         private void SetAsyncEditorContext(AsyncEditorPart part) =>
-            part.AsyncEditorContext = true;
+            part.IsAsyncEditorContext = true;
 
         private IList<EditorGroupDescriptor> GetEditorGroupList(AsyncEditorPart part, bool authorizedOnly) =>
             authorizedOnly ?
