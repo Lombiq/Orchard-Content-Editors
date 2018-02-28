@@ -64,14 +64,15 @@
                 if (response.Success) {
                     plugin.renderEditorShape(response.editorShape);
                 }
-                else {
-                    alert(response.ErrorMessage);
+
+                if (response.ResultMessage) {
+                    alert(response.ResultMessage);
                 }
 
                 plugin.currentGroup = response.EditorGroup;
                 plugin.currentContentItemId = response.ContentItemId;
 
-                plugin.showProcessingIndicator(false);
+                plugin.setProcessingIndicatorVisibility(false);
             };
             
             var closestLoaderElement = plugin.element
@@ -102,7 +103,7 @@
             var plugin = this;
             console.log("LOAD FROM " + plugin.element.attr("id") + " ID: " + contentItemId + " GROUP: " + group + " TYPE: " + plugin.settings.contentType);
 
-            plugin.showProcessingIndicator(true);
+            plugin.setProcessingIndicatorVisibility(true);
 
             $.ajax({
                 type: "GET",
@@ -119,14 +120,15 @@
                         plugin.currentGroup = response.EditorGroup;
                         plugin.currentContentItemId = response.ContentItemId;
                     }
-                    else {
-                        alert(response.ErrorMessage);
+
+                    if (response.ResultMessage) {
+                        alert(response.ResultMessage);
                     }
 
-                    plugin.showProcessingIndicator(false);
+                    plugin.setProcessingIndicatorVisibility(false);
                 },
                 error: function () {
-                    plugin.showProcessingIndicator(false);
+                    plugin.setProcessingIndicatorVisibility(false);
                 }
             });
         },
@@ -138,7 +140,7 @@
         postEditor: function (submitButtonNameValue, callback) {
             var plugin = this;
 
-            plugin.showProcessingIndicator(true);
+            plugin.setProcessingIndicatorVisibility(true);
 
             if (!submitButtonNameValue) submitButtonNameValue = plugin.settings.defaultSubmitButtonNameValue;
 
@@ -151,19 +153,20 @@
                     if (response.Success) {
                         plugin.renderEditorShape(response.EditorShape);
                     }
-                    else {
-                        alert(response.ErrorMessage);
+
+                    if (response.ResultMessage) {
+                        alert(response.ResultMessage);
                     }
 
                     plugin.currentGroup = response.EditorGroup;
                     plugin.currentContentItemId = response.ContentItemId;
 
-                    plugin.showProcessingIndicator(false);
+                    plugin.setProcessingIndicatorVisibility(false);
 
                     if (callback) callback(response);
                 },
                 error: function () {
-                    plugin.showProcessingIndicator(false);
+                    plugin.setProcessingIndicatorVisibility(false);
                 }
             });
         },
@@ -224,7 +227,7 @@
          * Displays or hides the processing indicator.
          * @param {boolean} show Displays or hides the indicator depending on this value.
          */
-        showProcessingIndicator: function (show) {
+        setProcessingIndicatorVisibility: function (show) {
             var plugin = this;
 
             if (!plugin.processingIndicatorElement) return;

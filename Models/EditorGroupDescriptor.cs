@@ -1,23 +1,19 @@
-﻿using System.Collections.Generic;
-
-namespace Lombiq.EditorGroups.Models
+﻿namespace Lombiq.EditorGroups.Models
 {
     public class EditorGroupDescriptor
     {
         public string Name { get; set; }
         public string Title { get; set; }
-        public bool PublishGroup { get; set; }
+        public bool IsPublishGroup { get; set; }
 
 
         public override bool Equals(object other)
         {
             var otherGroup = other as EditorGroupDescriptor;
-            if (otherGroup == null) return base.Equals(other);
 
-            return otherGroup.Name == Name;
+            return otherGroup == null ? base.Equals(other) : otherGroup.Name == Name;
         }
 
-        public override int GetHashCode() =>
-            Name.GetHashCode();
+        public override int GetHashCode() => Name.GetHashCode();
     }
 }

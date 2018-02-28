@@ -72,7 +72,7 @@
 
         @if ((asyncEditorPart.CurrentEditorGroup?.PublishGroup ?? true) && 
             asyncEditorPart.TypeDefinition.Settings.GetModel<ContentTypeSettings>().Draftable &&
-            asyncEditorService.AuthorizeToPublish(asyncEditorPart, asyncEditorPart.CurrentEditorGroup?.Name ?? ""))
+            asyncEditorService.IsauthorizedToPublish(asyncEditorPart, asyncEditorPart.CurrentEditorGroup?.Name ?? ""))
         {
             <input type="submit" name="submit.Publish" class="btn button @PublishButtonElementName" value="@T("Publish")" />
         }

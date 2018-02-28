@@ -26,7 +26,7 @@ namespace Lombiq.EditorGroups.Services
                         new EditorGroupDescriptor { Name = "TestForTitle", Title = T("Title").Text },
                         //new EditorGroupDescriptor { Name = "TestForBody", Title = T("Body").Text },
                         //new EditorGroupDescriptor { Name = "TestForFields", Title = T("Fields").Text },
-                        new EditorGroupDescriptor { Name = "TestForNested", Title = T("Nested").Text, PublishGroup = true },
+                        new EditorGroupDescriptor { Name = "TestForNested", Title = T("Nested").Text, IsPublishGroup = true },
                     },
                 UnauthorizedEditorGroupBehavior = UnauthorizedEditorGroupBehavior.AllowEditingUntilFirstUnauthorizedGroup
             };
@@ -51,7 +51,7 @@ namespace Lombiq.EditorGroups.Services
                 EditorGroups = new[]
                     {
                         new EditorGroupDescriptor { Name = "TestForTitle", Title = T("Title").Text },
-                        new EditorGroupDescriptor { Name = "TestForBody", Title = T("Body").Text, PublishGroup = true },
+                        new EditorGroupDescriptor { Name = "TestForBody", Title = T("Body").Text, IsPublishGroup = true },
                     },
                 UnauthorizedEditorGroupBehavior = UnauthorizedEditorGroupBehavior.AllowEditingUntilFirstUnauthorizedGroup
             };

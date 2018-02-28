@@ -12,7 +12,7 @@ namespace Lombiq.EditorGroups.Services
         /// <param name="part">AsyncEditorPart of the content item.</param>
         /// <param name="group">Editor group to be authorized on.</param>
         /// <returns>True if the current user is authorized.</returns>
-        bool AuthorizeToEdit(AsyncEditorPart part, string group = "");
+        bool IsAuthorizedToEdit(AsyncEditorPart part, string group = "");
 
         /// <summary>
         /// Authorizes the current user to publish the given content item on a specific group.
@@ -20,7 +20,7 @@ namespace Lombiq.EditorGroups.Services
         /// <param name="part">AsyncEditorPart of the content item.</param>
         /// <param name="group">Editor group to be authorized on.</param>
         /// <returns>True if the current user is authorized.</returns>
-        bool AuthorizeToPublish(AsyncEditorPart part, string group = "");
+        bool IsauthorizedToPublish(AsyncEditorPart part, string group = "");
 
         /// <summary>
         /// Returns editor groups that are complete.

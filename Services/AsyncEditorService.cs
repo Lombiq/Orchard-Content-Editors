@@ -38,7 +38,7 @@ namespace Lombiq.EditorGroups.Services
             return _contentManager.BuildEditor(part, group);
         }
 
-        public bool AuthorizeToEdit(AsyncEditorPart part, string group = "")
+        public bool IsAuthorizedToEdit(AsyncEditorPart part, string group = "")
         {
             // Commented out temporary.
             //SetCurrentGroup(part, group);
@@ -46,7 +46,7 @@ namespace Lombiq.EditorGroups.Services
             return _authorizer.Authorize(Permissions.EditContent, part);
         }
 
-        public bool AuthorizeToPublish(AsyncEditorPart part, string group = "")
+        public bool IsauthorizedToPublish(AsyncEditorPart part, string group = "")
         {
             // Commented out temporary.
             //SetCurrentGroup(part, group);
@@ -62,7 +62,7 @@ namespace Lombiq.EditorGroups.Services
             var authorizedEditorGroups = new List<EditorGroupDescriptor>();
             foreach (var editorGroup in editorGroups)
             {
-                if (AuthorizeToEdit(part, editorGroup.Name))
+                if (IsAuthorizedToEdit(part, editorGroup.Name))
                 {
                     authorizedEditorGroups.Add(editorGroup);
 
@@ -85,8 +85,8 @@ namespace Lombiq.EditorGroups.Services
             if (editorGroups == null) return Enumerable.Empty<EditorGroupDescriptor>();
 
             var completeGroupNames = !string.IsNullOrEmpty(part.CompleteEditorGroupNamesSerialized) ?
-                _jsonConverter.Deserialize<IEnumerable<string>>(part.CompleteEditorGroupNamesSerialized)
-                : Enumerable.Empty<string>();
+                _jsonConverter.Deserialize<IEnumerable<string>>(part.CompleteEditorGroupNamesSerialized) : 
+                Enumerable.Empty<string>();
 
             return completeGroupNames
                 .Select(groupName => editorGroups.FirstOrDefault(group => group.Name == groupName))

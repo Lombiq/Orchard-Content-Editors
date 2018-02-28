@@ -1,0 +1,19 @@
+﻿@using Lombiq.EditorGroups.Constants
+
+@{
+    var asyncEditorLoaderId = Model.AsyncEditorLoaderId as string;
+
+    if (string.IsNullOrEmpty(asyncEditorLoaderId))
+    {
+        return;
+    }
+
+    const string BlockName = ElementNames.AsyncEditorLoader.BlockName;
+    const string ProcessingIndicatorElementName = ElementNames.AsyncEditorLoader.ProcessingIndicatorElementName;
+    const string EditorPlaceholderElementName = ElementNames.AsyncEditorLoader.EditorPlaceholderElementName;
+}
+
+<div id="@asyncEditorLoaderId" class="@BlockName js-@BlockName">
+    <div class="@ProcessingIndicatorElementName js-@ProcessingIndicatorElementName" hidden>@T("Processing...")</div>
+    <div class="@EditorPlaceholderElementName js-@EditorPlaceholderElementName" hidden></div>
+</div>

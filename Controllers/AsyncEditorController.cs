@@ -47,7 +47,7 @@ namespace Lombiq.EditorGroups.Controllers
 
             if (part.HasEditorGroups && string.IsNullOrEmpty(group)) return GroupNameCannotBeEmptyResult();
 
-            if (!_asyncEditorService.AuthorizeToEdit(part, group)) return UnauthorizedGroupEditorResult();
+            if (!_asyncEditorService.IsAuthorizedToEdit(part, group)) return UnauthorizedGroupEditorResult();
 
             if (!string.IsNullOrEmpty(group) && 
                 !_asyncEditorService.EditorGroupAvailable(part, group)) return GroupUnavailableResult();
@@ -75,7 +75,7 @@ namespace Lombiq.EditorGroups.Controllers
 
             if (part == null || !part.HasEditorGroups) return ContentItemNotFoundResult();
 
-            if (!_asyncEditorService.AuthorizeToEdit(part, group)) return UnauthorizedGroupEditorResult();
+            if (!_asyncEditorService.IsAuthorizedToEdit(part, group)) return UnauthorizedGroupEditorResult();
 
             if (!_asyncEditorService.EditorGroupAvailable(part, group)) return GroupUnavailableResult();
 
@@ -97,6 +97,7 @@ namespace Lombiq.EditorGroups.Controllers
             return AsyncEditorSaveResult(part, nextGroup.Name);
         }
 
+        #region Helpers
 
         private AsyncEditorPart GetAsyncEditorPart(int id, string contentType) =>
             id == 0 ? 
@@ -124,9 +125,9 @@ namespace Lombiq.EditorGroups.Controllers
 
             if (part.HasEditorGroups && string.IsNullOrEmpty(group)) return GroupNameCannotBeEmptyResult();
 
-            if (!_asyncEditorService.AuthorizeToEdit(part, group)) return UnauthorizedGroupEditorResult();
+            if (!_asyncEditorService.IsAuthorizedToEdit(part, group)) return UnauthorizedGroupEditorResult();
 
-            if (publish && !_asyncEditorService.AuthorizeToPublish(part, group))
+            if (publish && !_asyncEditorService.IsauthorizedToPublish(part, group))
             {
                 return ErrorResult(T("You are not authorized to publish this content item."));
             }
@@ -137,7 +138,7 @@ namespace Lombiq.EditorGroups.Controllers
             if (part.HasEditorGroups)
             {
                 var currentEditorGroupDescriptor = _asyncEditorService.GetEditorGroupDescriptor(part, group);
-                if (publish && !currentEditorGroupDescriptor.PublishGroup)
+                if (publish && !currentEditorGroupDescriptor.IsPublishGroup)
                 {
                     return ErrorResult(T("The current group is not a publish group. Editor hasn't been updated."));
                 }
@@ -166,12 +167,9 @@ namespace Lombiq.EditorGroups.Controllers
             return AsyncEditorSaveResult(part, group);
         }
 
-        private ActionResult ErrorResult(LocalizedString errorMessage) =>
-            Json(new AsyncEditorResult
-            {
-                Success = false,
-                ErrorMessage = errorMessage.Text,
-            }, JsonRequestBehavior.AllowGet);
+        #endregion
+
+        #region Success results
 
         private ActionResult AsyncEditorResult(AsyncEditorPart part, string group, bool contentCreated = true) =>
             Json(new AsyncEditorResult
@@ -192,6 +190,16 @@ namespace Lombiq.EditorGroups.Controllers
                 HasValidationErrors = !ModelState.IsValid
             }, JsonRequestBehavior.AllowGet);
 
+        #endregion
+
+        #region Error results
+
+        private ActionResult ErrorResult(LocalizedString errorMessage) =>
+            Json(new AsyncEditorResult
+            {
+                Success = false,
+                ResultMessage = errorMessage.Text,
+            }, JsonRequestBehavior.AllowGet);
         private ActionResult ContentItemNotFoundResult() =>
             ErrorResult(T("Content item has not found."));
 
@@ -204,6 +212,7 @@ namespace Lombiq.EditorGroups.Controllers
         private ActionResult GroupUnavailableResult() =>
             ErrorResult(T("Editor group is not available. Fill all the previous editor groups first."));
 
+        #endregion
 
         #region IUpdateModel
 
