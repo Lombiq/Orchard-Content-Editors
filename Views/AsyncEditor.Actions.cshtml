@@ -54,12 +54,12 @@
                     if (asyncEditorPart.CompletedAuthorizedEditorGroups.Contains(editorGroup))
                     {
                         groupElementBuilder.AddCssClass(GroupNameElementNameWithCompletedModifier);
-                    }
 
-                    if (!isCurrent && asyncEditorPart.AvailableAuthorizedEditorGroups.Contains(editorGroup))
-                    {
-                        groupElementBuilder.AddCssClass("js-" + ElementNames.AsyncEditorActions.LoadEditorElementName);
-                        groupElementBuilder.Attributes.Add("data-editorGroupName", editorGroup.Name);
+                        if (!isCurrent)
+                        {
+                            groupElementBuilder.AddCssClass("js-" + ElementNames.AsyncEditorActions.LoadEditorElementName);
+                            groupElementBuilder.Attributes.Add("data-editorGroupName", editorGroup.Name);
+                        }
                     }
                 }
 

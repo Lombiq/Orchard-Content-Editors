@@ -143,7 +143,7 @@ namespace Lombiq.EditorGroups.Controllers
                 part, 
                 group, 
                 true, 
-                isPublishGroup ? null : T("The current group is not a publish group. Content item has been saved as draft."));
+                !isPublishGroup && publish ? T("The current group is not a publish group. Content item has been saved as draft.") : null);
         }
 
         private AsyncEditorPart GetAsyncEditorPart(int id, string contentType) =>
