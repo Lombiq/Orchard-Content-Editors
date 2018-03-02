@@ -15,7 +15,7 @@ namespace Lombiq.EditorGroups.Handlers
 
                 part.UnauthorizedEditorGroupBehaviorField.Loader(() => 
                     asyncEditorService.GetEditorGroupsSettings(part)?.UnauthorizedEditorGroupBehavior ?? 
-                    UnauthorizedEditorGroupBehavior.AllowEditingAllAuthorizedGroup);
+                    UnauthorizedEditorGroupBehavior.AllowEditingAllAuthorizedGroups);
 
                 part.AuthorizedEditorGroupsField.Loader(() => asyncEditorService.GetAuthorizedEditorGroups(part));
 

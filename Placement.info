@@ -1,9 +1,9 @@
 ﻿<Placement>
-    <Place Parts_AsyncEditor = "Content: 5" />
+    <Place Parts_AsyncEditor="Content: 5" />
     
     <Match RenderContext="FrontEnd">
         <Place
-            Parts_AsyncEditor_Edit = "Content: 5"
+            Parts_AsyncEditor_Edit="Content: 5"
             Content_SaveButton="-"
             Content_PublishButton="-"
             Content_CancelButton="-"

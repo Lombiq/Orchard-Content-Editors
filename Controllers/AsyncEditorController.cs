@@ -143,7 +143,7 @@ namespace Lombiq.EditorGroups.Controllers
                 part, 
                 group, 
                 true, 
-                !isPublishGroup && publish ? T("The current group is not a publish group. Content item has been saved as draft.") : null);
+                !isPublishGroup && publish ? T("The current group is not a publish group. Draft has been saved.") : null);
         }
 
         private AsyncEditorPart GetAsyncEditorPart(int id, string contentType) =>
@@ -207,8 +207,9 @@ namespace Lombiq.EditorGroups.Controllers
                 Success = false,
                 ResultMessage = errorMessage.Text,
             }, JsonRequestBehavior.AllowGet);
+
         private ActionResult ContentItemNotFoundResult() =>
-            ErrorResult(T("Content item has not found."));
+            ErrorResult(T("Content item was not found."));
 
         private ActionResult GroupNameCannotBeEmptyResult() =>
             ErrorResult(T("Group name cannot be empty."));

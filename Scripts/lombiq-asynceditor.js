@@ -1,6 +1,6 @@
 ﻿/**
  * @summary     Lombiq - Async Editor
- * @description Manages async content editing with content editor support.
+ * @description Manages async content editing with editor group support.
  * @version     1.0
  * @file        lombiq-asynceditor.js
  * @author      Lombiq Technologies Ltd.

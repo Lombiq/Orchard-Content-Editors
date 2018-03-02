@@ -7,7 +7,7 @@ namespace Lombiq.EditorGroups.Services
     public interface IAsyncEditorService : IDependency
     {
         /// <summary>
-        /// Authorizes the current user to edit the given content item on a specific group.
+        /// Checks if the user is authorized to edit the given content.
         /// </summary>
         /// <param name="part">AsyncEditorPart of the content item.</param>
         /// <param name="group">Editor group to be authorized on.</param>
@@ -15,7 +15,7 @@ namespace Lombiq.EditorGroups.Services
         bool IsAuthorizedToEdit(AsyncEditorPart part, string group = "");
 
         /// <summary>
-        /// Authorizes the current user to publish the given content item on a specific group.
+        /// Checks if the user is authorized to edit the given content.
         /// </summary>
         /// <param name="part">AsyncEditorPart of the content item.</param>
         /// <param name="group">Editor group to be authorized on.</param>

@@ -4,7 +4,7 @@ namespace Lombiq.EditorGroups.Models
 {
     public enum UnauthorizedEditorGroupBehavior
     {
-        AllowEditingAllAuthorizedGroup,
+        AllowEditingAllAuthorizedGroups,
         AllowEditingUntilFirstUnauthorizedGroup
     }
 
