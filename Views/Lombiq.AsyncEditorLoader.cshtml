@@ -1,0 +1,40 @@
+﻿@using Orchard.ContentManagement
+@using Lombiq.ContentEditors.Constants
+@using Lombiq.ContentEditors.Models
+
+@{
+    var contentItem = Model.ContentItem as ContentItem;
+    var asyncEditorPart = contentItem?.As<AsyncEditorPart>();
+
+    if (asyncEditorPart == null)
+    {
+        return;
+    }
+
+    Script.Require(ResourceNames.Lombiq_AsyncEditor).AtHead();
+
+    var editUrl = Url.Action("Edit", "AsyncEditor", new { Area = "Lombiq.ContentEditors" });
+
+    const string AsyncEditorLoaderId = "editorFor" + contentItem.ContentType;
+}
+
+@Display.Lombiq_AsyncEditorLoader_Container(AsyncEditorLoaderId: AsyncEditorLoaderId)
+
+
+<script type="text/javascript">
+    ; (function ($) {
+        $(function () {
+            $("#@AsyncEditorLoaderId").lombiq_AsyncEditor({
+                asyncEditorApiUrl: "@editUrl",
+                contentType: "@contentItem.ContentType",
+                initialContentItemId: @contentItem.Id,
+                initialEditorGroupName: "@(asyncEditorPart.CurrentEditorGroup?.Name ?? asyncEditorPart.AuthorizedEditorGroups.FirstOrDefault()?.Name)",
+                asyncEditorLoaderElementClass: ".js-@ElementNames.AsyncEditorLoader.BlockName",
+                processingIndicatorElementClass: ".js-@ElementNames.AsyncEditorLoader.ProcessingIndicatorElementName",
+                editorPlaceholderElementClass: ".js-@ElementNames.AsyncEditorLoader.EditorPlaceholderElementName",
+                loadEditorActionElementClass: ".js-@ElementNames.AsyncEditorActions.LoadEditorElementName",
+                postEditorActionElementClass: ".js-@ElementNames.AsyncEditorActions.PostEditorElementName"
+            });
+        });
+    })(jQuery);
+</script>

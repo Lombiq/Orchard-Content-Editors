@@ -1,0 +1,50 @@
+﻿@using Orchard.ContentManagement
+@using Lombiq.ContentEditors.Models
+@using Lombiq.ContentEditors.Constants
+
+@{
+    var contentItem = Model.ContentItem as ContentItem;
+    var asyncEditorPart = contentItem?.As<AsyncEditorPart>();
+    var editorShape = Model.EditorShape;
+
+    if (editorShape == null || !(asyncEditorPart?.IsAsyncEditorContext ?? false))
+    {
+        return;
+    }
+
+    var contentCreated = Model.ContentCreated as bool? ?? false;
+    var contentItemId = contentCreated ? contentItem.Id : 0;
+    var group = asyncEditorPart.CurrentEditorGroup?.Name ?? "";
+    var contentType = contentItem.ContentType;
+
+    const string BlockName = "asyncEditor";
+    const string ValidationSummaryElementName = BlockName + "__validationSummary";
+    const string TitleElementName = BlockName + "__title";
+    const string FormElementName = BlockName + "__form";
+    const string ActionsElementName = BlockName + "__actions";
+}
+
+
+<div class="@BlockName">
+    @using (Html.BeginFormAntiForgeryPost(
+        Url.Action(
+            "Edit", 
+            "AsyncEditor", 
+            new { Area = "Lombiq.ContentEditors", ContentItemId = contentItemId, Group = group, ContentType = contentType }),
+        FormMethod.Post,
+        new { @class = string.Join(" ", FormElementName, "js-" + FormElementName) }))
+    {
+        <div class="@TitleElementName">
+            @Display.AsyncEditor_Title(ContentItem: contentItem)
+        </div>
+        <div class="@ValidationSummaryElementName">
+            @Display(Model.ValidationSummaryShape)
+        </div>
+
+        @Display(editorShape)
+
+        <div class="@ActionsElementName">
+            @Display.AsyncEditor_Actions(ContentItem: contentItem)
+        </div>
+    }
+</div>

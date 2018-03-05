@@ -4,7 +4,7 @@ Website: https://lombiq.com
 Version: 1.0
 OrchardVersion: 1.10.2
 Features:
-    Lombiq.EditorGroups:
-        Name: Editor Groups
+    Lombiq.ContentEditors:
+        Name: Lombiq Content Editors
         Description: Managing advanced content editing processes based on editor groups.
         Category: Content

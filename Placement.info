@@ -1,0 +1,15 @@
+﻿<Placement>
+    <Place Parts_AsyncEditor="Content: 5" />
+    
+    <Match RenderContext="FrontEnd">
+        <Place
+            Parts_AsyncEditor_Edit="Content: 5"
+            Content_SaveButton="-"
+            Content_PublishButton="-"
+            Content_CancelButton="-"
+            Parts_Common_Owner_Edit="-"
+            Parts_Common_Date_Edit="-"
+            Parts_Common_Container_Edit="-"
+        />
+    </Match>
+</Placement>

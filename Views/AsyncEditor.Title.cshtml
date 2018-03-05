@@ -1,0 +1,18 @@
+﻿@using Orchard.ContentManagement
+@using Lombiq.ContentEditors.Models
+
+@{ 
+    var contentItem = Model.ContentItem as ContentItem;
+    var asyncEditorPart = contentItem?.As<AsyncEditorPart>();
+
+    if (!(asyncEditorPart?.IsAsyncEditorContext ?? false))
+    {
+        return;
+    }
+}
+
+<h2 class="asyncEditorTitle">
+    @T("{0} details", asyncEditorPart.CurrentEditorGroup != null ? 
+        asyncEditorPart.CurrentEditorGroup.Title :
+        asyncEditorPart.TypeDefinition.DisplayName)
+</h2>

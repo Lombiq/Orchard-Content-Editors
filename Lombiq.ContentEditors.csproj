@@ -10,8 +10,8 @@
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Lombiq.EditorGroups</RootNamespace>
-    <AssemblyName>Lombiq.EditorGroups</AssemblyName>
+    <RootNamespace>Lombiq.ContentEditors</RootNamespace>
+    <AssemblyName>Lombiq.ContentEditors</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <FileUpgradeFlags>
@@ -96,7 +96,29 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants\ElementNames.cs" />
+    <Compile Include="Constants\ResourceNames.cs" />
+    <Compile Include="Controllers\AsyncEditorController.cs" />
+    <Compile Include="Drivers\AsyncEditorPartDriver.cs" />
+    <Compile Include="Handlers\AsyncEditorPartHandler.cs" />
+    <Compile Include="Models\AsyncEditorSaveResult.cs" />
+    <Compile Include="Models\EditorGroupsSettings.cs" />
+    <Compile Include="Models\EditorGroupDescriptor.cs" />
+    <Compile Include="Models\AsyncEditorPart.cs" />
+    <Compile Include="Models\AsyncEditorResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\AsyncEditorShapeTableProvider.cs" />
+    <Compile Include="Services\RenderContextPlacementParseMatchProvider.cs" />
+    <Compile Include="Services\AsyncEditorService.cs" />
+    <Compile Include="Services\EditorGroupsSettingsProviderAccessor.cs" />
+    <Compile Include="Services\IAsyncEditorService.cs" />
+    <Compile Include="Services\IEditorGroupsProviderAccessor.cs" />
+    <Content Include="Scripts\lombiq-asynceditor.js" />
+    <Compile Include="ResourceManifest.cs" />
+    <Compile Include="Services\AdminRenderContextMatchProvider.cs" />
+    <Compile Include="Services\FrontEndRenderContextMatchProvider.cs" />
+    <Compile Include="Services\IEditorGroupsProvider.cs" />
+    <Compile Include="Services\IRenderContextMatchProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -117,9 +139,28 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Controllers\" />
-    <Folder Include="Models\" />
-    <Folder Include="Views\" />
+    <Content Include="Placement.info" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Lombiq.AsyncEditorLoader.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\AsyncEditor.Title.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\AsyncEditor.Actions.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Content.Edit.Async.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\AsyncEditor.ValidationSummary.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\AsyncEditor.Editor.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Lombiq.AsyncEditorLoader.Container.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
