@@ -11,22 +11,5 @@
             Parts_Common_Date_Edit="-"
             Parts_Common_Container_Edit="-"
         />
-
-        <Match ContentType="TestContentTypeWithGroups">
-            <Place
-                Parts_Title_Edit="Content:1@TestForTitle"
-                Parts_Common_Body_Edit="Content:1@TestForBody"
-                Fields_Input_Edit-TestField1="Content:1@TestForFields"
-                Fields_Input_Edit-TestField2="Content:2@TestForFields"
-                Parts_TestContent_NewTestContentTypeWithGroups_Edit="Content:1@TestForNested"
-             />
-        </Match>
-
-        <Match ContentType="TestContentTypeForNesting">
-            <Place
-                Parts_Title_Edit="Content:1@TestForTitle"
-                Parts_Common_Body_Edit="Content:1@TestForBody"
-             />
-        </Match>
     </Match>
 </Placement>

@@ -5,7 +5,6 @@ using Orchard.Data;
 using Orchard.DisplayManagement;
 using Orchard.Localization;
 using Orchard.Mvc;
-using Orchard.Security;
 using System.Web.Mvc;
 
 namespace Lombiq.EditorGroups.Controllers

@@ -1,6 +1,5 @@
 ﻿using Lombiq.EditorGroups.Models;
 using Orchard;
-using System.Collections.Generic;
 
 namespace Lombiq.EditorGroups.Services
 {

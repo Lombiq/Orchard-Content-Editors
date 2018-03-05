@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Lombiq.EditorGroups.Models;
 
 namespace Lombiq.EditorGroups.Services
 {

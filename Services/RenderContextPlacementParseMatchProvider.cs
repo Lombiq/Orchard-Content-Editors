@@ -1,5 +1,4 @@
-﻿using Lombiq.EditorGroups.Services;
-using Orchard.DisplayManagement.Descriptors;
+﻿using Orchard.DisplayManagement.Descriptors;
 using Orchard.DisplayManagement.Descriptors.ShapePlacementStrategy;
 using System.Collections.Generic;
 using System.Linq;
