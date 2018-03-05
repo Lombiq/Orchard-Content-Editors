@@ -1,10 +1,10 @@
-﻿using Lombiq.EditorGroups.Models;
+﻿using Lombiq.ContentEditors.Models;
 using Orchard.ContentManagement;
 using Orchard.DisplayManagement.Descriptors;
 using Orchard.DisplayManagement.Implementation;
 using System.Collections.Generic;
 
-namespace Lombiq.EditorGroups.Services
+namespace Lombiq.ContentEditors.Services
 {
     public class AsyncEditorShapeTableProvider : IShapeTableProvider
     {

@@ -1,6 +1,6 @@
 ﻿@using Orchard.ContentManagement
-@using Lombiq.EditorGroups.Models
-@using Lombiq.EditorGroups.Constants
+@using Lombiq.ContentEditors.Models
+@using Lombiq.ContentEditors.Constants
 
 @{
     var contentItem = Model.ContentItem as ContentItem;
@@ -30,7 +30,7 @@
         Url.Action(
             "Edit", 
             "AsyncEditor", 
-            new { Area = "Lombiq.EditorGroups", ContentItemId = contentItemId, Group = group, ContentType = contentType }),
+            new { Area = "Lombiq.ContentEditors", ContentItemId = contentItemId, Group = group, ContentType = contentType }),
         FormMethod.Post,
         new { @class = string.Join(" ", FormElementName, "js-" + FormElementName) }))
     {

@@ -1,6 +1,6 @@
 ﻿@using Orchard.ContentManagement
-@using Lombiq.EditorGroups.Constants
-@using Lombiq.EditorGroups.Models
+@using Lombiq.ContentEditors.Constants
+@using Lombiq.ContentEditors.Models
 
 @{
     var contentItem = Model.ContentItem as ContentItem;
@@ -11,11 +11,11 @@
         return;
     }
 
-    Script.Require(Lombiq.EditorGroups.Constants.ResourceNames.Lombiq_AsyncEditor).AtHead();
+    Script.Require(ResourceNames.Lombiq_AsyncEditor).AtHead();
 
-    var editUrl = Url.Action("Edit", "AsyncEditor", new { Area = "Lombiq.EditorGroups" });
+    var editUrl = Url.Action("Edit", "AsyncEditor", new { Area = "Lombiq.ContentEditors" });
 
-    string AsyncEditorLoaderId = "editorFor" + contentItem.ContentType;
+    const string AsyncEditorLoaderId = "editorFor" + contentItem.ContentType;
 }
 
 @Display.Lombiq_AsyncEditorLoader_Container(AsyncEditorLoaderId: AsyncEditorLoaderId)

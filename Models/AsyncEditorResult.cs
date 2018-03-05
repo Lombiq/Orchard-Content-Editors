@@ -1,4 +1,4 @@
-﻿namespace Lombiq.EditorGroups.Models
+﻿namespace Lombiq.ContentEditors.Models
 {
     public class AsyncEditorResult
     {

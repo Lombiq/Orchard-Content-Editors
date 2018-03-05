@@ -1,8 +1,8 @@
-﻿using Lombiq.EditorGroups.Models;
+﻿using Lombiq.ContentEditors.Models;
 using Orchard.ContentManagement.Drivers;
 using Orchard.ContentManagement.Handlers;
 
-namespace Lombiq.EditorGroups.Drivers
+namespace Lombiq.ContentEditors.Drivers
 {
     public class AsyncEditorPartDriver : ContentPartDriver<AsyncEditorPart>
     {

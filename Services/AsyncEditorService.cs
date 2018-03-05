@@ -1,4 +1,4 @@
-﻿using Lombiq.EditorGroups.Models;
+﻿using Lombiq.ContentEditors.Models;
 using Orchard.ContentManagement;
 using Orchard.Core.Contents;
 using Orchard.Security;
@@ -7,7 +7,7 @@ using Orchard.Validation;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Lombiq.EditorGroups.Services
+namespace Lombiq.ContentEditors.Services
 {
     public class AsyncEditorService : IAsyncEditorService
     {

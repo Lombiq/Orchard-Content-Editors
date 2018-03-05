@@ -1,8 +1,8 @@
-﻿using Lombiq.EditorGroups.Models;
-using Lombiq.EditorGroups.Services;
+﻿using Lombiq.ContentEditors.Models;
+using Lombiq.ContentEditors.Services;
 using Orchard.ContentManagement.Handlers;
 
-namespace Lombiq.EditorGroups.Handlers
+namespace Lombiq.ContentEditors.Handlers
 {
     public class AsyncEditorPartHandler : ContentHandler
     {

@@ -2,7 +2,7 @@
 using Orchard.Mvc;
 using Orchard.UI.Admin;
 
-namespace Lombiq.EditorGroups.Services
+namespace Lombiq.ContentEditors.Services
 {
     public class FrontEndRenderContextMatchProvider : IRenderContextMatchProvider
     {

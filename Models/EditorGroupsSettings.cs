@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Lombiq.EditorGroups.Models
+namespace Lombiq.ContentEditors.Models
 {
     public enum UnauthorizedEditorGroupBehavior
     {

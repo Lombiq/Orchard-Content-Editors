@@ -1,4 +1,4 @@
-﻿namespace Lombiq.EditorGroups.Constants
+﻿namespace Lombiq.ContentEditors.Constants
 {
     public static class ElementNames
     {

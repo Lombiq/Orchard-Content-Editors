@@ -1,8 +1,8 @@
-﻿using Lombiq.EditorGroups.Models;
+﻿using Lombiq.ContentEditors.Models;
 using Orchard;
 using System.Collections.Generic;
 
-namespace Lombiq.EditorGroups.Services
+namespace Lombiq.ContentEditors.Services
 {
     public interface IAsyncEditorService : IDependency
     {

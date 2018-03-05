@@ -1,7 +1,7 @@
 ﻿using Orchard.UI.Resources;
-using static Lombiq.EditorGroups.Constants.ResourceNames;
+using static Lombiq.ContentEditors.Constants.ResourceNames;
 
-namespace Lombiq.EditorGroups
+namespace Lombiq.ContentEditors
 {
     public class ResourceManifest : IResourceManifestProvider
     {

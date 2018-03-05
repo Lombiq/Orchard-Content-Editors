@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace Lombiq.EditorGroups.Services
+namespace Lombiq.ContentEditors.Services
 {
     public class EditorGroupsSettingsProviderAccessor : IEditorGroupsProviderAccessor
     {

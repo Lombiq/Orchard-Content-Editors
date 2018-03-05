@@ -2,7 +2,7 @@
 using Orchard.ContentManagement.Utilities;
 using System.Collections.Generic;
 
-namespace Lombiq.EditorGroups.Models
+namespace Lombiq.ContentEditors.Models
 {
     public class AsyncEditorPart : ContentPart
     {

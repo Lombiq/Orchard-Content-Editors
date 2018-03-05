@@ -1,5 +1,5 @@
-﻿using Lombiq.EditorGroups.Models;
-using Lombiq.EditorGroups.Services;
+﻿using Lombiq.ContentEditors.Models;
+using Lombiq.ContentEditors.Services;
 using Orchard.ContentManagement;
 using Orchard.Data;
 using Orchard.DisplayManagement;
@@ -7,7 +7,7 @@ using Orchard.Localization;
 using Orchard.Mvc;
 using System.Web.Mvc;
 
-namespace Lombiq.EditorGroups.Controllers
+namespace Lombiq.ContentEditors.Controllers
 {
     public class AsyncEditorController : Controller, IUpdateModel
     {

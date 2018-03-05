@@ -1,7 +1,7 @@
 ﻿using Orchard;
 using Orchard.DisplayManagement.Descriptors;
 
-namespace Lombiq.EditorGroups.Services
+namespace Lombiq.ContentEditors.Services
 {
     public interface IRenderContextMatchProvider : IDependency
     {

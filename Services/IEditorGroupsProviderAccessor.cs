@@ -1,6 +1,6 @@
 ﻿using Orchard;
 
-namespace Lombiq.EditorGroups.Services
+namespace Lombiq.ContentEditors.Services
 {
     public interface IEditorGroupsProviderAccessor : IDependency
     {

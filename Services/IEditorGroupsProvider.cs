@@ -1,7 +1,7 @@
-﻿using Lombiq.EditorGroups.Models;
+﻿using Lombiq.ContentEditors.Models;
 using Orchard;
 
-namespace Lombiq.EditorGroups.Services
+namespace Lombiq.ContentEditors.Services
 {
     public interface IEditorGroupsProvider : IDependency
     {
