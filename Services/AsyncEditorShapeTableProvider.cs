@@ -20,16 +20,16 @@ namespace Lombiq.ContentEditors.Services
                 })
                 .OnDisplaying(displaying =>
                 {
-                    var contentItem = GetValidAsyncEditorContentItem(displaying);
-                    if (contentItem == null) return;
+                    var asyncEditorPart = GetValidAsyncEditorPart(displaying);
+                    if (asyncEditorPart == null) return;
 
-                    var contentTypeDefinition = contentItem.TypeDefinition;
+                    var contentTypeDefinition = asyncEditorPart.TypeDefinition;
                     if (!contentTypeDefinition.Settings.TryGetValue("Stereotype", out var stereotype))
                     {
                         stereotype = "Content";
                     }
 
-                    var asyncEditorShapeType = stereotype + "_Edit_Async";
+                    var asyncEditorShapeType = $"{stereotype}_Edit_Async";
 
                     displaying.ShapeMetadata.Wrappers.Add("AsyncEditor_Wrapper");
 
@@ -38,7 +38,14 @@ namespace Lombiq.ContentEditors.Services
 
                     // [Stereotype]_Edit_AsyncEditor__[ContentType] e.g. Content.Edit.AsyncEditor-MyContentType
                     displaying.ShapeMetadata.Alternates.Add(
-                        asyncEditorShapeType + "__" + contentItem.ContentType);
+                        $"{asyncEditorShapeType}__{asyncEditorPart.ContentItem.ContentType}");
+
+                    if (asyncEditorPart.CurrentEditorGroup != null)
+                    {
+                        // [Stereotype]_Edit_AsyncEditor__[ContentType]__[EditorGroup] e.g. Content.Edit.AsyncEditor-MyContentType-MyEditorGroup
+                        displaying.ShapeMetadata.Alternates.Add(
+                            $"{asyncEditorShapeType}__{asyncEditorPart.ContentItem.ContentType}__{asyncEditorPart.CurrentEditorGroup.Name}");
+                    }
                 });
 
             AddAlternatesToAsyncEditorShapes(
@@ -60,17 +67,17 @@ namespace Lombiq.ContentEditors.Services
                     .Describe(shapeType)
                     .OnDisplaying(displaying =>
                     {
-                        var contentItem = GetValidAsyncEditorContentItem(displaying);
-                        if (contentItem == null) return;
+                        var asyncEditorPart = GetValidAsyncEditorPart(displaying);
+                        if (asyncEditorPart == null) return;
 
                         // [AsyncEditorShapeType]__[ContentType] e.g. AsyncEditor_Actions-MyContentType
                         displaying.ShapeMetadata.Alternates.Add(
-                            displaying.ShapeMetadata.Type + "__" + contentItem.ContentType);
+                            $"{displaying.ShapeMetadata.Type}__{asyncEditorPart.ContentItem.ContentType}");
                     });
             }
         }
 
-        private ContentItem GetValidAsyncEditorContentItem(ShapeDisplayingContext context)
+        private AsyncEditorPart GetValidAsyncEditorPart(ShapeDisplayingContext context)
         {
             var shape = context.Shape;
 
@@ -80,7 +87,7 @@ namespace Lombiq.ContentEditors.Services
             var asyncEditorPart = contentItem.As<AsyncEditorPart>();
             if (asyncEditorPart == null || !asyncEditorPart.IsAsyncEditorContext) return null;
 
-            return asyncEditorPart.ContentItem;
+            return asyncEditorPart;
         }
     }
 }
