@@ -2,6 +2,7 @@
 using Orchard.ContentManagement;
 using Orchard.ContentManagement.Drivers;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Linq.Expressions;
@@ -32,7 +33,6 @@ namespace Lombiq.ContentEditors.Drivers
         protected virtual ContentShapeResult PropertyEditor(
             dynamic shapeHelper,
             string shapeType,
-            bool uniqueTemplate,
             TPart part,
             Expression<Func<TPart, object>> propertyExpression,
             Action<PropertyEditorViewModel> builder)
@@ -55,7 +55,7 @@ namespace Lombiq.ContentEditors.Drivers
 
                 if (string.IsNullOrEmpty(editorBuilder.TemplateName))
                 {
-                    editorBuilder.TemplateName = uniqueTemplate ?
+                    editorBuilder.TemplateName = editorBuilder.HasOwnTemplate ?
                         $"Properties/{_lazyPartName.Value}/{propertyName}" :
                         $"Properties/{editorBuilder.EditorType}";
                 }
@@ -71,13 +71,12 @@ namespace Lombiq.ContentEditors.Drivers
             dynamic shapeHelper,
             string shapeType,
             TPart part,
-            params PropertyEditorShapeBuilder[] propertyEditorShapeBuilders) =>
-            Combined(propertyEditorShapeBuilders
+            Func<CombinedPropertyEditorShapeBuilder, CombinedPropertyEditorShapeBuilder> builderFactory) =>
+            Combined(builderFactory(new CombinedPropertyEditorShapeBuilder()).PropertyEditorShapeBuilders
                 .Select(builder => 
                     (DriverResult)PropertyEditor(
                         (object)shapeHelper, 
-                        shapeType, 
-                        builder.UniqueTemplate, 
+                        shapeType,
                         part, 
                         builder.PropertyExpression, 
                         builder.Builder))
@@ -86,33 +85,10 @@ namespace Lombiq.ContentEditors.Drivers
         protected virtual CombinedResult PropertyEditor(
             dynamic shapeHelper,
             TPart part,
-            params PropertyEditorShapeBuilder[] propertyEditorShapeBuilders) =>
-            Combined(propertyEditorShapeBuilders
-                .Select(builder =>
-                    (DriverResult)PropertyEditor(
-                        (object)shapeHelper,
-                        GetDefaultPartEditorShapeType(),
-                        builder.UniqueTemplate,
-                        part,
-                        builder.PropertyExpression,
-                        builder.Builder))
-                .ToArray());
+            Func<CombinedPropertyEditorShapeBuilder, CombinedPropertyEditorShapeBuilder> builderFactory) =>
+            PropertyEditor(shapeHelper, GetDefaultPartEditorShapeType(), part, builderFactory);
 
-        protected virtual PropertyEditorShapeBuilder For(
-            Expression<Func<TPart, object>> propertyExpression,
-            Action<PropertyEditorViewModel> builder,
-            bool useUniqueTemplate = false) =>
-            new PropertyEditorShapeBuilder
-            {
-                PropertyExpression = propertyExpression,
-                Builder = builder,
-                UniqueTemplate = useUniqueTemplate
-            };
 
-        protected virtual PropertyEditorShapeBuilder ForUnique(
-            Expression<Func<TPart, object>> propertyExpression,
-            Action<PropertyEditorViewModel> builder) =>
-            For(propertyExpression, builder, true);
 
         protected virtual string GetDefaultPartDisplayShapeType() =>
             _lazyDefaultDisplayShapeType.Value;
@@ -123,8 +99,7 @@ namespace Lombiq.ContentEditors.Drivers
 
         private static MemberInfo GetPropertyMemberInfo(Expression<Func<TPart, object>> propertyExpression) =>
             ((MemberExpression)propertyExpression.Body).Member;
-
-
+        
 
         private static string GenerateDefaultPartDisplayShapeType(string partName)
         {
@@ -137,12 +112,36 @@ namespace Lombiq.ContentEditors.Drivers
             $"{GenerateDefaultPartDisplayShapeType(partName)}_Edit";
 
 
+
         public class PropertyEditorShapeBuilder
         {
-            public bool UniqueTemplate { get; set; }
             public Expression<Func<TPart, object>> PropertyExpression { get; set; }
             public Action<PropertyEditorViewModel> Builder { get; set; }
         }
 
+        public class CombinedPropertyEditorShapeBuilder
+        {
+            public IList<PropertyEditorShapeBuilder> PropertyEditorShapeBuilders { get; set; }
+
+
+            public CombinedPropertyEditorShapeBuilder()
+            {
+                PropertyEditorShapeBuilders = new List<PropertyEditorShapeBuilder>();
+            }
+
+
+            public CombinedPropertyEditorShapeBuilder With(
+                Expression<Func<TPart, object>> propertyExpression,
+                Action<PropertyEditorViewModel> builder)
+            {
+                PropertyEditorShapeBuilders.Add(new PropertyEditorShapeBuilder
+                {
+                    PropertyExpression = propertyExpression,
+                    Builder = builder
+                });
+
+                return this;
+            }
+        }
     }
 }

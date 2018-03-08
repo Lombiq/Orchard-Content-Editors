@@ -13,6 +13,7 @@ namespace Lombiq.ContentEditors.ViewModels
         public string TemplateName { get; set; }
         public string Prefix { get; set; }
         public bool Required { get; set; }
+        public bool HasOwnTemplate { get; set; }
     }
 
     
@@ -60,9 +61,16 @@ namespace Lombiq.ContentEditors.ViewModels
             return viewModel;
         }
 
-        public static PropertyEditorViewModel SetRequired(this PropertyEditorViewModel viewModel, bool required)
+        public static PropertyEditorViewModel SetRequired(this PropertyEditorViewModel viewModel, bool required = true)
         {
             viewModel.Required = required;
+
+            return viewModel;
+        }
+
+        public static PropertyEditorViewModel WithOwnTemplate(this PropertyEditorViewModel viewModel, bool hasOwnHemplate = true)
+        {
+            viewModel.HasOwnTemplate = hasOwnHemplate;
 
             return viewModel;
         }
