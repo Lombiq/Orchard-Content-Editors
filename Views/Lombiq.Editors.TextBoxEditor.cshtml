@@ -1,0 +1,41 @@
+﻿@using Lombiq.ContentEditors.ViewModels
+
+@{
+    var viewModel = Model.ViewModel as EditorViewModel;
+
+    const string BlockName = "textBoxEditor";
+
+    var textBoxAttributes = viewModel.BuildAttributes(new Dictionary<string, object>
+    {
+        { "class", "form-control textBox " + BlockName + "__textBox" }
+    });
+
+    var labelAttributes = new Dictionary<string, object>
+    {
+        { "class", "editorLabel " + BlockName + "__label" }
+    };
+
+    if (viewModel.Required)
+    {
+        textBoxAttributes["required"] = true;
+        textBoxAttributes["class"] = textBoxAttributes["class"] + " required";
+        labelAttributes["class"] = labelAttributes["class"] + " required";
+    }
+
+    if (!string.IsNullOrEmpty(viewModel.Placeholder))
+    {
+        textBoxAttributes["placeholder"] = viewModel.Placeholder;
+    }
+}
+
+<div class="editor editorField form-group @BlockName">
+    @if (!string.IsNullOrEmpty(viewModel.Label))
+    {
+        @Html.Label(viewModel.Name, viewModel.Label, labelAttributes)
+    }
+    @if (!string.IsNullOrEmpty(viewModel.Hint))
+    {
+        <div class="editorHint @(BlockName)__editorHint">@viewModel.Hint</div>
+    }
+    @Html.TextBox(viewModel.Name, viewModel.Value, textBoxAttributes)
+</div>

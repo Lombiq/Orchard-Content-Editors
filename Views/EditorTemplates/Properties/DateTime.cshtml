@@ -1,0 +1,13 @@
+﻿@using Lombiq.ContentEditors.ViewModels
+
+@model PropertyEditorViewModel
+
+@Display.Lombiq_Editors_DateTimeEditor(ViewModel: 
+    new EditorViewModel
+    {
+        Name = Model.PropertyName,
+        Hint = Model.Hint,
+        Value = Model.Value.ToString(),
+        Label = Model.Label,
+        Placeholder = Model.Placeholder
+    })

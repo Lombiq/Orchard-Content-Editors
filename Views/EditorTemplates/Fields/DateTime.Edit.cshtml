@@ -1,0 +1,17 @@
+﻿@*@model Orchard.Fields.ViewModels.DateTimeFieldViewModel
+
+    @Html.ConsultantLinkTextBoxEditorFor((object)Display, model => model.Editor.Date, Model.Name, Model.IsRequired, Model.Hint)*@
+
+@using Lombiq.ContentEditors.ViewModels
+
+@model PropertyEditorViewModel
+
+@Display.Lombiq_Editors_DateTimeEditor(ViewModel:
+    new EditorViewModel
+    {
+        Name = "Editor.Date",
+        Hint = Model.Hint,
+        Value = Model.Value.ToString(),
+        Label = Model.Label,
+        Placeholder = Model.Placeholder
+    })

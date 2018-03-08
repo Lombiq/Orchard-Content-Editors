@@ -99,7 +99,11 @@
     <Compile Include="Constants\ElementNames.cs" />
     <Compile Include="Constants\ResourceNames.cs" />
     <Compile Include="Controllers\AsyncEditorController.cs" />
+    <Compile Include="Drivers\PropertyFocusedContentPartDriver.cs" />
     <Compile Include="Drivers\AsyncEditorPartDriver.cs" />
+    <Compile Include="ViewModels\PropertyEditorViewModel.cs" />
+    <Compile Include="Extensions\ContentEditorsHtmlHelperExtensions.cs" />
+    <Compile Include="Extensions\ContentPartDriverExtensions.cs" />
     <Compile Include="Handlers\AsyncEditorPartHandler.cs" />
     <Compile Include="Models\AsyncEditorSaveResult.cs" />
     <Compile Include="Models\EditorGroupsSettings.cs" />
@@ -113,6 +117,7 @@
     <Compile Include="Services\EditorGroupsSettingsProviderAccessor.cs" />
     <Compile Include="Services\IAsyncEditorService.cs" />
     <Compile Include="Services\IEditorGroupsProviderAccessor.cs" />
+    <Compile Include="ViewModels\EditorViewModel.cs" />
     <Content Include="Scripts\lombiq-asynceditor.js" />
     <Compile Include="ResourceManifest.cs" />
     <Compile Include="Services\AdminRenderContextMatchProvider.cs" />
@@ -161,6 +166,24 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Lombiq.AsyncEditorLoader.Container.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\EditorTemplates\Properties\Text.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Lombiq.Editors.TextBoxEditor.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Lombiq.Editors.DateTimeEditor.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\EditorTemplates\Properties\DateTime.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\EditorTemplates\Fields\DateTime.Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\EditorTemplates\Fields\Input.Edit.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
