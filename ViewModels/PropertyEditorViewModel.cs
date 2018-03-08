@@ -12,6 +12,7 @@ namespace Lombiq.ContentEditors.ViewModels
         public string EditorType { get; set; }
         public string TemplateName { get; set; }
         public string Prefix { get; set; }
+        public bool Required { get; set; }
     }
 
     
@@ -55,6 +56,13 @@ namespace Lombiq.ContentEditors.ViewModels
         public static PropertyEditorViewModel SetPrefix(this PropertyEditorViewModel viewModel, string prefix)
         {
             viewModel.Prefix = prefix;
+
+            return viewModel;
+        }
+
+        public static PropertyEditorViewModel SetRequired(this PropertyEditorViewModel viewModel, bool required)
+        {
+            viewModel.Required = required;
 
             return viewModel;
         }

@@ -2,8 +2,10 @@
 using Orchard.ContentManagement;
 using Orchard.ContentManagement.Drivers;
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 
 namespace Lombiq.ContentEditors.Drivers
 {
@@ -35,7 +37,8 @@ namespace Lombiq.ContentEditors.Drivers
             Expression<Func<TPart, object>> propertyExpression,
             Action<PropertyEditorViewModel> builder)
         {
-            var propertyName = GetPropertyName(propertyExpression);
+            var propertyMemberInfo = GetPropertyMemberInfo(propertyExpression);
+            var propertyName = propertyMemberInfo.Name;
 
             return ContentShape(shapeType, () =>
             {
@@ -44,18 +47,17 @@ namespace Lombiq.ContentEditors.Drivers
                     PropertyName = propertyName,
                     EditorType = "Text",
                     Value = propertyExpression.Compile()(part),
-                    Prefix = Prefix
+                    Prefix = Prefix,
+                    Required = Attribute.IsDefined(propertyMemberInfo, typeof(RequiredAttribute))
                 };
-
-                editorBuilder.TemplateName = uniqueTemplate ?
-                    $"Properties/{_lazyPartName.Value}/{propertyName}" : 
-                    $"Properties/{editorBuilder.EditorType}";
 
                 builder(editorBuilder);
 
                 if (string.IsNullOrEmpty(editorBuilder.TemplateName))
                 {
-                    editorBuilder.TemplateName = $"Properties/{editorBuilder.EditorType}";
+                    editorBuilder.TemplateName = uniqueTemplate ?
+                        $"Properties/{_lazyPartName.Value}/{propertyName}" :
+                        $"Properties/{editorBuilder.EditorType}";
                 }
 
                 return shapeHelper.EditorTemplate(
@@ -119,8 +121,8 @@ namespace Lombiq.ContentEditors.Drivers
             _lazyDefaultEditorShapeType.Value;
 
 
-        private static string GetPropertyName(Expression<Func<TPart, object>> propertyExpression) =>
-            ((MemberExpression)propertyExpression.Body).Member.Name;
+        private static MemberInfo GetPropertyMemberInfo(Expression<Func<TPart, object>> propertyExpression) =>
+            ((MemberExpression)propertyExpression.Body).Member;
 
 
 
