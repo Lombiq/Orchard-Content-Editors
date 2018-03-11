@@ -100,8 +100,6 @@
     <Compile Include="Constants\ResourceNames.cs" />
     <Compile Include="Controllers\AsyncEditorController.cs" />
     <Compile Include="Drivers\AsyncEditorPartDriver.cs" />
-    <Compile Include="Extensions\ContentEditorsHtmlHelperExtensions.cs" />
-    <Compile Include="Extensions\ContentPartDriverExtensions.cs" />
     <Compile Include="Handlers\AsyncEditorPartHandler.cs" />
     <Compile Include="Models\AsyncEditorSaveResult.cs" />
     <Compile Include="Models\EditorGroupsSettings.cs" />
