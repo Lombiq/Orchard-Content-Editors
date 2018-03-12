@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace Lombiq.ContentEditors.Models
+﻿namespace Lombiq.ContentEditors.Models
 {
-    public class MultiAsyncEditorResult
+    public class AsyncEditorWrapperResult
     {
         public int Id { get; set; }
         public dynamic ContentToDisplay { get; set; }

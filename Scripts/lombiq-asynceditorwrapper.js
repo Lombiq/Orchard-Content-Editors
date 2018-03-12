@@ -1,15 +1,15 @@
 ﻿/**
- * @summary     Lombiq - Multi Async Editor
+ * @summary     Lombiq - Async Editor Wrapper
  * @description Manages multiple async editors (i.e. async editors for content item lists).
  * @version     1.0
- * @file        lombiq-multiasynceditor.js
+ * @file        lombiq-asynceditorwrapper.js
  * @author      Lombiq Technologies Ltd.
  */
 
 ; (function ($, window, document, undefined) {
     "use strict";
 
-    var pluginName = "lombiq_MultiAsyncEditor";
+    var pluginName = "lombiq_AsyncEditorWrapper";
 
     var defaults = {
         // The id of the ul element of the list.

@@ -5,6 +5,6 @@
         private const string Prefix = "Lombiq.";
 
         public const string Lombiq_AsyncEditor = Prefix + "AsyncEditor";
-        public const string Lombiq_MultiAsyncEditor = Prefix + "MultiAsyncEditor";
+        public const string Lombiq_AsyncEditorWrapper = Prefix + "AsyncEditorWrapper";
     }
 }

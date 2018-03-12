@@ -106,7 +106,7 @@
     <Compile Include="Models\EditorGroupDescriptor.cs" />
     <Compile Include="Models\AsyncEditorPart.cs" />
     <Compile Include="Models\AsyncEditorResult.cs" />
-    <Compile Include="Models\MultiAsyncEditorResult.cs" />
+    <Compile Include="Models\AsyncEditorWrapperResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\AsyncEditorShapeTableProvider.cs" />
     <Compile Include="Services\RenderContextPlacementParseMatchProvider.cs" />
@@ -115,7 +115,7 @@
     <Compile Include="Services\IAsyncEditorService.cs" />
     <Compile Include="Services\IEditorGroupsProviderAccessor.cs" />
     <Compile Include="ViewModels\EditorViewModel.cs" />
-    <Content Include="Scripts\lombiq-multiasynceditor.js" />
+    <Content Include="Scripts\lombiq-asynceditorwrapper.js" />
     <Content Include="Scripts\lombiq-asynceditor.js" />
     <Compile Include="ResourceManifest.cs" />
     <Compile Include="Services\AdminRenderContextMatchProvider.cs" />
