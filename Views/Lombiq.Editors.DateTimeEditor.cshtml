@@ -1,14 +1,27 @@
 ﻿@using Lombiq.ContentEditors.ViewModels
+@using Orchard.Localization.Services
+@using Orchard.Localization.Models
+@using Orchard.Utility.Extensions
 
 @{
-    var viewModel = Model.ViewModel as EditorViewModel;
+    Style.Require("jQueryUI");
+
+    Script.Require("jQueryUI").AtHead();
+    Script.Require("jQueryTimeEntry").AtHead();
+
+    var viewModel = Model.ViewModel as DateTimeEditorViewModel;
+    var isDateEditor = viewModel.EditorType == DateTimeEditorType.Date || viewModel.EditorType == DateTimeEditorType.DateWithTimeZoneConversion;
+    var classifiedName = viewModel.Name.HtmlClassify();
+    var editorType = isDateEditor ? "text" : "time";
 
     const string BlockName = "dateTimeEditor";
 
+    var editorTypeClass = isDateEditor ? "datePicker" : "timePicker";
+
     var dateTimePickerAttributes = viewModel.BuildAttributes(new Dictionary<string, object>
     {
-        { "class", "form-control dateTimePicker " + BlockName + "__dateTimePicker" },
-        { "type", "date" }
+        { "type", editorType },
+        { "class", $"form-control {editorTypeClass} {BlockName}__{editorTypeClass} {classifiedName}" }
     });
 
     var labelAttributes = new Dictionary<string, object>
@@ -27,6 +40,19 @@
     {
         dateTimePickerAttributes["placeholder"] = viewModel.Placeholder;
     }
+
+    var dateLocalizationServices = WorkContext.Resolve<IDateLocalizationServices>();
+    var options = new DateLocalizationOptions
+    {
+        EnableTimeZoneConversion = viewModel.EditorType == DateTimeEditorType.Time || 
+            viewModel.EditorType == DateTimeEditorType.DateWithTimeZoneConversion,
+        EnableCalendarConversion = viewModel.EditorType == DateTimeEditorType.Date,
+        IgnoreDate = viewModel.EditorType == DateTimeEditorType.Time
+    };
+
+    var dateTimeString = viewModel.Value is string ? 
+        (string)viewModel.Value : 
+        dateLocalizationServices.ConvertToLocalizedString(viewModel.Value as DateTime?, isDateEditor ? "MM/dd/yyyy" : "HH:mm", options);
 }
 
 <div class="editor editorField form-group @BlockName">
@@ -34,9 +60,18 @@
     {
         @Html.Label(viewModel.Name, viewModel.Label, labelAttributes)
     }
-    @if (!string.IsNullOrEmpty(viewModel.Hint))
-    {
-        <div class="editorHint @(BlockName)__editorHint">@viewModel.Hint</div>
-    }
-    @Html.TextBox(viewModel.Name, viewModel.Value, dateTimePickerAttributes)
+
+    @Html.TextBox(viewModel.Name, dateTimeString, dateTimePickerAttributes)
 </div>
+
+@if (editorType == "text")
+{
+    <script type="text/javascript">
+        ; (function ($) {
+            $(function () {
+                $(".@classifiedName").datepicker();
+                $(".ui-datepicker").hide();
+            });
+        })(jQuery);
+    </script>
+}

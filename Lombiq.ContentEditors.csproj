@@ -113,6 +113,7 @@
     <Compile Include="Services\EditorGroupsSettingsProviderAccessor.cs" />
     <Compile Include="Services\IAsyncEditorService.cs" />
     <Compile Include="Services\IEditorGroupsProviderAccessor.cs" />
+    <Compile Include="ViewModels\DateTimeEditorViewModel.cs" />
     <Compile Include="ViewModels\EditorViewModel.cs" />
     <Content Include="Scripts\lombiq-asynceditor.js" />
     <Compile Include="ResourceManifest.cs" />
