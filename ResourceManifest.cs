@@ -10,6 +10,7 @@ namespace Lombiq.ContentEditors
             var manifest = builder.Add();
             
             manifest.DefineScript(Lombiq_AsyncEditor).SetUrl("lombiq-asynceditor.js").SetDependencies("jQuery");
+            manifest.DefineScript(Lombiq_MultiAsyncEditor).SetUrl("lombiq-multiasynceditor.js").SetDependencies("jQuery");
         }
     }
 }

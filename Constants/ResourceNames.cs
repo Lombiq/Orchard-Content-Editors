@@ -2,6 +2,9 @@
 {
     public static class ResourceNames
     {
-        public const string Lombiq_AsyncEditor = "Lombiq.AsyncEditor";
+        private const string Prefix = "Lombiq.";
+
+        public const string Lombiq_AsyncEditor = Prefix + "AsyncEditor";
+        public const string Lombiq_MultiAsyncEditor = Prefix + "MultiAsyncEditor";
     }
 }
