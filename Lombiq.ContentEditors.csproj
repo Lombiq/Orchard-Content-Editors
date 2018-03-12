@@ -113,6 +113,7 @@
     <Compile Include="Services\EditorGroupsSettingsProviderAccessor.cs" />
     <Compile Include="Services\IAsyncEditorService.cs" />
     <Compile Include="Services\IEditorGroupsProviderAccessor.cs" />
+    <Compile Include="ViewModels\EditorViewModel.cs" />
     <Content Include="Scripts\lombiq-asynceditor.js" />
     <Compile Include="ResourceManifest.cs" />
     <Compile Include="Services\AdminRenderContextMatchProvider.cs" />
@@ -161,6 +162,18 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Lombiq.AsyncEditorLoader.Container.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Lombiq.Editors.TextBoxEditor.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Lombiq.Editors.DateTimeEditor.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Lombiq.Editors.CheckBoxEditor.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Lombiq.Editors.TextAreaEditor.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
