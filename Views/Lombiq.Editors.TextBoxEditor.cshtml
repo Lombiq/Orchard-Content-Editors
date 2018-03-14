@@ -3,11 +3,11 @@
 @{
     var viewModel = Model.ViewModel as EditorViewModel;
 
-    const string BlockName = "textBoxEditor";
+    const string BlockName = "textboxEditor";
 
     var textBoxAttributes = viewModel.BuildAttributes(new Dictionary<string, object>
     {
-        { "class", "form-control textBox " + BlockName + "__textBox" }
+        { "class", "form-control textBox " + BlockName + "__textbox" }
     });
 
     var labelAttributes = new Dictionary<string, object>
