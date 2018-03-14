@@ -4,7 +4,7 @@
     var viewModel = Model.ViewModel as EditorViewModel;
     var value = (viewModel.Value as bool?) ?? false;
 
-    const string BlockName = "checkboxEditor";
+    string BlockName = viewModel.BlockName ?? "checkboxEditor";
 
     var checkBoxAttributes = viewModel.BuildAttributes(new Dictionary<string, object>
     {

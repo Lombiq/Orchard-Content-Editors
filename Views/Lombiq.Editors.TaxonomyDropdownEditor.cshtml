@@ -9,8 +9,8 @@
 
     if (!viewModel?.SelectList?.Any() ?? true) { return; }
 
-    const string BlockName = "taxonomyDropdownEditor";
-    const string TextBoxElementName = BlockName + "__textbox";
+    string BlockName = viewModel.BlockName ?? "taxonomyDropdownEditor";
+    string TextBoxElementName = BlockName + "__textbox";
     string TechnicalNameModifier = "_" + viewModel.TechnicalName;
 
     var taxonomyDropdownSelectizeInputId = BlockName + "__SelectizeInput" + TechnicalNameModifier;

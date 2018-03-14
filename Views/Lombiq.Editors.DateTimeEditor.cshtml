@@ -3,7 +3,7 @@
 @{
     var viewModel = Model.ViewModel as EditorViewModel;
 
-    const string BlockName = "dateTimeEditor";
+    string BlockName = viewModel.BlockName ?? "dateTimeEditor";
 
     var dateTimePickerAttributes = viewModel.BuildAttributes(new Dictionary<string, object>
     {

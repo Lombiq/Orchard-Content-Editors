@@ -3,7 +3,7 @@
 @{
     var viewModel = Model.ViewModel as EditorViewModel;
 
-    const string BlockName = "textAreaEditor";
+    string BlockName = viewModel.BlockName ?? "textAreaEditor";
 
     var textAreaAttributes = viewModel.BuildAttributes(new Dictionary<string, object>
     {
