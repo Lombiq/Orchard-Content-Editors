@@ -1,0 +1,34 @@
+﻿@{
+    var viewModel = Model.ViewModel as Lombiq.ContentEditors.ViewModels.InputFieldViewModel;
+    var value = viewModel?.Value as string;
+
+    if ((viewModel == null || string.IsNullOrEmpty(value)) && !viewModel.ShowIfEmpty)
+    {
+        return;
+    }
+
+    string BlockName = viewModel.BlockName ?? "inputField";
+    string LabelElementName = BlockName + "__label";
+    string ValueElementName = BlockName + "__value";
+    string ValueElementNameWithEmptyModifier = ValueElementName + "_empty";
+}
+
+<div class="@BlockName @viewModel.AdditionalClasses">
+    @if (!string.IsNullOrEmpty(viewModel.Label))
+    {
+        <div class="@LabelElementName">@viewModel.Label:</div>
+    }
+    <div class="@ValueElementName @(string.IsNullOrEmpty(value) ? ValueElementNameWithEmptyModifier : "")">
+        @if(viewModel != null)
+        {
+            if (viewModel.ContentItem != null)
+            {
+                @(Html.ItemDisplayLink(value, viewModel.ContentItem))
+            }
+            else
+            {
+                @(new HtmlString(value))
+            }
+        }
+    </div>
+</div>

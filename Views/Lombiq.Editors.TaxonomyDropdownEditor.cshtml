@@ -1,0 +1,49 @@
+﻿@using Lombiq.ContentEditors.ViewModels
+@using Lombiq.ContentEditors.Constants
+
+@{
+    Script.Require(ResourceNames.Selectize).AtHead();
+    Style.Require(ResourceNames.Selectize).AtHead();
+
+    var viewModel = Model.ViewModel as TaxonomyDropdownEditorViewModel;
+
+    if (!viewModel?.SelectList?.Any() ?? true) { return; }
+
+    string BlockName = viewModel.BlockName ?? "taxonomyDropdownEditor";
+    string TextBoxElementName = BlockName + "__textbox";
+    string TechnicalNameModifier = "_" + viewModel.TechnicalName;
+
+    var taxonomyDropdownSelectizeInputId = BlockName + "__SelectizeInput" + TechnicalNameModifier;
+
+    var attributes = new Dictionary<string, object>
+    {
+        { "class", TextBoxElementName },
+        { "id", @taxonomyDropdownSelectizeInputId }
+    };
+    if (!string.IsNullOrEmpty(viewModel.Label))
+    {
+        attributes.Add("placeholder", viewModel.Label);
+    }
+}
+
+<div class="editor editorField form-group @BlockName">
+    @Html.TextBox(viewModel.TechnicalName, "", attributes)
+</div>
+
+<script type="text/javascript">
+    ; (function ($) {
+        $(function () {
+            @* Initializing selectize on input field. *@
+            var $taxonomyDropdownSelectizeInput = $("#@taxonomyDropdownSelectizeInputId");
+            var $taxonomyDropdownSelectize = $taxonomyDropdownSelectizeInput.selectize()[0].selectize;
+
+            @* Adding options. *@
+            @foreach (var listItem in viewModel.SelectList)
+            {
+                <text>
+                    $taxonomyDropdownSelectize.addOption({ value: "@listItem.Value", text: "@listItem.Text" });
+                </text>
+            }
+        });
+    })(jQuery);
+</script>

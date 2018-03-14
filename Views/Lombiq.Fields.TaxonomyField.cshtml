@@ -1,0 +1,37 @@
+﻿@using Orchard.Taxonomies.Models
+
+@{
+    var viewModel = Model.ViewModel as Lombiq.ContentEditors.ViewModels.TaxonomyFieldViewModel;
+
+    if ((viewModel == null || viewModel.Terms == null || !viewModel.Terms.Any()) && !viewModel.ShowIfEmpty)
+    {
+        return;
+    }
+
+    string BlockName = viewModel.BlockName ?? "taxonomyField";
+    string LabelElementName = BlockName + "__label";
+    string ValueElementName = BlockName + "__value";
+    string ValueElementNameWithEmptyModifier = ValueElementName + "_empty";
+
+    viewModel.Terms = TermPart.Sort(viewModel.Terms);
+}
+
+<div class="@BlockName @viewModel.AdditionalClasses">
+    @if (!string.IsNullOrEmpty(viewModel.Label))
+    {
+        <div class="@LabelElementName">@viewModel.Label:</div>
+    }
+    <div class="@ValueElementName @(!viewModel.Terms.Any() ? ValueElementNameWithEmptyModifier : "")">
+        @if(viewModel != null && viewModel.Terms != null)
+        {
+            if (viewModel.IsLink)
+            {
+                @(new HtmlString(string.Join(", ", viewModel.Terms.Select(t => Html.ItemDisplayLink(t.Name, t.ContentItem).ToString()).ToArray())))
+            }
+            else
+            {
+                @(string.Join(", ", viewModel.Terms.Select(term => term.Name)))
+            }
+        }
+    </div>
+</div>
