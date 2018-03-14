@@ -2,7 +2,6 @@
 {
     public class EditorViewModel : InputFieldViewModel
     {
-
         /// <summary>
         /// Name of the HTML field.
         /// </summary>
