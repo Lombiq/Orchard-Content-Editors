@@ -10,7 +10,8 @@
     Script.Require(ResourceNames.jQueryUI).AtHead();
 
     var viewModel = Model.ViewModel as DateTimeEditorViewModel;
-    var isDateEditor = viewModel.EditorType == DateTimeEditorType.Date || viewModel.EditorType == DateTimeEditorType.DateWithTimeZoneConversion;
+    var isDateEditor = viewModel.EditorType == DateTimeEditorType.Date || 
+        viewModel.EditorType == DateTimeEditorType.DateWithTimeZoneConversion;
 
     if (!isDateEditor)
     {
