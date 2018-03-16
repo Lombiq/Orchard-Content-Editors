@@ -2,6 +2,13 @@
 {
     public static class ResourceNames
     {
-        public const string Lombiq_AsyncEditor = "Lombiq.AsyncEditor";
+        private const string Prefix = "Lombiq";
+
+        public const string jQuery = nameof(jQuery);
+        public const string jQueryUI = nameof(jQueryUI);
+
+        public const string Lombiq_AsyncEditor = Prefix + "AsyncEditor";
+        public const string iOS_StickyInputFocusOverride = Prefix + "iOS.StickyInputFocusOverride";
+        public const string Selectize = nameof(Selectize);
     }
 }

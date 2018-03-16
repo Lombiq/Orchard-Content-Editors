@@ -114,7 +114,15 @@
     <Compile Include="Services\IAsyncEditorService.cs" />
     <Compile Include="Services\IEditorGroupsProviderAccessor.cs" />
     <Compile Include="ViewModels\DateTimeEditorViewModel.cs" />
+    <Compile Include="ViewModels\InputFieldViewModel.cs" />
+    <Compile Include="ViewModels\TaxonomyFieldViewModel.cs" />
+    <Compile Include="ViewModels\FieldViewModel.cs" />
     <Compile Include="ViewModels\EditorViewModel.cs" />
+    <Compile Include="ViewModels\TaxonomyDropdownEditorViewModel.cs" />
+    <Content Include="Content\Selectize\selectize.bootstrap3.css" />
+    <Content Include="Content\Selectize\selectize.js" />
+    <Content Include="Content\Selectize\selectize.min.js" />
+    <Content Include="Scripts\lombiq-ios-stickyinputfocusoverride.js" />
     <Content Include="Scripts\lombiq-asynceditor.js" />
     <Compile Include="ResourceManifest.cs" />
     <Compile Include="Services\AdminRenderContextMatchProvider.cs" />
@@ -138,6 +146,10 @@
       <Project>{9916839C-39FC-4CEB-A5AF-89CA7E87119F}</Project>
       <Name>Orchard.Core</Name>
       <Private>$(MvcBuildViews)</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Orchard.Taxonomies\Orchard.Taxonomies.csproj">
+      <Project>{E649EA64-D213-461B-87F7-D67035801443}</Project>
+      <Name>Orchard.Taxonomies</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -165,16 +177,28 @@
     <Content Include="Views\Lombiq.AsyncEditorLoader.Container.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Lombiq.Editors.TextBoxEditor.cshtml" />
+    <Content Include="Views\Lombiq.Editors.TextboxEditor.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Lombiq.Editors.DateTimeEditor.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Lombiq.Editors.CheckBoxEditor.cshtml" />
+    <Content Include="Views\Lombiq.Editors.CheckboxEditor.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Lombiq.Editors.TextAreaEditor.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Lombiq.Editors.TaxonomyDropdownEditor.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Lombiq.Fields.TaxonomyField.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Lombiq.Fields.InputField.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\Web.config" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -3,11 +3,11 @@
 @{
     var viewModel = Model.ViewModel as EditorViewModel;
 
-    const string BlockName = "textBoxEditor";
+    string BlockName = viewModel.BlockName ?? "textboxEditor";
 
-    var textBoxAttributes = viewModel.BuildAttributes(new Dictionary<string, object>
+    var textboxAttributes = viewModel.BuildAttributes(new Dictionary<string, object>
     {
-        { "class", "form-control textBox " + BlockName + "__textBox" }
+        { "class", "form-control textbox " + BlockName + "__textbox" }
     });
 
     var labelAttributes = new Dictionary<string, object>
@@ -17,14 +17,14 @@
 
     if (viewModel.Required)
     {
-        textBoxAttributes["required"] = true;
-        textBoxAttributes["class"] = textBoxAttributes["class"] + " required";
+        textboxAttributes["required"] = true;
+        textboxAttributes["class"] = textboxAttributes["class"] + " required";
         labelAttributes["class"] = labelAttributes["class"] + " required";
     }
 
     if (!string.IsNullOrEmpty(viewModel.Placeholder))
     {
-        textBoxAttributes["placeholder"] = viewModel.Placeholder;
+        textboxAttributes["placeholder"] = viewModel.Placeholder;
     }
 }
 
@@ -37,5 +37,5 @@
     {
         <div class="editorHint @(BlockName)__editorHint">@viewModel.Hint</div>
     }
-    @Html.TextBox(viewModel.Name, viewModel.Value, textBoxAttributes)
+    @Html.TextBox(viewModel.Name, viewModel.Value, textboxAttributes)
 </div>

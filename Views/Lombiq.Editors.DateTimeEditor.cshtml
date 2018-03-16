@@ -14,7 +14,7 @@
     var classifiedName = viewModel.Name.HtmlClassify();
     var editorType = isDateEditor ? "text" : "time";
 
-    const string BlockName = "dateTimeEditor";
+    string BlockName = viewModel.BlockName ?? "dateTimeEditor";
 
     var editorTypeClass = isDateEditor ? "datePicker" : "timePicker";
 
