@@ -1,16 +1,22 @@
 ﻿@using Lombiq.ContentEditors.ViewModels
+@using Lombiq.ContentEditors.Constants
 @using Orchard.Localization.Services
 @using Orchard.Localization.Models
 @using Orchard.Utility.Extensions
 
 @{
-    Style.Require("jQueryUI");
+    Style.Require(ResourceNames.jQueryUI);
 
-    Script.Require("jQueryUI").AtHead();
-    Script.Require("jQueryTimeEntry").AtHead();
+    Script.Require(ResourceNames.jQueryUI).AtHead();
 
     var viewModel = Model.ViewModel as DateTimeEditorViewModel;
     var isDateEditor = viewModel.EditorType == DateTimeEditorType.Date || viewModel.EditorType == DateTimeEditorType.DateWithTimeZoneConversion;
+
+    if (!isDateEditor)
+    {
+        Script.Require(ResourceNames.jQueryTimeEntry).AtHead();
+    }
+
     var classifiedName = viewModel.Name.HtmlClassify();
     var editorType = isDateEditor ? "text" : "time";
 
@@ -44,14 +50,14 @@
     var dateLocalizationServices = WorkContext.Resolve<IDateLocalizationServices>();
     var options = new DateLocalizationOptions
     {
-        EnableTimeZoneConversion = viewModel.EditorType == DateTimeEditorType.Time || 
+        EnableTimeZoneConversion = viewModel.EditorType == DateTimeEditorType.Time ||
             viewModel.EditorType == DateTimeEditorType.DateWithTimeZoneConversion,
         EnableCalendarConversion = viewModel.EditorType == DateTimeEditorType.Date,
         IgnoreDate = viewModel.EditorType == DateTimeEditorType.Time
     };
 
-    var dateTimeString = viewModel.Value is string ? 
-        (string)viewModel.Value : 
+    var dateTimeString = viewModel.Value is string ?
+        (string)viewModel.Value :
         dateLocalizationServices.ConvertToLocalizedString(viewModel.Value as DateTime?, isDateEditor ? "MM/dd/yyyy" : "HH:mm", options);
 }
 
