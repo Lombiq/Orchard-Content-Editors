@@ -10,13 +10,14 @@
     Script.Require(ResourceNames.jQueryUI).AtHead();
 
     var viewModel = Model.ViewModel as DateTimeEditorViewModel;
-    var isDateEditor = viewModel.EditorType == DateTimeEditorType.Date ||
-        viewModel.EditorType == DateTimeEditorType.DateWithTimeZoneConversion;
 
-    if (!isDateEditor)
+    if (viewModel.EditorType == DateTimeEditorType.Time)
     {
         Script.Require(ResourceNames.jQueryTimeEntry).AtHead();
     }
+
+    var isDateEditor = viewModel.EditorType == DateTimeEditorType.Date ||
+        viewModel.EditorType == DateTimeEditorType.DateWithTimeZoneConversion;
 
     var classifiedName = viewModel.Name.HtmlClassify();
     var editorType = isDateEditor ? "text" : "time";
