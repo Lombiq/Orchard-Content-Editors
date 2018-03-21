@@ -3,7 +3,7 @@ using Orchard.Localization;
 
 namespace Lombiq.ContentEditors.Services
 {
-    public abstract class EditorGroupsProviderBase : IEditorGroupsProvider
+    public abstract class EditorGroupsProviderBase
     {
         public Localizer T { get; set; }
 
@@ -17,5 +17,9 @@ namespace Lombiq.ContentEditors.Services
         public abstract bool CanProvideEditorGroups(string contentType);
 
         public abstract EditorGroupsSettings GetEditorGroupsSettings();
+
+
+        protected virtual EditorGroupDescriptor EditorGroup(string name, LocalizedString title, bool isPublishGroup = false) =>
+            new EditorGroupDescriptor { Name = name, Title = title.Text, IsPublishGroup = isPublishGroup };
     }
 }
