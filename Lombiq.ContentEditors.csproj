@@ -113,6 +113,7 @@
     <Compile Include="Services\EditorGroupsSettingsProviderAccessor.cs" />
     <Compile Include="Services\IAsyncEditorService.cs" />
     <Compile Include="Services\IEditorGroupsProviderAccessor.cs" />
+    <Compile Include="ViewModels\DateTimeEditorViewModel.cs" />
     <Compile Include="ViewModels\InputFieldViewModel.cs" />
     <Compile Include="ViewModels\TaxonomyFieldViewModel.cs" />
     <Compile Include="ViewModels\FieldViewModel.cs" />
