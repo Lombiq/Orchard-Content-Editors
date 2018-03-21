@@ -10,6 +10,6 @@
 
     public class DateTimeEditorViewModel : EditorViewModel
     {
-        public DateTimeEditorType EditorType { get; set; }
+        public DateTimeEditorType EditorType { get; set; } = DateTimeEditorType.Date;
     }
 }
