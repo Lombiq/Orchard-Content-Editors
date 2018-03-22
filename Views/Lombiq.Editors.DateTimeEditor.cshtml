@@ -22,21 +22,22 @@
     var classifiedName = viewModel.Name.HtmlClassify();
     var editorType = isDateEditor ? "text" : "time";
 
-    string BlockName = viewModel.BlockName ?? "dateTimeEditor";
-    string DateTimePickerContainerElementName = BlockName + "__dateTimePickerContainer";
-    string GlyphiconElementName = BlockName + "__glyphicon";
+    string DefaultBlockName = "dateTimeEditor";
+    string BlockName = viewModel.BlockName ?? DefaultBlockName;
+    string DateTimePickerContainerElementName = DefaultBlockName + "__dateTimePickerContainer";
+    string GlyphiconElementName = DefaultBlockName + "__glyphicon";
 
     var editorTypeClass = isDateEditor ? "datePicker" : "timePicker";
 
     var dateTimePickerAttributes = viewModel.BuildAttributes(new Dictionary<string, object>
     {
         { "type", editorType },
-        { "class", $"form-control {editorTypeClass} {BlockName}__{editorTypeClass} {classifiedName}" }
+        { "class", $"form-control {editorTypeClass} {DefaultBlockName}__{editorTypeClass} {classifiedName}" }
     });
 
     var labelAttributes = new Dictionary<string, object>
     {
-        { "class", "editorLabel " + BlockName + "__label" }
+        { "class", "editorLabel " + DefaultBlockName + "__label" }
     };
 
     if (viewModel.Required)
@@ -66,7 +67,7 @@
         dateLocalizationServices.ConvertToLocalizedString(viewModel.Value as DateTime?, displayFormat, options);
 }
 
-<div class="editor editorField form-group @BlockName">
+<div class="editor editorField form-group @DefaultBlockName @BlockName">
     @if (!string.IsNullOrEmpty(viewModel.Label))
     {
         @Html.Label(viewModel.Name, viewModel.Label, labelAttributes)
