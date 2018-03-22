@@ -60,9 +60,10 @@
         IgnoreDate = viewModel.EditorType == DateTimeEditorType.Time
     };
 
+    var displayFormat = isDateEditor ? viewModel.DateDisplayFormat : "HH:mm";
     var dateTimeString = viewModel.Value is string ?
         (string)viewModel.Value :
-        dateLocalizationServices.ConvertToLocalizedString(viewModel.Value as DateTime?, isDateEditor ? "MM/dd/yyyy" : "HH:mm", options);
+        dateLocalizationServices.ConvertToLocalizedString(viewModel.Value as DateTime?, displayFormat, options);
 }
 
 <div class="editor editorField form-group @BlockName">
@@ -81,7 +82,7 @@
     <script type="text/javascript">
         ; (function ($) {
             $(function () {
-                $(".@classifiedName").datepicker();
+                $(".@classifiedName").datepicker({ dateFormat: "@displayFormat" });
                 $(".ui-datepicker").hide();
             });
         })(jQuery);
