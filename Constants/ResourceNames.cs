@@ -6,6 +6,7 @@
 
         public const string jQuery = nameof(jQuery);
         public const string jQueryUI = nameof(jQueryUI);
+        public const string jQueryTimeEntry = nameof(jQueryTimeEntry);
 
         public const string Lombiq_AsyncEditor = Prefix + "AsyncEditor";
         public const string Lombiq_AsyncEditorWrapper = Prefix + "AsyncEditorWrapper";
