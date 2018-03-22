@@ -102,6 +102,7 @@
     <Compile Include="Controllers\AsyncEditorController.cs" />
     <Compile Include="Drivers\AsyncEditorPartDriver.cs" />
     <Compile Include="Handlers\AsyncEditorPartHandler.cs" />
+    <Compile Include="Helpers\TaxonomyFieldHelpers.cs" />
     <Compile Include="Models\AsyncEditorSaveResult.cs" />
     <Compile Include="Models\EditorGroupsSettings.cs" />
     <Compile Include="Models\EditorGroupDescriptor.cs" />
@@ -121,7 +122,7 @@
     <Compile Include="ViewModels\TaxonomyFieldViewModel.cs" />
     <Compile Include="ViewModels\FieldViewModel.cs" />
     <Compile Include="ViewModels\EditorViewModel.cs" />
-    <Compile Include="ViewModels\TaxonomyDropdownEditorViewModel.cs" />
+    <Compile Include="ViewModels\DropdownEditorViewModel.cs" />
     <Content Include="Scripts\lombiq-asynceditorwrapper.js" />
     <Content Include="Content\Selectize\selectize.bootstrap3.css" />
     <Content Include="Content\Selectize\selectize.js" />
@@ -193,7 +194,7 @@
     <Content Include="Views\Lombiq.Editors.TextAreaEditor.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Lombiq.Editors.TaxonomyDropdownEditor.cshtml" />
+    <Content Include="Views\Lombiq.Editors.SelectizeDropdownEditor.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Lombiq.Fields.TaxonomyField.cshtml" />
@@ -203,6 +204,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\Web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Lombiq.Editors.TaxonomyDropdownEditor.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

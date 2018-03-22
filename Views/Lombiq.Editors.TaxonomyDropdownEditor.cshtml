@@ -1,49 +1,44 @@
 ﻿@using Lombiq.ContentEditors.ViewModels
-@using Lombiq.ContentEditors.Constants
 
 @{
-    Script.Require(ResourceNames.Selectize).AtHead();
-    Style.Require(ResourceNames.Selectize).AtHead();
-
-    var viewModel = Model.ViewModel as TaxonomyDropdownEditorViewModel;
-
-    if (!viewModel?.SelectList?.Any() ?? true) { return; }
+    var viewModel = Model.ViewModel as DropdownEditorViewModel;
 
     string BlockName = viewModel.BlockName ?? "taxonomyDropdownEditor";
-    string TextBoxElementName = BlockName + "__textbox";
-    string TechnicalNameModifier = "_" + viewModel.TechnicalName;
 
-    var taxonomyDropdownSelectizeInputId = BlockName + "__SelectizeInput" + TechnicalNameModifier;
-
-    var attributes = new Dictionary<string, object>
+    var dropdownAttributes = viewModel.BuildAttributes(new Dictionary<string, object>
     {
-        { "class", TextBoxElementName },
-        { "id", @taxonomyDropdownSelectizeInputId }
+        { "class", "form-control dropdown" + BlockName + "__dropdown" }
+    });
+
+    var labelAttributes = new Dictionary<string, object>
+    {
+        { "class", "editorLabel " + BlockName + "__label" }
     };
-    if (!string.IsNullOrEmpty(viewModel.Label))
+
+    if (viewModel.Required)
     {
-        attributes.Add("placeholder", viewModel.Label);
+        dropdownAttributes["required"] = true;
+        dropdownAttributes["class"] = dropdownAttributes["class"] + " required";
+        labelAttributes["class"] = labelAttributes["class"] + " required";
+    }
+
+    if (!string.IsNullOrEmpty(viewModel.Placeholder))
+    {
+        dropdownAttributes["placeholder"] = viewModel.Placeholder;
     }
 }
 
 <div class="editor editorField form-group @BlockName">
-    @Html.TextBox(viewModel.TechnicalName, "", attributes)
+    @if (!string.IsNullOrEmpty(viewModel.Label))
+    {
+        @Html.Label(viewModel.Label, labelAttributes)
+    }
+
+    @Html.DropDownList(viewModel.Name, viewModel.SelectList, dropdownAttributes)
+
+
+    @for (int i = 0; i < viewModel.SelectList.Count; i++)
+    {
+        @Html.Hidden($"Terms[{i}].Id", viewModel.SelectList[i].Value)
+    }
 </div>
-
-<script type="text/javascript">
-    ; (function ($) {
-        $(function () {
-            @* Initializing selectize on input field. *@
-            var $taxonomyDropdownSelectizeInput = $("#@taxonomyDropdownSelectizeInputId");
-            var $taxonomyDropdownSelectize = $taxonomyDropdownSelectizeInput.selectize()[0].selectize;
-
-            @* Adding options. *@
-            @foreach (var listItem in viewModel.SelectList)
-            {
-                <text>
-                    $taxonomyDropdownSelectize.addOption({ value: "@listItem.Value", text: "@listItem.Text" });
-                </text>
-            }
-        });
-    })(jQuery);
-</script>
