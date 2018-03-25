@@ -11,6 +11,6 @@
     public class DateTimeEditorViewModel : EditorViewModel
     {
         public DateTimeEditorType EditorType { get; set; } = DateTimeEditorType.Date;
-        public string DateDisplayFormat { get; set; } = "MM/dd/yyyy";
+        public string DateDisplayFormat { get; set; } = "mm/dd/yy";
     }
 }
