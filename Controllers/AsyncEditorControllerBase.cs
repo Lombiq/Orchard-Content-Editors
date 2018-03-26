@@ -39,11 +39,9 @@ namespace Lombiq.ContentEditors.Controllers
 
 
         #region Helpers
-
-        protected virtual ActionResult EditResult(int contentItemId, string group = "", string contentType = "")
+        
+        protected virtual ActionResult EditResult(AsyncEditorPart part, string group = "")
         {
-            var part = GetAsyncEditorPart(contentItemId, contentType);
-
             if (part == null) return ContentItemNotFoundResult();
 
             if (part.HasEditorGroups && string.IsNullOrEmpty(group)) return GroupNameCannotBeEmptyResult();
@@ -56,10 +54,11 @@ namespace Lombiq.ContentEditors.Controllers
             return AsyncEditorResult(part, group);
         }
 
-        protected virtual ActionResult SaveDraftOrPublishResult(int contentItemId, string group = "", string contentType = "", bool publish = false)
-        {
-            var part = GetAsyncEditorPart(contentItemId, contentType);
+        protected virtual ActionResult EditResult(int contentItemId, string group = "", string contentType = "") =>
+            EditResult(GetAsyncEditorPart(contentItemId, contentType));
 
+        protected virtual ActionResult SaveDraftOrPublishResult(AsyncEditorPart part, string group = "", bool publish = false)
+        {
             if (part == null) return ContentItemNotFoundResult();
 
             if (part.HasEditorGroups && string.IsNullOrEmpty(group)) return GroupNameCannotBeEmptyResult();
@@ -74,14 +73,14 @@ namespace Lombiq.ContentEditors.Controllers
             if (!string.IsNullOrEmpty(group) &&
                 !_asyncEditorService.IsEditorGroupAvailable(part, group)) return GroupUnavailableResult();
 
-            if (contentItemId == 0) _contentManager.Create(part.ContentItem, VersionOptions.Draft);
+            if (part.Id == 0) _contentManager.Create(part.ContentItem, VersionOptions.Draft);
             _contentManager.UpdateEditor(part.ContentItem, this, group);
 
             if (!ModelState.IsValid)
             {
                 _transactionManager.Cancel();
 
-                return AsyncEditorSaveResult(part, group, contentItemId != 0);
+                return AsyncEditorSaveResult(part, group, part.Id != 0);
             }
 
             if (part.HasEditorGroups)
@@ -103,26 +102,27 @@ namespace Lombiq.ContentEditors.Controllers
                 !isPublishGroup && publish ? T("The current group is not a publish group. Draft has been saved.") : null);
         }
 
-        protected virtual ActionResult SaveAndNextResult(int contentItemId, string group, string contentType = "")
+        protected virtual ActionResult SaveDraftOrPublishResult(int contentItemId, string group = "", string contentType = "", bool publish = false) =>
+            SaveDraftOrPublishResult(GetAsyncEditorPart(contentItemId, contentType), group, publish);
+
+        protected virtual ActionResult SaveAndNextResult(AsyncEditorPart part, string group)
         {
             if (string.IsNullOrEmpty(group)) return GroupNameCannotBeEmptyResult();
-
-            var part = GetAsyncEditorPart(contentItemId, contentType);
-
+            
             if (part == null || !part.HasEditorGroups) return ContentItemNotFoundResult();
 
             if (!_asyncEditorService.IsAuthorizedToEdit(part, group)) return UnauthorizedGroupEditorResult();
 
             if (!_asyncEditorService.IsEditorGroupAvailable(part, group)) return GroupUnavailableResult();
 
-            if (contentItemId == 0) _contentManager.Create(part.ContentItem, VersionOptions.Draft);
+            if (part.Id == 0) _contentManager.Create(part.ContentItem, VersionOptions.Draft);
             _contentManager.UpdateEditor(part.ContentItem, this, group);
 
             if (!ModelState.IsValid)
             {
                 _transactionManager.Cancel();
 
-                return AsyncEditorSaveResult(part, group, contentItemId != 0);
+                return AsyncEditorSaveResult(part, group, part.Id != 0);
             }
 
             _asyncEditorService.StoreCompletedEditorGroup(part, group);
@@ -132,6 +132,9 @@ namespace Lombiq.ContentEditors.Controllers
 
             return AsyncEditorSaveResult(part, nextGroup.Name);
         }
+
+        protected virtual ActionResult SaveAndNextResult(int contentItemId, string group, string contentType = "") =>
+            SaveAndNextResult(GetAsyncEditorPart(contentItemId, contentType), group);
 
         protected virtual AsyncEditorPart GetAsyncEditorPart(int id, string contentType) =>
             id == 0 ?
