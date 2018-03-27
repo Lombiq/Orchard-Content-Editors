@@ -55,7 +55,7 @@ namespace Lombiq.ContentEditors.Controllers
         }
 
         protected virtual ActionResult EditResult(int contentItemId, string group = "", string contentType = "") =>
-            EditResult(GetAsyncEditorPart(contentItemId, contentType));
+            EditResult(GetAsyncEditorPart(contentItemId, contentType), group);
 
         protected virtual ActionResult SaveDraftOrPublishResult(AsyncEditorPart part, string group = "", bool publish = false)
         {
