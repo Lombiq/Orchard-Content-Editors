@@ -40,15 +40,16 @@
 
             plugin.$editorPlaceholderElement = plugin.element.find(plugin.settings.editorPlaceholderElementClass);
 
-            plugin.$addNewItemActionElement = plugin.element.find(plugin.settings.addNewItemActionElementClass).first()
-                .on("click", function () {
-                    plugin.getItemEditor(0, $editorPlaceholderElement);
-                });
+            plugin.$addNewItemActionElement = plugin.element.find(plugin.settings.addNewItemActionElementClass).first();
+
+            plugin.$addNewItemActionElement.on("click", function () {
+                plugin.loadEditor($(this).attr("data-url"), plugin.$editorPlaceholderElement);
+            });
 
             plugin.$editItemActionElement = plugin.element.find(plugin.settings.editItemActionElementClass);
         },
 
-        getItemEditor: function (url, $editorPlaceholder) {
+        loadEditor: function (url, $editorPlaceholder) {
             var plugin = this;
 
             if (plugin.concurrentEditors > 0) {
@@ -94,6 +95,4 @@
             return $.data(this, "plugin_" + pluginName);
         });
     };
-
-    $[pluginName] = staticVariables;
 })(jQuery, window, document);
