@@ -118,6 +118,7 @@
     <Compile Include="Services\IAsyncEditorService.cs" />
     <Compile Include="Services\IEditorGroupsProviderAccessor.cs" />
     <Compile Include="ViewModels\DateTimeEditorViewModel.cs" />
+    <Compile Include="ViewModels\TaxonomyEditorViewModel.cs" />
     <Compile Include="ViewModels\InputFieldViewModel.cs" />
     <Compile Include="ViewModels\TaxonomyFieldViewModel.cs" />
     <Compile Include="ViewModels\FieldViewModel.cs" />
@@ -206,7 +207,13 @@
     <Content Include="Content\Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Lombiq.Editors.TaxonomyDropdownEditor.cshtml" />
+    <Content Include="Views\Lombiq.Editors.TaxonomyEditor.Dropdown.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Lombiq.Editors.TaxonomyEditor.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Lombiq.Editors.TaxonomyEditor.Default.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

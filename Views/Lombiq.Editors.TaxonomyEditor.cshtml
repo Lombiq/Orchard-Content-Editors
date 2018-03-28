@@ -1,0 +1,17 @@
+﻿@using Lombiq.ContentEditors.ViewModels
+
+@{
+    var viewModel = Model.ViewModel as TaxonomyEditorViewModel;
+
+    switch (viewModel.Flavor)
+    {
+        case TaxonomyEditorFlavor.Default:
+            @Display.Lombiq_Editors_TaxonomyEditor_Default(ViewModel: viewModel)
+            break;
+        case TaxonomyEditorFlavor.Dropdown:
+            @Display.Lombiq_Editors_TaxonomyEditor_Dropdown(ViewModel: viewModel)
+            break;
+        default:
+            break;
+    }
+}
