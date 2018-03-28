@@ -46,7 +46,7 @@
 
             if (plugin.settings.editItemActionElementClass) {
                 plugin.element.find(plugin.settings.editItemActionElementClass).on("click", function () {
-                    plugin.loadEditor($(this).attr("data-url"), plugin.$editorPlaceholderElement);
+                    plugin.loadEditor($(this).attr("data-url"), $editorPlaceholderElement);
                 });
             }
         },
