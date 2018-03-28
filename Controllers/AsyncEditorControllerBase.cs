@@ -163,7 +163,7 @@ namespace Lombiq.ContentEditors.Controllers
             string group,
             bool contentCreated = true,
             LocalizedString message = null) =>
-            Json(new AsyncEditorResult
+            Json(new AsyncEditorGroupResult
             {
                 Success = true,
                 ContentItemId = contentCreated ? part.ContentItem.Id : 0,
@@ -192,7 +192,7 @@ namespace Lombiq.ContentEditors.Controllers
         #region Error results
 
         protected virtual ActionResult ErrorResult(LocalizedString errorMessage) =>
-            Json(new AsyncEditorResult
+            Json(new AsyncEditorGroupResult
             {
                 Success = false,
                 ResultMessage = errorMessage.Text,

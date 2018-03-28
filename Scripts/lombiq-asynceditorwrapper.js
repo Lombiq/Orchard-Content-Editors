@@ -16,8 +16,9 @@
         addNewItemActionElementClass: "",
         editItemActionElementClass: "",
         cancelButtonElementClass: "",
+        allowMultipleEditors: false,
         multipleEditorsNotAllowedMessage: "Editing multiple items at the same is not allowed. Please save or cancel your current changes first.",
-        onSaveSuccess: function () { },
+        editorLoadedCallback: function (data, $editor) { },
     };
     
     function Plugin(element, options) {
@@ -31,32 +32,29 @@
 
     $.extend(Plugin.prototype, {
         concurrentEditors: 0,
-        $addNewItemActionElement: null,
-        $editItemActionElement: null,
-        $editorPlaceholderElement: null,
 
         init: function () {
             var plugin = this;
 
-            plugin.$editorPlaceholderElement = plugin.element.find(plugin.settings.editorPlaceholderElementClass);
+            var $editorPlaceholderElement = plugin.element.find(plugin.settings.editorPlaceholderElementClass);
 
-            plugin.$addNewItemActionElement = plugin.element.find(plugin.settings.addNewItemActionElementClass).first();
+            if (plugin.settings.addNewItemActionElementClass) {
+                plugin.element.find(plugin.settings.addNewItemActionElementClass).first().on("click", function () {
+                    plugin.loadEditor($(this).attr("data-url"), $editorPlaceholderElement);
+                });
+            }
 
-            plugin.$addNewItemActionElement.on("click", function () {
-                plugin.loadEditor($(this).attr("data-url"), plugin.$editorPlaceholderElement);
-            });
-
-            plugin.element.find(plugin.settings.editItemActionElementClass).on("click", function () {
-                plugin.loadEditor($(this).attr("data-url"), plugin.$editorPlaceholderElement);
-            });
-
-            plugin.$editItemActionElement = plugin.element.find(plugin.settings.editItemActionElementClass);
+            if (plugin.settings.editItemActionElementClass) {
+                plugin.element.find(plugin.settings.editItemActionElementClass).on("click", function () {
+                    plugin.loadEditor($(this).attr("data-url"), plugin.$editorPlaceholderElement);
+                });
+            }
         },
 
         loadEditor: function (url, $editorPlaceholder) {
             var plugin = this;
 
-            if (plugin.concurrentEditors > 0) {
+            if (!plugin.allowMultipleEditors && plugin.concurrentEditors > 0) {
                 alert(plugin.settings.multipleEditorsNotAllowedMessage);
 
                 return;
@@ -66,18 +64,28 @@
                 url: url,
                 type: "GET"
             }).success(function (data) {
-                $editorPlaceholder.html(data);
-                plugin.concurrentEditors++;
-                
-                //$editorPlaceholder.find(plugin.settings.cancelButtonElementClass).on("click", function () {
-                //    $editorPlaceholder.html("");
+                if (data.Success) {
+                    $editorPlaceholder.html($.parseHTML(data.EditorShape, true)).show();
+                    plugin.concurrentEditors++;
 
-                //    plugin.concurrentEditors--;
-                //});
+                    if (plugin.settings.cancelButtonElementClass) {
+                        $editorPlaceholder.find(plugin.settings.cancelButtonElementClass).on("click", function () {
+                            $editorPlaceholder.html("").hide();
 
-                $("html, body").animate({
-                    scrollTop: $editorPlaceholder.offset().top
-                }, 500);
+                            plugin.concurrentEditors--;
+                        });
+                    }
+
+                    $("html, body").animate({
+                        scrollTop: $editorPlaceholder.offset().top
+                    }, 500);
+                    
+                    plugin.settings.editorLoadedCallback.call(plugin, data, $editorPlaceholder);
+                }
+
+                if (data.ResultMessage) {
+                    alert(data.ResultMessage);
+                }
             });
         },
     });

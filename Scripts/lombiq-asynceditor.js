@@ -95,7 +95,7 @@
          * @returns {Object} Returns the current plugin.
          */
         reloadEditor: function () {
-            return this.loadEditor(plugin.currentContentItemId, plugin.currentGroup);
+            return this.loadEditor(this.currentContentItemId, this.currentGroup);
         },
 
         /**
