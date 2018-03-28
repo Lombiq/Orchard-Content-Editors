@@ -19,7 +19,8 @@
     var isDateEditor = viewModel.EditorType == DateTimeEditorType.Date ||
         viewModel.EditorType == DateTimeEditorType.DateWithTimeZoneConversion;
 
-    var classifiedName = viewModel.Name.HtmlClassify();
+    var classifiedName = $"{Html.NameForModel()}-{viewModel.Name}".HtmlClassify();
+    var hiddenFieldClassName = "js-" + classifiedName + "-value";
     var editorType = isDateEditor ? "text" : "time";
 
     string DefaultBlockName = "dateTimeEditor";
@@ -62,9 +63,23 @@
     };
 
     var displayFormat = isDateEditor ? viewModel.DateDisplayFormat : "HH:mm";
-    var dateTimeString = viewModel.Value is string ?
-        (string)viewModel.Value :
-        dateLocalizationServices.ConvertToLocalizedString(viewModel.Value as DateTime?, displayFormat, options);
+    var dateTimeString = viewModel.Value as string;
+    if (viewModel.Value is DateTime?)
+    {
+        var value = viewModel.Value as DateTime?;
+        dateTimeString = value.HasValue && value.Value != default(DateTime) ?
+            viewModel.Value is string ?
+                (string)viewModel.Value :
+                dateLocalizationServices.ConvertToLocalizedString(value, T("yyyy-MM-dd").Text, options) :
+            "";
+    }
+
+    var datePickerElement = new TagBuilder("input");
+    foreach (var attribute in dateTimePickerAttributes)
+    {
+        datePickerElement.Attributes.Add(attribute.Key, attribute.Value.ToString());
+    }
+    datePickerElement.Attributes.Add("value", dateTimeString);
 }
 
 <div class="editor editorField form-group @DefaultBlockName @BlockName">
@@ -74,7 +89,8 @@
     }
 
     <div class="@DateTimePickerContainerElementName">
-        @Html.TextBox(viewModel.Name, dateTimeString, dateTimePickerAttributes)
+        @Html.Raw(datePickerElement.ToString(TagRenderMode.SelfClosing))
+        @Html.Hidden(viewModel.Name, dateTimeString, new { @class = hiddenFieldClassName })
     </div>
 </div>
 
@@ -83,7 +99,22 @@
     <script type="text/javascript">
         ; (function ($) {
             $(function () {
-                $(".@classifiedName").datepicker({ dateFormat: "@displayFormat" });
+                var $datepicker = $(".@classifiedName");
+                var $hiddenfield = $(".@hiddenFieldClassName");
+                $datepicker.datepicker({
+                    dateFormat: "@displayFormat",
+                    onSelect: function () {
+                        var selectedDate = $(this).datepicker("getDate");
+                        selectedDate.setMinutes(selectedDate.getMinutes() - selectedDate.getTimezoneOffset());
+                        $hiddenfield.val(selectedDate.toISOString().split("T")[0]);
+                    }
+                });
+
+                @if (!string.IsNullOrEmpty(dateTimeString))
+                { 
+                    @:$datepicker.datepicker("setDate", new Date("@dateTimeString"));
+                }
+                
                 $(".ui-datepicker").hide();
             });
         })(jQuery);
