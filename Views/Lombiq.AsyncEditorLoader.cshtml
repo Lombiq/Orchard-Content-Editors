@@ -15,7 +15,7 @@
 
     var editUrl = Url.Action("Edit", "AsyncEditor", new { Area = "Lombiq.ContentEditors" });
 
-    const string AsyncEditorLoaderId = "editorFor" + contentItem.ContentType;
+    string AsyncEditorLoaderId = "editorFor" + contentItem.ContentType;
 }
 
 @Display.Lombiq_AsyncEditorLoader_Container(AsyncEditorLoaderId: AsyncEditorLoaderId)
