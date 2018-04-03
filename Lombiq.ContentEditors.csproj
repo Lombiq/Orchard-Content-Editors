@@ -215,6 +215,15 @@
   <ItemGroup>
     <Content Include="Views\Lombiq.Editors.TaxonomyEditor.Default.cshtml" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\AsyncEditor.Actions.Previous.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\AsyncEditor.Actions.GroupList.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\AsyncEditor.Actions.Submit.cshtml" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

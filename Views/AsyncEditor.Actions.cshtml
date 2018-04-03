@@ -1,8 +1,5 @@
 ﻿@using Orchard.ContentManagement
-@using Orchard.Core.Contents.Settings
-@using Lombiq.ContentEditors.Constants
 @using Lombiq.ContentEditors.Models
-@using Lombiq.ContentEditors.Services
 
 @{
     var contentItem = Model.ContentItem as ContentItem;
@@ -12,74 +9,12 @@
     {
         return;
     }
-
-    var asyncEditorService = WorkContext.Resolve<IAsyncEditorService>();
-
-    const string BlockName = "asyncEditorActions";
-    const string GroupListElementName = BlockName + "__groupList";
-    const string GroupListItemElementName = BlockName + "__groupListItem";
-    const string GroupNameElementName = BlockName + "__groupName";
-    const string GroupNameElementNameWithCurrentModifier = GroupNameElementName + "_current";
-    const string GroupNameElementNameWithCompletedModifier = GroupNameElementName + "_completed";
-    const string NavigationButtonsElementName = BlockName + "__navigationButtons";
-    const string SaveButtonElementName = BlockName + "__saveButton";
-    const string PublishButtonElementName = BlockName + "__publishButton";
-    const string NextButtonElementName = BlockName + "__nextButton";
-    const string PreviousButtonElementName = BlockName + "__previousButton";
 }
 
-<div class="@BlockName">
-    @if (asyncEditorPart.PreviousAuthorizedEditorGroup != null)
-    {
-        <div class="btn button @PreviousButtonElementName js-@ElementNames.AsyncEditorActions.LoadEditorElementName"
-             data-editorGroupName="@asyncEditorPart.PreviousAuthorizedEditorGroup.Name">
-            @T("Back")
-        </div>
-    }
-    <ol class="@GroupListElementName">
-        @foreach (var editorGroup in asyncEditorPart.AuthorizedEditorGroups)
-        {
-            <li class="@GroupListItemElementName">
-                @{ 
-                    var groupElementBuilder = new TagBuilder("div");
-                    groupElementBuilder.AddCssClass(GroupNameElementName);
-                    groupElementBuilder.InnerHtml = editorGroup.Title;
+<div class="asyncEditorActions">
+    @Display.AsyncEditor_Actions_Previous(ContentItem: Model.ContentItem)
 
-                    var isCurrent = asyncEditorPart.CurrentEditorGroup.Equals(editorGroup);
-                    if (isCurrent)
-                    {
-                        groupElementBuilder.AddCssClass(GroupNameElementNameWithCurrentModifier);
-                    }
+    @Display.AsyncEditor_Actions_GroupList(ContentItem: Model.ContentItem)
 
-                    if (asyncEditorPart.CompletedAuthorizedEditorGroups.Contains(editorGroup))
-                    {
-                        groupElementBuilder.AddCssClass(GroupNameElementNameWithCompletedModifier);
-
-                        if (!isCurrent)
-                        {
-                            groupElementBuilder.AddCssClass("js-" + ElementNames.AsyncEditorActions.LoadEditorElementName);
-                            groupElementBuilder.Attributes.Add("data-editorGroupName", editorGroup.Name);
-                        }
-                    }
-                }
-
-                @Html.Raw(groupElementBuilder.ToString(TagRenderMode.Normal))
-            </li>
-        }
-    </ol>
-    <div class="@NavigationButtonsElementName">
-        <input type="submit" name="submit.Save" data-submitContext="Save" class="btn button @SaveButtonElementName" value="@T("Save Draft")" />
-
-        @if ((asyncEditorPart.CurrentEditorGroup?.IsPublishGroup ?? true) && 
-            asyncEditorPart.TypeDefinition.Settings.GetModel<ContentTypeSettings>().Draftable &&
-            asyncEditorService.IsAuthorizedToPublish(asyncEditorPart, asyncEditorPart.CurrentEditorGroup?.Name ?? ""))
-        {
-            <input type="submit" name="submit.Publish" data-submitContext="Publish" class="btn button @PublishButtonElementName" value="@T("Publish")" />
-        }
-        
-        @if (asyncEditorPart.NextAuthorizedEditorGroup != null)
-        {
-            <input type="submit" name="submit.SaveAndNext" data-submitContext="SaveAndNext" class="btn button @NextButtonElementName" value="@T("Save and Next")" />
-        }
-    </div>
+    @Display.AsyncEditor_Actions_Submit(ContentItem: Model.ContentItem)
 </div>
