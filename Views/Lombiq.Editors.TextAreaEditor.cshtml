@@ -3,16 +3,17 @@
 @{
     var viewModel = Model.ViewModel as EditorViewModel;
 
-    string BlockName = viewModel.BlockName ?? "textAreaEditor";
+    const string DefaultBlockName = "textAreaEditor";
+    string BlockName = viewModel.BlockName ?? DefaultBlockName;
 
     var textAreaAttributes = viewModel.BuildAttributes(new Dictionary<string, object>
     {
-        { "class", "form-control textbox " + BlockName + "__textArea" }
+        { "class", "form-control textbox " + DefaultBlockName + "__textArea" }
     });
 
     var labelAttributes = new Dictionary<string, object>
     {
-        { "class", "editorLabel " + BlockName + "__label" }
+        { "class", "editorLabel " + DefaultBlockName + "__label" }
     };
 
     if (viewModel.Required)
@@ -28,14 +29,14 @@
     }
 }
 
-<div class="editor editorField form-group @BlockName">
+<div class="editor editorField form-group @DefaultBlockName">
     @if (!string.IsNullOrEmpty(viewModel.Label))
     {
         @Html.Label(viewModel.Name, viewModel.Label, labelAttributes)
     }
     @if (!string.IsNullOrEmpty(viewModel.Hint))
     {
-        <div class="editorHint @(BlockName)__editorHint">@viewModel.Hint</div>
+        <div class="editorHint @(DefaultBlockName)__editorHint">@viewModel.Hint</div>
     }
     @Html.TextArea(viewModel.Name, viewModel.Value?.ToString(), textAreaAttributes)
 </div>

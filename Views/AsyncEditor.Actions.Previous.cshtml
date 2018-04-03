@@ -1,0 +1,25 @@
+﻿@using Orchard.ContentManagement
+@using Orchard.Core.Contents.Settings
+@using Lombiq.ContentEditors.Constants
+@using Lombiq.ContentEditors.Models
+@using Lombiq.ContentEditors.Services
+
+@{
+    var contentItem = Model.ContentItem as ContentItem;
+    var asyncEditorPart = contentItem?.As<AsyncEditorPart>();
+
+    if (!(asyncEditorPart?.IsAsyncEditorContext ?? false) || !asyncEditorPart.HasEditorGroups)
+    {
+        return;
+    }
+
+    var asyncEditorService = WorkContext.Resolve<IAsyncEditorService>();
+}
+
+@if (asyncEditorPart.PreviousAuthorizedEditorGroup != null)
+{
+    <div class="btn button asyncEditorPreviousAction js-@ElementNames.AsyncEditorActions.LoadEditorElementName"
+         data-editorGroupName="@asyncEditorPart.PreviousAuthorizedEditorGroup.Name">
+        @T("Back")
+    </div>
+}

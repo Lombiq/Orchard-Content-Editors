@@ -98,27 +98,33 @@
   <ItemGroup>
     <Compile Include="Constants\ElementNames.cs" />
     <Compile Include="Constants\ResourceNames.cs" />
+    <Compile Include="Controllers\AsyncEditorControllerBase.cs" />
     <Compile Include="Controllers\AsyncEditorController.cs" />
     <Compile Include="Drivers\AsyncEditorPartDriver.cs" />
     <Compile Include="Handlers\AsyncEditorPartHandler.cs" />
+    <Compile Include="Helpers\TaxonomyFieldHelpers.cs" />
+    <Compile Include="Models\AsyncEditorResult.cs" />
     <Compile Include="Models\AsyncEditorSaveResult.cs" />
     <Compile Include="Models\EditorGroupsSettings.cs" />
     <Compile Include="Models\EditorGroupDescriptor.cs" />
     <Compile Include="Models\AsyncEditorPart.cs" />
-    <Compile Include="Models\AsyncEditorResult.cs" />
+    <Compile Include="Models\AsyncEditorGroupResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\AsyncEditorShapeTableProvider.cs" />
+    <Compile Include="Services\EditorGroupsProviderBase.cs" />
     <Compile Include="Services\RenderContextPlacementParseMatchProvider.cs" />
     <Compile Include="Services\AsyncEditorService.cs" />
     <Compile Include="Services\EditorGroupsSettingsProviderAccessor.cs" />
     <Compile Include="Services\IAsyncEditorService.cs" />
     <Compile Include="Services\IEditorGroupsProviderAccessor.cs" />
     <Compile Include="ViewModels\DateTimeEditorViewModel.cs" />
+    <Compile Include="ViewModels\TaxonomyEditorViewModel.cs" />
     <Compile Include="ViewModels\InputFieldViewModel.cs" />
     <Compile Include="ViewModels\TaxonomyFieldViewModel.cs" />
     <Compile Include="ViewModels\FieldViewModel.cs" />
     <Compile Include="ViewModels\EditorViewModel.cs" />
-    <Compile Include="ViewModels\TaxonomyDropdownEditorViewModel.cs" />
+    <Compile Include="ViewModels\DropdownEditorViewModel.cs" />
+    <Content Include="Scripts\lombiq-asynceditorwrapper.js" />
     <Content Include="Content\Selectize\selectize.bootstrap3.css" />
     <Content Include="Content\Selectize\selectize.js" />
     <Content Include="Content\Selectize\selectize.min.js" />
@@ -189,7 +195,7 @@
     <Content Include="Views\Lombiq.Editors.TextAreaEditor.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Lombiq.Editors.TaxonomyDropdownEditor.cshtml" />
+    <Content Include="Views\Lombiq.Editors.SelectizeDropdownEditor.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Lombiq.Fields.TaxonomyField.cshtml" />
@@ -199,6 +205,24 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\Web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Lombiq.Editors.TaxonomyEditor.Dropdown.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Lombiq.Editors.TaxonomyEditor.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Lombiq.Editors.TaxonomyEditor.Default.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\AsyncEditor.Actions.Previous.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\AsyncEditor.Actions.GroupList.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\AsyncEditor.Actions.Submit.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

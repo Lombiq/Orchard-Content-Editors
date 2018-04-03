@@ -5,15 +5,16 @@
     Script.Require(ResourceNames.Selectize).AtHead();
     Style.Require(ResourceNames.Selectize).AtHead();
 
-    var viewModel = Model.ViewModel as TaxonomyDropdownEditorViewModel;
+    var viewModel = Model.ViewModel as DropdownEditorViewModel;
 
     if (!viewModel?.SelectList?.Any() ?? true) { return; }
 
-    string BlockName = viewModel.BlockName ?? "taxonomyDropdownEditor";
-    string TextBoxElementName = BlockName + "__textbox";
+    const string DefaultBlockName = "selectizeDropdownEditor";
+    string BlockName = viewModel.BlockName ?? DefaultBlockName;
+    const string TextBoxElementName = DefaultBlockName + "__textbox";
     string TechnicalNameModifier = "_" + viewModel.TechnicalName;
 
-    var taxonomyDropdownSelectizeInputId = BlockName + "__SelectizeInput" + TechnicalNameModifier;
+    var taxonomyDropdownSelectizeInputId = DefaultBlockName + "__SelectizeInput" + TechnicalNameModifier;
 
     var attributes = new Dictionary<string, object>
     {
@@ -26,7 +27,7 @@
     }
 }
 
-<div class="editor editorField form-group @BlockName">
+<div class="editor editorField form-group @DefaultBlockName @BlockName">
     @Html.TextBox(viewModel.TechnicalName, "", attributes)
 </div>
 

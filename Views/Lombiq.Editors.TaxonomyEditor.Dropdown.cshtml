@@ -1,0 +1,45 @@
+﻿@using Lombiq.ContentEditors.ViewModels
+
+@{
+    var viewModel = Model.ViewModel as DropdownEditorViewModel;
+
+    const string DefaultBlockName = "taxonomyDropdownEditor";
+    string BlockName = viewModel.BlockName ?? DefaultBlockName;
+
+    var dropdownAttributes = viewModel.BuildAttributes(new Dictionary<string, object>
+    {
+        { "class", "form-control dropdown" + DefaultBlockName + "__dropdown" }
+    });
+
+    var labelAttributes = new Dictionary<string, object>
+    {
+        { "class", "editorLabel " + DefaultBlockName + "__label" }
+    };
+
+    if (viewModel.Required)
+    {
+        dropdownAttributes["required"] = true;
+        dropdownAttributes["class"] = dropdownAttributes["class"] + " required";
+        labelAttributes["class"] = labelAttributes["class"] + " required";
+    }
+
+    if (!string.IsNullOrEmpty(viewModel.Placeholder))
+    {
+        dropdownAttributes["placeholder"] = viewModel.Placeholder;
+    }
+}
+
+<div class="editor editorField form-group @DefaultBlockName @BlockName">
+    @if (!string.IsNullOrEmpty(viewModel.Label))
+    {
+        @Html.Label(viewModel.Label, labelAttributes)
+    }
+
+    @Html.DropDownList(viewModel.Name, viewModel.SelectList, dropdownAttributes)
+
+
+    @for (int i = 0; i < viewModel.SelectList.Count; i++)
+    {
+        @Html.Hidden($"Terms[{i}].Id", viewModel.SelectList[i].Value)
+    }
+</div>

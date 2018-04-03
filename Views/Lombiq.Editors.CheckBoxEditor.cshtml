@@ -4,16 +4,17 @@
     var viewModel = Model.ViewModel as EditorViewModel;
     var value = (viewModel.Value as bool?) ?? false;
 
-    string BlockName = viewModel.BlockName ?? "checkboxEditor";
+    const string DefaultBlockName = "checkboxEditor";
+    string BlockName = viewModel.BlockName ?? DefaultBlockName;
 
     var checkBoxAttributes = viewModel.BuildAttributes(new Dictionary<string, object>
     {
-        { "class", "form-control textbox " + BlockName + "__checkbox" }
+        { "class", "form-control textbox " + DefaultBlockName + "__checkbox" }
     });
 
     var labelAttributes = new Dictionary<string, object>
     {
-        { "class", "editorLabel " + BlockName + "__label" }
+        { "class", "editorLabel " + DefaultBlockName + "__label" }
     };
 
     if (viewModel.Required)
@@ -29,7 +30,7 @@
     }
 }
 
-<div class="editor editorField form-group @BlockName">
+<div class="editor editorField form-group @DefaultBlockName @BlockName">
     @Html.CheckBox(viewModel.Name, value, checkBoxAttributes)
     @if (!string.IsNullOrEmpty(viewModel.Label))
     {
@@ -37,6 +38,6 @@
     }
     @if (!string.IsNullOrEmpty(viewModel.Hint))
     {
-        <div class="editorHint @(BlockName)__editorHint">@viewModel.Hint</div>
+        <div class="editorHint @(DefaultBlockName)__editorHint">@viewModel.Hint</div>
     }
 </div>

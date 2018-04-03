@@ -53,6 +53,9 @@ namespace Lombiq.ContentEditors.Services
                 new[]
                 {
                     "AsyncEditor_Actions",
+                    "AsyncEditor_Actions_Previous",
+                    "AsyncEditor_Actions_GroupList",
+                    "AsyncEditor_Actions_Submit",
                     "AsyncEditor_Editor",
                     "AsyncEditor_Title"
                 });

@@ -1,0 +1,85 @@
+﻿@using Lombiq.ContentEditors.ViewModels
+@using Orchard.Taxonomies.Helpers
+
+@{
+    var viewModel = Model.ViewModel as TaxonomyEditorViewModel;
+    var taxonomyViewModel = viewModel.TaxonomyFieldViewModel;
+
+    const string DefaultBlockName = "taxonomyRadioButtonEditor";
+    string BlockName = viewModel.BlockName ?? DefaultBlockName;
+    string EditorTypeModifier = taxonomyViewModel.Settings.SingleChoice ? "_editorType_singleChoice" : "_editorType_multiChoice";
+    string BlockNameWithModifier = DefaultBlockName + EditorTypeModifier;
+
+    var labelAttributes = new Dictionary<string, object>
+    {
+        { "class", "editorLabel " + DefaultBlockName + "__label" }
+    };
+
+    if (viewModel.Required)
+    {
+        labelAttributes["class"] = labelAttributes["class"] + " required";
+    }
+
+    var termIndex = 0;
+    var prefix = Html.NameForModel();
+}
+
+
+<div class="editor editorField form-group @DefaultBlockName @BlockName @BlockNameWithModifier">
+    @if (!string.IsNullOrEmpty(viewModel.Label))
+    {
+        @Html.Label(viewModel.Label, labelAttributes)
+    }
+
+    @if (!string.IsNullOrEmpty(viewModel.Hint))
+    {
+        <div class="editorHint @(DefaultBlockName)__editorHint">@viewModel.Hint</div>
+    }
+
+
+    <ul class="@(DefaultBlockName)__taxonomyTermList">
+        @foreach (var entry in taxonomyViewModel.Terms)
+        {
+            <li>
+                @for (var i = 1; i <= entry.GetLevels(); i++)
+                {
+                    <span class="@(DefaultBlockName)__gap">&nbsp;</span>
+                }
+
+                @{
+                    var disabled = !entry.Selectable ||
+                        (taxonomyViewModel.Settings.LeavesOnly &&
+                        taxonomyViewModel.Terms.Any(term => term.Path.Contains(entry.Path + entry.Id)));
+
+                    var elementId = $"{prefix}-Term-{termIndex}";
+                    if (taxonomyViewModel.Settings.SingleChoice)
+                    {
+                        <input @if (disabled) { <text> disabled="disabled" </text> }
+                               type="radio"
+                               value="@taxonomyViewModel.Terms[termIndex].Id"
+                               @if (entry.Id == taxonomyViewModel.SingleTermId) { <text> checked="checked" </text> }
+                               name="@($"{prefix}.SingleTermId")"
+                               id="@elementId"
+                               class="@(DefaultBlockName)__termRadioButton" />
+                    }
+                    else
+                    {
+                        <input @if (disabled) { <text> disabled="disabled" </text> } 
+                               type="checkbox" 
+                               value="true" 
+                               @if (entry.IsChecked) { <text> checked="checked" </text> } 
+                               name="@($"{prefix}.Terms[{termIndex}].IsChecked")" 
+                               id="@elementId"
+                               class="@(DefaultBlockName)__termCheckbox" />
+                    }
+                }
+
+                <label class="forcheckbox @(DefaultBlockName)__termLabel" for="@elementId">@entry.Name</label>
+
+                <input type="hidden" name="@($"{prefix}.Terms[{termIndex}].Id")" value="@taxonomyViewModel.Terms[termIndex].Id" />
+            </li>
+
+            termIndex++;
+        }
+    </ul>
+</div>
