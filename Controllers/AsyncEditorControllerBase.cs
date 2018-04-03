@@ -73,14 +73,15 @@ namespace Lombiq.ContentEditors.Controllers
             if (!string.IsNullOrEmpty(group) &&
                 !_asyncEditorService.IsEditorGroupAvailable(part, group)) return GroupUnavailableResult();
 
-            if (part.Id == 0) _contentManager.Create(part.ContentItem, VersionOptions.Draft);
+            var newContent = part.Id == 0;
+            if (newContent) _contentManager.Create(part.ContentItem, VersionOptions.Draft);
             _contentManager.UpdateEditor(part.ContentItem, this, group);
 
             if (!ModelState.IsValid)
             {
                 _transactionManager.Cancel();
 
-                return AsyncEditorSaveResult(part, group, part.Id != 0);
+                return AsyncEditorSaveResult(part, group, !newContent);
             }
 
             if (part.HasEditorGroups)
@@ -115,14 +116,15 @@ namespace Lombiq.ContentEditors.Controllers
 
             if (!_asyncEditorService.IsEditorGroupAvailable(part, group)) return GroupUnavailableResult();
 
-            if (part.Id == 0) _contentManager.Create(part.ContentItem, VersionOptions.Draft);
+            var newContent = part.Id == 0;
+            if (newContent) _contentManager.Create(part.ContentItem, VersionOptions.Draft);
             _contentManager.UpdateEditor(part.ContentItem, this, group);
 
             if (!ModelState.IsValid)
             {
                 _transactionManager.Cancel();
 
-                return AsyncEditorSaveResult(part, group, part.Id != 0);
+                return AsyncEditorSaveResult(part, group, !newContent);
             }
 
             _asyncEditorService.StoreCompletedEditorGroup(part, group);
