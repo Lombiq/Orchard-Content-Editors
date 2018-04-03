@@ -3,16 +3,17 @@
 @{
     var viewModel = Model.ViewModel as DropdownEditorViewModel;
 
-    string BlockName = viewModel.BlockName ?? "taxonomyDropdownEditor";
+    const string DefaultBlockName = "taxonomyDropdownEditor";
+    string BlockName = viewModel.BlockName ?? DefaultBlockName;
 
     var dropdownAttributes = viewModel.BuildAttributes(new Dictionary<string, object>
     {
-        { "class", "form-control dropdown" + BlockName + "__dropdown" }
+        { "class", "form-control dropdown" + DefaultBlockName + "__dropdown" }
     });
 
     var labelAttributes = new Dictionary<string, object>
     {
-        { "class", "editorLabel " + BlockName + "__label" }
+        { "class", "editorLabel " + DefaultBlockName + "__label" }
     };
 
     if (viewModel.Required)
@@ -28,7 +29,7 @@
     }
 }
 
-<div class="editor editorField form-group @BlockName">
+<div class="editor editorField form-group @DefaultBlockName @BlockName">
     @if (!string.IsNullOrEmpty(viewModel.Label))
     {
         @Html.Label(viewModel.Label, labelAttributes)
