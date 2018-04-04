@@ -15,7 +15,7 @@ namespace Lombiq.ContentEditors.Services
         /// <summary>
         /// Returns the editor group settings for the content type that the actual provider is for.
         /// </summary>
-        /// <returns>Editor gorup settings.</returns>
+        /// <returns>Editor group settings.</returns>
         EditorGroupsSettings GetEditorGroupsSettings();
     }
 }
