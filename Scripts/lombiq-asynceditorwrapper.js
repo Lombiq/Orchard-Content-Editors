@@ -12,12 +12,13 @@
     var pluginName = "lombiq_AsyncEditorWrapper";
 
     var defaults = {
+        editUrl: "",
         editorPlaceholderElementClass: "",
         addNewItemActionElementClass: "",
         editItemActionElementClass: "",
         cancelButtonElementClass: "",
         allowMultipleEditors: false,
-        autoLoadUrl: "",
+        contentItemIdQueryStringParameter: "",
         multipleEditorsNotAllowedMessage: "Editing multiple items at the same is not allowed. Please save or cancel your current changes first.",
         editorLoadedCallback: function (data, $editor) { },
     };
@@ -33,7 +34,6 @@
 
     $.extend(Plugin.prototype, {
         concurrentEditors: 0,
-        autoLoadUrlQueryStringParameter: "",
 
         init: function () {
             var plugin = this;
@@ -42,22 +42,24 @@
 
             if (plugin.settings.addNewItemActionElementClass) {
                 plugin.element.find(plugin.settings.addNewItemActionElementClass).first().on("click", function () {
-                    plugin.loadEditor($(this).attr("data-url"), $editorPlaceholderElement);
+                    plugin.loadEditor($(this).attr("data-contentItemId"), $editorPlaceholderElement);
                 });
             }
 
             if (plugin.settings.editItemActionElementClass) {
                 plugin.element.find(plugin.settings.editItemActionElementClass).on("click", function () {
-                    plugin.loadEditor($(this).attr("data-url"), $editorPlaceholderElement);
+                    plugin.loadEditor($(this).attr("data-contentItemId"), $editorPlaceholderElement);
                 });
             }
 
-            if (plugin.settings.autoLoadUrl.length > 0) {
-                plugin.loadEditor(plugin.settings.autoLoadUrl, $editorPlaceholderElement);
+            if (plugin.settings.contentItemIdQueryStringParameter.length > 0) {
+                var id = plugin.getContentItemIdFromUrl();
+
+                if (id && id.length > 0) plugin.loadEditor(id, $editorPlaceholderElement);
             }
         },
 
-        loadEditor: function (url, $editorPlaceholder) {
+        loadEditor: function (contentItemId, $editorPlaceholder) {
             var plugin = this;
 
             if (!plugin.allowMultipleEditors && plugin.concurrentEditors > 0) {
@@ -65,9 +67,15 @@
 
                 return;
             }
+
+            var currentIdInUrl = plugin.getContentItemIdFromUrl();
+            if (currentIdInUrl != contentItemId) {
+                plugin.setContentItemIdInUrl(contentItemId);
+            }
             
             $.ajax({
-                url: url,
+                url: plugin.settings.editUrl,
+                data: { contentItemId: contentItemId },
                 type: "GET"
             }).success(function (data) {
                 if (data.Success) {
@@ -94,6 +102,29 @@
                 }
             });
         },
+
+        getContentItemIdFromUrl: function () {
+            var plugin = this;
+
+            return new URI().search(true)[plugin.settings.contentItemIdQueryStringParameter];
+        },
+
+        setContentItemIdInUrl: function (contentItemId) {
+            var plugin = this;
+
+            if (plugin.settings.contentItemIdQueryStringParameter.length == 0) return;
+
+            var uri = new URI();
+
+            if (contentItemId) {
+                uri.setSearch(plugin.settings.contentItemIdQueryStringParameter, contentItemId);
+            }
+            else {
+                uri.removeSearch(plugin.settings.contentItemIdQueryStringParameter);
+            }
+
+            history.pushState(null, "", uri.pathname() + uri.search());
+        }
     });
     
     $.fn[pluginName] = function (options) {
