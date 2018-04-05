@@ -2,6 +2,7 @@
 using Orchard.ContentManagement;
 using Orchard.Core.Contents;
 using Orchard.Security;
+using Orchard.Security.Permissions;
 using Orchard.Services;
 using Orchard.Validation;
 using System.Collections.Generic;
@@ -38,21 +39,11 @@ namespace Lombiq.ContentEditors.Services
             return _contentManager.BuildEditor(part, group);
         }
 
-        public bool IsAuthorizedToEdit(AsyncEditorPart part, string group = "")
-        {
-            // Commented out temporary.
-            //SetCurrentGroup(part, group);
+        public bool IsAuthorizedToEdit(AsyncEditorPart part, string group = "") =>
+            IsAuthorized(part, group, Permissions.EditContent);
 
-            return _authorizer.Authorize(Permissions.EditContent, part);
-        }
-
-        public bool IsAuthorizedToPublish(AsyncEditorPart part, string group = "")
-        {
-            // Commented out temporary.
-            //SetCurrentGroup(part, group);
-
-            return _authorizer.Authorize(Permissions.PublishContent, part);
-        }
+        public bool IsAuthorizedToPublish(AsyncEditorPart part, string group = "") =>
+            IsAuthorized(part, group, Permissions.PublishContent);
 
         public IEnumerable<EditorGroupDescriptor> GetAuthorizedEditorGroups(AsyncEditorPart part)
         {
@@ -179,5 +170,16 @@ namespace Lombiq.ContentEditors.Services
             authorizedOnly ?
                 GetAuthorizedEditorGroups(part).ToList() :
                 GetEditorGroupsSettings(part)?.EditorGroups.ToList();
+
+        private bool IsAuthorized(AsyncEditorPart part, string group, Permission permission)
+        {
+            var originalEditorGroup = part.CurrentEditorGroup;
+            SetCurrentGroup(part, group);
+
+            var isAuthorized = _authorizer.Authorize(permission, part);
+
+            part.CurrentEditorGroup = originalEditorGroup;
+            return isAuthorized;
+        }
     }
 }

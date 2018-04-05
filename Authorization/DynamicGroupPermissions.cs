@@ -2,15 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using Lombiq.ContentEditors.Services;
 using Orchard.ContentManagement.MetaData;
 using Orchard.ContentManagement.MetaData.Models;
 using Orchard.Core.Contents;
 using Orchard.Environment.Extensions.Models;
 using Orchard.Security.Permissions;
 
-namespace Lombiq.ContentEditors.Services
+namespace Lombiq.ContentEditors.Authorization
 {
-    public class DynamicPermissions : IPermissionProvider
+    /// <summary>
+    /// Permissions dynamically generated for editor groups.
+    /// </summary>
+    public class DynamicGroupPermissions : IPermissionProvider
     {
         private static readonly Permission PublishContent = new Permission
         {
@@ -54,7 +58,7 @@ namespace Lombiq.ContentEditors.Services
         public virtual Feature Feature { get; set; }
 
 
-        public DynamicPermissions(
+        public DynamicGroupPermissions(
             IContentDefinitionManager contentDefinitionManager, 
             IEnumerable<IEditorGroupsProvider> editorGroupsProviders)
         {
@@ -86,15 +90,16 @@ namespace Lombiq.ContentEditors.Services
         public IEnumerable<PermissionStereotype> GetDefaultStereotypes() => Enumerable.Empty<PermissionStereotype>();
 
         /// <summary>
-        /// Returns a dynamic permission for a content type, based on a global content permission template.
+        /// Creates a dynamic permission template for a content type, based on a global content permission template.
         /// </summary>
-        public static Permission ConvertToDynamicPermission(Permission permission) =>
+        public static Permission ConvertToDynamicPermissionTemplate(Permission permission) =>
             PermissionTemplates.ContainsKey(permission.Name) ? PermissionTemplates[permission.Name] : null;
 
         /// <summary>
         /// Generates a permission dynamically for a content type and editor group.
         /// </summary>
-        public static Permission CreateDynamicPermission(Permission template, ContentTypeDefinition typeDefinition, string group) =>
+        public static Permission CreateDynamicPermission(
+            Permission template, ContentTypeDefinition typeDefinition, string group) =>
             new Permission
             {
                 Name = string.Format(template.Name, typeDefinition.Name, group),
