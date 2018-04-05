@@ -13,5 +13,7 @@
         public const string iOS_StickyInputFocusOverride = Prefix + "iOS.StickyInputFocusOverride";
         
         public const string Selectize = nameof(Selectize);
+
+        public const string Uri_Js = "URI.js";
     }
 }

@@ -24,7 +24,8 @@
         asyncEditorApiUrl: "",
         contentType: "",
         initialContentItemId: 0,
-        initialEditorGroupName: "",
+        defaultEditorGroupName: "",
+        groupNameQueryStringParameter: "",
         processingIndicatorElementClass: "",
         asyncEditorLoaderElementClass: "",
         editorPlaceholderElementClass: "",
@@ -36,7 +37,7 @@
             editorPostedCallback: function (submitContext, apiResponse) { }
         }
     };
-    
+
     function Plugin(element, options) {
         this.element = element;
         this.settings = $.extend(true, {}, defaults, options);
@@ -54,6 +55,7 @@
         currentForm: null,
         parentPlugin: null,
         childPlugin: null,
+        groupNameQueryStringParameter: null,
 
         /**
          * Initializes the Lombiq Async Editor plugin.
@@ -63,6 +65,10 @@
 
             plugin.$editorContainerElement = plugin.element.find(plugin.settings.editorPlaceholderElementClass).first();
             plugin.$processingIndicatorElement = plugin.element.find(plugin.settings.processingIndicatorElementClass).first();
+
+            plugin.groupNameQueryStringParameter = plugin.settings.groupNameQueryStringParameter.length > 0 ?
+                plugin.settings.groupNameQueryStringParameter :
+                plugin.settings.contentType + "EditorGroup";
 
             // Find the closest potential parent AsyncEditor plugin.
             var $closestLoaderElement = plugin.element
@@ -75,7 +81,16 @@
             }
 
             // Load the editor group if the initial data was given.
-            plugin.loadEditor(plugin.settings.initialContentItemId, plugin.settings.initialEditorGroupName);
+            var getEditorGroup = function () {
+                return plugin.getEditorGroupNameFromUrl() ||
+                    plugin.settings.defaultEditorGroupName;
+            }
+
+            plugin.reloadEditor();
+            
+            window.onpopstate = function (e) {
+                plugin.getRootPlugin().reloadEditor();
+            };
         },
 
         /**
@@ -95,7 +110,12 @@
          * @returns {Object} Returns the current plugin.
          */
         reloadEditor: function () {
-            return this.loadEditor(this.currentContentItemId, this.currentGroup);
+            var plugin = this;
+
+            var editorGroup = plugin.getEditorGroupNameFromUrl() ||
+                plugin.settings.defaultEditorGroupName;
+
+            return plugin.loadEditor(plugin.currentContentItemId || plugin.settings.initialContentItemId, editorGroup);
         },
 
         /**
@@ -198,6 +218,10 @@
                 .on("click", function () {
                     var groupName = $(this).attr("data-editorGroupName");
 
+                    if (plugin.currentGroup != groupName) {
+                        plugin.setEditorGroupNameInUrl(groupName)
+                    }
+
                     if (groupName) plugin.loadEditor(plugin.currentContentItemId, groupName);
                 });
 
@@ -299,13 +323,26 @@
         },
 
         /**
+         * Returns the root plugin from the hierarchy.
+         * @returns Root plugin.
+         */
+        getRootPlugin: function () {
+            var plugin = this;
+
+            while (plugin) {
+                if (plugin.parentPlugin) plugin = plugin.parentPlugin;
+                else return plugin;
+            }
+        },
+
+        /**
          * Generates an async ajax request object for posting the editor.
          * @param {Object} submitContext Contains information about the editor post (e.g. submit button details).
          * @returns {Object} XHR object for posting the editor async.
          */
         getPostEditorXHR: function (submitContext) {
             var plugin = this;
-            
+
             return $.ajax({
                 type: "POST",
                 url: plugin.currentForm.attr("action"),
@@ -315,6 +352,10 @@
                     plugin.setProcessingIndicatorVisibility(true);
                 },
                 success: function (response) {
+                    if (response.EditorGroup && plugin.currentGroup != response.EditorGroup) {
+                        plugin.setEditorGroupNameInUrl(response.EditorGroup);
+                    }
+
                     plugin.evaluateApiResponse(response);
 
                     if (plugin.settings.callbacks.editorPostedCallback) {
@@ -339,8 +380,36 @@
                 submitButtonValue: $submitButtonElement.attr("value")
             };
         },
+
+        /**
+         * Helper for acquiring group name from query string.
+         * @returns Editor group name.
+         */
+        getEditorGroupNameFromUrl: function () {
+            var plugin = this;
+
+            return new URI().search(true)[plugin.groupNameQueryStringParameter];
+        },
+
+        /**
+         * Helper for updating group name query string parameter.
+         * @param {string} groupName Name of the editor group;
+         */
+        setEditorGroupNameInUrl: function (groupName) {
+            var plugin = this;
+
+            var uri = new URI();
+            if (groupName.length > 0) {
+                uri.setSearch(plugin.groupNameQueryStringParameter, groupName);
+            }
+            else {
+                uri.removeSearch(plugin.groupNameQueryStringParameter);
+            }
+            
+            history.pushState(groupName, "", uri.pathname() + uri.search());
+        }
     });
-    
+
     $.fn[pluginName] = function (options) {
         // Return null if the element query is invalid.
         if (!this || this.length == 0) return null;

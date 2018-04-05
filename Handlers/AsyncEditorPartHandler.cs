@@ -1,6 +1,7 @@
 ﻿using Lombiq.ContentEditors.Models;
 using Lombiq.ContentEditors.Services;
 using Orchard.ContentManagement.Handlers;
+using System.Linq;
 
 namespace Lombiq.ContentEditors.Handlers
 {
@@ -37,6 +38,10 @@ namespace Lombiq.ContentEditors.Handlers
                     part.CurrentEditorGroup == null ?
                         null :
                         asyncEditorService.GetPreviousGroupDescriptor(part, part.CurrentEditorGroup.Name, true));
+
+                part.NextEditableAuthorizedGroupField.Loader(() =>
+                    asyncEditorService.GetIncompleteEditorGroups(part, true).FirstOrDefault() ?? 
+                        asyncEditorService.GetCompletedEditorGroups(part, true).LastOrDefault());
             });
         }
     }

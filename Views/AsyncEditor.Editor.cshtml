@@ -1,6 +1,7 @@
 ﻿@using Orchard.ContentManagement
 @using Lombiq.ContentEditors.Models
 @using Lombiq.ContentEditors.Constants
+@using Orchard.Utility.Extensions
 
 @{
     var contentItem = Model.ContentItem as ContentItem;
@@ -25,11 +26,11 @@
 }
 
 
-<div class="@BlockName">
+<div class="@BlockName @if (!string.IsNullOrEmpty(group)) { <text> @(BlockName)_group_@(group.HtmlClassify()) </text> }">
     @using (Html.BeginFormAntiForgeryPost(
         Url.Action(
-            "Edit", 
-            "AsyncEditor", 
+            "Edit",
+            "AsyncEditor",
             new { Area = "Lombiq.ContentEditors", ContentItemId = contentItemId, Group = group, ContentType = contentType }),
         FormMethod.Post,
         new { @class = string.Join(" ", FormElementName, "js-" + FormElementName) }))
