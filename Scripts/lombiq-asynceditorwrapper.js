@@ -17,6 +17,7 @@
         editItemActionElementClass: "",
         cancelButtonElementClass: "",
         allowMultipleEditors: false,
+        autoLoadUrl: "",
         multipleEditorsNotAllowedMessage: "Editing multiple items at the same is not allowed. Please save or cancel your current changes first.",
         editorLoadedCallback: function (data, $editor) { },
     };
@@ -32,6 +33,7 @@
 
     $.extend(Plugin.prototype, {
         concurrentEditors: 0,
+        autoLoadUrlQueryStringParameter: "",
 
         init: function () {
             var plugin = this;
@@ -48,6 +50,10 @@
                 plugin.element.find(plugin.settings.editItemActionElementClass).on("click", function () {
                     plugin.loadEditor($(this).attr("data-url"), $editorPlaceholderElement);
                 });
+            }
+
+            if (plugin.settings.autoLoadUrl.length > 0) {
+                plugin.loadEditor(plugin.settings.autoLoadUrl, $editorPlaceholderElement);
             }
         },
 
