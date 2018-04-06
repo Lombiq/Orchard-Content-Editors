@@ -229,9 +229,7 @@
   <ItemGroup>
     <Content Include="Views\AsyncEditor.Actions.Submit.cshtml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="EventHandlers\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="Views\Lombiq.Editors.DropdownEditor.cshtml" />
   </ItemGroup>
