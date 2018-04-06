@@ -15,25 +15,23 @@ namespace Lombiq.ContentEditors.Authorization
     /// Adjusts permissions to utilize editor group permissions. Mostly follows the built-in dynamic content permission
     /// event handler (<see cref="Orchard.Core.Contents.Security.AuthorizationEventHandler"/>), and sadly parts of it
     /// need to be copy-pasted.
-    /// 
-    /// Note that this will only work if the content type is not securable, because if it is, the built-in event handler
-    /// will swap out the currently checked permission with a dynamic one (like Edit_MyContentType), rendering this
-    /// event handler unable to detect the proper permissions (alternatively the logic could run in Checking() to
-    /// front-run the built-in event handler).
     /// </summary>
     public class GroupAuthorizationEventHandler : IAuthorizationServiceEventHandler
     {
-        public void Checking(CheckAccessContext context) { }
+        public void Adjust(CheckAccessContext context) { }
         public void Complete(CheckAccessContext context) { }
 
-        public void Adjust(CheckAccessContext context)
+        // Note that this will only work if it's in Checking(), not Adjust. In that case if the content type is not 
+        // securable then the built-in event handler will swap out the currently checked permission with a dynamic one 
+        // (like Edit_MyContentType), rendering this event handler unable to detect the proper permissions.
+        public void Checking(CheckAccessContext context)
         {
             var asyncEditorPart = context.Content.As<AsyncEditorPart>();
 
             if (context.Granted || 
                 !context.Content.Has<ICommonPart>() ||
                 asyncEditorPart == null || 
-                string.IsNullOrEmpty(asyncEditorPart.CurrentEditorGroup.Name))
+                string.IsNullOrEmpty(asyncEditorPart.CurrentEditorGroup?.Name))
             {
                 return;
             }
