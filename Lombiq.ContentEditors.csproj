@@ -102,6 +102,7 @@
     <Compile Include="Controllers\AsyncEditorController.cs" />
     <Compile Include="Drivers\AsyncEditorPartDriver.cs" />
     <Compile Include="Authorization\GroupAuthorizationEventHandler.cs" />
+    <Compile Include="Extensions\HtmlHelperExtensions.cs" />
     <Compile Include="Handlers\AsyncEditorPartHandler.cs" />
     <Compile Include="Helpers\TaxonomyFieldHelpers.cs" />
     <Compile Include="Models\AsyncEditorResult.cs" />
@@ -126,6 +127,8 @@
     <Compile Include="ViewModels\FieldViewModel.cs" />
     <Compile Include="ViewModels\EditorViewModel.cs" />
     <Compile Include="ViewModels\DropdownEditorViewModel.cs" />
+    <Content Include="Content\URI.js\URI.js" />
+    <Content Include="Content\URI.js\URI.min.js" />
     <Content Include="Scripts\lombiq-asynceditorwrapper.js" />
     <Content Include="Content\Selectize\selectize.bootstrap3.css" />
     <Content Include="Content\Selectize\selectize.js" />
@@ -228,6 +231,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="EventHandlers\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Lombiq.Editors.DropdownEditor.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

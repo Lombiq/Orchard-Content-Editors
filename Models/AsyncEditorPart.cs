@@ -47,5 +47,9 @@ namespace Lombiq.ContentEditors.Models
         private readonly LazyField<EditorGroupDescriptor> _previousAuthorizedEditorGroup = new LazyField<EditorGroupDescriptor>();
         internal LazyField<EditorGroupDescriptor> PreviousEditorGroupField => _previousAuthorizedEditorGroup;
         public EditorGroupDescriptor PreviousAuthorizedEditorGroup => _previousAuthorizedEditorGroup.Value;
+
+        private readonly LazyField<EditorGroupDescriptor> _nextEditableAuthorizedGroup = new LazyField<EditorGroupDescriptor>();
+        internal LazyField<EditorGroupDescriptor> NextEditableAuthorizedGroupField => _nextEditableAuthorizedGroup;
+        public EditorGroupDescriptor NextEditableAuthorizedGroup => _nextEditableAuthorizedGroup.Value;
     }
 }

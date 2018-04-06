@@ -11,11 +11,15 @@
         return;
     }
 
+    // Default group can be given as a shape parameter or it can be the next accessible editor group.
+    // If the <ContentType>EditorGroup query string parameter is given then the value of it is stronger.
+    var defaultGroup = (Model.EditorGroup as string) ?? asyncEditorPart.NextEditableAuthorizedGroup?.Name;
+
     Script.Require(ResourceNames.Lombiq_AsyncEditor).AtHead();
 
-    var editUrl = Url.Action("Edit", "AsyncEditor", new { Area = "Lombiq.ContentEditors" });
+    var editUrl = Model.EditUrl ?? Url.Action("Edit", "AsyncEditor", new { Area = "Lombiq.ContentEditors" });
 
-    string AsyncEditorLoaderId = "editorFor" + contentItem.ContentType;
+    string AsyncEditorLoaderId = Html.AsyncEditorPluginId(contentItem);
 }
 
 @Display.Lombiq_AsyncEditorLoader_Container(AsyncEditorLoaderId: AsyncEditorLoaderId)
@@ -28,7 +32,7 @@
                 asyncEditorApiUrl: "@editUrl",
                 contentType: "@contentItem.ContentType",
                 initialContentItemId: @contentItem.Id,
-                initialEditorGroupName: "@(asyncEditorPart.CurrentEditorGroup?.Name ?? asyncEditorPart.AuthorizedEditorGroups.FirstOrDefault()?.Name)",
+                defaultEditorGroupName: "@defaultGroup",
                 asyncEditorLoaderElementClass: ".js-@ElementNames.AsyncEditorLoader.BlockName",
                 processingIndicatorElementClass: ".js-@ElementNames.AsyncEditorLoader.ProcessingIndicatorElementName",
                 editorPlaceholderElementClass: ".js-@ElementNames.AsyncEditorLoader.EditorPlaceholderElementName",
