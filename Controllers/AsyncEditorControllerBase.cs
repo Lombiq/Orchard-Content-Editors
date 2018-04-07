@@ -44,7 +44,12 @@ namespace Lombiq.ContentEditors.Controllers
         {
             if (part == null) return ContentItemNotFoundResult();
 
-            if (part.HasEditorGroups && string.IsNullOrEmpty(group)) return GroupNameCannotBeEmptyResult();
+            if (part.HasEditorGroups && string.IsNullOrEmpty(group))
+            {
+                group = part.NextEditableAuthorizedGroup?.Name;
+
+                if (string.IsNullOrEmpty(group)) return GroupNameCannotBeEmptyResult();
+            }
 
             if (!_asyncEditorService.IsAuthorizedToEdit(part, group)) return UnauthorizedGroupEditorResult();
 
