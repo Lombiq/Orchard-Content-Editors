@@ -51,7 +51,7 @@ namespace Lombiq.ContentEditors.Controllers
                 if (string.IsNullOrEmpty(group)) return GroupNameCannotBeEmptyResult();
             }
 
-            if (!_asyncEditorService.IsAuthorizedToEdit(part, group)) return UnauthorizedGroupEditorResult();
+            if (!_asyncEditorService.IsAuthorizedToEdit(part, group)) return UnauthorizedEditorResult();
 
             if (!string.IsNullOrEmpty(group) &&
                 !_asyncEditorService.IsEditorGroupAvailable(part, group)) return GroupUnavailableResult();
@@ -68,7 +68,7 @@ namespace Lombiq.ContentEditors.Controllers
 
             if (part.HasEditorGroups && string.IsNullOrEmpty(group)) return GroupNameCannotBeEmptyResult();
 
-            if (!_asyncEditorService.IsAuthorizedToEdit(part, group)) return UnauthorizedGroupEditorResult();
+            if (!_asyncEditorService.IsAuthorizedToEdit(part, group)) return UnauthorizedEditorResult();
 
             if (publish && !_asyncEditorService.IsAuthorizedToPublish(part, group))
             {
@@ -117,7 +117,7 @@ namespace Lombiq.ContentEditors.Controllers
             
             if (part == null || !part.HasEditorGroups) return ContentItemNotFoundResult();
 
-            if (!_asyncEditorService.IsAuthorizedToEdit(part, group)) return UnauthorizedGroupEditorResult();
+            if (!_asyncEditorService.IsAuthorizedToEdit(part, group)) return UnauthorizedEditorResult();
 
             if (!_asyncEditorService.IsEditorGroupAvailable(part, group)) return GroupUnavailableResult();
 
@@ -211,7 +211,7 @@ namespace Lombiq.ContentEditors.Controllers
         protected virtual ActionResult GroupNameCannotBeEmptyResult() =>
             ErrorResult(T("Group name cannot be empty."));
 
-        protected virtual ActionResult UnauthorizedGroupEditorResult() =>
+        protected virtual ActionResult UnauthorizedEditorResult() =>
             ErrorResult(T("You are not authorized to edit this content item on this editor group."));
 
         protected virtual ActionResult GroupUnavailableResult() =>
