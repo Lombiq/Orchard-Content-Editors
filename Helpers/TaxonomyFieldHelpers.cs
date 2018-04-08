@@ -1,4 +1,4 @@
-﻿using Orchard.Taxonomies.Fields;
+﻿using Lombiq.ContentEditors.Models;
 using Orchard.Taxonomies.Helpers;
 using Orchard.Taxonomies.ViewModels;
 using System;
@@ -35,6 +35,26 @@ namespace Lombiq.ContentEditors.Helpers
             }
 
             return selectListItems;
+        }
+
+        public static IEnumerable<ValueStructure> CreateAllValueStructuresFromTerms(TaxonomyFieldViewModel viewModel)
+        {
+            var termEntries = viewModel.Terms;
+            var topLevelTermEntries = termEntries.Where(term => term.GetLevels() == 0).ToList();
+            var allValueStructures = new List<ValueStructure>();
+
+            foreach (var entry in topLevelTermEntries)
+            {
+                var valueStructure = new ValueStructure
+                {
+                    RootValue = entry.Id.ToString(),
+                    Children = termEntries.Where(term => term.Path.Contains(entry.Path + entry.Id))
+                        .Select(term => new ValueNamePair { Value = term.Id.ToString(), Name = term.Name }).ToList()
+                };
+                allValueStructures.Add(valueStructure);
+            }
+
+            return allValueStructures;
         }
     }
 }
