@@ -132,6 +132,7 @@
     <Content Include="Content\Selectize\selectize.bootstrap3.css" />
     <Content Include="Content\Selectize\selectize.js" />
     <Content Include="Content\Selectize\selectize.min.js" />
+    <Content Include="Scripts\lombiq-filterdropdownoptions.js" />
     <Content Include="Scripts\lombiq-ios-stickyinputfocusoverride.js" />
     <Content Include="Scripts\lombiq-asynceditor.js" />
     <Compile Include="ResourceManifest.cs" />

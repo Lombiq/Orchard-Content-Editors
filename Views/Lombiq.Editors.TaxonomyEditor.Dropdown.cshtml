@@ -1,7 +1,10 @@
 ﻿@using Lombiq.ContentEditors.ViewModels
+@using Lombiq.ContentEditors.Constants
 
 @{
-    var viewModel = Model.ViewModel as DropdownEditorViewModel;
+    Script.Require(ResourceNames.Lombiq_FilterDropdownOptions).AtHead();
+
+    var viewModel = Model.ViewModel as TaxonomyEditorViewModel;
 
     const string DefaultBlockName = "taxonomyDropdownEditor";
     string BlockName = viewModel.BlockName ?? DefaultBlockName;
@@ -43,3 +46,20 @@
         @Html.Hidden($"Terms[{i}].Id", viewModel.SelectList[i].Value)
     }
 </div>
+
+@if (!string.IsNullOrEmpty(viewModel.ParentDropdownEditorName))
+{
+    using (Script.Foot())
+    {
+        <script type="text/javascript">
+                ; (function ($) {
+                    $(function () {
+                        $("select[name='@(ViewData.TemplateInfo.HtmlFieldPrefix + "." + viewModel.Name)']").lombiq_FilterDropdowntOptions({
+                            parentDropdownName: "@viewModel.ParentDropdownEditorName",
+                            valueStructures: "@Json.Encode(viewModel.ValueStructures)"
+                        });
+                    });
+                })(jQuery);
+        </script>
+    }
+}  
