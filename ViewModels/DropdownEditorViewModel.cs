@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Lombiq.ContentEditors.Models;
+using System.Collections.Generic;
 using System.Web.Mvc;
 
 namespace Lombiq.ContentEditors.ViewModels
@@ -6,6 +7,8 @@ namespace Lombiq.ContentEditors.ViewModels
     public class DropdownEditorViewModel : EditorViewModel
     {
         public List<SelectListItem> SelectList { get; set; } = new List<SelectListItem>();
+        public string ParentDropdownEditorName { get; set; }
+        public IEnumerable<ValueStructure> ValueStructures { get; set; }
 
 
         public DropdownEditorViewModel(IEnumerable<string> values)
@@ -15,7 +18,6 @@ namespace Lombiq.ContentEditors.ViewModels
 
         public DropdownEditorViewModel()
         {
-
         }
     }
 }
