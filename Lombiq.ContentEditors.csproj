@@ -118,6 +118,7 @@
     <Compile Include="Services\EditorGroupsSettingsProviderAccessor.cs" />
     <Compile Include="Services\IAsyncEditorService.cs" />
     <Compile Include="Services\IEditorGroupsProviderAccessor.cs" />
+    <Compile Include="ViewModels\BoolEditorViewModel.cs" />
     <Compile Include="ViewModels\DateTimeEditorViewModel.cs" />
     <Compile Include="ViewModels\TaxonomyEditorViewModel.cs" />
     <Compile Include="ViewModels\InputFieldViewModel.cs" />
@@ -229,6 +230,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Lombiq.Editors.DropdownEditor.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Lombiq.Editors.BoolEditor.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Lombiq.Editors.BoolEditor.Radio.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

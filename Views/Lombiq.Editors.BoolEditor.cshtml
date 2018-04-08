@@ -1,0 +1,51 @@
+﻿@using Lombiq.ContentEditors.ViewModels
+
+@{
+    var viewModel = Model.ViewModel as BoolEditorViewModel;
+    var value = (viewModel.Value as bool?) ?? false;
+
+    const string DefaultBlockName = "BoolEditor";
+    string BlockName = viewModel.BlockName ?? DefaultBlockName;
+
+    var boolAttributes = viewModel.BuildAttributes(new Dictionary<string, object>
+    {
+        { "class", "form-control textbox " + DefaultBlockName + "__checkbox" }
+    });
+
+    var labelAttributes = new Dictionary<string, object>
+    {
+        { "class", "editorLabel " + DefaultBlockName + "__label" }
+    };
+
+    if (viewModel.Required)
+    {
+        boolAttributes["required"] = true;
+        boolAttributes["class"] = boolAttributes["class"] + " required";
+        labelAttributes["class"] = labelAttributes["class"] + " required";
+    }
+
+    if (!string.IsNullOrEmpty(viewModel.Placeholder))
+    {
+        boolAttributes["placeholder"] = viewModel.Placeholder;
+    }
+}
+
+<div class="editor editorField form-group @DefaultBlockName @BlockName">
+    @switch (viewModel.RenderMode)
+    {
+        case RenderMode.Checkbox:
+            @Display.Lombiq_Editors_BoolEditor(ViewModel: viewModel)
+            break;
+        case RenderMode.RadioButtons:
+            @Display.Lombiq_Editors_BoolEditor(ViewModel: viewModel)
+            break;
+        case RenderMode.Toggle:
+            @Display.Lombiq_Editors_BoolEditor(ViewModel: viewModel)
+            break;
+    }
+
+    @if (!string.IsNullOrEmpty(viewModel.Hint))
+    {
+        <div class="editorHint @(DefaultBlockName)__editorHint">@viewModel.Hint</div>
+    }
+</div>
