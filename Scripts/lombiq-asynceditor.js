@@ -26,6 +26,7 @@
         initialContentItemId: 0,
         defaultEditorGroupName: "",
         groupNameQueryStringParameter: "",
+        contentItemIdQueryStringParameter: "",
         processingIndicatorElementClass: "",
         asyncEditorLoaderElementClass: "",
         editorPlaceholderElementClass: "",
@@ -56,6 +57,7 @@
         parentPlugin: null,
         childPlugin: null,
         groupNameQueryStringParameter: null,
+        contentItemIdQueryStringParameter: "",
 
         /**
          * Initializes the Lombiq Async Editor plugin.
@@ -69,6 +71,10 @@
             plugin.groupNameQueryStringParameter = plugin.settings.groupNameQueryStringParameter.length > 0 ?
                 plugin.settings.groupNameQueryStringParameter :
                 plugin.settings.contentType + "EditorGroup";
+
+            plugin.contentItemIdQueryStringParameter = plugin.settings.contentItemIdQueryStringParameter.length > 0 ?
+                plugin.settings.contentItemIdQueryStringParameter :
+                plugin.settings.contentType + "Id";
 
             // Find the closest potential parent AsyncEditor plugin.
             var $closestLoaderElement = plugin.element
@@ -112,10 +118,13 @@
         reloadEditor: function () {
             var plugin = this;
 
+            var contentItemId = plugin.getContentItemIdFromUrl() ||
+                plugin.settings.initialContentItemId;
+
             var editorGroup = plugin.getEditorGroupNameFromUrl() ||
                 plugin.settings.defaultEditorGroupName;
 
-            return plugin.loadEditor(plugin.currentContentItemId || plugin.settings.initialContentItemId, editorGroup);
+            return plugin.loadEditor(contentItemId || plugin.settings.initialContentItemId, editorGroup);
         },
 
         /**
@@ -219,7 +228,7 @@
                     var groupName = $(this).attr("data-editorGroupName");
 
                     if (plugin.currentGroup != groupName) {
-                        plugin.setEditorGroupNameInUrl(groupName)
+                        plugin.setGroupNameAndItemIdInUrl(groupName, plugin.getContentItemIdFromUrl() || plugin.currentContentItemId)
                     }
 
                     if (groupName) plugin.loadEditor(plugin.currentContentItemId, groupName);
@@ -353,7 +362,7 @@
                 },
                 success: function (response) {
                     if (response.EditorGroup && plugin.currentGroup != response.EditorGroup) {
-                        plugin.setEditorGroupNameInUrl(response.EditorGroup);
+                        plugin.setGroupNameAndItemIdInUrl(response.EditorGroup, response.ContentItemId);
                     }
 
                     plugin.evaluateApiResponse(response);
@@ -382,8 +391,8 @@
         },
 
         /**
-         * Helper for acquiring group name from query string.
-         * @returns Editor group name.
+         * Helper for acquiring content item ID from query string.
+         * @returns Content item ID.
          */
         getEditorGroupNameFromUrl: function () {
             var plugin = this;
@@ -392,18 +401,36 @@
         },
 
         /**
-         * Helper for updating group name query string parameter.
-         * @param {string} groupName Name of the editor group;
+         * Helper for acquiring group name from query string.
+         * @returns Editor group name.
          */
-        setEditorGroupNameInUrl: function (groupName) {
+        getContentItemIdFromUrl: function () {
+            var plugin = this;
+
+            return new URI().search(true)[plugin.contentItemIdQueryStringParameter];
+        },
+
+        /**
+         * Helper for updating group name and content item ID query string parameter.
+         * @param {string} groupName Name of the editor group.
+         * @param {number} contentItemId ID of the content item.
+         */
+        setGroupNameAndItemIdInUrl: function (groupName, contentItemId) {
             var plugin = this;
 
             var uri = new URI();
-            if (groupName.length > 0) {
+            if (groupName && groupName.length > 0) {
                 uri.setSearch(plugin.groupNameQueryStringParameter, groupName);
             }
             else {
                 uri.removeSearch(plugin.groupNameQueryStringParameter);
+            }
+
+            if (contentItemId) {
+                uri.setSearch(plugin.contentItemIdQueryStringParameter, contentItemId);
+            }
+            else {
+                uri.removeSearch(plugin.contentItemIdQueryStringParameter);
             }
             
             history.pushState(groupName, "", uri.pathname() + uri.search());

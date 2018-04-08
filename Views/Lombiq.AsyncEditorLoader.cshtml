@@ -1,25 +1,20 @@
-﻿@using Orchard.ContentManagement
-@using Lombiq.ContentEditors.Constants
-@using Lombiq.ContentEditors.Models
+﻿@using Lombiq.ContentEditors.Constants
 
 @{
-    var contentItem = Model.ContentItem as ContentItem;
-    var asyncEditorPart = contentItem?.As<AsyncEditorPart>();
+    var contentType = Model.ContentType as string;
 
-    if (asyncEditorPart == null)
-    {
-        return;
-    }
+    // Initial content item ID can be given as a shape parameter or can be empty if the item is new.
+    var contentItemId = Model.ContentItemId as int? ?? 0;
 
-    // Default group can be given as a shape parameter or it can be the next accessible editor group.
+    // Default group can be given as a shape parameter.
     // If the <ContentType>EditorGroup query string parameter is given then the value of it is stronger.
-    var defaultGroup = (Model.EditorGroup as string) ?? asyncEditorPart.NextEditableAuthorizedGroup?.Name;
+    var defaultGroup = Model.EditorGroup as string;
 
     Script.Require(ResourceNames.Lombiq_AsyncEditor).AtHead();
 
     var editUrl = Model.EditUrl ?? Url.Action("Edit", "AsyncEditor", new { Area = "Lombiq.ContentEditors" });
 
-    string AsyncEditorLoaderId = Html.AsyncEditorPluginId(contentItem);
+    string AsyncEditorLoaderId = Html.AsyncEditorPluginId(contentType);
 }
 
 @Display.Lombiq_AsyncEditorLoader_Container(AsyncEditorLoaderId: AsyncEditorLoaderId)
@@ -30,8 +25,8 @@
         $(function () {
             $("#@AsyncEditorLoaderId").lombiq_AsyncEditor({
                 asyncEditorApiUrl: "@editUrl",
-                contentType: "@contentItem.ContentType",
-                initialContentItemId: @contentItem.Id,
+                contentType: "@contentType",
+                initialContentItemId: @contentItemId,
                 defaultEditorGroupName: "@defaultGroup",
                 asyncEditorLoaderElementClass: ".js-@ElementNames.AsyncEditorLoader.BlockName",
                 processingIndicatorElementClass: ".js-@ElementNames.AsyncEditorLoader.ProcessingIndicatorElementName",
