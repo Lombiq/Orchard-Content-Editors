@@ -34,13 +34,13 @@
     @switch (viewModel.RenderMode)
     {
         case RenderMode.Checkbox:
-            @Display.Lombiq_Editors_BoolEditor(ViewModel: viewModel)
+            @Display.Lombiq_Editors_BoolEditor_Radio(ViewModel: viewModel)
             break;
         case RenderMode.RadioButtons:
-            @Display.Lombiq_Editors_BoolEditor(ViewModel: viewModel)
+            @Display.Lombiq_Editors_BoolEditor_Radio(ViewModel: viewModel)
             break;
         case RenderMode.Toggle:
-            @Display.Lombiq_Editors_BoolEditor(ViewModel: viewModel)
+            @Display.Lombiq_Editors_BoolEditor_Radio(ViewModel: viewModel)
             break;
     }
 
