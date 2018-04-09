@@ -1,7 +1,8 @@
 ﻿@using Lombiq.ContentEditors.ViewModels
+@using Orchard.Utility.Extensions
 
 @{
-    var viewModel = Model.ViewModel as EditorViewModel;
+    var viewModel = Model.ViewModel as BoolEditorViewModel;
     var value = (viewModel.Value as bool?) ?? false;
 
     const string DefaultBlockName = "BoolEditor";
@@ -9,12 +10,12 @@
 
     var boolAttributes = viewModel.BuildAttributes(new Dictionary<string, object>
     {
-        { "class", "form-control textbox " + DefaultBlockName + "__checkbox" }
+    { "class", "form-control textbox " + DefaultBlockName + "__checkbox" }
     });
 
     var labelAttributes = new Dictionary<string, object>
     {
-        { "class", "editorLabel " + DefaultBlockName + "__label" }
+    { "class", "editorLabel " + DefaultBlockName + "__label" }
     };
 
     if (viewModel.Required)
@@ -28,24 +29,28 @@
     {
         boolAttributes["placeholder"] = viewModel.Placeholder;
     }
-   
+
     var yesBool = boolAttributes.ToDictionary(k => k.Key, k => k.Value);
     yesBool["id"] = BlockName + "__yes";
+
+    var onChangedSelectorId = viewModel.Id ?? viewModel.Name.HtmlClassify();
 }
 
-<div class="editor editorField form-group @DefaultBlockName @BlockName">
+<div id="@onChangedSelectorId" class="editor editorField form-group @DefaultBlockName @BlockName js-@viewModel.Name.HtmlClassify()">
     @if (!string.IsNullOrEmpty(viewModel.Label))
     {
         @Html.Label(viewModel.Name, viewModel.Label, labelAttributes)
     }
+    <div class="js-@(BlockName)__radioButtons">
+        <label>
+            @Html.RadioButton(viewModel.Name, value, value, yesBool) @T("Yes")
+        </label>
 
-    <label>
-        @Html.RadioButton(viewModel.Name, value, value, yesBool) @T("Yes")
-    </label>
+        <label>
+            @Html.RadioButton(viewModel.Name, !value, !value, boolAttributes) @T("No")
+        </label>
 
-    <label>
-        @Html.RadioButton(viewModel.Name, !value, !value, boolAttributes) @T("No")
-    </label>
+    </div>
     @if (!string.IsNullOrEmpty(viewModel.Hint))
     {
         <div class="editorHint @(DefaultBlockName)__editorHint">@viewModel.Hint</div>
@@ -55,20 +60,13 @@
 <script type="text/javascript">
     ; (function ($) {
         $(function () {
-            $("input[name='@viewModel.Name']").on("click", function (event) {
-                var boolEditorValue = $("#BoolEditor__yes").is(":checked");
-                debugger;
+            $("#@onChangedSelectorId .js-@(BlockName)__radioButtons").on("click", function (event) {
+                var boolEditorValue = $(this).find("#BoolEditor__yes").is(":checked");
 
-                $this.trigger("StateChanged", [boolEditorValue])
-               // OnBoolEditorStateChanged(boolEditorValue);
+                //debugger;
+                $("#@onChangedSelectorId").trigger("change", [boolEditorValue]);
             });
 
-            @*function OnBoolEditorStateChanged(state) {
-                var evt = $.Event('@(viewModel.Name)StateChanged');
-                evt.state = state;
-
-                $(window).trigger(evt);
-            }*@
         });
     })(jQuery);
 </script>

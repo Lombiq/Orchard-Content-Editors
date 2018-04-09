@@ -10,6 +10,7 @@
 
     public class BoolEditorViewModel : EditorViewModel
     {
+        public string Id { get; set; }
         public RenderMode RenderMode { get; set; } = RenderMode.RadioButtons;
     }
 }
