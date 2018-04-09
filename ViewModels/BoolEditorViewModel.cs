@@ -1,4 +1,6 @@
-﻿namespace Lombiq.ContentEditors.ViewModels
+﻿using Orchard.Localization;
+
+namespace Lombiq.ContentEditors.ViewModels
 {
     public enum RenderMode
     {
@@ -12,5 +14,7 @@
     {
         public string Id { get; set; }
         public RenderMode RenderMode { get; set; } = RenderMode.RadioButtons;
+        public LocalizedString TextTrue { get; set; } = new LocalizedString("Yes");
+        public LocalizedString TextFalse { get; set; } = new LocalizedString("No");
     }
 }

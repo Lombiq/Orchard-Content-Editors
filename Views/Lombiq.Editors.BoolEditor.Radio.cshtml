@@ -43,11 +43,11 @@
     }
     <div class="js-@(BlockName)__radioButtons">
         <label>
-            @Html.RadioButton(viewModel.Name, value, value, yesBool) @T("Yes")
+            @Html.RadioButton(viewModel.Name, value, value, yesBool) @viewModel.TextTrue
         </label>
 
         <label>
-            @Html.RadioButton(viewModel.Name, !value, !value, boolAttributes) @T("No")
+            @Html.RadioButton(viewModel.Name, !value, !value, boolAttributes) @viewModel.TextFalse
         </label>
 
     </div>
@@ -62,11 +62,9 @@
         $(function () {
             $("#@onChangedSelectorId .js-@(BlockName)__radioButtons").on("click", function (event) {
                 var boolEditorValue = $(this).find("#BoolEditor__yes").is(":checked");
-
-                //debugger;
+                                
                 $("#@onChangedSelectorId").trigger("change", [boolEditorValue]);
             });
-
         });
     })(jQuery);
 </script>
