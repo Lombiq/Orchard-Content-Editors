@@ -10,6 +10,6 @@
 
     public class BoolEditorViewModel : EditorViewModel
     {
-        public RenderMode RenderMode { get; set; } = RenderMode.Checkbox;
+        public RenderMode RenderMode { get; set; } = RenderMode.RadioButtons;
     }
 }
