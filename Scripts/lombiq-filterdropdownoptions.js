@@ -28,9 +28,15 @@
     $.extend(Plugin.prototype, {
         init: function () {
             var plugin = this;
+            var parentSelect = "select[name=" + plugin.settings.parentDropdownName + "]";
 
-            $("select[name=@(viewModel.ParentTaxonomyEditorName)]").change(function () {
-
+            $(parentSelect).change(function () {
+                $(plugin.element).empty().data("options");
+                let currentOptions = plugin.settings.valueStructures[$(parentSelect).val()];
+                $.each(currentOptions, function (i) {
+                    let option = currentOptions[i];
+                    $(plugin.element).append($("<option>").text(option.name).val(option.value));
+                });
             });
         }
     });
