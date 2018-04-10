@@ -27,6 +27,17 @@
     {
         dropdownAttributes["placeholder"] = viewModel.Placeholder;
     }
+
+    if (viewModel.HasDefaultEmptyValue)
+    {
+        var emptySelectListItem = new SelectListItem
+        {
+            Text = "",
+            Value = "",
+            Selected = !viewModel.SelectList.Any(selectListItem => selectListItem.Selected)
+        };
+        viewModel.SelectList.Insert(0, emptySelectListItem);
+    }
 }
 
 <div class="editor editorField form-group @DefaultBlockName @BlockName">
