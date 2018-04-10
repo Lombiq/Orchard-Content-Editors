@@ -19,7 +19,7 @@ namespace Lombiq.ContentEditors
             manifest.DefineScript(Lombiq_AsyncEditor).SetUrl("lombiq-asynceditor.js").SetDependencies(jQuery, Uri_Js);
             manifest.DefineScript(Lombiq_AsyncEditorWrapper).SetUrl("lombiq-asynceditorwrapper.js").SetDependencies(jQuery, Uri_Js);
 
-            manifest.DefineScript(Lombiq_FilterDropdownOptions).SetUrl("lombiq-filterdropdownoptions").SetDependencies(jQuery);
+            manifest.DefineScript(Lombiq_FilterDropdownOptions).SetUrl("lombiq-filterdropdownoptions.js").SetDependencies(jQuery);
         }
     }
 }

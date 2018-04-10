@@ -2,8 +2,6 @@
 @using Lombiq.ContentEditors.Constants
 
 @{
-    Script.Require(ResourceNames.Lombiq_FilterDropdownOptions).AtHead();
-
     var viewModel = Model.ViewModel as TaxonomyEditorViewModel;
 
     const string DefaultBlockName = "taxonomyDropdownEditor";
@@ -47,19 +45,17 @@
     }
 </div>
 
+
 @if (!string.IsNullOrEmpty(viewModel.ParentDropdownEditorName))
 {
-    using (Script.Foot())
-    {
-        <script type="text/javascript">
-                ; (function ($) {
-                    $(function () {
-                        $("select[name='@(ViewData.TemplateInfo.HtmlFieldPrefix + "." + viewModel.Name)']").lombiq_FilterDropdowntOptions({
-                            parentDropdownName: "@viewModel.ParentDropdownEditorName",
-                            valueStructures: "@Json.Encode(viewModel.ValueStructures)"
-                        });
-                    });
-                })(jQuery);
-        </script>
-    }
-}  
+    <script type="text/javascript">
+        ; (function ($) {
+            $(function () {
+                $("select[name='@viewModel.Name']").lombiq_FilterDropdownOptions({
+                    parentDropdownName: "@viewModel.ParentDropdownEditorName",
+                    valueStructures: "@Json.Encode(viewModel.ValueStructures)"
+                });
+            });
+        })(jQuery);
+    </script>
+}
