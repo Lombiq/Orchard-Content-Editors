@@ -15,7 +15,7 @@
 
     var labelAttributes = new Dictionary<string, object>
     {
-    { "class", "editorLabel " + DefaultBlockName + "__label" }
+    { "class", "editorLabel " + DefaultBlockName + "_S_label" }
     };
 
     if (viewModel.Required)
@@ -29,27 +29,20 @@
     {
         boolAttributes["placeholder"] = viewModel.Placeholder;
     }
-
-    var yesBool = boolAttributes.ToDictionary(k => k.Key, k => k.Value);
-    yesBool["id"] = BlockName + "__yes";
-
+    
     var onChangedSelectorId = viewModel.Id ?? viewModel.Name.HtmlClassify();
 }
 
 <div id="@onChangedSelectorId" class="editor editorField form-group @DefaultBlockName @BlockName js-@viewModel.Name.HtmlClassify()">
-    @if (!string.IsNullOrEmpty(viewModel.Label))
+    @*@if (!string.IsNullOrEmpty(viewModel.Label))
     {
         @Html.Label(viewModel.Name, viewModel.Label, labelAttributes)
-    }
-    <div class="js-@(BlockName)__radioButtons">
+    }*@
+    <div class="js-@(BlockName)__checkboxButton">
         <label>
-            @Html.RadioButton(viewModel.Name, true, value, yesBool) @viewModel.TextTrue
+            @Html.CheckBox(viewModel.Name, value, boolAttributes)
+            @viewModel.Label
         </label>
-
-        <label>
-            @Html.RadioButton(viewModel.Name, false, !value, boolAttributes) @viewModel.TextFalse
-        </label>
-
     </div>
     @if (!string.IsNullOrEmpty(viewModel.Hint))
     {
@@ -60,8 +53,8 @@
 <script type="text/javascript">
     ; (function ($) {
         $(function () {
-            $("#@onChangedSelectorId .js-@(BlockName)__radioButtons").on("click", function (event) {
-                var boolEditorValue = $(this).find("#BoolEditor__yes").is(":checked");
+            $("#@onChangedSelectorId .js-@(BlockName)__checkboxButton").on("click", function (event) {
+                var boolEditorValue = $(this).find(".@(DefaultBlockName)__checkbox").is(":checked");
                                 
                 $("#@onChangedSelectorId").trigger("change", [boolEditorValue]);
             });
