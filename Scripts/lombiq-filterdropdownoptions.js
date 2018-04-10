@@ -30,15 +30,20 @@
             var plugin = this;
             var parentSelect = "select[name='" + plugin.settings.parentDropdownName + "']";
 
-            $(parentSelect).change(function () {
+            var parentSelectChange = function () {
                 $(plugin.element).empty().data("options");
-                let selectedValue = $(parentSelect).val();
-                let currentOptions = plugin.settings.valueStructures[selectedValue];
+                var selectedValue = $(parentSelect).val();
+                var currentOptions = plugin.settings.valueStructures[selectedValue];
                 $.each(currentOptions, function (i) {
-                    let option = currentOptions[i];
+                    var option = currentOptions[i];
                     $(plugin.element).append($("<option>").text(option.Name).val(option.Value));
                 });
-            });
+            };
+
+            // Initially filter child dropdown options
+            parentSelectChange();
+
+            $(parentSelect).change(parentSelectChange);
         }
     });
     

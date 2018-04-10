@@ -10,20 +10,20 @@ namespace Lombiq.ContentEditors.Helpers
 {
     public static class TaxonomyFieldHelpers
     {
-        public static IList<SelectListItem> GetSelectListFromTerms(TaxonomyFieldViewModel viewModel)
+        public static IList<SelectListItem> GetSelectListFromTerms(TaxonomyFieldViewModel viewModel, int? parentId = null, int depth = int.MaxValue)
         {
             var selectedTerm = viewModel.SelectedTerms.FirstOrDefault();
+            var parentTermLevel = parentId == null ? 0 : viewModel.Terms.Where(term => term.Id == parentId).FirstOrDefault().GetLevels();
             var termEntries = viewModel.Terms;
-            var leavesOnly = viewModel.Settings.LeavesOnly;
             var selectListItems = new List<SelectListItem>();
 
             foreach (var entry in termEntries)
             {
                 if (!entry.Selectable ||
-                    (leavesOnly && termEntries.Any(term => term.Path.Contains(entry.Path + entry.Id))))
+                    (parentId != null || !entry.Path.Contains("/" + parentId) || (entry.GetLevels() - parentTermLevel) > depth))
                     continue;
 
-                var prefix = leavesOnly ? "" : new String('-', entry.GetLevels() * 2) + " ";
+                var prefix = new String(' ', (entry.GetLevels() - parentTermLevel) * 2);
 
                 selectListItems.Add(
                     new SelectListItem

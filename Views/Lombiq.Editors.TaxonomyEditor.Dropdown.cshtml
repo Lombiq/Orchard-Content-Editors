@@ -51,7 +51,7 @@
     <script type="text/javascript">
         ; (function ($) {
             $(function () {
-                $("select[name='@viewModel.Name']").lombiq_FilterDropdownOptions({
+                $("select[name='@(ViewData.TemplateInfo.HtmlFieldPrefix + "." + viewModel.Name)']").lombiq_FilterDropdownOptions({
                     parentDropdownName: "@viewModel.ParentDropdownEditorName",
                     valueStructures: @Html.Raw(Json.Encode(viewModel.ValueStructures))
                 });
