@@ -1,9 +1,9 @@
 ﻿using Lombiq.ContentEditors.Models;
 using Orchard.Taxonomies.Helpers;
 using Orchard.Taxonomies.ViewModels;
-using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Web.Mvc;
 
 namespace Lombiq.ContentEditors.Helpers
@@ -63,11 +63,16 @@ namespace Lombiq.ContentEditors.Helpers
 
         private static SelectListItem CreateSelectListItem(TermEntry term, string selectedTermName, int startingLevel)
         {
-            var prefix = new String(' ', (term.GetLevels() - startingLevel) * 2);
+            var prefix = new StringBuilder();
+            var nbsp = "\xA0\xA0\xA0\xA0";
+            for (int i = 0; i < (term.GetLevels() - startingLevel); i++)
+            {
+                prefix.Append(nbsp);
+            }
 
             return new SelectListItem
             {
-                Text = prefix + term.Name,
+                Text = prefix.ToString() + term.Name,
                 Value = term.Id.ToString(),
                 Selected = term.Name == selectedTermName
             };
