@@ -44,15 +44,15 @@ namespace Lombiq.ContentEditors.Helpers
             return selectListItems;
         }
 
-        public static IDictionary<string, IEnumerable<ValueNamePair>> CreateAllValueStructuresFromTerms(TaxonomyFieldViewModel viewModel)
+        public static IDictionary<string, IEnumerable<ValueNamePair>> CreateAllValueStructuresFromTerms(TaxonomyFieldViewModel viewModel, int parentLevel = 0, int depth = int.MaxValue)
         {
             var termEntries = viewModel.Terms;
-            var topLevelTermEntries = termEntries.Where(term => term.GetLevels() == 0).ToList();
+            var topLevelTermEntries = termEntries.Where(term => term.GetLevels() == parentLevel).ToList();
             var valueStructures = new Dictionary<string, IEnumerable<ValueNamePair>>();
 
             foreach (var entry in topLevelTermEntries)
             {
-                var children = termEntries.Where(term => term.Path.Contains(entry.Path + entry.Id))
+                var children = termEntries.Where(term => term.Path.Contains(entry.Path + entry.Id) && term.GetLevels() <= depth + parentLevel)
                     .Select(term => new ValueNamePair { Value = term.Id.ToString(), Name = term.Name }).ToList();
                 valueStructures[entry.Id.ToString()] = children;
             }
