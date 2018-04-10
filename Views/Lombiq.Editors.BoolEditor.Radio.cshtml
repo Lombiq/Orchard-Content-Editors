@@ -7,15 +7,18 @@
 
     const string DefaultBlockName = "BoolEditor";
     string BlockName = viewModel.BlockName ?? DefaultBlockName;
+    var RadioElementName = BlockName + "__checkbox";
+    var RadioButtonsElementName = BlockName + "__radioButtons";
+    var RadioButtonTrueElementName = BlockName + "__trueRadioButton";
 
     var boolAttributes = viewModel.BuildAttributes(new Dictionary<string, object>
     {
-    { "class", "form-control textbox " + DefaultBlockName + "__checkbox" }
+        { "class", "form-control textbox " + DefaultBlockName + "__checkbox" }
     });
 
     var labelAttributes = new Dictionary<string, object>
     {
-    { "class", "editorLabel " + DefaultBlockName + "__label" }
+        { "class", "editorLabel " + DefaultBlockName + "__label" }
     };
 
     if (viewModel.Required)
@@ -30,8 +33,8 @@
         boolAttributes["placeholder"] = viewModel.Placeholder;
     }
 
-    var yesBool = boolAttributes.ToDictionary(k => k.Key, k => k.Value);
-    yesBool["id"] = BlockName + "__yes";
+    var boolTrueAttributes = new Dictionary<string, object>(boolAttributes);
+    boolTrueAttributes["id"] = RadioButtonTrueElementName;
 
     var onChangedSelectorId = viewModel.Id ?? viewModel.Name.HtmlClassify();
 }
@@ -41,9 +44,9 @@
     {
         @Html.Label(viewModel.Name, viewModel.Label, labelAttributes)
     }
-    <div class="js-@(BlockName)__radioButtons">
+    <div class="@RadioButtonsElementName js-@RadioButtonsElementName">
         <label>
-            @Html.RadioButton(viewModel.Name, true, value, yesBool) @viewModel.TextTrue
+            @Html.RadioButton(viewModel.Name, true, value, boolTrueAttributes) @viewModel.TextTrue
         </label>
 
         <label>
@@ -60,9 +63,9 @@
 <script type="text/javascript">
     ; (function ($) {
         $(function () {
-            $("#@onChangedSelectorId .js-@(BlockName)__radioButtons").on("click", function (event) {
-                var boolEditorValue = $(this).find("#BoolEditor__yes").is(":checked");
-                                
+            $("#@onChangedSelectorId .js-@RadioButtonsElementName").on("click", function (event) {
+                var boolEditorValue = $(this).find("#@RadioButtonTrueElementName").is(":checked");
+
                 $("#@onChangedSelectorId").trigger("change", [boolEditorValue]);
             });
         });

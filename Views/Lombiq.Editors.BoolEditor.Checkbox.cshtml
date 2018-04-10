@@ -7,15 +7,17 @@
 
     const string DefaultBlockName = "BoolEditor";
     string BlockName = viewModel.BlockName ?? DefaultBlockName;
+    var CheckboxElementName = BlockName + "__checkbox";
+    var CheckboxButtonElementName = BlockName + "__checkboxButton";
 
     var boolAttributes = viewModel.BuildAttributes(new Dictionary<string, object>
     {
-    { "class", "form-control textbox " + DefaultBlockName + "__checkbox" }
+        { "class", "form-control textbox " + CheckboxElementName + " js-" + CheckboxElementName }
     });
 
     var labelAttributes = new Dictionary<string, object>
     {
-    { "class", "editorLabel " + DefaultBlockName + "_S_label" }
+        { "class", "editorLabel " + DefaultBlockName + "_S_label" }
     };
 
     if (viewModel.Required)
@@ -29,16 +31,12 @@
     {
         boolAttributes["placeholder"] = viewModel.Placeholder;
     }
-    
+
     var onChangedSelectorId = viewModel.Id ?? viewModel.Name.HtmlClassify();
 }
 
 <div id="@onChangedSelectorId" class="editor editorField form-group @DefaultBlockName @BlockName js-@viewModel.Name.HtmlClassify()">
-    @*@if (!string.IsNullOrEmpty(viewModel.Label))
-    {
-        @Html.Label(viewModel.Name, viewModel.Label, labelAttributes)
-    }*@
-    <div class="js-@(BlockName)__checkboxButton">
+    <div class="@CheckboxButtonElementName js-@CheckboxButtonElementName">
         <label>
             @Html.CheckBox(viewModel.Name, value, boolAttributes)
             @viewModel.Label
@@ -53,9 +51,9 @@
 <script type="text/javascript">
     ; (function ($) {
         $(function () {
-            $("#@onChangedSelectorId .js-@(BlockName)__checkboxButton").on("click", function (event) {
-                var boolEditorValue = $(this).find(".@(DefaultBlockName)__checkbox").is(":checked");
-                                
+            $("#@onChangedSelectorId .js-@CheckboxButtonElementName").on("click", function (event) {
+                var boolEditorValue = $(this).find(".js-@CheckboxElementName").is(":checked");
+
                 $("#@onChangedSelectorId").trigger("change", [boolEditorValue]);
             });
         });

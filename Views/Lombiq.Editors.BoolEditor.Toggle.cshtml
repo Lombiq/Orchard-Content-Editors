@@ -25,9 +25,7 @@
 
     <input class="js-@(BooleanFieldElementName)" type="hidden" name="@viewModel.Name" value="@viewModel.Value.ToString()">
 
-
     <div id="@onChangedSelectorId" class="@SwitcherElementName js-@SwitcherElementName">
-
         <div class="@string.Join(" ", SwitchElementName, OnSwitchElementName, "js-" + SwitchElementName, "js-" + OnSwitchElementName, value ? SwitchElementName + EnabledModifierName : "", value ? OnSwitchElementName + EnabledModifierName : "")">
             @viewModel.TextTrue
         </div>
@@ -49,8 +47,8 @@
                     val = booleanField.val();
                 booleanField.val(val === "True" ? "False" : "True").trigger("change");
 
-                                
-                $("#@onChangedSelectorId").trigger("change", [val.toLowerCase()=="true"]);
+
+                $("#@onChangedSelectorId").trigger("change", [val.toLowerCase() == "true"]);
 
                 $(this).children(".js-@SwitchElementName").toggleClass("@(SwitchElementName + EnabledModifierName)");
                 $(this).children(".js-@OnSwitchElementName").toggleClass("@(OnSwitchElementName + EnabledModifierName)");
