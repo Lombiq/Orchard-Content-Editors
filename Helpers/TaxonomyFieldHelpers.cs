@@ -10,28 +10,35 @@ namespace Lombiq.ContentEditors.Helpers
 {
     public static class TaxonomyFieldHelpers
     {
-        public static IList<SelectListItem> GetSelectListFromTerms(TaxonomyFieldViewModel viewModel, int? parentId = null, int depth = int.MaxValue)
+        public static IList<SelectListItem> GetSelectListFromTermsUnderParent(TaxonomyFieldViewModel viewModel, int? parentId = null, int depth = int.MaxValue)
         {
-            var selectedTerm = viewModel.SelectedTerms.FirstOrDefault();
+            var selectedTermName = viewModel.SelectedTerms.FirstOrDefault()?.Name;
             var parentTermLevel = parentId == null ? 0 : viewModel.Terms.Where(term => term.Id == parentId).FirstOrDefault().GetLevels();
-            var termEntries = viewModel.Terms;
             var selectListItems = new List<SelectListItem>();
 
-            foreach (var entry in termEntries)
+            foreach (var entry in viewModel.Terms)
             {
                 if (!entry.Selectable ||
-                    (parentId != null || !entry.Path.Contains("/" + parentId) || (entry.GetLevels() - parentTermLevel) > depth))
+                    (parentId != null || !entry.Path.Contains("/" + parentId) || (entry.GetLevels() - parentTermLevel) >= depth))
                     continue;
 
-                var prefix = new String(' ', (entry.GetLevels() - parentTermLevel) * 2);
+                selectListItems.Add(CreateSelectListItem(entry, selectedTermName, parentTermLevel));
+            }
 
-                selectListItems.Add(
-                    new SelectListItem
-                    {
-                        Text = prefix + entry.Name,
-                        Value = entry.Id.ToString(),
-                        Selected = selectedTerm != null && entry.Name == selectedTerm.Name
-                    });
+            return selectListItems;
+        }
+
+        public static IList<SelectListItem> GetSelectListFromTermsUnderLevel(TaxonomyFieldViewModel viewModel, int startingLevel = 0, int depth = int.MaxValue)
+        {
+            var selectedTermName = viewModel.SelectedTerms.FirstOrDefault()?.Name;
+            var selectListItems = new List<SelectListItem>();
+
+            foreach (var entry in viewModel.Terms)
+            {
+                if (!entry.Selectable || entry.GetLevels() < startingLevel || (entry.GetLevels() - startingLevel) >= depth)
+                    continue;
+
+                selectListItems.Add(CreateSelectListItem(entry, selectedTermName, startingLevel));
             }
 
             return selectListItems;
@@ -51,6 +58,19 @@ namespace Lombiq.ContentEditors.Helpers
             }
 
             return valueStructures;
+        }
+
+
+        private static SelectListItem CreateSelectListItem(TermEntry term, string selectedTermName, int startingLevel)
+        {
+            var prefix = new String(' ', (term.GetLevels() - startingLevel) * 2);
+
+            return new SelectListItem
+            {
+                Text = prefix + term.Name,
+                Value = term.Id.ToString(),
+                Selected = term.Name == selectedTermName
+            };
         }
     }
 }
