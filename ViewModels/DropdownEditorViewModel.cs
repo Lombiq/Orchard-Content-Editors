@@ -6,6 +6,7 @@ namespace Lombiq.ContentEditors.ViewModels
     public class DropdownEditorViewModel : EditorViewModel
     {
         public List<SelectListItem> SelectList { get; set; } = new List<SelectListItem>();
+        public bool HasDefaultEmptyValue { get; set; }
 
 
         public DropdownEditorViewModel(IEnumerable<string> values)
