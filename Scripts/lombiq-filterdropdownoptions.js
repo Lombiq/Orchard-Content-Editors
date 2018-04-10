@@ -31,12 +31,19 @@
             var parentSelect = "select[name='" + plugin.settings.parentDropdownName + "']";
 
             var parentSelectChange = function () {
+                var selectedValue = $(plugin.element).val();
                 $(plugin.element).empty().data("options");
-                var selectedValue = $(parentSelect).val();
-                var currentOptions = plugin.settings.valueStructures[selectedValue];
+
+                var parentSelectedValue = $(parentSelect).val();
+                var currentOptions = plugin.settings.valueStructures[parentSelectedValue];
+
                 $.each(currentOptions, function (i) {
-                    var option = currentOptions[i];
-                    $(plugin.element).append($("<option>").text(option.Name).val(option.Value));
+                    var currentOption = currentOptions[i];
+                    var optionTag = $("<option>").text(currentOption.Name).val(currentOption.Value);
+                    if (selectedValue === currentOption.Value) {
+                        optionTag.attr("selected", "selected");
+                    }
+                    $(plugin.element).append(optionTag);
                 });
             };
 
