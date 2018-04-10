@@ -8,7 +8,7 @@ namespace Lombiq.ContentEditors.ViewModels
     {
         public List<SelectListItem> SelectList { get; set; } = new List<SelectListItem>();
         public string ParentDropdownEditorName { get; set; }
-        public IEnumerable<ValueStructure> ValueStructures { get; set; }
+        public IDictionary<string, IEnumerable<ValueNamePair>> ValueStructures { get; set; }
 
 
         public DropdownEditorViewModel(IEnumerable<string> values)

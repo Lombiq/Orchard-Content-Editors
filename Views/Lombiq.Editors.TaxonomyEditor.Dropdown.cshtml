@@ -53,7 +53,7 @@
             $(function () {
                 $("select[name='@viewModel.Name']").lombiq_FilterDropdownOptions({
                     parentDropdownName: "@viewModel.ParentDropdownEditorName",
-                    valueStructures: "@Json.Encode(viewModel.ValueStructures)"
+                    valueStructures: @Html.Raw(Json.Encode(viewModel.ValueStructures))
                 });
             });
         })(jQuery);

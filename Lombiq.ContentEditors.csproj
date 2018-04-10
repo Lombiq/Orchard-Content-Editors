@@ -110,7 +110,7 @@
     <Compile Include="Models\EditorGroupDescriptor.cs" />
     <Compile Include="Models\AsyncEditorPart.cs" />
     <Compile Include="Models\AsyncEditorGroupResult.cs" />
-    <Compile Include="Models\ValueStructure.cs" />
+    <Compile Include="Models\ValueNamePair.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\AsyncEditorShapeTableProvider.cs" />
     <Compile Include="Services\EditorGroupsProviderBase.cs" />
