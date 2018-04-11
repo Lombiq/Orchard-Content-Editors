@@ -1,5 +1,4 @@
-﻿using Lombiq.ContentEditors.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Web.Mvc;
 
 namespace Lombiq.ContentEditors.ViewModels
@@ -9,7 +8,7 @@ namespace Lombiq.ContentEditors.ViewModels
         public List<SelectListItem> SelectList { get; set; } = new List<SelectListItem>();
         public bool HasDefaultEmptyValue { get; set; }
         public string ParentDropdownEditorName { get; set; }
-        public IDictionary<string, IEnumerable<ValueNamePair>> ValueStructures { get; set; }
+        public Dictionary<string, Dictionary<string, string>> ValueHierarchy { get; set; }
 
 
         public DropdownEditorViewModel(IEnumerable<string> values)

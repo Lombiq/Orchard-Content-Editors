@@ -50,9 +50,9 @@
     <script type="text/javascript">
         ; (function ($) {
             $(function () {
-                $("select[name='@(ViewData.TemplateInfo.HtmlFieldPrefix + "." + viewModel.Name)']").lombiq_FilterDropdownOptions({
-                    parentDropdownName: "@viewModel.ParentDropdownEditorName",
-                    valueStructures: @Html.Raw(Json.Encode(viewModel.ValueStructures))
+                $("select[name='@(ViewData.TemplateInfo.HtmlFieldPrefix + "." + viewModel.Name)']").lombiq_ConnectedValueSelector({
+                    parentElementName: "@viewModel.ParentDropdownEditorName",
+                    valueHierarchy: @Html.Raw(Json.Encode(viewModel.ValueHierarchy))
                 });
             });
         })(jQuery);

@@ -1,19 +1,21 @@
 ﻿/**
- * @summary     Lombiq - Filter Dropdown Options
- * @description Filters a <select>'s <option> tags based on the selected option of the parent <select>
+ * @summary     Lombiq - Connected Value Selector
+ * @description Connects a value selector control with a parent control to be able to react
+ *              to the parent changing its value by changing the set of selectable values.
+ *              Currently only supports select-option structures on both end.
  * @version     1.0
- * @file        lombiq-filterdropdownoptions.js
+ * @file        lombiq-connectedvalueselector.js
  * @author      Lombiq Technologies Ltd.
  */
 
 ; (function ($, window, document, undefined) {
     "use strict";
 
-    var pluginName = "lombiq_FilterDropdownOptions";
+    var pluginName = "lombiq_ConnectedValueSelector";
 
     var defaults = {
-        parentDropdownName: "",
-        valueStructures: ""
+        parentElementName: "",
+        valueHierarchy: ""
     };
     
     function Plugin(element, options) {
@@ -28,29 +30,30 @@
     $.extend(Plugin.prototype, {
         init: function () {
             var plugin = this;
-            var parentSelect = "select[name='" + plugin.settings.parentDropdownName + "']";
+            var parentElement = "select[name='" + plugin.settings.parentElementName + "']";
 
-            var parentSelectChange = function () {
+            var parentElementChanged = function () {
                 var selectedValue = $(plugin.element).val();
                 $(plugin.element).empty().data("options");
 
-                var parentSelectedValue = $(parentSelect).val();
-                var currentOptions = plugin.settings.valueStructures[parentSelectedValue];
+                var parentValue = $(parentElement).val();
+                var currentValues = plugin.settings.valueHierarchy[parentValue];
 
-                $.each(currentOptions, function (i) {
-                    var currentOption = currentOptions[i];
-                    var optionTag = $("<option>").text(currentOption.Name).val(currentOption.Value);
-                    if (selectedValue === currentOption.Value) {
+                $.each(Object.keys(currentValues), function () {
+                    var optionTag = $("<option>").text(currentValues[this]).val(this);
+                    if (selectedValue === this) {
                         optionTag.attr("selected", "selected");
                     }
                     $(plugin.element).append(optionTag);
                 });
             };
 
-            // Initially filter child dropdown options
-            parentSelectChange();
+            if (parentElement) {
+                // Initially filter child dropdown options
+                parentElementChanged();
 
-            $(parentSelect).change(parentSelectChange);
+                $(parentElement).change(parentElementChanged);
+            }
         }
     });
     

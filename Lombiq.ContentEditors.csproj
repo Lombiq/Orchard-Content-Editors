@@ -111,7 +111,6 @@
     <Compile Include="Models\EditorGroupDescriptor.cs" />
     <Compile Include="Models\AsyncEditorPart.cs" />
     <Compile Include="Models\AsyncEditorGroupResult.cs" />
-    <Compile Include="Models\ValueNamePair.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\AsyncEditorShapeTableProvider.cs" />
     <Compile Include="Authorization\DynamicGroupPermissions.cs" />
@@ -134,7 +133,7 @@
     <Content Include="Content\Selectize\selectize.bootstrap3.css" />
     <Content Include="Content\Selectize\selectize.js" />
     <Content Include="Content\Selectize\selectize.min.js" />
-    <Content Include="Scripts\lombiq-filterdropdownoptions.js" />
+    <Content Include="Scripts\lombiq-connectedvalueselector.js" />
     <Content Include="Scripts\lombiq-ios-stickyinputfocusoverride.js" />
     <Content Include="Scripts\lombiq-asynceditor.js" />
     <Compile Include="ResourceManifest.cs" />

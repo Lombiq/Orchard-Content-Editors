@@ -1,5 +1,4 @@
-﻿using Lombiq.ContentEditors.Models;
-using Orchard.Taxonomies.Helpers;
+﻿using Orchard.Taxonomies.Helpers;
 using Orchard.Taxonomies.ViewModels;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +9,8 @@ namespace Lombiq.ContentEditors.Helpers
 {
     public static class TaxonomyFieldHelpers
     {
-        public static IList<SelectListItem> GetSelectListFromTermsUnderParent(TaxonomyFieldViewModel viewModel, int? parentId = null, int depth = int.MaxValue)
+        public static IList<SelectListItem> GetSelectListFromTermsUnderParent(
+            TaxonomyFieldViewModel viewModel, int? parentId = null, int depth = int.MaxValue)
         {
             var selectedTermName = viewModel.SelectedTerms.FirstOrDefault()?.Name;
             var parentTermLevel = parentId == null ? 0 : viewModel.Terms.Where(term => term.Id == parentId).FirstOrDefault().GetLevels();
@@ -28,7 +28,8 @@ namespace Lombiq.ContentEditors.Helpers
             return selectListItems;
         }
 
-        public static IList<SelectListItem> GetSelectListFromTermsUnderLevel(TaxonomyFieldViewModel viewModel, int startingLevel = 0, int depth = int.MaxValue)
+        public static IList<SelectListItem> GetSelectListFromTermsUnderLevel(
+            TaxonomyFieldViewModel viewModel, int startingLevel = 0, int depth = int.MaxValue)
         {
             var selectedTermName = viewModel.SelectedTerms.FirstOrDefault()?.Name;
             var selectListItems = new List<SelectListItem>();
@@ -44,31 +45,29 @@ namespace Lombiq.ContentEditors.Helpers
             return selectListItems;
         }
 
-        public static IDictionary<string, IEnumerable<ValueNamePair>> CreateAllValueStructuresFromTerms(TaxonomyFieldViewModel viewModel, int parentLevel = 0, int depth = int.MaxValue)
+        public static Dictionary<string, Dictionary<string, string>> CreateValueHierarchyFromTerms(
+            TaxonomyFieldViewModel viewModel, int parentLevel = 0, int depth = int.MaxValue)
         {
             var termEntries = viewModel.Terms;
             var topLevelTermEntries = termEntries.Where(term => term.GetLevels() == parentLevel).ToList();
-            var valueStructures = new Dictionary<string, IEnumerable<ValueNamePair>>();
+            var valueHierarchy = new Dictionary<string, Dictionary<string, string>>();
 
             foreach (var entry in topLevelTermEntries)
             {
                 var children = termEntries.Where(term => term.Path.Contains(entry.Path + entry.Id) && term.GetLevels() <= depth + parentLevel)
-                    .Select(term => new ValueNamePair { Value = term.Id.ToString(), Name = term.Name }).ToList();
-                valueStructures[entry.Id.ToString()] = children;
+                    .ToDictionary(term => term.Id.ToString(), term => term.Name);
+                valueHierarchy.Add(entry.Id.ToString(), children);
             }
 
-            return valueStructures;
+            return valueHierarchy;
         }
 
 
         private static SelectListItem CreateSelectListItem(TermEntry term, string selectedTermName, int startingLevel)
         {
             var prefix = new StringBuilder();
-            var nbsp = "\xA0\xA0\xA0\xA0";
-            for (int i = 0; i < (term.GetLevels() - startingLevel); i++)
-            {
-                prefix.Append(nbsp);
-            }
+            var indentation = "\xA0\xA0\xA0\xA0";
+            for (int i = 0; i < (term.GetLevels() - startingLevel); i++) prefix.Append(indentation);
 
             return new SelectListItem
             {
