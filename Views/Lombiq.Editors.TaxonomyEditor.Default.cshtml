@@ -58,7 +58,7 @@
                                type="radio"
                                value="@taxonomyViewModel.Terms[termIndex].Id"
                                @if (entry.Id == taxonomyViewModel.SingleTermId) { <text> checked="checked" </text> }
-                               name="@($"{prefix}.SingleTermId")"
+                               name="@($"{prefix}.{nameof(Orchard.Taxonomies.ViewModels.TaxonomyFieldViewModel.SingleTermId)}")"
                                id="@elementId"
                                class="@(DefaultBlockName)__termRadioButton" />
                     }

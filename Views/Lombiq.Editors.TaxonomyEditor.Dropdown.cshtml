@@ -43,3 +43,18 @@
         @Html.Hidden($"Terms[{i}].Id", viewModel.SelectList[i].Value)
     }
 </div>
+
+
+@if (!string.IsNullOrEmpty(viewModel.ParentDropdownEditorName))
+{
+    <script type="text/javascript">
+        ; (function ($) {
+            $(function () {
+                $("select[name='@(ViewData.TemplateInfo.HtmlFieldPrefix + "." + viewModel.Name)']").lombiq_ConnectedValueSelector({
+                    parentElementName: "@viewModel.ParentDropdownEditorName",
+                    valueHierarchy: @Html.Raw(Json.Encode(viewModel.ValueHierarchy))
+                });
+            });
+        })(jQuery);
+    </script>
+}
