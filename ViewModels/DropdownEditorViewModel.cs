@@ -7,6 +7,8 @@ namespace Lombiq.ContentEditors.ViewModels
     {
         public List<SelectListItem> SelectList { get; set; } = new List<SelectListItem>();
         public bool HasDefaultEmptyValue { get; set; }
+        public string ParentDropdownEditorName { get; set; }
+        public Dictionary<string, Dictionary<string, string>> ValueHierarchy { get; set; }
 
 
         public DropdownEditorViewModel(IEnumerable<string> values)
@@ -16,7 +18,6 @@ namespace Lombiq.ContentEditors.ViewModels
 
         public DropdownEditorViewModel()
         {
-
         }
     }
 }
