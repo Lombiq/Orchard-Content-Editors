@@ -88,7 +88,7 @@
 
                 if (momentValue.isValid()) {
                     displayText = momentValue.format(plugin.settings.dateDisplayFormat);
-                    storeText = momentValue.format(plugin.settings.dateDisplayFormat);
+                    storeText = momentValue.format(plugin.settings.dateStoreFormat);
                 }
                 else {
                     if (plugin.settings.invalidDateFormatErrorText.length > 0) {
