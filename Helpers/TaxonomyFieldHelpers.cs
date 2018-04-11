@@ -19,7 +19,7 @@ namespace Lombiq.ContentEditors.Helpers
             foreach (var entry in viewModel.Terms)
             {
                 if (!entry.Selectable ||
-                    (parentId != null || !entry.Path.Contains("/" + parentId) || (entry.GetLevels() - parentTermLevel) >= depth))
+                    (parentId == null || !entry.Path.Contains("/" + parentId) || (entry.GetLevels() - parentTermLevel) > depth))
                     continue;
 
                 selectListItems.Add(CreateSelectListItem(entry, selectedTermName, parentTermLevel));
@@ -36,10 +36,12 @@ namespace Lombiq.ContentEditors.Helpers
 
             foreach (var entry in viewModel.Terms)
             {
-                if (!entry.Selectable || entry.GetLevels() < startingLevel || (entry.GetLevels() - startingLevel) >= depth)
+                var entryLevel = entry.GetLevels();
+
+                if (!entry.Selectable || entryLevel < startingLevel || (entryLevel - startingLevel) >= depth)
                     continue;
 
-                selectListItems.Add(CreateSelectListItem(entry, selectedTermName, startingLevel));
+                selectListItems.Add(CreateSelectListItem(entry, selectedTermName, entryLevel - startingLevel));
             }
 
             return selectListItems;
