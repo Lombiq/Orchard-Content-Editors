@@ -19,9 +19,9 @@ namespace Lombiq.ContentEditors.Services
 
 
         public AsyncEditorService(
-            IAuthorizer authorizer, 
-            IContentManager contentManager, 
-            IEditorGroupsProviderAccessor editorGroupsProviderAccessor, 
+            IAuthorizer authorizer,
+            IContentManager contentManager,
+            IEditorGroupsProviderAccessor editorGroupsProviderAccessor,
             IJsonConverter jsonConverter)
         {
             _authorizer = authorizer;
@@ -60,7 +60,7 @@ namespace Lombiq.ContentEditors.Services
                     continue;
                 }
 
-                if (GetEditorGroupsSettings(part).UnauthorizedEditorGroupBehavior == 
+                if (GetEditorGroupsSettings(part).UnauthorizedEditorGroupBehavior ==
                     UnauthorizedEditorGroupBehavior.AllowEditingUntilFirstUnauthorizedGroup)
                 {
                     break;
@@ -76,7 +76,7 @@ namespace Lombiq.ContentEditors.Services
             if (editorGroups == null) return Enumerable.Empty<EditorGroupDescriptor>();
 
             var completeGroupNames = !string.IsNullOrEmpty(part.CompletedEditorGroupNamesSerialized) ?
-                _jsonConverter.Deserialize<IEnumerable<string>>(part.CompletedEditorGroupNamesSerialized) : 
+                _jsonConverter.Deserialize<IEnumerable<string>>(part.CompletedEditorGroupNamesSerialized) :
                 Enumerable.Empty<string>();
 
             return completeGroupNames
@@ -125,8 +125,8 @@ namespace Lombiq.ContentEditors.Services
             var groupDescriptor = editorGroups.FirstOrDefault(editorGroup => editorGroup.Name == group);
             if (groupDescriptor == null) return null;
 
-            return groupDescriptor.Equals(editorGroups.Last()) ? 
-                null : 
+            return groupDescriptor.Equals(editorGroups.Last()) ?
+                null :
                 editorGroups[editorGroups.IndexOf(groupDescriptor) + 1];
         }
 
@@ -140,7 +140,7 @@ namespace Lombiq.ContentEditors.Services
             var groupDescriptor = editorGroups.FirstOrDefault(editorGroup => editorGroup.Name == group);
             if (groupDescriptor == null) return null;
 
-            return groupDescriptor == editorGroups.First() ? 
+            return groupDescriptor == editorGroups.First() ?
                 null :
                 editorGroups[editorGroups.IndexOf(groupDescriptor) - 1];
         }

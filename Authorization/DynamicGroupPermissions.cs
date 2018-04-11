@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using Lombiq.ContentEditors.Services;
+﻿using Lombiq.ContentEditors.Services;
 using Orchard.ContentManagement.MetaData;
 using Orchard.ContentManagement.MetaData.Models;
 using Orchard.Core.Contents;
 using Orchard.Environment.Extensions.Models;
 using Orchard.Security.Permissions;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Lombiq.ContentEditors.Authorization
 {
@@ -59,7 +57,7 @@ namespace Lombiq.ContentEditors.Authorization
 
 
         public DynamicGroupPermissions(
-            IContentDefinitionManager contentDefinitionManager, 
+            IContentDefinitionManager contentDefinitionManager,
             IEnumerable<IEditorGroupsProvider> editorGroupsProviders)
         {
             _contentDefinitionManager = contentDefinitionManager;

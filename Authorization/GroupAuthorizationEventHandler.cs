@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using Lombiq.ContentEditors.Models;
+﻿using Lombiq.ContentEditors.Models;
 using Orchard.ContentManagement;
 using Orchard.ContentManagement.Aspects;
 using Orchard.Core.Contents;
@@ -30,9 +26,9 @@ namespace Lombiq.ContentEditors.Authorization
         {
             var asyncEditorPart = context.Content.As<AsyncEditorPart>();
 
-            if (context.Granted || 
+            if (context.Granted ||
                 !context.Content.Has<ICommonPart>() ||
-                asyncEditorPart == null || 
+                asyncEditorPart == null ||
                 string.IsNullOrEmpty(asyncEditorPart.CurrentEditorGroup?.Name))
             {
                 return;
