@@ -240,7 +240,7 @@
     <Content Include="Views\Lombiq.Editors.BoolEditor.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Lombiq.Editors.BoolEditor.Radio.cshtml" />
+    <Content Include="Views\Lombiq.Editors.BoolEditor.RadioButtons.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Lombiq.Editors.BoolEditor.Toggle.cshtml" />

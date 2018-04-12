@@ -14,7 +14,7 @@ namespace Lombiq.ContentEditors.ViewModels
     {
         public string Id { get; set; }
         public RenderMode RenderMode { get; set; } = RenderMode.RadioButtons;
-        public LocalizedString TextTrue { get; set; } = new LocalizedString("Yes");
-        public LocalizedString TextFalse { get; set; } = new LocalizedString("No");
+        public LocalizedString TextTrue { get; set; }
+        public LocalizedString TextFalse { get; set; }
     }
 }

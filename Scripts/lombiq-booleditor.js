@@ -18,15 +18,15 @@
         radioButtonsClass: "",
         checkboxButtonClass: "",
         checkboxClass: "",
-        booleanFieldClass: ".js-@BooleanFieldElementName",
-        switchClass: ".js-@SwitchElementName",
-        switcherClass: ".js-@SwitcherElementName",
-        switchClassName: "@SwitchElementName",
-        enabledModifierClassName: "@EnabledModifierName",
-        onSwitchClassname: "@OnSwitchElementName",
-        offSwitchClassname: "@OffSwitchElementName",
-        onSwitchClass: ".js-@OnSwitchElementName",
-        offSwitchClass: ".js-@OffSwitchElementName"
+        booleanFieldClass: ".",
+        switchClass: ".",
+        switcherClass: "",
+        switchClassName: "",
+        enabledModifierClassName: "",
+        onSwitchClassname: "",
+        offSwitchClassname: "",
+        onSwitchClass: "",
+        offSwitchClass: ""
     }
 
     function Plugin(element, options) {

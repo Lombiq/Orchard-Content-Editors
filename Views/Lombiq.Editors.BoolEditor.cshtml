@@ -2,6 +2,8 @@
 
 @{
     var viewModel = Model.ViewModel as BoolEditorViewModel;
+    viewModel.TextTrue = string.IsNullOrEmpty(viewModel.TextTrue.Text) ? T("Yes") : viewModel.TextTrue;
+    viewModel.TextFalse = string.IsNullOrEmpty(viewModel.TextFalse.Text) ? T("No") : viewModel.TextFalse;
 }
 
 @switch (viewModel.RenderMode)
@@ -10,7 +12,7 @@
         @Display.Lombiq_Editors_BoolEditor_Checkbox(ViewModel: viewModel)
         break;
     case RenderMode.RadioButtons:
-        @Display.Lombiq_Editors_BoolEditor_Radio(ViewModel: viewModel)
+        @Display.Lombiq_Editors_BoolEditor_RadioButtons(ViewModel: viewModel)
         break;
     case RenderMode.Toggle:
         @Display.Lombiq_Editors_BoolEditor_Toggle(ViewModel: viewModel)
