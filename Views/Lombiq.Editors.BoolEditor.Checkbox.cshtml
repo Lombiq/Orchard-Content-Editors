@@ -54,9 +54,11 @@
         $(function () {
             $("#@onChangedSelectorId").lombiq_BoolEditor({
                 renderMode: "@viewModel.RenderMode",
-                onChangedSelectorId: "#@onChangedSelectorId",
-                checkboxButtonClass: ".js-@CheckboxButtonElementName",
-                checkboxClass: ".js-@CheckboxElementName"
+                checkboxSettings: {
+                    onChangedSelectorId: "#@onChangedSelectorId",
+                    checkboxButtonClass: ".js-@CheckboxButtonElementName",
+                    checkboxClass: ".js-@CheckboxElementName"
+                }
             });           
         });
     })(jQuery);

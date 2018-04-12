@@ -2,8 +2,8 @@
 
 @{
     var viewModel = Model.ViewModel as BoolEditorViewModel;
-    viewModel.TextTrue = string.IsNullOrEmpty(viewModel.TextTrue.Text) ? T("Yes") : viewModel.TextTrue;
-    viewModel.TextFalse = string.IsNullOrEmpty(viewModel.TextFalse.Text) ? T("No") : viewModel.TextFalse;
+    viewModel.TextTrue = viewModel.TextTrue ?? T("Yes");
+    viewModel.TextFalse = viewModel.TextFalse ?? T("No");
 }
 
 @switch (viewModel.RenderMode)

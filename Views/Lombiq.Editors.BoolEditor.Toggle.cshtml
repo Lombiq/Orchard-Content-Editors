@@ -39,17 +39,19 @@
     ; (function ($) {
         $(function () {
              $("#@onChangedSelectorId").lombiq_BoolEditor({
-                renderMode: "@viewModel.RenderMode",
-                onChangedSelectorId: "#@onChangedSelectorId",
-                booleanFieldClass: ".js-@BooleanFieldElementName",
-                switchClass: ".js-@SwitchElementName",
-                switcherClass: ".js-@SwitcherElementName",
-                switchClassName: "@SwitchElementName",
-                enabledModifierClassName: "@EnabledModifierName",
-                onSwitchClassname: "@OnSwitchElementName",
-                offSwitchClassname: "@OffSwitchElementName",
-                onSwitchClass: ".js-@OnSwitchElementName",
-                offSwitchClass: ".js-@OffSwitchElementName"
+                 renderMode: "@viewModel.RenderMode",
+                 toggleSettings: {
+                     onChangedSelectorId: "#@onChangedSelectorId",
+                     booleanFieldClass: ".js-@BooleanFieldElementName",
+                     switchClass: ".js-@SwitchElementName",
+                     switcherClass: ".js-@SwitcherElementName",
+                     switchClassName: "@SwitchElementName",
+                     enabledModifierClassName: "@EnabledModifierName",
+                     onSwitchClassName: "@OnSwitchElementName",
+                     offSwitchClassName: "@OffSwitchElementName",
+                     onSwitchClass: ".js-@OnSwitchElementName",
+                     offSwitchClass: ".js-@OffSwitchElementName"
+                 }
             });
         });
     })(jQuery);

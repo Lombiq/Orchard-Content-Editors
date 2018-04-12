@@ -65,9 +65,11 @@
         $(function () {
             $("#@onChangedSelectorId").lombiq_BoolEditor({
                 renderMode: "@viewModel.RenderMode",
-                onChangedSelectorId: "#@onChangedSelectorId",
-                radioButtonTrueId: "#@RadioButtonTrueElementName",
-                radioButtonsClass: ".js-@RadioButtonsElementName"
+                radioButtonsSettings: {
+                    onChangedSelectorId: "#@onChangedSelectorId",
+                    radioButtonTrueId: "#@RadioButtonTrueElementName",
+                    radioButtonsClass: ".js-@RadioButtonsElementName"
+                }
             });
         });
     })(jQuery);
