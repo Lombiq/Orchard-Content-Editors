@@ -5,9 +5,9 @@
 @using Orchard.Utility.Extensions
 
 @{
-    Style.Require(ResourceNames.jQueryUI);
+    Style.Require(ResourceNames.Lombiq_Editors_DateTimeEditor);
 
-    Script.Require(ResourceNames.jQueryUI).AtHead();
+    Script.Require(ResourceNames.Lombiq_Editors_DateTimeEditor).AtHead();
 
     var viewModel = Model.ViewModel as DateTimeEditorViewModel;
 
@@ -19,7 +19,7 @@
     var isDateEditor = viewModel.EditorType == DateTimeEditorType.Date ||
         viewModel.EditorType == DateTimeEditorType.DateWithTimeZoneConversion;
 
-    var classifiedName = $"{Html.NameForModel()}-{viewModel.Name}".HtmlClassify();
+    var classifiedName = Html.ClassifiedName(viewModel.Name);
     var hiddenFieldClassName = "js-" + classifiedName + "-value";
     var editorType = isDateEditor ? "text" : "time";
 
@@ -62,7 +62,7 @@
         IgnoreDate = viewModel.EditorType == DateTimeEditorType.Time
     };
 
-    var displayFormat = isDateEditor ? viewModel.DateDisplayFormat : "HH:mm";
+    var displayFormat = isDateEditor ? viewModel.MomentJsDateDisplayFormat : "HH:mm";
     var dateTimeString = viewModel.Value as string;
     if (viewModel.Value is DateTime?)
     {
@@ -99,20 +99,16 @@
     <script type="text/javascript">
         ; (function ($) {
             $(function () {
-                var $datepicker = $(".@classifiedName");
-                var $hiddenfield = $(".@hiddenFieldClassName");
-                $datepicker.datepicker({
-                    dateFormat: "@displayFormat",
-                    onSelect: function () {
-                        var selectedDate = $(this).datepicker("getDate");
-                        selectedDate.setMinutes(selectedDate.getMinutes() - selectedDate.getTimezoneOffset());
-                        $hiddenfield.val(selectedDate.toISOString().split("T")[0]);
-                    }
-                });
+
+                var dateTimeEditorPlugin = $(".@classifiedName").lombiq_Editors_DateTimeEditor({
+                    dateTimeValueInputClassName: ".@hiddenFieldClassName",
+                    invalidDateFormatErrorText: "@HttpUtility.JavaScriptStringEncode(T("Invalid date format given. Expected format: {0}", displayFormat).Text)",
+                    dateDisplayFormat: "@displayFormat"
+                })[0];
 
                 @if (!string.IsNullOrEmpty(dateTimeString))
                 { 
-                    @:$datepicker.datepicker("setDate", new Date("@dateTimeString"));
+                    @:dateTimeEditorPlugin.setDate(new Date("@dateTimeString"));
                 }
                 
                 $(".ui-datepicker").hide();

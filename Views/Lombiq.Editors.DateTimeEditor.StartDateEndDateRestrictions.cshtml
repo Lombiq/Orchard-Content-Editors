@@ -1,0 +1,42 @@
+﻿@using Orchard.Utility.Extensions
+
+@model dynamic
+
+@{
+    string startDateFieldName = Model.StartDateFieldName;
+    string endDateFieldName = Model.EndDateFieldName;
+
+    if (string.IsNullOrEmpty(startDateFieldName) || string.IsNullOrEmpty(endDateFieldName))
+    {
+        return;
+    }
+}
+
+<script type="text/javascript">
+    ; (function ($) {
+        $(function () {
+            var startDatePicker = $(".@(startDateFieldName.HtmlClassify())").lombiq_Editors_DateTimeEditor()[0];
+            var endDatePicker = $(".@(endDateFieldName.HtmlClassify())").lombiq_Editors_DateTimeEditor()[0];
+
+            startDatePicker.settings.dateChanged = function (startDate) {
+                if (startDate) {
+                    var endDate = endDatePicker.getDate();
+
+                    if (!endDate || startDate > endDate) {
+                        endDatePicker.setDate(startDate);
+                    }
+                }
+            };
+
+            endDatePicker.settings.dateChanged = function (endDate) {
+                if (endDate) {
+                    var startDate = startDatePicker.getDate();
+
+                    if (!startDate || startDate > endDate) {
+                        startDatePicker.setDate(endDate);
+                    }
+                }
+            };
+        });
+    })(jQuery);
+</script>
