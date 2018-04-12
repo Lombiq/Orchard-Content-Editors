@@ -53,7 +53,6 @@
             switch (plugin.settings.renderMode) {
                 case "RadioButtons":
                     $(plugin.settings.radioButtonsSettings.onChangedSelectorId + " " + plugin.settings.radioButtonsSettings.radioButtonsClass).on("click", function (event) {
-
                         var boolEditorValue = $(this).find(plugin.settings.radioButtonsSettings.radioButtonTrueId).is(":checked");
 
                         $(plugin.settings.radioButtonsSettings.onChangedSelectorId).trigger("change", [boolEditorValue]);
@@ -64,12 +63,12 @@
                         // For some reason, the click event is triggered twice when rendered in a modal window.
                         event.stopImmediatePropagation();
 
-                        var booleanField = $(this).siblings(plugin.settings.toggleSettings.booleanFieldClass),
-                            val = booleanField.val();
+                        var booleanField = $(this).siblings(plugin.settings.toggleSettings.booleanFieldClass);
+                        var value = booleanField.val();
 
-                        booleanField.val(val === "True" ? "False" : "True").trigger("change");
+                        booleanField.val(value === "True" ? "False" : "True").trigger("change");
 
-                        $(plugin.settings.toggleSettings.onChangedSelectorId).trigger("change", [val.toLowerCase() == "false"]);
+                        $(plugin.settings.toggleSettings.onChangedSelectorId).trigger("change", [value.toLowerCase() == "false"]);
 
                         $(this).children(plugin.settings.toggleSettings.switchClass).toggleClass(plugin.settings.toggleSettings.switchClassName + plugin.settings.toggleSettings.enabledModifierClassName);
                         $(this).children(plugin.settings.toggleSettings.onSwitchClass).toggleClass(plugin.settings.toggleSettings.onSwitchClassName + plugin.settings.toggleSettings.enabledModifierClassName);
