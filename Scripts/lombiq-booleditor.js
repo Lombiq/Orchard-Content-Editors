@@ -1,6 +1,6 @@
 ﻿/**
  * @summary     Lombiq - Bool Editor
- * @description Initializes a content picker shape and uses the parent window as the container of the content picker settings.
+ * @description Initializes Bool Editors based on render mode and extending jQuery with ShowHideClassByBoolEditorId.
  * @version     1.0
  * @file        lombiq-booleditor.js
  * @author      Lombiq Technologies Ltd.
@@ -58,9 +58,10 @@
 
                         var booleanField = $(this).siblings(plugin.settings.booleanFieldClass),
                             val = booleanField.val();
+
                         booleanField.val(val === "True" ? "False" : "True").trigger("change");
 
-                        $(plugin.settings.onChangedSelectorId).trigger("change", [val.toLowerCase() == "true"]);
+                        $(plugin.settings.onChangedSelectorId).trigger("change", [val.toLowerCase() == "false"]);
 
                         $(this).children(plugin.settings.switchClass).toggleClass(plugin.settings.switchClassName + plugin.settings.enabledModifierClassName);
                         $(this).children(plugin.settings.onSwitchClass).toggleClass(plugin.settings.onSwitchClassname + plugin.settings.enabledModifierClassName);

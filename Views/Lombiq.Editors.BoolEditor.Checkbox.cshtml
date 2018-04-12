@@ -5,10 +5,11 @@
     var viewModel = Model.ViewModel as BoolEditorViewModel;
     var value = (viewModel.Value as bool?) ?? false;
 
-    const string DefaultBlockName = "BoolEditor";
+    const string DefaultBlockName = "checkboxBoolEditor";
     string BlockName = viewModel.BlockName ?? DefaultBlockName;
     var CheckboxElementName = BlockName + "__checkbox";
     var CheckboxButtonElementName = BlockName + "__checkboxButton";
+    var LabelElementName = BlockName + "__label";
 
     var boolAttributes = viewModel.BuildAttributes(new Dictionary<string, object>
     {
@@ -37,7 +38,7 @@
 
 <div id="@onChangedSelectorId" class="editor editorField form-group @DefaultBlockName @BlockName js-@viewModel.Name.HtmlClassify()">
     <div class="@CheckboxButtonElementName js-@CheckboxButtonElementName">
-        <label>
+        <label class="@LabelElementName">
             @Html.CheckBox(viewModel.Name, value, boolAttributes)
             @viewModel.Label
         </label>
