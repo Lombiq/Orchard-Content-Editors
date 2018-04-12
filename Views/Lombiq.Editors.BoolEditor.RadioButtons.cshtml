@@ -7,13 +7,13 @@
 
     const string DefaultBlockName = "radioButtonsBoolEditor";
     string BlockName = viewModel.BlockName ?? DefaultBlockName;
-    var RadioElementName = BlockName + "__checkbox";
     var RadioButtonsElementName = BlockName + "__radioButtons";
     var RadioButtonTrueElementName = BlockName + "__trueRadioButton";
+    var RadioButtonTextLabel = BlockName + "__textLabel";
 
     var boolAttributes = viewModel.BuildAttributes(new Dictionary<string, object>
     {
-        { "class", "form-control textbox " + DefaultBlockName + "__checkbox" }
+        { "class", DefaultBlockName + "__radioButton" }
     });
 
     var labelAttributes = new Dictionary<string, object>
@@ -45,11 +45,11 @@
         @Html.Label(viewModel.Name, viewModel.Label, labelAttributes)
     }
     <div class="@RadioButtonsElementName js-@RadioButtonsElementName">
-        <label>
+        <label class="@RadioButtonTextLabel">
             @Html.RadioButton(viewModel.Name, true, value, boolTrueAttributes) @viewModel.TextTrue
         </label>
 
-        <label>
+        <label class="@RadioButtonTextLabel">
             @Html.RadioButton(viewModel.Name, false, !value, boolAttributes) @viewModel.TextFalse
         </label>
 
