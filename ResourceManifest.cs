@@ -19,6 +19,8 @@ namespace Lombiq.ContentEditors
             manifest.DefineScript(Lombiq_AsyncEditor).SetUrl("lombiq-asynceditor.js").SetDependencies(jQuery, Uri_Js);
             manifest.DefineScript(Lombiq_AsyncEditorWrapper).SetUrl("lombiq-asynceditorwrapper.js").SetDependencies(jQuery, Uri_Js);
 
+            manifest.DefineScript(Lombiq_BoolEditor).SetUrl("lombiq-booleditor.js").SetDependencies(jQuery);
+
             manifest.DefineScript(Lombiq_ConnectedValueSelector).SetUrl("lombiq-connectedvalueselector.js").SetDependencies(jQuery);
         }
     }

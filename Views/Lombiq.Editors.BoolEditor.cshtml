@@ -16,24 +16,3 @@
         @Display.Lombiq_Editors_BoolEditor_Toggle(ViewModel: viewModel)
         break;
 }
-
-<script type="text/javascript">
-    ; (function ($) {
-        $(function () {
-            $.fn.extend({
-                ShowHideClassByBoolEditorId: function (targetClass) {
-                    $("#" + this.selector).on('change', function (e, boolEditorValue) {
-                        if (boolEditorValue == null) return;
-
-                        if (boolEditorValue) {
-                            $("." + targetClass).show();
-                        }
-                        else {
-                            $("." + targetClass).hide();
-                        }
-                    });
-                }
-            });
-        });
-    })(jQuery);
-</script>

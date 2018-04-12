@@ -51,11 +51,12 @@
 <script type="text/javascript">
     ; (function ($) {
         $(function () {
-            $("#@onChangedSelectorId .js-@CheckboxButtonElementName").on("click", function (event) {
-                var boolEditorValue = $(this).find(".js-@CheckboxElementName").is(":checked");
-
-                $("#@onChangedSelectorId").trigger("change", [boolEditorValue]);
-            });
+            $("#@onChangedSelectorId").lombiq_BoolEditor({
+                renderMode: "@viewModel.RenderMode",
+                onChangedSelectorId: "#@onChangedSelectorId",
+                checkboxButtonClass: ".js-@CheckboxButtonElementName",
+                checkboxClass: ".js-@CheckboxElementName"
+            });           
         });
     })(jQuery);
 </script>

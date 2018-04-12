@@ -38,19 +38,18 @@
 <script type="text/javascript">
     ; (function ($) {
         $(function () {
-            $(".js-@SwitcherElementName").on("click", function (event) {
-                // For some reason, the click event is triggered twice when rendered in a modal window.
-                event.stopImmediatePropagation();
-
-                var booleanField = $(this).siblings(".js-@BooleanFieldElementName"),
-                    val = booleanField.val();
-                booleanField.val(val === "True" ? "False" : "True").trigger("change");
-
-                $("#@onChangedSelectorId").trigger("change", [val.toLowerCase() == "true"]);
-
-                $(this).children(".js-@SwitchElementName").toggleClass("@(SwitchElementName + EnabledModifierName)");
-                $(this).children(".js-@OnSwitchElementName").toggleClass("@(OnSwitchElementName + EnabledModifierName)");
-                $(this).children(".js-@OffSwitchElementName").toggleClass("@(OffSwitchElementName + EnabledModifierName)");
+             $("#@onChangedSelectorId").lombiq_BoolEditor({
+                renderMode: "@viewModel.RenderMode",
+                onChangedSelectorId: "#@onChangedSelectorId",
+                booleanFieldClass: ".js-@BooleanFieldElementName",
+                switchClass: ".js-@SwitchElementName",
+                switcherClass: ".js-@SwitcherElementName",
+                switchClassName: "@SwitchElementName",
+                enabledModifierClassName: "@EnabledModifierName",
+                onSwitchClassname: "@OnSwitchElementName",
+                offSwitchClassname: "@OffSwitchElementName",
+                onSwitchClass: ".js-@OnSwitchElementName",
+                offSwitchClass: ".js-@OffSwitchElementName"
             });
         });
     })(jQuery);
