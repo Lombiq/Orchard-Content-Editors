@@ -11,6 +11,7 @@
         public const string Lombiq_AsyncEditor = Prefix + "AsyncEditor";
         public const string Lombiq_AsyncEditorWrapper = Prefix + "AsyncEditorWrapper";
         public const string Lombiq_BoolEditor = Prefix + "BoolEditor";
+        public const string Lombiq_Editors_DateTimeEditor = Prefix + "Editors.DateTimeEditor";
         public const string iOS_StickyInputFocusOverride = Prefix + "iOS.StickyInputFocusOverride";
         public const string Lombiq_ConnectedValueSelector = Prefix + "ConnectedValueSelector";
 

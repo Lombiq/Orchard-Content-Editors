@@ -134,6 +134,7 @@
     <Content Include="Content\Selectize\selectize.bootstrap3.css" />
     <Content Include="Content\Selectize\selectize.js" />
     <Content Include="Content\Selectize\selectize.min.js" />
+    <Content Include="Scripts\lombiq-editors-datetimeeditor.js" />
     <Content Include="Scripts\lombiq-connectedvalueselector.js" />
     <Content Include="Scripts\lombiq-booleditor.js" />
     <Content Include="Scripts\lombiq-ios-stickyinputfocusoverride.js" />
@@ -232,7 +233,9 @@
   <ItemGroup>
     <Content Include="Views\AsyncEditor.Actions.Submit.cshtml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Views\Lombiq.Editors.DateTimeEditor.StartDateEndDateRestrictions.cshtml" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Lombiq.Editors.DropdownEditor.cshtml" />
   </ItemGroup>
