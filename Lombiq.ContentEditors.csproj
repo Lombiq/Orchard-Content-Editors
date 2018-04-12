@@ -101,6 +101,7 @@
     <Compile Include="Controllers\AsyncEditorControllerBase.cs" />
     <Compile Include="Controllers\AsyncEditorController.cs" />
     <Compile Include="Drivers\AsyncEditorPartDriver.cs" />
+    <Compile Include="Authorization\GroupAuthorizationEventHandler.cs" />
     <Compile Include="Extensions\HtmlHelperExtensions.cs" />
     <Compile Include="Handlers\AsyncEditorPartHandler.cs" />
     <Compile Include="Helpers\TaxonomyFieldHelpers.cs" />
@@ -112,6 +113,7 @@
     <Compile Include="Models\AsyncEditorGroupResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\AsyncEditorShapeTableProvider.cs" />
+    <Compile Include="Authorization\DynamicGroupPermissions.cs" />
     <Compile Include="Services\EditorGroupsProviderBase.cs" />
     <Compile Include="Services\RenderContextPlacementParseMatchProvider.cs" />
     <Compile Include="Services\AsyncEditorService.cs" />
@@ -132,6 +134,7 @@
     <Content Include="Content\Selectize\selectize.bootstrap3.css" />
     <Content Include="Content\Selectize\selectize.js" />
     <Content Include="Content\Selectize\selectize.min.js" />
+    <Content Include="Scripts\lombiq-connectedvalueselector.js" />
     <Content Include="Scripts\lombiq-ios-stickyinputfocusoverride.js" />
     <Content Include="Scripts\lombiq-asynceditor.js" />
     <Compile Include="ResourceManifest.cs" />
@@ -228,6 +231,7 @@
   <ItemGroup>
     <Content Include="Views\AsyncEditor.Actions.Submit.cshtml" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="Views\Lombiq.Editors.DropdownEditor.cshtml" />
   </ItemGroup>
