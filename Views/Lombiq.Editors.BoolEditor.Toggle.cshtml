@@ -1,0 +1,58 @@
+﻿@using Lombiq.ContentEditors.ViewModels
+@using Orchard.Utility.Extensions
+
+@{
+    var viewModel = Model.ViewModel as BoolEditorViewModel;
+    var value = (viewModel.Value as bool?) ?? false;
+
+    var onChangedSelectorId = viewModel.Id ?? viewModel.Name.HtmlClassify();
+
+    const string BlockName = "toggleBoolEditor";
+    const string BooleanFieldElementName = BlockName + "__booleanField";
+    const string SwitcherElementName = BlockName + "__switcher";
+    const string SwitchElementName = BlockName + "__switch";
+    const string OnSwitchElementName = BlockName + "__onSwitch";
+    const string OffSwitchElementName = BlockName + "__offSwitch";
+    const string EnabledModifierName = "_enabled";
+}
+
+<div class="editor form-group @BlockName">
+
+    @if (!string.IsNullOrEmpty(viewModel.Label))
+    {
+        @Html.Label(viewModel.Label + ":", new { @class = BlockName + "__label" })
+    }
+
+    <input class="js-@(BooleanFieldElementName)" type="hidden" name="@viewModel.Name" value="@viewModel.Value.ToString()">
+
+    <div id="@onChangedSelectorId" class="@SwitcherElementName js-@SwitcherElementName">
+        <div class="@string.Join(" ", SwitchElementName, OnSwitchElementName, "js-" + SwitchElementName, "js-" + OnSwitchElementName, value ? SwitchElementName + EnabledModifierName : "", value ? OnSwitchElementName + EnabledModifierName : "")">
+            @viewModel.TextTrue
+        </div>
+        <div class="@string.Join(" ", SwitchElementName, OffSwitchElementName, "js-" + SwitchElementName, "js-" + OffSwitchElementName, value ? "" : SwitchElementName + EnabledModifierName, value ? "" : OffSwitchElementName + EnabledModifierName)">
+            @viewModel.TextFalse
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    ; (function ($) {
+        $(function () {
+             $("#@onChangedSelectorId").lombiq_BoolEditor({
+                 renderMode: "@viewModel.RenderMode",
+                 toggleSettings: {
+                     onChangedSelectorId: "#@onChangedSelectorId",
+                     booleanFieldClass: ".js-@BooleanFieldElementName",
+                     switchClass: ".js-@SwitchElementName",
+                     switcherClass: ".js-@SwitcherElementName",
+                     switchClassName: "@SwitchElementName",
+                     enabledModifierClassName: "@EnabledModifierName",
+                     onSwitchClassName: "@OnSwitchElementName",
+                     offSwitchClassName: "@OffSwitchElementName",
+                     onSwitchClass: ".js-@OnSwitchElementName",
+                     offSwitchClass: ".js-@OffSwitchElementName"
+                 }
+            });
+        });
+    })(jQuery);
+</script>

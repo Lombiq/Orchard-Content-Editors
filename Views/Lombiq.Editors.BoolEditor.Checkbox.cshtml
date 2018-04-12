@@ -1,0 +1,65 @@
+﻿@using Lombiq.ContentEditors.ViewModels
+@using Orchard.Utility.Extensions
+
+@{
+    var viewModel = Model.ViewModel as BoolEditorViewModel;
+    var value = (viewModel.Value as bool?) ?? false;
+
+    const string DefaultBlockName = "checkboxBoolEditor";
+    string BlockName = viewModel.BlockName ?? DefaultBlockName;
+    var CheckboxElementName = BlockName + "__checkbox";
+    var CheckboxButtonElementName = BlockName + "__checkboxButton";
+    var LabelElementName = BlockName + "__label";
+
+    var boolAttributes = viewModel.BuildAttributes(new Dictionary<string, object>
+    {
+        { "class", "form-control textbox " + CheckboxElementName + " js-" + CheckboxElementName }
+    });
+
+    var labelAttributes = new Dictionary<string, object>
+    {
+        { "class", "editorLabel " + DefaultBlockName + "__label" }
+    };
+
+    if (viewModel.Required)
+    {
+        boolAttributes["required"] = true;
+        boolAttributes["class"] = boolAttributes["class"] + " required";
+        labelAttributes["class"] = labelAttributes["class"] + " required";
+    }
+
+    if (!string.IsNullOrEmpty(viewModel.Placeholder))
+    {
+        boolAttributes["placeholder"] = viewModel.Placeholder;
+    }
+
+    var onChangedSelectorId = viewModel.Id ?? viewModel.Name.HtmlClassify();
+}
+
+<div id="@onChangedSelectorId" class="editor editorField form-group @DefaultBlockName @BlockName js-@viewModel.Name.HtmlClassify()">
+    <div class="@CheckboxButtonElementName js-@CheckboxButtonElementName">
+        <label class="@LabelElementName">
+            @Html.CheckBox(viewModel.Name, value, boolAttributes)
+            @viewModel.Label
+        </label>
+    </div>
+    @if (!string.IsNullOrEmpty(viewModel.Hint))
+    {
+        <div class="editorHint @(DefaultBlockName)__editorHint">@viewModel.Hint</div>
+    }
+</div>
+
+<script type="text/javascript">
+    ; (function ($) {
+        $(function () {
+            $("#@onChangedSelectorId").lombiq_BoolEditor({
+                renderMode: "@viewModel.RenderMode",
+                checkboxSettings: {
+                    onChangedSelectorId: "#@onChangedSelectorId",
+                    checkboxButtonClass: ".js-@CheckboxButtonElementName",
+                    checkboxClass: ".js-@CheckboxElementName"
+                }
+            });           
+        });
+    })(jQuery);
+</script>
