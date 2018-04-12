@@ -22,7 +22,7 @@ namespace Lombiq.ContentEditors.Helpers
                     (parentId == null || !entry.Path.Contains("/" + parentId) || (entry.GetLevels() - parentTermLevel) > depth))
                     continue;
 
-                selectListItems.Add(CreateSelectListItem(entry, selectedTermName, parentTermLevel));
+                selectListItems.Add(CreateSelectListItem(entry, selectedTermName, entry.GetLevels() - parentTermLevel));
             }
 
             return selectListItems;
