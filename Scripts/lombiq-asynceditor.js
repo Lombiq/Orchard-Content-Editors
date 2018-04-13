@@ -17,6 +17,11 @@
             Save: "Save",
             SaveAndNext: "SaveAndNext",
             Publish: "Publish"
+        },
+        eventNames: {
+            editorLoaded: pluginName + "_EditorLoaded",
+            editorPosted: pluginName + "_EditorPosted",
+            parentEditorPostRequested: pluginName + "_ParentEditorPostRequested"
         }
     };
 
@@ -65,8 +70,8 @@
         init: function () {
             var plugin = this;
 
-            plugin.$editorContainerElement = plugin.element.find(plugin.settings.editorPlaceholderElementClass).first();
-            plugin.$processingIndicatorElement = plugin.element.find(plugin.settings.processingIndicatorElementClass).first();
+            plugin.$editorContainerElement = $(plugin.element).find(plugin.settings.editorPlaceholderElementClass).first();
+            plugin.$processingIndicatorElement = $(plugin.element).find(plugin.settings.processingIndicatorElementClass).first();
 
             plugin.groupNameQueryStringParameter = plugin.settings.groupNameQueryStringParameter.length > 0 ?
                 plugin.settings.groupNameQueryStringParameter :
@@ -77,7 +82,7 @@
                 plugin.settings.contentType + "Id";
 
             // Find the closest potential parent AsyncEditor plugin.
-            var $closestLoaderElement = plugin.element
+            var $closestLoaderElement = $(plugin.element)
                 .parent()
                 .closest(plugin.settings.asyncEditorLoaderElementClass);
 
@@ -178,6 +183,8 @@
                 if (plugin.settings.callbacks.parentEditorPostRequestedCallback) {
                     plugin.settings.callbacks.parentEditorPostRequestedCallback(submitContext, eventContext);
                 }
+
+                $(plugin.element).trigger(staticVariables.eventNames.parentEditorPostRequested, [plugin, submitContext, eventContext]);
 
                 if (eventContext.cancel) deferred.reject();
                 else if (eventContext.postEditor) {
@@ -324,6 +331,8 @@
                     if (plugin.settings.callbacks.editorLoadedCallback) {
                         plugin.settings.callbacks.editorLoadedCallback(response);
                     }
+                    
+                    $(plugin.element).trigger(staticVariables.eventNames.editorLoaded, [plugin, response]);
                 },
                 complete: function () {
                     plugin.setProcessingIndicatorVisibility(false);
@@ -370,6 +379,8 @@
                     if (plugin.settings.callbacks.editorPostedCallback) {
                         plugin.settings.callbacks.editorPostedCallback(submitContext, response);
                     }
+
+                    $(plugin.element).trigger(staticVariable.eventNames.editorPosted, [plugin, submitContext, response]);
                 },
                 complete: function () {
                     plugin.setProcessingIndicatorVisibility(false);
@@ -446,7 +457,7 @@
             // If "options" is defined, but the plugin is not instantiated on this element ...
             if (options && !$.data(this, "plugin_" + pluginName)) {
                 // ... then create a plugin instance ...
-                $.data(this, "plugin_" + pluginName, new Plugin($(this), options));
+                $.data(this, "plugin_" + pluginName, new Plugin(this, options));
             }
 
             // ... and then return the plugin instance, which might be null
