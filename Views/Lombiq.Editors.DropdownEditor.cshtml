@@ -34,9 +34,9 @@
         {
             Text = "",
             Value = "",
-            Selected = !viewModel.SelectList.Any(selectListItem => selectListItem.Selected)
+            Selected = !viewModel.SelectList?.Any(selectListItem => selectListItem.Selected) ?? false
         };
-        viewModel.SelectList.Insert(0, emptySelectListItem);
+        viewModel.SelectList?.Insert(0, emptySelectListItem);
     }
 }
 
