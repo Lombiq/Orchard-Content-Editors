@@ -120,6 +120,7 @@
     <Compile Include="Services\EditorGroupsSettingsProviderAccessor.cs" />
     <Compile Include="Services\IAsyncEditorService.cs" />
     <Compile Include="Services\IEditorGroupsProviderAccessor.cs" />
+    <Compile Include="ViewModels\BoolEditorViewModel.cs" />
     <Compile Include="ViewModels\DateTimeEditorViewModel.cs" />
     <Compile Include="ViewModels\TaxonomyEditorViewModel.cs" />
     <Compile Include="ViewModels\InputFieldViewModel.cs" />
@@ -135,6 +136,7 @@
     <Content Include="Content\Selectize\selectize.min.js" />
     <Content Include="Scripts\lombiq-editors-datetimeeditor.js" />
     <Content Include="Scripts\lombiq-connectedvalueselector.js" />
+    <Content Include="Scripts\lombiq-booleditor.js" />
     <Content Include="Scripts\lombiq-ios-stickyinputfocusoverride.js" />
     <Content Include="Scripts\lombiq-asynceditor.js" />
     <Compile Include="ResourceManifest.cs" />
@@ -236,6 +238,18 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Lombiq.Editors.DropdownEditor.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Lombiq.Editors.BoolEditor.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Lombiq.Editors.BoolEditor.RadioButtons.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Lombiq.Editors.BoolEditor.Toggle.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Lombiq.Editors.BoolEditor.Checkbox.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

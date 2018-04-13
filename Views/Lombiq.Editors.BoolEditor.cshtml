@@ -1,0 +1,20 @@
+﻿@using Lombiq.ContentEditors.ViewModels
+
+@{
+    var viewModel = Model.ViewModel as BoolEditorViewModel;
+    viewModel.TextTrue = viewModel.TextTrue ?? T("Yes");
+    viewModel.TextFalse = viewModel.TextFalse ?? T("No");
+}
+
+@switch (viewModel.RenderMode)
+{
+    case RenderMode.Checkbox:
+        @Display.Lombiq_Editors_BoolEditor_Checkbox(ViewModel: viewModel)
+        break;
+    case RenderMode.RadioButtons:
+        @Display.Lombiq_Editors_BoolEditor_RadioButtons(ViewModel: viewModel)
+        break;
+    case RenderMode.Toggle:
+        @Display.Lombiq_Editors_BoolEditor_Toggle(ViewModel: viewModel)
+        break;
+}

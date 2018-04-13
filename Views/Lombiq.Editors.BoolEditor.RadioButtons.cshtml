@@ -1,0 +1,76 @@
+﻿@using Lombiq.ContentEditors.ViewModels
+@using Orchard.Utility.Extensions
+
+@{
+    var viewModel = Model.ViewModel as BoolEditorViewModel;
+    var value = (viewModel.Value as bool?) ?? false;
+
+    const string DefaultBlockName = "radioButtonsBoolEditor";
+    string BlockName = viewModel.BlockName ?? DefaultBlockName;
+    var RadioButtonsElementName = BlockName + "__radioButtons";
+    var RadioButtonTrueElementName = BlockName + "__trueRadioButton";
+    var RadioButtonTextLabel = BlockName + "__textLabel";
+
+    var boolAttributes = viewModel.BuildAttributes(new Dictionary<string, object>
+    {
+        { "class", DefaultBlockName + "__radioButton" }
+    });
+
+    var labelAttributes = new Dictionary<string, object>
+    {
+        { "class", "editorLabel " + DefaultBlockName + "__label" }
+    };
+
+    if (viewModel.Required)
+    {
+        boolAttributes["required"] = true;
+        boolAttributes["class"] = boolAttributes["class"] + " required";
+        labelAttributes["class"] = labelAttributes["class"] + " required";
+    }
+
+    if (!string.IsNullOrEmpty(viewModel.Placeholder))
+    {
+        boolAttributes["placeholder"] = viewModel.Placeholder;
+    }
+
+    var boolTrueAttributes = new Dictionary<string, object>(boolAttributes);
+    boolTrueAttributes["id"] = RadioButtonTrueElementName;
+
+    var onChangedSelectorId = viewModel.Id ?? viewModel.Name.HtmlClassify();
+}
+
+<div id="@onChangedSelectorId" class="editor editorField form-group @DefaultBlockName @BlockName js-@viewModel.Name.HtmlClassify()">
+    @if (!string.IsNullOrEmpty(viewModel.Label))
+    {
+        @Html.Label(viewModel.Name, viewModel.Label, labelAttributes)
+    }
+    <div class="@RadioButtonsElementName js-@RadioButtonsElementName">
+        <label class="@RadioButtonTextLabel">
+            @Html.RadioButton(viewModel.Name, true, value, boolTrueAttributes) @viewModel.TextTrue
+        </label>
+
+        <label class="@RadioButtonTextLabel">
+            @Html.RadioButton(viewModel.Name, false, !value, boolAttributes) @viewModel.TextFalse
+        </label>
+
+    </div>
+    @if (!string.IsNullOrEmpty(viewModel.Hint))
+    {
+        <div class="editorHint @(DefaultBlockName)__editorHint">@viewModel.Hint</div>
+    }
+</div>
+
+<script type="text/javascript">
+    ; (function ($) {
+        $(function () {
+            $("#@onChangedSelectorId").lombiq_BoolEditor({
+                renderMode: "@viewModel.RenderMode",
+                radioButtonsSettings: {
+                    onChangedSelectorId: "#@onChangedSelectorId",
+                    radioButtonTrueId: "#@RadioButtonTrueElementName",
+                    radioButtonsClass: ".js-@RadioButtonsElementName"
+                }
+            });
+        });
+    })(jQuery);
+</script>
