@@ -380,7 +380,7 @@
                         plugin.settings.callbacks.editorPostedCallback(submitContext, response);
                     }
 
-                    $(plugin.element).trigger(staticVariable.eventNames.editorPosted, [plugin, submitContext, response]);
+                    $(plugin.element).trigger(staticVariables.eventNames.editorPosted, [plugin, submitContext, response]);
                 },
                 complete: function () {
                     plugin.setProcessingIndicatorVisibility(false);
