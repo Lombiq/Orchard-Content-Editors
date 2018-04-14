@@ -37,11 +37,22 @@
                 $(plugin.element).empty().data("options");
 
                 var parentValue = $(parentElement).val();
+
+                if (!parentValue) return;
+
                 var currentValues = plugin.settings.valueHierarchy[parentValue];
 
-                $.each(Object.keys(currentValues), function () {
-                    var optionTag = $("<option>").text(currentValues[this]).val(this);
-                    if (selectedValue === this) {
+                var sortedCurrentValues = Object.keys(currentValues).map(function (key) {
+                    return [key, currentValues[key]];
+                });
+
+                sortedCurrentValues.sort(function (first, second) {
+                    return first[1].localeCompare(second[1]);
+                });
+
+                $.each(Object.keys(sortedCurrentValues), function () {
+                    var optionTag = $("<option>").text(sortedCurrentValues[this][1]).val(sortedCurrentValues[this][0]);
+                    if (selectedValue === sortedCurrentValues[this][0]) {
                         optionTag.attr("selected", "selected");
                     }
                     $(plugin.element).append(optionTag);
