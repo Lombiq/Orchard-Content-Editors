@@ -3,7 +3,8 @@
     public enum TaxonomyEditorFlavor
     {
         Default,
-        Dropdown
+        Dropdown,
+        Checkbox
     }
 
     public class TaxonomyEditorViewModel : DropdownEditorViewModel

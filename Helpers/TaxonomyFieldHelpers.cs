@@ -12,7 +12,7 @@ namespace Lombiq.ContentEditors.Helpers
         public static IList<SelectListItem> GetSelectListFromTermsUnderParent(
             TaxonomyFieldViewModel viewModel, int? parentId = null, int depth = int.MaxValue)
         {
-            var selectedTermName = viewModel.SelectedTerms.FirstOrDefault()?.Name;
+            var selectedTermNames = viewModel.SelectedTerms?.Select(term => term.Name) ?? Enumerable.Empty<string>();
             var parentTermLevel = parentId == null ? 0 : viewModel.Terms.Where(term => term.Id == parentId).FirstOrDefault().GetLevels();
             var selectListItems = new List<SelectListItem>();
 
@@ -22,7 +22,7 @@ namespace Lombiq.ContentEditors.Helpers
                     (parentId == null || !entry.Path.Contains("/" + parentId) || (entry.GetLevels() - parentTermLevel) > depth))
                     continue;
 
-                selectListItems.Add(CreateSelectListItem(entry, selectedTermName, entry.GetLevels() - parentTermLevel));
+                selectListItems.Add(CreateSelectListItem(entry, selectedTermNames, entry.GetLevels() - parentTermLevel));
             }
 
             return selectListItems;
@@ -31,7 +31,7 @@ namespace Lombiq.ContentEditors.Helpers
         public static IList<SelectListItem> GetSelectListFromTermsUnderLevel(
             TaxonomyFieldViewModel viewModel, int startingLevel = 0, int depth = int.MaxValue)
         {
-            var selectedTermName = viewModel.SelectedTerms.FirstOrDefault()?.Name;
+            var selectedTermNames = viewModel.SelectedTerms?.Select(term => term.Name) ?? Enumerable.Empty<string>();
             var selectListItems = new List<SelectListItem>();
 
             foreach (var entry in viewModel.Terms)
@@ -41,7 +41,7 @@ namespace Lombiq.ContentEditors.Helpers
                 if (!entry.Selectable || entryLevel < startingLevel || (entryLevel - startingLevel) >= depth)
                     continue;
 
-                selectListItems.Add(CreateSelectListItem(entry, selectedTermName, entryLevel - startingLevel));
+                selectListItems.Add(CreateSelectListItem(entry, selectedTermNames, entryLevel - startingLevel));
             }
 
             return selectListItems.OrderBy(item => item.Text).ToList();
@@ -65,7 +65,7 @@ namespace Lombiq.ContentEditors.Helpers
         }
 
 
-        private static SelectListItem CreateSelectListItem(TermEntry term, string selectedTermName, int startingLevel)
+        private static SelectListItem CreateSelectListItem(TermEntry term, IEnumerable<string> selectedTermNames, int startingLevel)
         {
             var prefix = new StringBuilder();
             var indentation = "\xA0\xA0\xA0\xA0";
@@ -75,7 +75,7 @@ namespace Lombiq.ContentEditors.Helpers
             {
                 Text = prefix.ToString() + term.Name,
                 Value = term.Id.ToString(),
-                Selected = term.Name == selectedTermName
+                Selected = selectedTermNames.Contains(term.Name)
             };
         }
     }

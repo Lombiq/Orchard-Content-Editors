@@ -1,0 +1,44 @@
+﻿@using Lombiq.ContentEditors.ViewModels
+
+@{
+    var viewModel = Model.ViewModel as TaxonomyEditorViewModel;
+
+    const string DefaultBlockName = "taxonomyCheckboxEditor";
+    string BlockName = viewModel.BlockName ?? DefaultBlockName;
+    var CheckBoxesListElementName = BlockName + "__list";
+    var CheckBoxesListItemElementName = BlockName + "__listItem";
+    var CheckBoxElementName = BlockName + "__checkbox";
+    var CheckboxTextLabel = BlockName + "__textLabel";
+    var termIndex = 0;
+
+    var labelAttributes = new Dictionary<string, object>
+    {
+        { "class", "editorLabel " + DefaultBlockName + "__label" }
+    };
+
+    if (viewModel.Required)
+    {
+        labelAttributes["class"] = labelAttributes["class"] + " required";
+    }
+}
+
+<div class="editor editorField form-group @DefaultBlockName @BlockName">
+    @if (!string.IsNullOrEmpty(viewModel.Label))
+    {
+        @Html.Label(viewModel.Label, labelAttributes)
+    }
+
+    <ul class="@CheckBoxesListElementName">
+        @foreach (var selectListItem in viewModel.SelectList)
+        {
+            <li class="@CheckBoxesListItemElementName @CheckBoxElementName">
+                <input @if (selectListItem.Disabled) { <text> disabled="disabled" </text> } type="checkbox" value="true" @if (selectListItem.Selected) { <text> checked="checked" </text> } name="@Html.Name($"Terms[{termIndex}].IsChecked")" id="@Html.Id($"Terms[{termIndex}].IsChecked")" data-term="@selectListItem.Text" />
+
+                @Html.Hidden($"Terms[{termIndex}].Id", selectListItem.Value)
+
+                <label class="forcheckbox @CheckboxTextLabel" for="@Html.Id($"Terms[{termIndex}].IsChecked")">@selectListItem.Text</label>
+            </li>
+            termIndex++;
+        }
+    </ul>
+</div>
