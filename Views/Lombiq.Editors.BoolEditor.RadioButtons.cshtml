@@ -3,7 +3,15 @@
 
 @{
     var viewModel = Model.ViewModel as BoolEditorViewModel;
-    var value = (viewModel.Value as bool?) ?? false;
+    var value = viewModel.Value as bool?;
+    var trueChecked = false;
+    var falseChecked = false;
+
+    if (value != null)
+    {
+        trueChecked = value.Value;
+        falseChecked = !value.Value;
+    }
 
     const string DefaultBlockName = "radioButtonsBoolEditor";
     string BlockName = viewModel.BlockName ?? DefaultBlockName;
@@ -46,11 +54,11 @@
     }
     <div class="@RadioButtonsElementName js-@RadioButtonsElementName">
         <label class="@RadioButtonTextLabel">
-            @Html.RadioButton(viewModel.Name, true, value, boolTrueAttributes) @viewModel.TextTrue
+            @Html.RadioButton(viewModel.Name, true, trueChecked, boolTrueAttributes) @viewModel.TextTrue
         </label>
 
         <label class="@RadioButtonTextLabel">
-            @Html.RadioButton(viewModel.Name, false, !value, boolAttributes) @viewModel.TextFalse
+            @Html.RadioButton(viewModel.Name, false, falseChecked, boolAttributes) @viewModel.TextFalse
         </label>
 
     </div>

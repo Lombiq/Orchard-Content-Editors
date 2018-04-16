@@ -44,7 +44,7 @@ namespace Lombiq.ContentEditors.Helpers
                 selectListItems.Add(CreateSelectListItem(entry, selectedTermName, entryLevel - startingLevel));
             }
 
-            return selectListItems;
+            return selectListItems.OrderBy(item => item.Text).ToList();
         }
 
         public static Dictionary<string, Dictionary<string, string>> CreateValueHierarchyFromTerms(
