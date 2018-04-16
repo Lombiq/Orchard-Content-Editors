@@ -128,6 +128,10 @@
     <Compile Include="ViewModels\FieldViewModel.cs" />
     <Compile Include="ViewModels\EditorViewModel.cs" />
     <Compile Include="ViewModels\DropdownEditorViewModel.cs" />
+    <Content Include="Content\LC-switch\demo.html" />
+    <Content Include="Content\LC-switch\lc_switch.css" />
+    <Content Include="Content\LC-switch\lc_switch.js" />
+    <Content Include="Content\LC-switch\lc_switch.min.js" />
     <Content Include="Content\URI.js\URI.js" />
     <Content Include="Content\URI.js\URI.min.js" />
     <Content Include="Scripts\lombiq-asynceditorwrapper.js" />
@@ -253,6 +257,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Lombiq.Editors.TaxonomyEditor.Checkbox.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\LC-switch\LICENSE" />
+    <Content Include="Content\LC-switch\README.md" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
