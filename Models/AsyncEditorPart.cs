@@ -16,6 +16,12 @@ namespace Lombiq.ContentEditors.Models
             set { this.Store(x => x.CompletedEditorGroupNamesSerialized, value); }
         }
 
+        public string LastUpdatedEditorGroupName
+        {
+            get { return this.Retrieve(x => x.LastUpdatedEditorGroupName); }
+            set { this.Store(x => x.LastUpdatedEditorGroupName, value); }
+        }
+
         private readonly LazyField<bool> _hasEditorGroups = new LazyField<bool>();
         internal LazyField<bool> HasEditorGroupsField => _hasEditorGroups;
         public bool HasEditorGroups => _hasEditorGroups.Value;
@@ -51,5 +57,9 @@ namespace Lombiq.ContentEditors.Models
         private readonly LazyField<EditorGroupDescriptor> _nextEditableAuthorizedGroup = new LazyField<EditorGroupDescriptor>();
         internal LazyField<EditorGroupDescriptor> NextEditableAuthorizedGroupField => _nextEditableAuthorizedGroup;
         public EditorGroupDescriptor NextEditableAuthorizedGroup => _nextEditableAuthorizedGroup.Value;
+
+        private readonly LazyField<EditorGroupDescriptor> _lastUpdatedEditorGroup = new LazyField<EditorGroupDescriptor>();
+        internal LazyField<EditorGroupDescriptor> LastUpdatedEditorGroupField => _lastUpdatedEditorGroup;
+        public EditorGroupDescriptor LastUpdatedEditorGroup => _lastUpdatedEditorGroup.Value;
     }
 }
