@@ -29,12 +29,12 @@ namespace Lombiq.ContentEditors.Handlers
                 part.AvailableAuthorizedEditorGroupsField.Loader(() =>
                     asyncEditorService.GetAvailableEditorGroups(part, true));
 
-                part.NextEditorGroupField.Loader(() =>
+                part.NextAuthorizedEditorGroupField.Loader(() =>
                     part.CurrentEditorGroup == null ?
                         null :
                         asyncEditorService.GetNextGroupDescriptor(part, part.CurrentEditorGroup.Name, true));
 
-                part.PreviousEditorGroupField.Loader(() =>
+                part.PreviousAuthorizedEditorGroupField.Loader(() =>
                     part.CurrentEditorGroup == null ?
                         null :
                         asyncEditorService.GetPreviousGroupDescriptor(part, part.CurrentEditorGroup.Name, true));
@@ -49,6 +49,9 @@ namespace Lombiq.ContentEditors.Handlers
                             .GetAuthorizedEditorGroups(part)
                             .FirstOrDefault(group => group.Name == part.LastUpdatedEditorGroupName) :
                         null);
+
+                part.IsAllEditorGroupsCompletedField.Loader(() => 
+                    !asyncEditorService.GetIncompleteEditorGroups(part).Any());
             });
         }
     }

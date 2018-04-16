@@ -36,7 +36,7 @@ namespace Lombiq.ContentEditors.Controllers
             T = NullLocalizer.Instance;
         }
 
-
+        
         #region Helpers
 
         protected virtual ActionResult EditResult(AsyncEditorPart part, string group = "")
