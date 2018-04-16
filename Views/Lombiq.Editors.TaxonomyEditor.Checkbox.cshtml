@@ -28,17 +28,17 @@
         @Html.Label(viewModel.Label, labelAttributes)
     }
 
-    <ul class="@CheckBoxesListElementName">
+    <div class="@CheckBoxesListElementName">
         @foreach (var selectListItem in viewModel.SelectList)
         {
-            <li class="@CheckBoxesListItemElementName @CheckBoxElementName">
+            <div class="@CheckBoxesListItemElementName @CheckBoxElementName">
                 <input @if (selectListItem.Disabled) { <text> disabled="disabled" </text> } type="checkbox" value="true" @if (selectListItem.Selected) { <text> checked="checked" </text> } name="@Html.Name($"Terms[{termIndex}].IsChecked")" id="@Html.Id($"Terms[{termIndex}].IsChecked")" data-term="@selectListItem.Text" />
 
                 @Html.Hidden($"Terms[{termIndex}].Id", selectListItem.Value)
 
                 <label class="forcheckbox @CheckboxTextLabel" for="@Html.Id($"Terms[{termIndex}].IsChecked")">@selectListItem.Text</label>
-            </li>
+            </div>
             termIndex++;
         }
-    </ul>
+    </div>
 </div>
