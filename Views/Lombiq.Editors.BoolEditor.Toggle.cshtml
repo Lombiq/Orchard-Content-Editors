@@ -7,21 +7,21 @@
     var BlockName = viewModel.BlockName ?? DefaultBlockName;
 
     var BooleanFieldElementName = BlockName + "__booleanField";
-    
+
 
     var toggleAttributes = viewModel.BuildAttributes(new Dictionary<string, object>
     {
         { "class", DefaultBlockName + "__toggle" }
     });
 
-    var expandableContainerDiv = Tag(Model, "div");
-    expandableContainerDiv.MergeAttributes(toggleAttributes);
+    var checkboxContainerDiv = Tag(Model, "div");
+    checkboxContainerDiv.MergeAttributes(toggleAttributes);
 }
 
 <div class="editor form-group @BlockName">
-    @expandableContainerDiv.StartElement
+    @checkboxContainerDiv.StartElement
         <input class="@BooleanFieldElementName" type="checkbox" name="@viewModel.Name" value="@Json.Encode(value)" @(value ? "checked=checked" : "") />
-    @expandableContainerDiv.EndElement
+    @checkboxContainerDiv.EndElement
 </div>
 
 <script type="text/javascript">
