@@ -30,7 +30,9 @@
             $(".@BlockName").lombiq_BoolEditor({
                 renderMode: "@viewModel.RenderMode",
                 toggleSettings: {
-                    booleanFieldClass: ".@BooleanFieldElementName"
+                    booleanFieldClass: ".@BooleanFieldElementName",
+                    textTrue: "@viewModel.TextTrue.Text",
+                    textFalse: "@viewModel.TextFalse.Text"
                 }
             });
         });
