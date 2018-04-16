@@ -24,16 +24,7 @@
             checkboxClass: "", // The class of the checkbox.
         },
         toggleSettings: {
-            onChangedSelectorId: "",
-            booleanFieldClass: ".", // Hidden input.
-            switchClass: ".", // Common class of switch buttons.
-            switcherClass: "", // The wrapper of the switch buttons.
-            switchClassName: "", // Only the name of the switchClass for further string concatenation.
-            enabledModifierClassName: "",
-            onSwitchClassName: "",
-            offSwitchClassName: "",
-            onSwitchClass: "",
-            offSwitchClass: ""
+            booleanFieldClass: "."            
         }
     }
 
@@ -59,22 +50,7 @@
                     });
                     break;
                 case "Toggle":
-                    $(plugin.settings.toggleSettings.switcherClass).on("click", function (event) {
-                        // For some reason, the click event is triggered twice when rendered in a modal window.
-                        event.stopImmediatePropagation();
-
-                        var booleanField = $(this).siblings(plugin.settings.toggleSettings.booleanFieldClass);
-                        var value = booleanField.val();
-
-                        booleanField.val(value === "True" ? "False" : "True").trigger("change");
-
-                        $(plugin.settings.toggleSettings.onChangedSelectorId).trigger("change", [value.toLowerCase() == "false"]);
-
-                        $(this).children(plugin.settings.toggleSettings.switchClass).toggleClass(plugin.settings.toggleSettings.switchClassName + plugin.settings.toggleSettings.enabledModifierClassName);
-                        $(this).children(plugin.settings.toggleSettings.onSwitchClass).toggleClass(plugin.settings.toggleSettings.onSwitchClassName + plugin.settings.toggleSettings.enabledModifierClassName);
-                        $(this).children(plugin.settings.toggleSettings.offSwitchClass).toggleClass(plugin.settings.toggleSettings.offSwitchClassName + plugin.settings.toggleSettings.enabledModifierClassName);
-                    });
-
+                    $(plugin.settings.toggleSettings.booleanFieldClass).lc_switch("Yes", "No");
                     break;
                 case "Checkbox":
                     $(plugin.settings.checkboxSettings.onChangedSelectorId + " " + plugin.settings.checkboxSettings.checkboxButtonClass).on("click", function (event) {
