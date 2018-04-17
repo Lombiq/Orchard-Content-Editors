@@ -23,6 +23,7 @@
         allowMultipleEditors: false,
         contentItemIdQueryStringParameter: "",
         multipleEditorsNotAllowedMessage: "Editing multiple items at the same is not allowed. Please save or cancel your current changes first.",
+        deleteItemConfirmationText: "Are you sure you want to delete this item?",
         editorLoadedCallback: function (data, $editor) { },
         deleteCallback: function (data) { },
         cancelCallback: function ($editor) { }
@@ -59,7 +60,15 @@
 
             if (plugin.settings.deleteItemActionElementClass) {
                 plugin.element.find(plugin.settings.deleteItemActionElementClass).on("click", function () {
-                    plugin.deleteContentItem($(this).attr("data-contentItemId"));
+                    var contentItemId = $(this).attr("data-contentItemId");
+                    if (plugin.settings.deleteItemConfirmationText) {
+                        if (confirm(plugin.settings.deleteItemConfirmationText)) {
+                            plugin.deleteContentItem(contentItemId);
+                        }
+                    }
+                    else {
+                        plugin.deleteContentItem(contentItemId);
+                    }
                 });
             }
 
