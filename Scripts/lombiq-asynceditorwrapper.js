@@ -13,14 +13,18 @@
 
     var defaults = {
         editUrl: "",
+        deleteUrl: "",
+        requestToken: "",
         editorPlaceholderElementClass: "",
         addNewItemActionElementClass: "",
         editItemActionElementClass: "",
+        deleteItemActionElementClass: "",
         cancelButtonElementClass: "",
         allowMultipleEditors: false,
         contentItemIdQueryStringParameter: "",
         multipleEditorsNotAllowedMessage: "Editing multiple items at the same is not allowed. Please save or cancel your current changes first.",
         editorLoadedCallback: function (data, $editor) { },
+        deleteCallback: function (data) { },
     };
     
     function Plugin(element, options) {
@@ -49,6 +53,12 @@
             if (plugin.settings.editItemActionElementClass) {
                 plugin.element.find(plugin.settings.editItemActionElementClass).on("click", function () {
                     plugin.loadEditor($(this).attr("data-contentItemId"), $editorPlaceholderElement);
+                });
+            }
+
+            if (plugin.settings.deleteItemActionElementClass) {
+                plugin.element.find(plugin.settings.deleteItemActionElementClass).on("click", function () {
+                    plugin.deleteContentItem($(this).attr("data-contentItemId"));
                 });
             }
 
@@ -95,6 +105,27 @@
                     }, 500);
                     
                     plugin.settings.editorLoadedCallback.call(plugin, data, $editorPlaceholder);
+                }
+
+                if (data.ResultMessage) {
+                    alert(data.ResultMessage);
+                }
+            });
+        },
+
+        deleteContentItem: function (contentItemId) {
+            var plugin = this;
+
+            $.ajax({
+                url: plugin.settings.deleteUrl,
+                data: {
+                    contentItemId: contentItemId,
+                    __requestVerificationToken: plugin.settings.requestToken,
+                },
+                type: "POST"
+            }).success(function (data) {
+                if (data.Success) {
+                    plugin.settings.deleteCallback.call(plugin, data);
                 }
 
                 if (data.ResultMessage) {
