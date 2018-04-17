@@ -4,7 +4,6 @@ using Orchard.ContentManagement;
 using Orchard.Data;
 using Orchard.DisplayManagement;
 using Orchard.Localization;
-using Orchard.Mvc;
 using System.Web.Mvc;
 
 namespace Lombiq.ContentEditors.Controllers
@@ -37,16 +36,16 @@ namespace Lombiq.ContentEditors.Controllers
             T = NullLocalizer.Instance;
         }
 
-
-        #region Helpers
         
+        #region Helpers
+
         protected virtual ActionResult EditResult(AsyncEditorPart part, string group = "")
         {
             if (part == null) return ContentItemNotFoundResult();
 
             if (part.HasEditorGroups && string.IsNullOrEmpty(group))
             {
-                group = part.NextEditableAuthorizedGroup?.Name;
+                group = part.LastUpdatedEditorGroup?.Name ?? part.NextEditableAuthorizedGroup?.Name;
 
                 if (string.IsNullOrEmpty(group)) return GroupNameCannotBeEmptyResult();
             }
@@ -94,6 +93,8 @@ namespace Lombiq.ContentEditors.Controllers
                 _asyncEditorService.StoreCompletedEditorGroup(part, group);
             }
 
+            part.LastUpdatedEditorGroupName = group;
+
             var currentEditorGroupDescriptor = _asyncEditorService.GetEditorGroupDescriptor(part, group);
             var isPublishGroup = currentEditorGroupDescriptor?.IsPublishGroup ?? true;
             if (publish && isPublishGroup)
@@ -114,7 +115,7 @@ namespace Lombiq.ContentEditors.Controllers
         protected virtual ActionResult SaveAndNextResult(AsyncEditorPart part, string group)
         {
             if (string.IsNullOrEmpty(group)) return GroupNameCannotBeEmptyResult();
-            
+
             if (part == null || !part.HasEditorGroups) return ContentItemNotFoundResult();
 
             if (!_asyncEditorService.IsAuthorizedToEdit(part, group)) return UnauthorizedEditorResult();
@@ -133,6 +134,8 @@ namespace Lombiq.ContentEditors.Controllers
             }
 
             _asyncEditorService.StoreCompletedEditorGroup(part, group);
+
+            part.LastUpdatedEditorGroupName = group;
 
             var nextGroup = _asyncEditorService.GetNextGroupDescriptor(part, group);
             if (nextGroup == null) return AsyncEditorResult(part, group);
