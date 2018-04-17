@@ -1,0 +1,65 @@
+﻿@using Lombiq.ContentEditors.Constants
+@using Lombiq.ContentEditors.ViewModels
+
+@{
+    var viewModel = Model.ViewModel as TaxonomyEditorViewModel;
+
+    Script.Require(ResourceNames.jQuery).AtHead();
+
+    const string DefaultBlockName = "taxonomyCheckboxEditor";
+    string BlockName = viewModel.BlockName ?? DefaultBlockName;
+    var CheckBoxesListElementName = DefaultBlockName + "__list";
+    var CheckBoxesListItemElementName = DefaultBlockName + "__listItem";
+    var CheckBoxElementName = DefaultBlockName + "__checkbox";
+    var CheckboxTextLabel = DefaultBlockName + "__textLabel";
+    var termIndex = 0;
+
+    var labelAttributes = new Dictionary<string, object>
+    {
+        { "class", "editorLabel " + DefaultBlockName + "__label" }
+    };
+
+    if (viewModel.Required)
+    {
+        labelAttributes["class"] = labelAttributes["class"] + " required";
+    }
+}
+
+<div class="editor editorField form-group @DefaultBlockName @BlockName">
+    @if (!string.IsNullOrEmpty(viewModel.Label))
+    {
+        @Html.Label(viewModel.Label, labelAttributes)
+    }
+
+    <div class="@CheckBoxesListElementName">
+        @foreach (var selectListItem in viewModel.SelectList)
+        {
+            <div class="@CheckBoxesListItemElementName">
+                <input class="@CheckBoxElementName" @if (selectListItem.Disabled) { <text> disabled="disabled" </text> } type="checkbox" value="true" @if (selectListItem.Selected) { <text> checked="checked" </text> } name="@Html.Name($"Terms[{termIndex}].IsChecked")" id="@Html.Id($"Terms[{termIndex}].IsChecked")" data-term="@selectListItem.Text" />
+
+                @Html.Hidden($"Terms[{termIndex}].Id", selectListItem.Value)
+
+                <label class="forcheckbox @CheckboxTextLabel" for="@Html.Id($"Terms[{termIndex}].IsChecked")">@selectListItem.Text</label>
+            </div>
+            termIndex++;
+        }
+    </div>
+</div>
+
+@if (viewModel.TaxonomyFieldViewModel.Settings.SingleChoice)
+{
+    <script type="text/javascript">
+        ; (function ($) {
+            $(function () {
+                $(".@CheckBoxElementName").click(function () {
+                    @* Trying to match the current field editor as much as possible,
+                       so that we don't interfere with other ones,
+                       but that requires the BlockName to be defined. *@
+                    if (!$(this).parents().eq(2).hasClass("@BlockName")) return;
+
+                    $(this).parent().siblings().children(".@CheckBoxElementName").prop("checked", false);
+                });
+            });
+        })(jQuery);
+    </script>
+}
