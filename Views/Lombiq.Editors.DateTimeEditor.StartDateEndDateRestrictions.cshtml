@@ -20,21 +20,13 @@
 
             startDatePicker.settings.dateChanged = function (startDate) {
                 if (startDate) {
-                    var endDate = endDatePicker.getDate();
-
-                    if (!endDate || startDate > endDate) {
-                        endDatePicker.setDate(startDate);
-                    }
+                    endDatePicker.setOption("minDate", startDate);
                 }
             };
 
             endDatePicker.settings.dateChanged = function (endDate) {
                 if (endDate) {
-                    var startDate = startDatePicker.getDate();
-
-                    if (!startDate || startDate > endDate) {
-                        startDatePicker.setDate(endDate);
-                    }
+                    startDatePicker.setOption("maxDate", endDate);
                 }
             };
         });
