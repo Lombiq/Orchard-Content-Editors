@@ -27,6 +27,11 @@
 
             endDatePicker.settings.dateChanged = function (endDate) {
                 if (endDate) {
+                    var startDate = startDatePicker.getDate();
+
+                    if (!startDate) {
+                        startDatePicker.setDate(endDate);
+                    }
                     startDatePicker.setOption("maxDate", endDate);
                 }
             };
