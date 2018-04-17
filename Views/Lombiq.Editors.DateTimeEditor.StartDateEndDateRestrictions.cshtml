@@ -20,8 +20,13 @@
 
             startDatePicker.settings.dateChanged = function (startDate) {
                 if (startDate) {
+                    var endDate = endDatePicker.getDate();
+
+                    if (!endDate) {
+                        endDatePicker.setDate(startDate);
+                    }
+
                     endDatePicker.setOption("minDate", startDate);
-                    endDatePicker.setDate(startDate);
                 }
             };
 
