@@ -13,14 +13,20 @@
 
     var defaults = {
         editUrl: "",
+        deleteUrl: "",
+        requestToken: "",
         editorPlaceholderElementClass: "",
         addNewItemActionElementClass: "",
         editItemActionElementClass: "",
+        deleteItemActionElementClass: "",
         cancelButtonElementClass: "",
         allowMultipleEditors: false,
         contentItemIdQueryStringParameter: "",
         multipleEditorsNotAllowedMessage: "Editing multiple items at the same is not allowed. Please save or cancel your current changes first.",
+        deleteItemConfirmationText: "Are you sure you want to delete this item?",
         editorLoadedCallback: function (data, $editor) { },
+        deleteCallback: function (data) { },
+        cancelCallback: function ($editor) { }
     };
     
     function Plugin(element, options) {
@@ -38,24 +44,49 @@
         init: function () {
             var plugin = this;
 
-            var $editorPlaceholderElement = plugin.element.find(plugin.settings.editorPlaceholderElementClass);
+            var $editorPlaceholder = plugin.element.find(plugin.settings.editorPlaceholderElementClass);
 
             if (plugin.settings.addNewItemActionElementClass) {
                 plugin.element.find(plugin.settings.addNewItemActionElementClass).first().on("click", function () {
-                    plugin.loadEditor($(this).attr("data-contentItemId"), $editorPlaceholderElement);
+                    plugin.loadEditor($(this).attr("data-contentItemId"), $editorPlaceholder);
                 });
             }
 
             if (plugin.settings.editItemActionElementClass) {
                 plugin.element.find(plugin.settings.editItemActionElementClass).on("click", function () {
-                    plugin.loadEditor($(this).attr("data-contentItemId"), $editorPlaceholderElement);
+                    plugin.loadEditor($(this).attr("data-contentItemId"), $editorPlaceholder);
+                });
+            }
+
+            if (plugin.settings.deleteItemActionElementClass) {
+                plugin.element.find(plugin.settings.deleteItemActionElementClass).on("click", function () {
+                    var contentItemId = $(this).attr("data-contentItemId");
+                    if (plugin.settings.deleteItemConfirmationText) {
+                        if (confirm(plugin.settings.deleteItemConfirmationText)) {
+                            plugin.deleteContentItem(contentItemId);
+                        }
+                    }
+                    else {
+                        plugin.deleteContentItem(contentItemId);
+                    }
+                });
+            }
+
+            if (plugin.settings.cancelButtonElementClass) {
+                $editorPlaceholder.on("click", plugin.settings.cancelButtonElementClass, function () {
+                    $editorPlaceholder.html("").hide();
+
+                    plugin.concurrentEditors--;
+                    plugin.setContentItemIdInUrl(null);
+
+                    plugin.settings.cancelCallback.call(plugin, $editorPlaceholder);
                 });
             }
 
             if (plugin.settings.contentItemIdQueryStringParameter.length > 0) {
                 var id = plugin.getContentItemIdFromUrl();
 
-                if (id && id.length > 0) plugin.loadEditor(id, $editorPlaceholderElement);
+                if (id && id.length > 0) plugin.loadEditor(id, $editorPlaceholder);
             }
         },
 
@@ -82,19 +113,32 @@
                     $editorPlaceholder.html($.parseHTML(data.EditorShape, true)).show();
                     plugin.concurrentEditors++;
 
-                    if (plugin.settings.cancelButtonElementClass) {
-                        $editorPlaceholder.find(plugin.settings.cancelButtonElementClass).on("click", function () {
-                            $editorPlaceholder.html("").hide();
-
-                            plugin.concurrentEditors--;
-                        });
-                    }
-
                     $("html, body").animate({
                         scrollTop: $editorPlaceholder.offset().top
                     }, 500);
                     
                     plugin.settings.editorLoadedCallback.call(plugin, data, $editorPlaceholder);
+                }
+
+                if (data.ResultMessage) {
+                    alert(data.ResultMessage);
+                }
+            });
+        },
+
+        deleteContentItem: function (contentItemId) {
+            var plugin = this;
+
+            $.ajax({
+                url: plugin.settings.deleteUrl,
+                data: {
+                    contentItemId: contentItemId,
+                    __requestVerificationToken: plugin.settings.requestToken,
+                },
+                type: "POST"
+            }).success(function (data) {
+                if (data.Success) {
+                    plugin.settings.deleteCallback.call(plugin, data);
                 }
 
                 if (data.ResultMessage) {

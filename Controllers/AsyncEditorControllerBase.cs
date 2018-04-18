@@ -197,6 +197,13 @@ namespace Lombiq.ContentEditors.Controllers
                 ResultMessage = message?.Text
             }, JsonRequestBehavior.AllowGet);
 
+        protected virtual ActionResult SuccessResult(LocalizedString message = null) =>
+            Json(new AsyncEditorResult
+            {
+                Success = true,
+                ResultMessage = message?.Text
+            });
+
         #endregion
 
         #region Error results
