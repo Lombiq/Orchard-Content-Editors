@@ -22,9 +22,11 @@
                 if (startDate) {
                     var endDate = endDatePicker.getDate();
 
-                    if (!endDate || startDate > endDate) {
+                    if (!endDate) {
                         endDatePicker.setDate(startDate);
                     }
+
+                    endDatePicker.setOption("minDate", startDate);
                 }
             };
 
@@ -32,9 +34,11 @@
                 if (endDate) {
                     var startDate = startDatePicker.getDate();
 
-                    if (!startDate || startDate > endDate) {
+                    if (!startDate) {
                         startDatePicker.setDate(endDate);
                     }
+
+                    startDatePicker.setOption("maxDate", endDate);
                 }
             };
         });
