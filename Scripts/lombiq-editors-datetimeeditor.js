@@ -109,6 +109,12 @@
             var storeText = plugin.$dateTimeValueInput.val();
 
             return storeText.length > 0 ? moment(storeText).toDate() : null;
+        },
+
+        setOption: function (name, value) {
+            if (name && value) {
+                this.$datepicker.datepicker("option", name, value);
+            }
         }
     });
 
