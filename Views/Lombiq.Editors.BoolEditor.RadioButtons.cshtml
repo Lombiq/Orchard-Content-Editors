@@ -18,6 +18,7 @@
     var RadioButtonsElementName = BlockName + "__radioButtons";
     var RadioButtonTrueElementName = BlockName + "__trueRadioButton";
     var RadioButtonTextLabel = BlockName + "__textLabel";
+    var RadioButtonIndicator = BlockName + "__indicator";
 
     var boolAttributes = viewModel.BuildAttributes(new Dictionary<string, object>
     {
@@ -55,10 +56,12 @@
     <div class="@RadioButtonsElementName js-@RadioButtonsElementName">
         <label class="@RadioButtonTextLabel">
             @Html.RadioButton(viewModel.Name, true, trueChecked, boolTrueAttributes) @viewModel.TextTrue
+            <div class="@RadioButtonIndicator"></div>
         </label>
 
         <label class="@RadioButtonTextLabel">
             @Html.RadioButton(viewModel.Name, false, falseChecked, boolAttributes) @viewModel.TextFalse
+            <div class="@RadioButtonIndicator"></div>
         </label>
 
     </div>
