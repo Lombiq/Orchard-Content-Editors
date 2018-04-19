@@ -170,6 +170,8 @@
          */
         parentPostEditorRequested: function (submitContext, parentPlugin) {
             var plugin = this;
+            var currentSubmitContext = {};
+            $.extend(currentSubmitContext, submitContext);
 
             var deferred = $.Deferred();
 
@@ -181,14 +183,14 @@
                 };
 
                 if (plugin.settings.callbacks.parentEditorPostRequestedCallback) {
-                    plugin.settings.callbacks.parentEditorPostRequestedCallback(submitContext, eventContext);
+                    plugin.settings.callbacks.parentEditorPostRequestedCallback(currentSubmitContext, eventContext);
                 }
 
-                $(plugin.element).trigger(staticVariables.eventNames.parentEditorPostRequested, [plugin, submitContext, eventContext]);
-
+                $(plugin.element).trigger(staticVariables.eventNames.parentEditorPostRequested, [plugin, currentSubmitContext, eventContext]);
+                
                 if (eventContext.cancel) deferred.reject();
                 else if (eventContext.postEditor) {
-                    $.when(plugin.getPostEditorXHR(submitContext))
+                    $.when(plugin.getPostEditorXHR(currentSubmitContext))
                         .done(function (response) {
                             if (response.Success && !response.HasValidationErrors) deferred.resolve();
                             else deferred.reject();
@@ -198,6 +200,7 @@
             }
 
             if (plugin.childPlugin) {
+                // Alert children with the original submit context.
                 $.when(plugin.childPlugin.parentPostEditorRequested(submitContext, plugin))
                     .done(handle)
                     .fail(deferred.reject);
