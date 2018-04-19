@@ -61,7 +61,7 @@
         currentForm: null,
         parentPlugin: null,
         childPlugin: null,
-        groupNameQueryStringParameter: null,
+        groupNameQueryStringParameter: "",
         contentItemIdQueryStringParameter: "",
 
         /**
@@ -98,7 +98,7 @@
             }
 
             plugin.reloadEditor();
-            
+
             window.onpopstate = function (e) {
                 plugin.getRootPlugin().reloadEditor();
             };
@@ -331,7 +331,7 @@
                     if (plugin.settings.callbacks.editorLoadedCallback) {
                         plugin.settings.callbacks.editorLoadedCallback(response);
                     }
-                    
+
                     $(plugin.element).trigger(staticVariables.eventNames.editorLoaded, [plugin, response]);
                 },
                 complete: function () {
@@ -430,21 +430,39 @@
             var plugin = this;
 
             var uri = new URI();
+            var parametersToRemove = plugin.getQueryStringParameterNames(true);
+
+            uri.removeSearch(parametersToRemove);
+
             if (groupName && groupName.length > 0) {
                 uri.setSearch(plugin.groupNameQueryStringParameter, groupName);
-            }
-            else {
-                uri.removeSearch(plugin.groupNameQueryStringParameter);
             }
 
             if (contentItemId) {
                 uri.setSearch(plugin.contentItemIdQueryStringParameter, contentItemId);
             }
-            else {
-                uri.removeSearch(plugin.contentItemIdQueryStringParameter);
-            }
-            
+
             history.pushState(groupName, "", uri.pathname() + uri.search());
+        },
+
+        /**
+         * Returns a list of query string parameters used by this async editor plugin. 
+         * Optionally includes parameters used by child plugins as well.
+         * @param {boolean} deep Include query string parameters used by child plugins.
+         * @returns List of query string parameters.
+         */
+        getQueryStringParameterNames: function (deep) {
+            var plugin = this;
+            var parameters = [
+                plugin.groupNameQueryStringParameter,
+                plugin.contentItemIdQueryStringParameter
+            ];
+
+            if (deep && plugin.childPlugin) {
+                $.merge(parameters, plugin.childPlugin.getQueryStringParameterNames(true));
+            }
+
+            return parameters;
         }
     });
 
