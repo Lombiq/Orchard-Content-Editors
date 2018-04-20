@@ -15,7 +15,8 @@
 
     var defaults = {
         parentElementName: "",
-        valueHierarchy: ""
+        valueHierarchy: "",
+        hasDefaultEmptyValue: false
     };
     
     function Plugin(element, options) {
@@ -49,6 +50,10 @@
                 sortedCurrentValues.sort(function (first, second) {
                     return first[1].localeCompare(second[1]);
                 });
+
+                if (plugin.settings.hasDefaultEmptyValue) {
+                    $(plugin.element).append($("<option>").text("").val(0));
+                }
 
                 $.each(Object.keys(sortedCurrentValues), function () {
                     var optionTag = $("<option>").text(sortedCurrentValues[this][1]).val(sortedCurrentValues[this][0]);
