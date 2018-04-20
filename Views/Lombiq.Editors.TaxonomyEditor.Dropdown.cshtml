@@ -68,7 +68,8 @@
             $(function () {
                 $("select[name='@(ViewData.TemplateInfo.HtmlFieldPrefix + "." + viewModel.Name)']").lombiq_ConnectedValueSelector({
                     parentElementName: "@viewModel.ParentDropdownEditorName",
-                    valueHierarchy: @Html.Raw(Json.Encode(viewModel.ValueHierarchy))
+                    valueHierarchy: @Html.Raw(Json.Encode(viewModel.ValueHierarchy)),
+                    hasDefaultEmptyValue: "@viewModel.HasDefaultEmptyValue" === "True" ? true : false
                 });
             });
         })(jQuery);
