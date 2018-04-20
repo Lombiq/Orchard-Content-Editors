@@ -87,9 +87,9 @@
 
     $(function () {
         $.fn.extend({
-            ShowHideClassByBoolEditorId: function (targetClass, inverseTargetClass) {
-                $("#" + this.selector).on("change", function (e, boolEditorValue) {
-                    if (boolEditorValue == null) return;
+            ShowHideClassByBoolEditorId: function (initialValue, targetClass, inverseTargetClass) {
+                var adjustTargetElementVisibility = function (event, boolEditorValue) {
+                    if (boolEditorValue === null || typeof boolEditorValue === "undefined") return;
 
                     if (boolEditorValue) {
                         $("." + targetClass).show();
@@ -99,6 +99,12 @@
                         $("." + targetClass).hide();
                         if (inverseTargetClass) $("." + inverseTargetClass).show();
                     }
+                }
+
+                adjustTargetElementVisibility(null, typeof initialValue === "boolean" ? initialValue : initialValue === "true" || initialValue === "True");
+
+                $("#" + this.selector).on("change", function (event, boolEditorValue) {
+                    adjustTargetElementVisibility(event, boolEditorValue);
                 });
             }
         });
