@@ -61,7 +61,7 @@
         currentForm: null,
         parentPlugin: null,
         childPlugin: null,
-        groupNameQueryStringParameter: null,
+        groupNameQueryStringParameter: "",
         contentItemIdQueryStringParameter: "",
 
         /**
@@ -98,7 +98,7 @@
             }
 
             plugin.reloadEditor();
-            
+
             window.onpopstate = function (e) {
                 plugin.getRootPlugin().reloadEditor();
             };
@@ -170,6 +170,8 @@
          */
         parentPostEditorRequested: function (submitContext, parentPlugin) {
             var plugin = this;
+            var currentSubmitContext = {};
+            $.extend(currentSubmitContext, submitContext);
 
             var deferred = $.Deferred();
 
@@ -181,14 +183,14 @@
                 };
 
                 if (plugin.settings.callbacks.parentEditorPostRequestedCallback) {
-                    plugin.settings.callbacks.parentEditorPostRequestedCallback(submitContext, eventContext);
+                    plugin.settings.callbacks.parentEditorPostRequestedCallback(currentSubmitContext, eventContext);
                 }
 
-                $(plugin.element).trigger(staticVariables.eventNames.parentEditorPostRequested, [plugin, submitContext, eventContext]);
-
+                $(plugin.element).trigger(staticVariables.eventNames.parentEditorPostRequested, [plugin, currentSubmitContext, eventContext]);
+                
                 if (eventContext.cancel) deferred.reject();
                 else if (eventContext.postEditor) {
-                    $.when(plugin.getPostEditorXHR(submitContext))
+                    $.when(plugin.getPostEditorXHR(currentSubmitContext))
                         .done(function (response) {
                             if (response.Success && !response.HasValidationErrors) deferred.resolve();
                             else deferred.reject();
@@ -198,6 +200,7 @@
             }
 
             if (plugin.childPlugin) {
+                // Alert children with the original submit context.
                 $.when(plugin.childPlugin.parentPostEditorRequested(submitContext, plugin))
                     .done(handle)
                     .fail(deferred.reject);
@@ -331,7 +334,7 @@
                     if (plugin.settings.callbacks.editorLoadedCallback) {
                         plugin.settings.callbacks.editorLoadedCallback(response);
                     }
-                    
+
                     $(plugin.element).trigger(staticVariables.eventNames.editorLoaded, [plugin, response]);
                 },
                 complete: function () {
@@ -430,21 +433,39 @@
             var plugin = this;
 
             var uri = new URI();
+            var parametersToRemove = plugin.getQueryStringParameterNames(true);
+
+            uri.removeSearch(parametersToRemove);
+
             if (groupName && groupName.length > 0) {
                 uri.setSearch(plugin.groupNameQueryStringParameter, groupName);
-            }
-            else {
-                uri.removeSearch(plugin.groupNameQueryStringParameter);
             }
 
             if (contentItemId) {
                 uri.setSearch(plugin.contentItemIdQueryStringParameter, contentItemId);
             }
-            else {
-                uri.removeSearch(plugin.contentItemIdQueryStringParameter);
-            }
-            
+
             history.pushState(groupName, "", uri.pathname() + uri.search());
+        },
+
+        /**
+         * Returns a list of query string parameters used by this async editor plugin. 
+         * Optionally includes parameters used by child plugins as well.
+         * @param {boolean} deep Include query string parameters used by child plugins.
+         * @returns List of query string parameters.
+         */
+        getQueryStringParameterNames: function (deep) {
+            var plugin = this;
+            var parameters = [
+                plugin.groupNameQueryStringParameter,
+                plugin.contentItemIdQueryStringParameter
+            ];
+
+            if (deep && plugin.childPlugin) {
+                $.merge(parameters, plugin.childPlugin.getQueryStringParameterNames(true));
+            }
+
+            return parameters;
         }
     });
 

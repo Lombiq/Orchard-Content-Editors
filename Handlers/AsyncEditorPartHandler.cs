@@ -52,6 +52,13 @@ namespace Lombiq.ContentEditors.Handlers
 
                 part.IsAllEditorGroupsCompletedField.Loader(() => 
                     !asyncEditorService.GetIncompleteEditorGroups(part).Any());
+
+                part.LastDisplayedEditorGroupField.Loader(() =>
+                    !string.IsNullOrEmpty(part.LastDisplayedEditorGroupName) ?
+                        asyncEditorService
+                            .GetAuthorizedEditorGroups(part)
+                            .FirstOrDefault(group => group.Name == part.LastDisplayedEditorGroupName) :
+                        null);
             });
         }
     }
