@@ -45,7 +45,7 @@ namespace Lombiq.ContentEditors.Controllers
 
             if (part.HasEditorGroups && string.IsNullOrEmpty(group))
             {
-                group = part.LastUpdatedEditorGroup?.Name ?? part.NextEditableAuthorizedGroup?.Name;
+                group = part.LastDisplayedEditorGroup?.Name ?? part.NextEditableAuthorizedGroup?.Name;
 
                 if (string.IsNullOrEmpty(group)) return GroupNameCannotBeEmptyResult();
             }
@@ -172,8 +172,11 @@ namespace Lombiq.ContentEditors.Controllers
             AsyncEditorPart part,
             string group,
             bool contentCreated = true,
-            LocalizedString message = null) =>
-            Json(new AsyncEditorGroupResult
+            LocalizedString message = null)
+        {
+            part.LastDisplayedEditorGroupName = group;
+
+            return Json(new AsyncEditorGroupResult
             {
                 Success = true,
                 ContentItemId = contentCreated ? part.ContentItem.Id : 0,
@@ -181,13 +184,17 @@ namespace Lombiq.ContentEditors.Controllers
                 EditorGroup = group,
                 ResultMessage = message?.Text
             }, JsonRequestBehavior.AllowGet);
+        }
 
         protected virtual ActionResult AsyncEditorSaveResult(
             AsyncEditorPart part,
             string group,
             bool contentCreated = true,
-            LocalizedString message = null) =>
-            Json(new AsyncEditorSaveResult
+            LocalizedString message = null)
+        {
+            part.LastDisplayedEditorGroupName = group;
+
+            return Json(new AsyncEditorSaveResult
             {
                 Success = true,
                 ContentItemId = contentCreated ? part.ContentItem.Id : 0,
@@ -196,6 +203,7 @@ namespace Lombiq.ContentEditors.Controllers
                 HasValidationErrors = !ModelState.IsValid,
                 ResultMessage = message?.Text
             }, JsonRequestBehavior.AllowGet);
+        }
 
         protected virtual ActionResult SuccessResult(LocalizedString message = null) =>
             Json(new AsyncEditorResult

@@ -87,11 +87,23 @@
 
     $(function () {
         $.fn.extend({
-            ShowHideClassByBoolEditorId: function (targetClass, inverseTargetClass) {
-                $("#" + this.selector).on("change", function (e, boolEditorValue) {
-                    if (boolEditorValue == null) return;
+            ShowHideClassByBoolEditorId: function (initialValue, targetClass, inverseTargetClass) {
+                var adjustTargetElementVisibility = function (value) {
+                    if (typeof value === "undefined") return;
 
-                    if (boolEditorValue) {
+                    var actualValue = typeof value === "boolean" ?
+                        value :
+                        typeof value === "string" ?
+                            value === "true" || value === "True" || value === "false" || value === "False" ?
+                                value === "true" || value === "True" :
+                                null :
+                            null;
+
+                    if (actualValue == null) {
+                        $("." + targetClass).hide();
+                        if (inverseTargetClass) $("." + inverseTargetClass).hide();
+                    }
+                    else if (actualValue) {
                         $("." + targetClass).show();
                         if (inverseTargetClass) $("." + inverseTargetClass).hide();
                     }
@@ -99,6 +111,12 @@
                         $("." + targetClass).hide();
                         if (inverseTargetClass) $("." + inverseTargetClass).show();
                     }
+                }
+
+                adjustTargetElementVisibility(initialValue);
+
+                $("#" + this.selector).on("change", function (event, boolEditorValue) {
+                    adjustTargetElementVisibility(boolEditorValue);
                 });
             }
         });
