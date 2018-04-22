@@ -57,7 +57,7 @@
             var datepickerOptions = $.extend(true, {}, plugin.settings.datepickerOptions, {
                 dateFormat: plugin.settings.dateDisplayFormat,
                 onSelect: function () {
-                    plugin.setDate($(this).datepicker("getDate"));
+                    plugin.setDate(plugin.$datepicker.val());
                 }
             });
 
@@ -80,10 +80,10 @@
                     var format = plugin.settings.dateDisplayFormat;
                     if (dateFormat) format = dateFormat;
 
-                    momentValue = moment(value, format);
+                    momentValue = moment.utc(value, format);
                 }
                 else {
-                    momentValue = moment(value);
+                    momentValue = moment.utc(value);
                 }
 
                 if (momentValue.isValid()) {
@@ -108,7 +108,7 @@
 
             var storeText = plugin.$dateTimeValueInput.val();
 
-            return storeText.length > 0 ? moment(storeText).toDate() : null;
+            return storeText.length > 0 ? moment.utc(storeText).toDate() : null;
         },
 
         setOption: function (name, value) {
