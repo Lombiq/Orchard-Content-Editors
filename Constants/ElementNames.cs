@@ -16,5 +16,13 @@
             public const string MessagePlaceholderElementName = BlockName + "__message";
             public const string EditorPlaceholderElementName = BlockName + "__editor";
         }
+
+        public static class LoadingIndicator
+        {
+            public const string BlockName = "loadingIndicator";
+            public const string ContentElementName = BlockName + "__content";
+            public const string HeaderElementName = BlockName + "__header";
+            public const string ProgressBarElementName = BlockName + "__progressBar";
+        }
     }
 }

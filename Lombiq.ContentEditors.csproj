@@ -129,6 +129,7 @@
     <Compile Include="ViewModels\FieldViewModel.cs" />
     <Compile Include="ViewModels\EditorViewModel.cs" />
     <Compile Include="ViewModels\DropdownEditorViewModel.cs" />
+    <Content Include="Content\Images\spinner.gif" />
     <Content Include="Content\LC-switch\demo.html" />
     <Content Include="Content\LC-switch\lc_switch.css" />
     <Content Include="Content\LC-switch\lc_switch.js" />
@@ -139,6 +140,7 @@
     <Content Include="Content\Selectize\selectize.bootstrap3.css" />
     <Content Include="Content\Selectize\selectize.js" />
     <Content Include="Content\Selectize\selectize.min.js" />
+    <Content Include="Scripts\lombiq-loadingindicator.js" />
     <Content Include="Scripts\lombiq-editors-datetimeeditor.js" />
     <Content Include="Scripts\lombiq-connectedvalueselector.js" />
     <Content Include="Scripts\lombiq-booleditor.js" />
@@ -152,6 +154,17 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
+    <None Include="compilerconfig.json" />
+    <None Include="compilerconfig.json.defaults">
+      <DependentUpon>compilerconfig.json</DependentUpon>
+    </None>
+    <None Include="Styles\lombiq-loadingindicator.scss" />
+    <Content Include="Styles\lombiq-loadingindicator.css">
+      <DependentUpon>lombiq-loadingindicator.scss</DependentUpon>
+    </Content>
+    <Content Include="Styles\lombiq-loadingindicator.min.css">
+      <DependentUpon>lombiq-loadingindicator.css</DependentUpon>
+    </Content>
     <Content Include="Web.config" />
     <Content Include="Scripts\Web.config" />
     <Content Include="Module.txt" />
@@ -262,6 +275,19 @@
   <ItemGroup>
     <Content Include="Content\LC-switch\LICENSE" />
     <Content Include="Content\LC-switch\README.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Lombiq.LoadingIndicator.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Lombiq.LoadingIndicator.Container.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Lombiq.LoadingIndicator.Resources.cshtml" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Styles\Web.config" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
