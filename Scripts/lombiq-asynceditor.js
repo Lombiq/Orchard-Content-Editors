@@ -296,13 +296,16 @@
         setProcessingIndicatorVisibility: function (show) {
             var plugin = this;
 
-            if (!plugin.$processingIndicatorElement) return;
+            // Use static loading indicator if processing indicator element is not given.
+            var useStaticLoadingIndicator = !plugin.settings.processingIndicatorElementClass;
 
             if (show) {
-                plugin.$processingIndicatorElement.show();
+                if (useStaticLoadingIndicator) $.lombiq_LoadingIndicator.show();
+                else plugin.$processingIndicatorElement.show();
             }
             else {
-                plugin.$processingIndicatorElement.hide();
+                if (useStaticLoadingIndicator) $.lombiq_LoadingIndicator.hide();
+                else plugin.$processingIndicatorElement.hide();
             }
 
             return plugin;

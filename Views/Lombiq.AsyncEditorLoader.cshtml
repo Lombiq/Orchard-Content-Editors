@@ -13,6 +13,7 @@
     Script.Require(ResourceNames.Lombiq_AsyncEditor).AtHead();
 
     var editUrl = Model.EditUrl ?? Url.Action("Edit", "AsyncEditor", new { Area = "Lombiq.ContentEditors" });
+    var useStaticLoadingIndicator = Model.UseStaticLoadingIndicator as bool? ?? false;
 
     string AsyncEditorLoaderId = Html.AsyncEditorPluginId(contentType);
 }
@@ -29,7 +30,7 @@
                 initialContentItemId: @contentItemId,
                 defaultEditorGroupName: "@defaultGroup",
                 asyncEditorLoaderElementClass: ".js-@ElementNames.AsyncEditorLoader.BlockName",
-                processingIndicatorElementClass: ".js-@ElementNames.AsyncEditorLoader.ProcessingIndicatorElementName",
+                processingIndicatorElementClass: "@(useStaticLoadingIndicator ? "" : ".js-" + ElementNames.AsyncEditorLoader.ProcessingIndicatorElementName)",
                 editorPlaceholderElementClass: ".js-@ElementNames.AsyncEditorLoader.EditorPlaceholderElementName",
                 loadEditorActionElementClass: ".js-@ElementNames.AsyncEditorActions.LoadEditorElementName",
                 postEditorActionElementClass: ".js-@ElementNames.AsyncEditorActions.PostEditorElementName"
