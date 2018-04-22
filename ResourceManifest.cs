@@ -16,8 +16,11 @@ namespace Lombiq.ContentEditors
             manifest.DefineScript(Selectize).SetUrl("../Content/Selectize/selectize.min.js", "../Content/Selectize/selectize.js").SetDependencies(jQuery, iOS_StickyInputFocusOverride);
             manifest.DefineStyle(Selectize).SetUrl("../Content/Selectize/selectize.bootstrap3.css");
 
-            manifest.DefineScript(Lombiq_AsyncEditor).SetUrl("lombiq-asynceditor.js").SetDependencies(jQuery, Uri_Js);
-            manifest.DefineScript(Lombiq_AsyncEditorWrapper).SetUrl("lombiq-asynceditorwrapper.js").SetDependencies(jQuery, Uri_Js);
+            manifest.DefineScript(Lombiq_LoadingIndicator).SetUrl("lombiq-loadingindicator.js").SetDependencies(jQuery);
+            manifest.DefineStyle(Lombiq_LoadingIndicator).SetUrl("lombiq-loadingindicator.min.css", "lombiq-loadingindicator.css");
+
+            manifest.DefineScript(Lombiq_AsyncEditor).SetUrl("lombiq-asynceditor.js").SetDependencies(Lombiq_LoadingIndicator, Uri_Js);
+            manifest.DefineScript(Lombiq_AsyncEditorWrapper).SetUrl("lombiq-asynceditorwrapper.js").SetDependencies(Lombiq_LoadingIndicator, Uri_Js);
             manifest.DefineScript(Lombiq_Editors_DateTimeEditor).SetUrl("lombiq-editors-datetimeeditor.js").SetDependencies(jQueryUI, "Moment");
             manifest.DefineScript(Lombiq_BoolEditor).SetUrl("lombiq-booleditor.js").SetDependencies(jQuery);
 

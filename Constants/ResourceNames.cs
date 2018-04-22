@@ -10,6 +10,7 @@
 
         public const string Lombiq_AsyncEditor = Prefix + "AsyncEditor";
         public const string Lombiq_AsyncEditorWrapper = Prefix + "AsyncEditorWrapper";
+        public const string Lombiq_LoadingIndicator = Prefix + "LoadingIndicator";
         public const string Lombiq_BoolEditor = Prefix + "BoolEditor";
         public const string Lombiq_BoolEditor_Toggle = Prefix + "BoolEditorToggle";
         public const string Lombiq_Editors_DateTimeEditor = Prefix + "Editors.DateTimeEditor";
