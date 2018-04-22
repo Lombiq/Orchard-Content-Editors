@@ -13,6 +13,7 @@
 
     var defaults = {
         loadingIndicatorContainerClassName: "",
+        minimumDisplayTimeInMilliseconds: 500,
         showCallback: function (element, plugin) { },
         hideCallback: function (element, plugin) { }
     };
@@ -28,6 +29,8 @@
 
     $.extend(Plugin.prototype, {
         $loadingIndicatorContainer: null,
+        minimumTimeElapsed: false,
+        hideRequested: false,
 
         init: function () {
             var plugin = this;
@@ -40,9 +43,20 @@
 
             if (!plugin.settings.loadingIndicatorContainerClassName) return;
 
+            plugin.minimumTimeElapsed = false;
+            plugin.hideRequested = false;
+
             plugin.$loadingIndicatorContainer.show();
 
             plugin.settings.showCallback(plugin.element, plugin);
+
+            setTimeout(function () {
+                plugin.minimumTimeElapsed = true;
+
+                if (plugin.hideRequested) {
+                    plugin.hideLoadingIndicatorElement();
+                }
+            }, plugin.settings.minimumDisplayTimeInMilliseconds);
         },
 
         hide: function () {
@@ -50,8 +64,19 @@
 
             if (!plugin.settings.loadingIndicatorContainerClassName) return;
 
-            plugin.$loadingIndicatorContainer.hide();
+            plugin.hideRequested = true;
 
+            if (plugin.minimumTimeElapsed) {
+                plugin.hideLoadingIndicatorElement();
+            }
+        },
+
+        hideLoadingIndicatorElement: function () {
+            var plugin = this;
+
+            if (!plugin.settings.loadingIndicatorContainerClassName) return;
+
+            plugin.$loadingIndicatorContainer.hide();
             plugin.settings.hideCallback(plugin.element, plugin);
         }
     });
