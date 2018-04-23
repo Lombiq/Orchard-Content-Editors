@@ -22,10 +22,9 @@
     var hiddenFieldClassName = "js-" + classifiedName + "-value";
     var editorType = isDateEditor ? "text" : "time";
 
-    string DefaultBlockName = "dateTimeEditor";
+    const string DefaultBlockName = "dateTimeEditor";
     string BlockName = viewModel.BlockName ?? DefaultBlockName;
-    string DateTimePickerContainerElementName = DefaultBlockName + "__dateTimePickerContainer";
-    string GlyphiconElementName = DefaultBlockName + "__glyphicon";
+    const string DateTimePickerContainerElementName = DefaultBlockName + "__dateTimePickerContainer";
 
     var editorTypeClass = isDateEditor ? "datePicker" : "timePicker";
 
@@ -61,15 +60,20 @@
         IgnoreDate = viewModel.EditorType == DateTimeEditorType.Time
     };
 
-    var displayFormat = isDateEditor ? viewModel.MomentJsDateDisplayFormat : "HH:mm";
+    var frontEndDisplayFormat = isDateEditor ? viewModel.FrontEndDateDisplayFormat : "HH:mm";
+    var frontEndStoreFormat = isDateEditor ? viewModel.FrontEndDateStoreFormat : "HH:mm";
+
+    // Assume that the given value is a string and properly formatted.
     var dateTimeString = viewModel.Value as string;
-    if (viewModel.Value is DateTime?)
+
+    // If the value is not string then assume that it is a DateTime object. If so, format it.
+    if (!string.IsNullOrEmpty(dateTimeString) && viewModel.Value is DateTime?)
     {
         var value = viewModel.Value as DateTime?;
         dateTimeString = value.HasValue && value.Value != default(DateTime) ?
             viewModel.Value is string ?
                 (string)viewModel.Value :
-                dateLocalizationServices.ConvertToLocalizedString(value, T("yyyy-MM-dd").Text, options) :
+                dateLocalizationServices.ConvertToLocalizedString(value, viewModel.DateFormat, options) :
             "";
     }
 
@@ -93,22 +97,17 @@
     </div>
 </div>
 
-@if (editorType == "text")
+@if (isDateEditor)
 {
     <script type="text/javascript">
         ; (function ($) {
             $(function () {
-
                 var dateTimeEditorPlugin = $(".@classifiedName").lombiq_Editors_DateTimeEditor({
                     dateTimeValueInputClassName: ".@hiddenFieldClassName",
-                    invalidDateFormatErrorText: "@HttpUtility.JavaScriptStringEncode(T("Invalid date format given. Expected format: {0}", displayFormat).Text)",
-                    dateDisplayFormat: "@displayFormat"
+                    invalidDateFormatErrorText: "@HttpUtility.JavaScriptStringEncode(T("Invalid date format given. Expected format: {0}", frontEndDisplayFormat).Text)",
+                    dateDisplayFormat: "@frontEndDisplayFormat",
+                    dateStoreFormat: "@frontEndStoreFormat"
                 })[0];
-
-                @if (!string.IsNullOrEmpty(dateTimeString))
-                { 
-                    @:dateTimeEditorPlugin.setDate(new Date("@dateTimeString"));
-                }
                 
                 $(".ui-datepicker").hide();
             });
