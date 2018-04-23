@@ -50,45 +50,45 @@
 
         init: function () {
             var plugin = this;
-
+            
             plugin.$datepicker = $(plugin.element);
             plugin.$dateTimeValueInput = plugin.$datepicker.siblings(plugin.settings.dateTimeValueInputClassName).first();
 
             var datepickerOptions = $.extend(true, {}, plugin.settings.datepickerOptions, {
                 dateFormat: plugin.settings.dateDisplayFormat,
                 onSelect: function () {
-                    plugin.setDate(plugin.$datepicker.val());
+                    plugin.setDate(plugin.$datepicker.datepicker("getDate"));
                 }
             });
 
             plugin.$datepicker.datepicker(datepickerOptions);
 
             plugin.$datepicker.on("change", function () {
-                plugin.setDate(plugin.$datepicker.val());
+                plugin.setDate(plugin.$datepicker.val(), plugin.settings.dateDisplayFormat);
             });
+            
+            var storedDateMoment = plugin.getStoredValueMoment();
+            if (storedDateMoment != null) {
+                plugin.setDate(storedDateMoment.toDate());
+            }
         },
 
         setDate: function (value, dateFormat) {
             var plugin = this;
 
             var displayText = "";
-            var storeText = "";
             if (value) {
                 var momentValue = null;
 
                 if (typeof value === "string") {
-                    var format = plugin.settings.dateDisplayFormat;
-                    if (dateFormat) format = dateFormat;
-
-                    momentValue = moment.utc(value, format);
+                    momentValue = moment(value, dateFormat);
                 }
                 else {
-                    momentValue = moment.utc(value);
+                    momentValue = moment(value);
                 }
 
                 if (momentValue.isValid()) {
                     displayText = momentValue.format(plugin.settings.dateDisplayFormat);
-                    storeText = momentValue.format(plugin.settings.dateStoreFormat);
                 }
                 else {
                     if (plugin.settings.invalidDateFormatErrorText.length > 0) {
@@ -97,10 +97,12 @@
                 }
             }
 
-            plugin.$datepicker.val(displayText);
-            plugin.$dateTimeValueInput.val(storeText);
+            var date = momentValue.toDate();
+            plugin.$datepicker.datepicker("setDate", momentValue.toDate());
 
-            plugin.settings.dateChanged(plugin.getDate());
+            plugin.updateStoredValue(date);
+
+            plugin.settings.dateChanged(date);
         },
 
         getDate: function () {
@@ -108,13 +110,39 @@
 
             var storeText = plugin.$dateTimeValueInput.val();
 
-            return storeText.length > 0 ? moment.utc(storeText).toDate() : null;
+            return storeText.length > 0 ? plugin.$datepicker.datepicker("getDate") : null;
         },
 
         setOption: function (name, value) {
+            var plugin = this;
+
             if (name && value) {
                 this.$datepicker.datepicker("option", name, value);
+
+                plugin.updateStoredValue();
             }
+        },
+
+        updateStoredValue: function (date) {
+            var plugin = this;
+
+            if (!date) {
+                date = plugin.getDate();
+            }
+
+            if (date != null) {
+                plugin.$dateTimeValueInput.val(moment(date).format(plugin.settings.dateStoreFormat));
+            }
+            else {
+                plugin.$dateTimeValueInput.val("");
+            }
+        },
+
+        getStoredValueMoment: function () {
+            var plugin = this;
+
+            var storedValue = plugin.$dateTimeValueInput.val();
+            return storedValue ? moment(storedValue, this.settings.dateStoreFormat) : null;
         }
     });
 
