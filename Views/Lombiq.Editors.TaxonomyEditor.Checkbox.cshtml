@@ -12,6 +12,8 @@
     var CheckBoxesListItemElementName = DefaultBlockName + "__listItem";
     var CheckBoxElementName = DefaultBlockName + "__checkbox";
     var CheckboxTextLabel = DefaultBlockName + "__textLabel";
+    var CheckboxIndicator = DefaultBlockName + "__indicator";
+
     var termIndex = 0;
 
     var labelAttributes = new Dictionary<string, object>
@@ -35,11 +37,15 @@
         @foreach (var selectListItem in viewModel.SelectList)
         {
             <div class="@CheckBoxesListItemElementName">
-                <input class="@CheckBoxElementName" @if (selectListItem.Disabled) { <text> disabled="disabled" </text> } type="checkbox" value="true" @if (selectListItem.Selected) { <text> checked="checked" </text> } name="@Html.Name($"Terms[{termIndex}].IsChecked")" id="@Html.Id($"Terms[{termIndex}].IsChecked")" data-term="@selectListItem.Text" />
+                <label class="forcheckbox @CheckboxTextLabel" for="@Html.Id($"Terms[{termIndex}].IsChecked")">
+                    <input class="@CheckBoxElementName" @if (selectListItem.Disabled) { <text> disabled="disabled" </text> } type="checkbox" value="true" @if (selectListItem.Selected) { <text> checked="checked" </text> } name="@Html.Name($"Terms[{termIndex}].IsChecked")" id="@Html.Id($"Terms[{termIndex}].IsChecked")" data-term="@selectListItem.Text" />
 
-                @Html.Hidden($"Terms[{termIndex}].Id", selectListItem.Value)
+                    @Html.Hidden($"Terms[{termIndex}].Id", selectListItem.Value)
 
-                <label class="forcheckbox @CheckboxTextLabel" for="@Html.Id($"Terms[{termIndex}].IsChecked")">@selectListItem.Text</label>
+                    @selectListItem.Text
+
+                    <div class="@CheckboxIndicator"></div>
+                </label>
             </div>
             termIndex++;
         }
@@ -55,9 +61,9 @@
                     @* Trying to match the current field editor as much as possible,
                        so that we don't interfere with other ones,
                        but that requires the BlockName to be defined. *@
-                    if (!$(this).parents().eq(2).hasClass("@BlockName")) return;
+                    if (!$(this).parents().eq(3).hasClass("@BlockName")) return;
 
-                    $(this).parent().siblings().children(".@CheckBoxElementName").prop("checked", false);
+                    $(this).parent().parent().siblings().find(".@CheckBoxElementName").prop("checked", false);
                 });
             });
         })(jQuery);

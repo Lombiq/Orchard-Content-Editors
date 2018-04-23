@@ -10,6 +10,7 @@
     var CheckboxElementName = BlockName + "__checkbox";
     var CheckboxButtonElementName = BlockName + "__checkboxButton";
     var LabelElementName = BlockName + "__label";
+    var CheckboxIndicator = BlockName + "__indicator";
 
     var boolAttributes = viewModel.BuildAttributes(new Dictionary<string, object>
     {
@@ -41,6 +42,7 @@
         <label class="@LabelElementName">
             @Html.CheckBox(viewModel.Name, value, boolAttributes)
             @viewModel.Label
+            <div class="@CheckboxIndicator"></div>
         </label>
     </div>
     @if (!string.IsNullOrEmpty(viewModel.Hint))
