@@ -21,7 +21,7 @@
 
     @if (modelState != null && !modelState.IsValid)
     {
-        <ol class="@ErrorsElementName">
+        <ol class="alert alert-danger @ErrorsElementName">
             @foreach (var key in modelState.Keys)
             {
                 foreach (var validationError in modelState[key].Errors)
