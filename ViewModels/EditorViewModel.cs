@@ -22,5 +22,10 @@
         /// that triggers front-end validation logic.
         /// </summary>
         public bool Required { get; set; }
+
+        /// <summary>
+        /// Indicates whether the HTML field is Disabled.
+        /// </summary>
+        public bool Disabled { get; set; }
     }
 }
