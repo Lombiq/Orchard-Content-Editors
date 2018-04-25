@@ -67,7 +67,7 @@
     var dateTimeString = viewModel.Value as string;
 
     // If the value is not string then assume that it is a DateTime object. If so, format it.
-    if (!string.IsNullOrEmpty(dateTimeString) && viewModel.Value is DateTime?)
+    if (string.IsNullOrEmpty(dateTimeString) && viewModel.Value is DateTime?)
     {
         var value = viewModel.Value as DateTime?;
         dateTimeString = value.HasValue && value.Value != default(DateTime) ?
