@@ -33,7 +33,8 @@
                 processingIndicatorElementClass: "@(useStaticLoadingIndicator ? "" : ".js-" + ElementNames.AsyncEditorLoader.ProcessingIndicatorElementName)",
                 editorPlaceholderElementClass: ".js-@ElementNames.AsyncEditorLoader.EditorPlaceholderElementName",
                 loadEditorActionElementClass: ".js-@ElementNames.AsyncEditorActions.LoadEditorElementName",
-                postEditorActionElementClass: ".js-@ElementNames.AsyncEditorActions.PostEditorElementName"
+                postEditorActionElementClass: ".js-@ElementNames.AsyncEditorActions.PostEditorElementName",
+                dirtyFormLeaveConfirmationText: "@HttpUtility.JavaScriptStringEncode(T("Are you sure you want to leave this editor group? Changes you made may not be saved.").Text)",
             });
         });
     })(jQuery);

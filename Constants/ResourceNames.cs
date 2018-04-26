@@ -20,5 +20,7 @@
         public const string Selectize = nameof(Selectize);
 
         public const string Uri_Js = "URI.js";
+
+        public const string AreYouSure = nameof(AreYouSure);
     }
 }
