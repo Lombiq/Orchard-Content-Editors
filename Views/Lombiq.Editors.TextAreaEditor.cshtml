@@ -53,10 +53,10 @@
                         minWidth: 40,
                         minHeight: 30,
                         start: function () {
-                            $(this).children(".ui-resizable-se").css({ "right": "27px", "bottom": "15px" });
+                            $(this).children(".ui-resizable-se").css({ "bottom": "15px" });
                         }
                     }).removeAttr("style").parent().removeAttr("style")
-                        .css({ "height": "auto", "width": "100%", "position": "relative" });
+                        .css({ "height": "auto", "min-width": "100%", "max-width": "100%", "position": "relative" });
                 });
             })(jQuery);
     </script>
