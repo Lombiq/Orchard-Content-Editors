@@ -20,7 +20,7 @@
 
 <div class="editor form-group @BlockName">
     @checkboxContainerDiv.StartElement
-        <input class="@BooleanFieldElementName" type="checkbox" name="@viewModel.Name" value="@Json.Encode(value)" @(value ? "checked=checked" : "") />
+        <input class="@BooleanFieldElementName" type="checkbox" name="@viewModel.Name" value="@Json.Encode(value)" @(value ? "checked=checked" : "") @if (viewModel.Disabled) { <text> disabled="disabled" </text> }/>
     @checkboxContainerDiv.EndElement
 </div>
 
