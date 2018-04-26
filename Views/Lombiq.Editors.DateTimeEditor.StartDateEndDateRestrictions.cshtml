@@ -18,7 +18,7 @@
             var startDatePicker = $(".@(startDateFieldName.HtmlClassify())").lombiq_Editors_DateTimeEditor()[0];
             var endDatePicker = $(".@(endDateFieldName.HtmlClassify())").lombiq_Editors_DateTimeEditor()[0];
 
-            startDatePicker.settings.dateChanged = function (startDate) {
+            function setEndDateByStartDate(startDate) {
                 if (startDate) {
                     var endDate = endDatePicker.getDate();
 
@@ -28,9 +28,9 @@
 
                     endDatePicker.setOption("minDate", startDate);
                 }
-            };
+            }
 
-            endDatePicker.settings.dateChanged = function (endDate) {
+            function setStartDateByEndDate(endDate) {
                 if (endDate) {
                     var startDate = startDatePicker.getDate();
 
@@ -40,6 +40,20 @@
 
                     startDatePicker.setOption("maxDate", endDate);
                 }
+            }
+
+            var startDate = startDatePicker.getDate();
+            setEndDateByStartDate(startDate);
+
+            var endDate = endDatePicker.getDate();
+            setStartDateByEndDate(endDate);
+
+            startDatePicker.settings.dateChanged = function (startDate) {
+                setEndDateByStartDate(startDate);
+            };
+
+            endDatePicker.settings.dateChanged = function (endDate) {
+                setStartDateByEndDate(endDate);
             };
         });
     })(jQuery);
