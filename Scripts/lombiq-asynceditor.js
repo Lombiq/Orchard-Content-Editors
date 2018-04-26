@@ -142,7 +142,9 @@
             var plugin = this;
 
             var postEditorAjax = function () {
-                plugin.getPostEditorXHR(submitContext);
+                if (plugin.validateForm()) {
+                    plugin.getPostEditorXHR(submitContext);
+                }
             };
             if (!plugin.childPlugin) postEditorAjax();
             else {
@@ -161,6 +163,14 @@
             this.childPlugin = childPlugin;
 
             return this;
+        },
+
+        /**
+         * Triggers a form validation and returns the form validity.
+         * @returns True if the form is valid.
+         */
+        validateForm: function () {
+            return this.currentForm[0].checkValidity();
         },
 
         /**
@@ -191,12 +201,14 @@
                 
                 if (eventContext.cancel) deferred.reject();
                 else if (eventContext.postEditor) {
-                    $.when(plugin.getPostEditorXHR(currentSubmitContext))
-                        .done(function (response) {
-                            if (response.Success && !response.HasValidationErrors) deferred.resolve();
-                            else deferred.reject();
-                        })
-                        .fail(deferred.reject);
+                    if (plugin.validateForm()) {
+                        $.when(plugin.getPostEditorXHR(currentSubmitContext))
+                            .done(function (response) {
+                                if (response.Success && !response.HasValidationErrors) deferred.resolve();
+                                else deferred.reject();
+                            })
+                            .fail(deferred.reject);
+                    }
                 }
             }
 
