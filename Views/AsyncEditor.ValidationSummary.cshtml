@@ -13,7 +13,7 @@
     const string ErrorMessageElementName = BlockName + "__errorMessage";
 }
 
-<div class="@BlockName">
+<div class="@BlockName js-@BlockName">
     @if (!string.IsNullOrEmpty(validationMessage))
     {
         <div class="@ValidationMessageElementName">@validationMessage</div>
@@ -34,3 +34,13 @@
         </ol>
     }
 </div>
+
+<script type="text/javascript">
+    ; (function ($) {
+        $(function () {
+            $("html, body").animate({
+                scrollTop: $(".js-@BlockName").offset().top
+            }, 500);
+        });
+    })(jQuery);
+</script>

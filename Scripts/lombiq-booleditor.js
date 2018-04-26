@@ -88,6 +88,8 @@
     $(function () {
         $.fn.extend({
             ShowHideClassByBoolEditorId: function (initialValue, targetClass, inverseTargetClass) {
+                var self = this;
+
                 var adjustTargetElementVisibility = function (value) {
                     if (typeof value === "undefined") return;
 
@@ -99,17 +101,37 @@
                                 null :
                             null;
 
+                    var replaceRequiredAttribute = function (className) {
+                        self.ReplaceAttribute("." + className, "required", "required-hidden");
+                    }
+
+                    var replaceRequiredHiddenAttribute = function (className) {
+                        self.ReplaceAttribute("." + className, "required-hidden", "required");
+                    }
+
                     if (actualValue == null) {
                         $("." + targetClass).hide();
-                        if (inverseTargetClass) $("." + inverseTargetClass).hide();
+                        replaceRequiredAttribute(targetClass);
+                        if (inverseTargetClass) {
+                            $("." + inverseTargetClass).hide();
+                            replaceRequiredAttribute(inverseTargetClass);
+                        }
                     }
                     else if (actualValue) {
                         $("." + targetClass).show();
-                        if (inverseTargetClass) $("." + inverseTargetClass).hide();
+                        replaceRequiredHiddenAttribute(targetClass);
+                        if (inverseTargetClass) {
+                            $("." + inverseTargetClass).hide();
+                            replaceRequiredAttribute(inverseTargetClass);
+                        }
                     }
                     else {
                         $("." + targetClass).hide();
-                        if (inverseTargetClass) $("." + inverseTargetClass).show();
+                        replaceRequiredAttribute(targetClass);
+                        if (inverseTargetClass) {
+                            $("." + inverseTargetClass).show();
+                            replaceRequiredHiddenAttribute(inverseTargetClass);
+                        }
                     }
                 }
 
@@ -117,6 +139,15 @@
 
                 $("#" + this.selector).on("change", function (event, boolEditorValue) {
                     adjustTargetElementVisibility(boolEditorValue);
+                });
+            },
+
+            ReplaceAttribute: function (selector, attribute, newAttribute) {
+                $(selector).find("[" + attribute + "]").each(function () {
+                    var $self = $(this);
+                    var attrValue = $self.attr(attribute);
+                    $self.removeAttr(attribute);
+                    $self.attr(newAttribute, attrValue);
                 });
             }
         });
