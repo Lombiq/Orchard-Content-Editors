@@ -25,7 +25,7 @@ namespace Lombiq.ContentEditors.Helpers
                 selectListItems.Add(CreateSelectListItem(entry, selectedTermNames, entry.GetLevels() - parentTermLevel));
             }
 
-            return selectListItems;
+            return selectListItems.OrderBy(item => item.Text).ToList();
         }
 
         public static IList<SelectListItem> GetSelectListFromTermsUnderLevel(
