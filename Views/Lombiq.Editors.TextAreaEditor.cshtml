@@ -1,14 +1,17 @@
 ﻿@using Lombiq.ContentEditors.ViewModels
+@using Lombiq.ContentEditors.Extensions
+@using Orchard.Utility.Extensions
 
 @{
     var viewModel = Model.ViewModel as EditorViewModel;
 
     const string DefaultBlockName = "textAreaEditor";
     string BlockName = viewModel.BlockName ?? DefaultBlockName;
+    string ClassNameForScripts = "js-" + viewModel.Name.HtmlClassify();
 
     var textAreaAttributes = viewModel.BuildAttributes(new Dictionary<string, object>
     {
-        { "class", "form-control textbox " + DefaultBlockName + "__textArea" }
+        { "class", "form-control textbox " + DefaultBlockName + "__textArea " + ClassNameForScripts }
     });
 
     var labelAttributes = new Dictionary<string, object>
@@ -40,3 +43,21 @@
     }
     @Html.TextArea(viewModel.Name, viewModel.Value?.ToString(), textAreaAttributes)
 </div>
+
+@if (this.IsInternetExplorer(Request.UserAgent))
+{
+    <script type="text/javascript">
+            ; (function ($) {
+                $(function () {
+                    $(".@ClassNameForScripts").resizable({
+                        minWidth: 40,
+                        minHeight: 30,
+                        start: function () {
+                            $(this).children(".ui-resizable-se").css({ "bottom": "15px" });
+                        }
+                    }).removeAttr("style").parent().removeAttr("style")
+                        .css({ "height": "auto", "min-width": "100%", "max-width": "100%", "position": "relative" });
+                });
+            })(jQuery);
+    </script>
+}
