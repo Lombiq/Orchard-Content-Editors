@@ -107,6 +107,7 @@
     <Compile Include="Drivers\AsyncEditorPartDriver.cs" />
     <Compile Include="Authorization\GroupAuthorizationEventHandler.cs" />
     <Compile Include="Extensions\HtmlHelperExtensions.cs" />
+    <Compile Include="Extensions\WebViewPageExtensions.cs" />
     <Compile Include="Handlers\AsyncEditorPartHandler.cs" />
     <Compile Include="Helpers\TaxonomyFieldHelpers.cs" />
     <Compile Include="Models\AsyncEditorResult.cs" />
