@@ -13,6 +13,7 @@
     var CheckBoxElementName = DefaultBlockName + "__checkbox";
     var CheckboxTextLabel = DefaultBlockName + "__textLabel";
     var CheckboxIndicator = DefaultBlockName + "__indicator";
+    var Tooltip = DefaultBlockName + "__tooltip";
 
     var termIndex = 0;
 
@@ -44,6 +45,11 @@
 
                     @selectListItem.Text
 
+                    @if (viewModel.Hints.TryGetValue(selectListItem.Value, out string tooltip))
+                    {
+                        <span class="@Tooltip" data-toggle="tooltip" title="@tooltip">@T("Tooltip")</span>
+                    }
+
                     <div class="@CheckboxIndicator"></div>
                 </label>
             </div>
@@ -57,6 +63,11 @@
     <script type="text/javascript">
         ; (function ($) {
             $(function () {
+                $("[data-toggle='tooltip']").tooltip({
+                    content: function () {
+                        return $(this).prop('title');
+                    }
+                }); 
                 $(".@CheckBoxElementName").click(function () {
                     @* Trying to match the current field editor as much as possible,
                        so that we don't interfere with other ones,
