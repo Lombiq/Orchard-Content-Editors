@@ -67,6 +67,9 @@
                 $("[data-toggle='tooltip']").tooltip({
                     content: function () {
                         return $(this).prop("title");
+                    },
+                    classes: {
+                        "ui-tooltip": "highlight"
                     }
                 }); 
                 $(".@CheckBoxElementName").click(function () {
