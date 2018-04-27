@@ -48,7 +48,7 @@
 
                     @if (hasHints && viewModel.Hints.TryGetValue(selectListItem.Value, out string tooltip))
                     {
-                        <span class="@Tooltip" data-toggle="tooltip" title="@tooltip">@T("Tooltip")</span>
+                        <span class="@Tooltip" data-toggle="tooltip" title="@tooltip"></span>
                     }
 
                     <div class="@CheckboxIndicator"></div>
