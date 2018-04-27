@@ -146,6 +146,7 @@
     <Content Include="Content\Selectize\selectize.bootstrap3.css" />
     <Content Include="Content\Selectize\selectize.js" />
     <Content Include="Content\Selectize\selectize.min.js" />
+    <Content Include="Scripts\lombiq-unsafeaction.js" />
     <Content Include="Scripts\lombiq-loadingindicator.js" />
     <Content Include="Scripts\lombiq-editors-datetimeeditor.js" />
     <Content Include="Scripts\lombiq-connectedvalueselector.js" />
