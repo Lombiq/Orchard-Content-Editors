@@ -14,6 +14,7 @@
     var CheckboxTextLabel = DefaultBlockName + "__textLabel";
     var CheckboxIndicator = DefaultBlockName + "__indicator";
     var Tooltip = DefaultBlockName + "__tooltip";
+    var hasHints = viewModel.Hints != null;
 
     var termIndex = 0;
 
@@ -45,7 +46,7 @@
 
                     @selectListItem.Text
 
-                    @if (viewModel.Hints.TryGetValue(selectListItem.Value, out string tooltip))
+                    @if (hasHints && viewModel.Hints.TryGetValue(selectListItem.Value, out string tooltip))
                     {
                         <span class="@Tooltip" data-toggle="tooltip" title="@tooltip">@T("Tooltip")</span>
                     }
