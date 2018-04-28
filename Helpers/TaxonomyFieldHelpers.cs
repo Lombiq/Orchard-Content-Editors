@@ -9,7 +9,7 @@ namespace Lombiq.ContentEditors.Helpers
 {
     public static class TaxonomyFieldHelpers
     {
-        public static IList<TermEntry> GetTermEntryListFromTermsUnderParent(
+        public static List<TermEntry> GetTermEntryListFromTermsUnderParent(
             TaxonomyFieldViewModel viewModel, int? parentId = null, int depth = int.MaxValue)
         {
             var parentTermLevel = parentId == null ? 0 : viewModel.Terms.Where(term => term.Id == parentId).FirstOrDefault().GetLevels();
@@ -27,14 +27,14 @@ namespace Lombiq.ContentEditors.Helpers
             return termEntries.OrderBy(entry => entry.Name).ToList();
         }
 
-        public static IList<SelectListItem> GetSelectListFromTermsUnderParent(
-            IList<TermEntry> termEntries, int levelOffset = 0, IEnumerable<string> selectedTermNames = null) =>
+        public static List<SelectListItem> GetSelectListFromTermsUnderParent(
+            List<TermEntry> termEntries, int levelOffset = 0, IEnumerable<string> selectedTermNames = null) =>
             termEntries
                 .Select(entry => CreateSelectListItem(entry, selectedTermNames, entry.GetLevels() - levelOffset))
                 .OrderBy(item => item.Text)
                 .ToList();
 
-        public static IList<SelectListItem> GetSelectListFromTermsUnderParent(
+        public static List<SelectListItem> GetSelectListFromTermsUnderParent(
             TaxonomyFieldViewModel viewModel, int? parentId = null, int depth = int.MaxValue)
         {
             var selectedTermNames = viewModel.SelectedTerms?.Select(term => term.Name) ?? Enumerable.Empty<string>();
@@ -43,7 +43,7 @@ namespace Lombiq.ContentEditors.Helpers
             return GetSelectListFromTermsUnderParent(GetTermEntryListFromTermsUnderParent(viewModel, parentId, depth), parentTermLevel, selectedTermNames);
         }
 
-        public static IList<SelectListItem> GetSelectListFromTermsUnderLevel(
+        public static List<SelectListItem> GetSelectListFromTermsUnderLevel(
             TaxonomyFieldViewModel viewModel, int startingLevel = 0, int depth = int.MaxValue)
         {
             var selectedTermNames = viewModel.SelectedTerms?.Select(term => term.Name) ?? Enumerable.Empty<string>();
