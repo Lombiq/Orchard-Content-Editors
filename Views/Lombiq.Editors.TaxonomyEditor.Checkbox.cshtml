@@ -13,6 +13,8 @@
     var CheckBoxElementName = DefaultBlockName + "__checkbox";
     var CheckboxTextLabel = DefaultBlockName + "__textLabel";
     var CheckboxIndicator = DefaultBlockName + "__indicator";
+    var TooltipElementName = DefaultBlockName + "__tooltip";
+    var hasHints = viewModel.Hints != null && viewModel.Hints.Any();
 
     var termIndex = 0;
 
@@ -44,7 +46,12 @@
 
                     @selectListItem.Text
 
-                    <div class="@CheckboxIndicator"></div>
+                    @if (hasHints && viewModel.Hints.TryGetValue(selectListItem.Value, out string tooltip))
+                    {
+                        <span class="@TooltipElementName" title="@tooltip"></span>
+                    }
+
+                    <span class="@CheckboxIndicator"></span>
                 </label>
             </div>
             termIndex++;
@@ -57,6 +64,20 @@
     <script type="text/javascript">
         ; (function ($) {
             $(function () {
+                @if (hasHints)
+                {
+                    <text>
+                    $(".@TooltipElementName").tooltip({
+                        content: function () {
+                            return $(this).prop("title");
+                        },
+                        classes: {
+                            "ui-tooltip": "highlight"
+                        }
+                    });
+                    </text>
+                }
+
                 $(".@CheckBoxElementName").click(function () {
                     @* Trying to match the current field editor as much as possible,
                        so that we don't interfere with other ones,
