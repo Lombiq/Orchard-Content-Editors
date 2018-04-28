@@ -2,12 +2,9 @@
     dynamic shapeFactory = WorkContext.Resolve<Orchard.DisplayManagement.IShapeFactory>();
     
     var okButtonShape = shapeFactory.Lombiq_Modal_Button(
-        ButtonText: Model.OkButtonText as string ?? T("OK").Text,
+        ButtonText: Model.ButtonText as string ?? T("OK").Text,
         CssClasses: "modalOkButton",
         Trigger: "confirm");
-    var cancelButtonShape = shapeFactory.Lombiq_Modal_Button(
-        ButtonText: Model.CancelButtonText as string ?? T("Cancel").Text,
-        CssClasses: "modalCancelButton");
 }
 
 @Display.Lombiq_Modal(
@@ -15,4 +12,4 @@
     BlockName: Model.BlockName,
     Title: Model.Title,
     Body: Model.Body,
-    ButtonShapes: new[] { okButtonShape, cancelButtonShape })
+    ButtonShapes: new[] { okButtonShape })

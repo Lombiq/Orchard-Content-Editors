@@ -24,7 +24,7 @@
         contentItemIdQueryStringParameter: "",
         multipleEditorsNotAllowedMessage: "Editing multiple items at the same is not allowed. Please save or cancel your current changes first.",
         deleteItemConfirmationText: "Are you sure you want to delete this item?",
-        editorLoadedCallback: function (data, $editor) { },
+        editorLoadedCallback: function (plugin, data, $editor) { },
         deleteCallback: function (data) { },
         cancelCallback: function ($editor) { }
     };

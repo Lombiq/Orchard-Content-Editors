@@ -176,6 +176,10 @@
     <Content Include="Scripts\Web.config" />
     <Content Include="Module.txt" />
     <Content Include="Views\Lombiq.Modals.Confirmation.cshtml" />
+    <Content Include="Views\Lombiq.Modal.Resources.cshtml" />
+    <Content Include="Views\Lombiq.Modal.cshtml" />
+    <Content Include="Views\Lombiq.Modal.Button.cshtml" />
+    <Content Include="Views\Lombiq.Modals.Information.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Orchard\Orchard.Framework.csproj">
