@@ -28,18 +28,19 @@ namespace Lombiq.ContentEditors.Helpers
         }
 
         public static IList<SelectListItem> GetSelectListFromTermsUnderParent(
+            IList<TermEntry> termEntries, int levelOffset = 0, IEnumerable<string> selectedTermNames = null) =>
+            termEntries
+                .Select(entry => CreateSelectListItem(entry, selectedTermNames, entry.GetLevels() - levelOffset))
+                .OrderBy(item => item.Text)
+                .ToList();
+
+        public static IList<SelectListItem> GetSelectListFromTermsUnderParent(
             TaxonomyFieldViewModel viewModel, int? parentId = null, int depth = int.MaxValue)
         {
             var selectedTermNames = viewModel.SelectedTerms?.Select(term => term.Name) ?? Enumerable.Empty<string>();
             var parentTermLevel = parentId == null ? 0 : viewModel.Terms.Where(term => term.Id == parentId).FirstOrDefault().GetLevels();
-            var selectListItems = new List<SelectListItem>();
 
-            foreach (var entry in GetTermEntryListFromTermsUnderParent(viewModel, parentId, depth))
-            {
-                selectListItems.Add(CreateSelectListItem(entry, selectedTermNames, entry.GetLevels() - parentTermLevel));
-            }
-
-            return selectListItems.OrderBy(item => item.Text).ToList();
+            return GetSelectListFromTermsUnderParent(GetTermEntryListFromTermsUnderParent(viewModel, parentId, depth), parentTermLevel, selectedTermNames);
         }
 
         public static IList<SelectListItem> GetSelectListFromTermsUnderLevel(
@@ -89,7 +90,7 @@ namespace Lombiq.ContentEditors.Helpers
             {
                 Text = prefix.ToString() + term.Name,
                 Value = term.Id.ToString(),
-                Selected = selectedTermNames.Contains(term.Name)
+                Selected = selectedTermNames != null && selectedTermNames.Contains(term.Name)
             };
         }
     }
