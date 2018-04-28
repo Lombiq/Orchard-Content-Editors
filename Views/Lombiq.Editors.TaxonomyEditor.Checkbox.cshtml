@@ -13,8 +13,8 @@
     var CheckBoxElementName = DefaultBlockName + "__checkbox";
     var CheckboxTextLabel = DefaultBlockName + "__textLabel";
     var CheckboxIndicator = DefaultBlockName + "__indicator";
-    var Tooltip = DefaultBlockName + "__tooltip";
-    var hasHints = viewModel.Hints != null;
+    var TooltipElementName = DefaultBlockName + "__tooltip";
+    var hasHints = viewModel.Hints != null && viewModel.Hints.Any();
 
     var termIndex = 0;
 
@@ -48,10 +48,10 @@
 
                     @if (hasHints && viewModel.Hints.TryGetValue(selectListItem.Value, out string tooltip))
                     {
-                        <span class="@Tooltip" data-toggle="tooltip" title="@tooltip"></span>
+                        <span class="@TooltipElementName" title="@tooltip"></span>
                     }
 
-                    <div class="@CheckboxIndicator"></div>
+                    <span class="@CheckboxIndicator"></span>
                 </label>
             </div>
             termIndex++;
@@ -64,14 +64,20 @@
     <script type="text/javascript">
         ; (function ($) {
             $(function () {
-                $("[data-toggle='tooltip']").tooltip({
-                    content: function () {
-                        return $(this).prop("title");
-                    },
-                    classes: {
-                        "ui-tooltip": "highlight"
-                    }
-                }); 
+                @if (hasHints)
+                {
+                    <text>
+                    $(".@TooltipElementName").tooltip({
+                        content: function () {
+                            return $(this).prop("title");
+                        },
+                        classes: {
+                            "ui-tooltip": "highlight"
+                        }
+                    });
+                    </text>
+                }
+
                 $(".@CheckBoxElementName").click(function () {
                     @* Trying to match the current field editor as much as possible,
                        so that we don't interfere with other ones,
