@@ -1,4 +1,6 @@
 ﻿@{
+    Script.Require(Lombiq.ContentEditors.Constants.ResourceNames.jQueryUI);
+
     var title = Model.Title as string ?? "";
     var body = Model.Body as string ?? "";
     var buttonShapes = Model.ButtonShapes as IEnumerable<dynamic> ?? Enumerable.Empty<dynamic>();
