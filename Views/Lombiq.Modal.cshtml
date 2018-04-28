@@ -21,29 +21,26 @@
     <div class="modalBody @(DefaultBlockName)__body">@Html.Raw(body)</div>
 </div>
 
-@using (Script.Foot())
-{
-    <script type="text/javascript">
-        ; (function ($) {
-            $(function () {
-                $("#@id").dialog({
-                    dialogClass: "@ModalContainerName",
-                    width: "460px",
-                    closeOnEscape: true,
-                    modal: true,
-                    autoOpen: false,
-                    buttons: [
-                        @foreach (var buttonShape in buttonShapes)
-                        {
-                            @Display(buttonShape)
-                            @:,
-                        }
-                    ],
-                    beforeClose: function () {
-                        $(this).data("context", null);
+<script type="text/javascript">
+    ; (function ($) {
+        $(function () {
+            $("#@id").dialog({
+                dialogClass: "@ModalContainerName",
+                width: "460px",
+                closeOnEscape: true,
+                modal: true,
+                autoOpen: false,
+                buttons: [
+                    @foreach (var buttonShape in buttonShapes)
+                    {
+                        @Display(buttonShape)
+                        @:,
                     }
-                });
+                ],
+                beforeClose: function () {
+                    $(this).data("context", null);
+                }
             });
-        })(jQuery);
-    </script>
-}
+        });
+    })(jQuery);
+</script>
