@@ -37,6 +37,7 @@
         editorPlaceholderElementClass: "",
         loadEditorActionElementClass: "",
         postEditorActionElementClass: "",
+        dirtyFormLeaveConfirmationText: "Are you sure you want to leave this editor group? Changes you made may not be saved.",
         callbacks: {
             parentEditorPostRequestedCallback: function (submitContext, eventContext) { },
             editorLoadedCallback: function (apiResponse) { },
@@ -141,7 +142,9 @@
             var plugin = this;
 
             var postEditorAjax = function () {
-                plugin.getPostEditorXHR(submitContext);
+                if (plugin.validateForm()) {
+                    plugin.getPostEditorXHR(submitContext);
+                }
             };
             if (!plugin.childPlugin) postEditorAjax();
             else {
@@ -160,6 +163,14 @@
             this.childPlugin = childPlugin;
 
             return this;
+        },
+
+        /**
+         * Triggers a form validation and returns the form validity.
+         * @returns True if the form is valid.
+         */
+        validateForm: function () {
+            return this.currentForm[0].checkValidity();
         },
 
         /**
@@ -190,12 +201,14 @@
                 
                 if (eventContext.cancel) deferred.reject();
                 else if (eventContext.postEditor) {
-                    $.when(plugin.getPostEditorXHR(currentSubmitContext))
-                        .done(function (response) {
-                            if (response.Success && !response.HasValidationErrors) deferred.resolve();
-                            else deferred.reject();
-                        })
-                        .fail(deferred.reject);
+                    if (plugin.validateForm()) {
+                        $.when(plugin.getPostEditorXHR(currentSubmitContext))
+                            .done(function (response) {
+                                if (response.Success && !response.HasValidationErrors) deferred.resolve();
+                                else deferred.reject();
+                            })
+                            .fail(deferred.reject);
+                    }
                 }
             }
 
@@ -237,11 +250,13 @@
                 .on("click", function () {
                     var groupName = $(this).attr("data-editorGroupName");
 
-                    if (plugin.currentGroup != groupName) {
-                        plugin.setGroupNameAndItemIdInUrl(groupName, plugin.getContentItemIdFromUrl() || plugin.currentContentItemId)
-                    }
+                    if (plugin.confirmDirtyFormLeave()) {
+                        if (plugin.currentGroup != groupName) {
+                            plugin.setGroupNameAndItemIdInUrl(groupName, plugin.getContentItemIdFromUrl() || plugin.currentContentItemId)
+                        }
 
-                    if (groupName) plugin.loadEditor(plugin.currentContentItemId, groupName);
+                        if (groupName) plugin.loadEditor(plugin.currentContentItemId, groupName);
+                    }
                 });
 
             plugin.currentForm = plugin.$editorContainerElement
@@ -251,6 +266,10 @@
             if (plugin.currentForm) {
                 plugin.currentForm.submit(function (e) {
                     e.preventDefault();
+                });
+
+                plugin.currentForm.areYouSure({
+                    message: plugin.settings.dirtyFormLeaveConfirmationText,
                 });
 
                 plugin.currentForm.find("input[type=submit]")
@@ -469,6 +488,18 @@
             }
 
             return parameters;
+        },
+
+        /**
+         * Checks if the form is dirty. If yes, displays a confirmation text.
+         * @returns True if the form is not dirty or the user confirmed to leave dirty form.
+         */
+        confirmDirtyFormLeave: function () {
+            var isDirty = this.currentForm.hasClass("dirty");
+
+            if (!isDirty) return true;
+
+            return confirm(this.settings.dirtyFormLeaveConfirmationText);
         }
     });
 

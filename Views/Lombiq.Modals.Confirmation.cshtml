@@ -1,0 +1,67 @@
+﻿@using Lombiq.ContentEditors.Constants
+
+@{
+    Script.Require(ResourceNames.jQueryUI);
+    Style.Require(ResourceNames.jQueryUI);
+
+    var title = Model.Title as string ?? "";
+    var body = Model.Body as string ?? "";
+    var okButtonText = Model.OkButtonText as string ?? T("OK").Text;
+    var cancelButtonText = Model.CancelButtonText as string ?? T("Cancel").Text;
+    var titleless = string.IsNullOrEmpty(title);
+
+    const string DefaultBlockName = "confirmationModal";
+    string BlockName = Model.BlockName as string ?? DefaultBlockName;
+
+    const string ModalContainerName = DefaultBlockName + "Container";
+}
+
+<div class="@BlockName js-@BlockName @DefaultBlockName @(titleless ? $"{DefaultBlockName}_titleless" : "")" hidden>
+    @if (!titleless)
+    {
+        <h1 class="modalTitle @(DefaultBlockName)__title">@Html.Raw(title)</h1>
+    }
+    <div class="modalBody @(DefaultBlockName)__body">@Html.Raw(body)</div>
+</div>
+
+@using (Script.Foot())
+{
+    <script type="text/javascript">
+        ; (function ($) {
+            $(function () {
+                $(".js-@BlockName").dialog({
+                    dialogClass: "@ModalContainerName",
+                    width: "34%",
+                    closeOnEscape: true,
+                    modal: true,
+                    autoOpen: false,
+                    buttons: [
+                        {
+                            text: "@okButtonText",
+                            "class": "btn button modalButton modalOkButton @(DefaultBlockName)__okButton",
+                            click: function () {
+                                var $self = $(this);
+
+                                $self.trigger("confirm", [$self.data("context")]);
+                                $self.dialog("close");
+                            }
+                        },
+                        {
+                            text: "@cancelButtonText",
+                            "class": "btn button modalButton modalCancelButton @(DefaultBlockName)__cancelButton",
+                            click: function () {
+                                var $self = $(this);
+
+                                $self.trigger("cancel", [$self.data("context")]);
+                                $self.dialog("close");
+                            }
+                        }
+                    ],
+                    beforeClose: function () {
+                        $(this).data("context", null);
+                    }
+                });
+            });
+        })(jQuery);
+    </script>
+}
