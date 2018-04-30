@@ -20,6 +20,7 @@
         },
         eventNames: {
             editorLoaded: pluginName + "_EditorLoaded",
+            editorPosting: pluginName + "_EditorPosting",
             editorPosted: pluginName + "_EditorPosted",
             parentEditorPostRequested: pluginName + "_ParentEditorPostRequested"
         }
@@ -39,9 +40,10 @@
         postEditorActionElementClass: "",
         dirtyFormLeaveConfirmationText: "Are you sure you want to leave this editor group? Changes you made may not be saved.",
         callbacks: {
-            parentEditorPostRequestedCallback: function (submitContext, eventContext) { },
-            editorLoadedCallback: function (apiResponse) { },
-            editorPostedCallback: function (submitContext, apiResponse) { }
+            parentEditorPostRequestedCallback: function (plugin, submitContext, eventContext) { },
+            editorLoadedCallback: function (plugin, apiResponse) { },
+            editorPostingCallback: function (plugin, context) { },
+            editorPostedCallback: function (plugin, submitContext, apiResponse) { }
         }
     };
 
@@ -141,6 +143,15 @@
         postEditor: function (submitContext) {
             var plugin = this;
 
+            var postingContext = {
+                cancel: false
+            };
+
+            plugin.settings.callbacks.editorPostingCallback(plugin, submitContext, postingContext);
+            $(plugin.element).trigger(staticVariables.eventNames.editorPosting, [plugin, submitContext, postingContext]);
+
+            if (postingContext.cancel) return plugin;
+
             var postEditorAjax = function () {
                 if (plugin.validateForm()) {
                     plugin.getPostEditorXHR(submitContext);
@@ -194,20 +205,31 @@
                 };
 
                 if (plugin.settings.callbacks.parentEditorPostRequestedCallback) {
-                    plugin.settings.callbacks.parentEditorPostRequestedCallback(currentSubmitContext, eventContext);
+                    plugin.settings.callbacks.parentEditorPostRequestedCallback(plugin, currentSubmitContext, eventContext);
                 }
 
                 $(plugin.element).trigger(staticVariables.eventNames.parentEditorPostRequested, [plugin, currentSubmitContext, eventContext]);
                 
                 if (eventContext.cancel) deferred.reject();
-                else if (eventContext.postEditor) {
-                    if (plugin.validateForm()) {
-                        $.when(plugin.getPostEditorXHR(currentSubmitContext))
-                            .done(function (response) {
-                                if (response.Success && !response.HasValidationErrors) deferred.resolve();
-                                else deferred.reject();
-                            })
-                            .fail(deferred.reject);
+                else {
+                    var postingContext = {
+                        cancel: false
+                    };
+
+                    plugin.settings.callbacks.editorPostingCallback(plugin, submitContext, postingContext);
+
+                    $(plugin.element).trigger(staticVariables.eventNames.editorPosting, [plugin, submitContext, postingContext]);
+
+                    if (postingContext.cancel) deferred.reject();
+                    else if (eventContext.postEditor) {
+                        if (plugin.validateForm()) {
+                            $.when(plugin.getPostEditorXHR(currentSubmitContext))
+                                .done(function (response) {
+                                    if (response.Success && !response.HasValidationErrors) deferred.resolve();
+                                    else deferred.reject();
+                                })
+                                .fail(deferred.reject);
+                        }
                     }
                 }
             }
@@ -354,7 +376,7 @@
                     plugin.evaluateApiResponse(response);
 
                     if (plugin.settings.callbacks.editorLoadedCallback) {
-                        plugin.settings.callbacks.editorLoadedCallback(response);
+                        plugin.settings.callbacks.editorLoadedCallback(plugin, response);
                     }
 
                     $(plugin.element).trigger(staticVariables.eventNames.editorLoaded, [plugin, response]);
@@ -408,7 +430,7 @@
                     plugin.evaluateApiResponse(response);
 
                     if (plugin.settings.callbacks.editorPostedCallback) {
-                        plugin.settings.callbacks.editorPostedCallback(submitContext, response);
+                        plugin.settings.callbacks.editorPostedCallback(plugin, submitContext, response);
                     }
 
                     $(plugin.element).trigger(staticVariables.eventNames.editorPosted, [plugin, submitContext, response]);
