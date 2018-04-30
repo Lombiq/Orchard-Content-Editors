@@ -409,8 +409,8 @@
             var plugin = this;
             // For file uploads to work FormData needs to be used, and processData, contentType needs to be false.
             var formData = new FormData(plugin.currentForm[0]);
-            if (!submitContext.submitButtonName || !submitContext.submitButtonValue) {
-                formData.delete(submitContext.submitButtonName);
+            if (submitContext.submitButtonName && submitContext.submitButtonValue) {
+                formData.append(submitContext.submitButtonName, submitContext.submitButtonValue);
             }
 
             return $.ajax({
