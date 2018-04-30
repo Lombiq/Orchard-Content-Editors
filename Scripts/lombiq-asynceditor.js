@@ -385,12 +385,18 @@
          */
         getPostEditorXHR: function (submitContext) {
             var plugin = this;
+            // For file uploads to work FormData needs to be used, and processData, contentType needs to be false.
+            var formData = new FormData(plugin.currentForm[0]);
+            if (!submitContext.submitButtonName || !submitContext.submitButtonValue) {
+                formData.delete(submitContext.submitButtonName);
+            }
 
             return $.ajax({
                 type: "POST",
                 url: plugin.currentForm.attr("action"),
-                data: plugin.currentForm.serialize() + (submitContext.submitButtonName && submitContext.submitButtonValue ?
-                    ("&" + encodeURI(submitContext.submitButtonName) + "=" + encodeURI(submitContext.submitButtonValue)) : ""),
+                data: formData,
+                processData: false,
+                contentType: false,
                 beforeSend: function () {
                     plugin.setProcessingIndicatorVisibility(true);
                 },
