@@ -25,6 +25,7 @@ namespace Lombiq.ContentEditors
             manifest.DefineScript(Lombiq_AsyncEditorWrapper).SetUrl("lombiq-asynceditorwrapper.js").SetDependencies(Lombiq_LoadingIndicator, Uri_Js);
             manifest.DefineScript(Lombiq_Editors_DateTimeEditor).SetUrl("lombiq-editors-datetimeeditor.js").SetDependencies(jQueryUI, "Moment");
             manifest.DefineScript(Lombiq_BoolEditor).SetUrl("lombiq-booleditor.js").SetDependencies(jQuery);
+            manifest.DefineScript(Lombiq_UnsafeAction).SetUrl("lombiq-unsafeaction.js").SetDependencies(jQuery);
 
             manifest.DefineScript(Lombiq_BoolEditor_Toggle).SetUrl("../Content/LC-switch/lc_switch.min.js", "../Content/LC-switch/lc_switch.js").SetDependencies(jQuery);
             manifest.DefineStyle(Lombiq_BoolEditor_Toggle).SetUrl("../Content/LC-switch/lc_switch.css");
