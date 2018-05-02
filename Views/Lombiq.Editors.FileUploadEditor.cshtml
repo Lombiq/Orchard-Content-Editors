@@ -20,8 +20,8 @@
     if (viewModel.Required)
     {
         fileUploadAttributes["required"] = true;
-        fileUploadAttributes["class"] = fileUploadAttributes["class"] + " required";
-        labelAttributes["class"] = labelAttributes["class"] + " required";
+        fileUploadAttributes["class"] += " required";
+        labelAttributes["class"] += " required";
     }
 
     if (!string.IsNullOrEmpty(viewModel.Placeholder))
