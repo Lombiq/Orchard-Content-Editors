@@ -303,6 +303,7 @@
             }
 
             plugin.$editorContainerElement.show();
+            $("html, body").scrollTop(0);
 
             return plugin;
         },
