@@ -17,6 +17,7 @@
 
     var isDateEditor = viewModel.EditorType == DateTimeEditorType.Date ||
         viewModel.EditorType == DateTimeEditorType.DateWithTimeZoneConversion;
+    var hasHint = !string.IsNullOrEmpty(viewModel.Hint);
 
     var classifiedName = Html.ClassifiedName(viewModel.Name);
     var hiddenFieldClassName = "js-" + classifiedName + "-value";
@@ -25,6 +26,7 @@
     const string DefaultBlockName = "dateTimeEditor";
     string BlockName = viewModel.BlockName ?? DefaultBlockName;
     const string DateTimePickerContainerElementName = DefaultBlockName + "__dateTimePickerContainer";
+    const string TooltipElementName = DefaultBlockName + "__tooltip";
 
     var editorTypeClass = isDateEditor ? "datePicker" : "timePicker";
 
@@ -90,6 +92,10 @@
     {
         @Html.Label(viewModel.Name, viewModel.Label, labelAttributes)
     }
+    @if (hasHint)
+    {
+        <span class="@TooltipElementName" title="@viewModel.Hint"></span>
+    }
 
     <div class="@DateTimePickerContainerElementName">
         @Html.Raw(datePickerElement.ToString(TagRenderMode.SelfClosing))
@@ -102,6 +108,19 @@
     <script type="text/javascript">
         ; (function ($) {
             $(function () {
+                @if (hasHint)
+                {
+                    <text>
+                    $(".@TooltipElementName").tooltip({
+                        content: function () {
+                            return $(this).prop("title");
+                        },
+                        classes: {
+                            "ui-tooltip": "highlight"
+                        }
+                    });
+                    </text>
+                }
                 var dateTimeEditorPlugin = $(".@classifiedName").lombiq_Editors_DateTimeEditor({
                     dateTimeValueInputClassName: ".@hiddenFieldClassName",
                     dateDisplayFormat: "@frontEndDisplayFormat",
