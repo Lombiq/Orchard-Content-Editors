@@ -146,6 +146,7 @@
     <Content Include="Content\Selectize\selectize.bootstrap3.css" />
     <Content Include="Content\Selectize\selectize.js" />
     <Content Include="Content\Selectize\selectize.min.js" />
+    <Content Include="Scripts\lombiq-unsafeaction.js" />
     <Content Include="Scripts\lombiq-loadingindicator.js" />
     <Content Include="Scripts\lombiq-editors-datetimeeditor.js" />
     <Content Include="Scripts\lombiq-connectedvalueselector.js" />
@@ -174,6 +175,12 @@
     <Content Include="Web.config" />
     <Content Include="Scripts\Web.config" />
     <Content Include="Module.txt" />
+    <Content Include="Views\Lombiq.Editors.FileUploadEditor.cshtml" />
+    <Content Include="Views\Lombiq.Modals.Confirmation.cshtml" />
+    <Content Include="Views\Lombiq.Modal.Resources.cshtml" />
+    <Content Include="Views\Lombiq.Modal.cshtml" />
+    <Content Include="Views\Lombiq.Modal.Button.cshtml" />
+    <Content Include="Views\Lombiq.Modals.Information.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Orchard\Orchard.Framework.csproj">

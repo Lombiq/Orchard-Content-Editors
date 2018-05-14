@@ -1,0 +1,43 @@
+﻿@using Lombiq.ContentEditors.ViewModels
+
+@{
+    var viewModel = Model.ViewModel as EditorViewModel;
+
+    const string DefaultBlockName = "fileUpload";
+    string BlockName = viewModel.BlockName ?? DefaultBlockName;
+
+    var fileUploadAttributes = viewModel.BuildAttributes(new Dictionary<string, object>
+    {
+        { "class", "form-control fileUpload " + DefaultBlockName + "__fileUpload" },
+        { "type", "file" }
+    });
+
+    var labelAttributes = new Dictionary<string, object>
+    {
+        { "class", "editorLabel " + DefaultBlockName + "__label" }
+    };
+
+    if (viewModel.Required)
+    {
+        fileUploadAttributes["required"] = true;
+        fileUploadAttributes["class"] += " required";
+        labelAttributes["class"] += " required";
+    }
+
+    if (!string.IsNullOrEmpty(viewModel.Placeholder))
+    {
+        fileUploadAttributes["placeholder"] = viewModel.Placeholder;
+    }
+}
+
+<div class="editor editorField form-group @DefaultBlockName @BlockName">
+    @if (!string.IsNullOrEmpty(viewModel.Label))
+    {
+        @Html.Label(viewModel.Name, viewModel.Label, labelAttributes)
+    }
+    @if (!string.IsNullOrEmpty(viewModel.Hint))
+    {
+        <div class="editorHint @(DefaultBlockName)__editorHint">@viewModel.Hint</div>
+    }
+    @Html.TextBox(viewModel.Name, null, fileUploadAttributes)
+</div>

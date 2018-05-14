@@ -9,7 +9,7 @@ namespace Lombiq.ContentEditors.ViewModels
         public bool HasDefaultEmptyValue { get; set; }
         public string ParentDropdownEditorName { get; set; }
         public Dictionary<string, Dictionary<string, string>> ValueHierarchy { get; set; }
-
+        public Dictionary<string, string> Hints { get; set; }
 
         public DropdownEditorViewModel(IEnumerable<string> values)
         {
