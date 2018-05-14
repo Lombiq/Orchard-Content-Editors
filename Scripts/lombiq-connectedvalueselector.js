@@ -52,7 +52,7 @@
                 });
 
                 if (plugin.settings.hasDefaultEmptyValue) {
-                    $(plugin.element).append($("<option>").text("").val(0));
+                    $(plugin.element).append($("<option>").text("").val(""));
                 }
 
                 $.each(Object.keys(sortedCurrentValues), function () {
