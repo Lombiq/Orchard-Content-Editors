@@ -101,12 +101,17 @@
                                 null :
                             null;
 
+                    var validationAttributes = ["required", "min", "max", "pattern"];
                     var replaceRequiredAttribute = function (className) {
-                        self.ReplaceAttribute("." + className, "required", "required-hidden");
+                        $.each(validationAttributes, function () {
+                            self.ReplaceAttribute("." + className, this, this + "-hidden");
+                        });
                     }
 
                     var replaceRequiredHiddenAttribute = function (className) {
-                        self.ReplaceAttribute("." + className, "required-hidden", "required");
+                        $.each(validationAttributes, function () {
+                            self.ReplaceAttribute("." + className, this + "-hidden", this);
+                        });
                     }
 
                     if (actualValue == null) {
