@@ -1,4 +1,5 @@
-﻿using Lombiq.ContentEditors.Services;
+﻿using Lombiq.ContentEditors.Events;
+using Lombiq.ContentEditors.Services;
 using Orchard.ContentManagement;
 using Orchard.Data;
 using Orchard.DisplayManagement;
@@ -14,8 +15,9 @@ namespace Lombiq.ContentEditors.Controllers
             IShapeDisplay shapeDisplay,
             IShapeFactory shapeFactory,
             IAsyncEditorService asyncEditorService,
-            ITransactionManager transactionManager)
-            : base(contentManager, shapeDisplay, shapeFactory, asyncEditorService, transactionManager)
+            ITransactionManager transactionManager,
+            IContentAsyncEditorEventHandler contentAsyncEditorEventHandler)
+            : base(contentManager, shapeDisplay, shapeFactory, asyncEditorService, transactionManager, contentAsyncEditorEventHandler)
         {
         }
 

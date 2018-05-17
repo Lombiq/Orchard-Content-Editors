@@ -1,4 +1,5 @@
-﻿using Lombiq.ContentEditors.Models;
+﻿using Lombiq.ContentEditors.Events;
+using Lombiq.ContentEditors.Models;
 using Lombiq.ContentEditors.Services;
 using Orchard.ContentManagement;
 using Orchard.Data;
@@ -10,6 +11,7 @@ namespace Lombiq.ContentEditors.Controllers
 {
     public abstract class AsyncEditorControllerBase : Controller, IUpdateModel
     {
+        protected readonly IContentAsyncEditorEventHandler _contentAsyncEditorEventHandler;
         protected readonly IContentManager _contentManager;
         protected readonly IShapeDisplay _shapeDisplay;
         protected readonly dynamic _shapeFactory;
@@ -25,13 +27,15 @@ namespace Lombiq.ContentEditors.Controllers
             IShapeDisplay shapeDisplay,
             IShapeFactory shapeFactory,
             IAsyncEditorService asyncEditorService,
-            ITransactionManager transactionManager)
+            ITransactionManager transactionManager,
+            IContentAsyncEditorEventHandler contentAsyncEditorEventHandler)
         {
             _contentManager = contentManager;
             _shapeDisplay = shapeDisplay;
             _shapeFactory = shapeFactory;
             _asyncEditorService = asyncEditorService;
             _transactionManager = transactionManager;
+            _contentAsyncEditorEventHandler = contentAsyncEditorEventHandler;
 
             T = NullLocalizer.Instance;
         }
@@ -100,6 +104,12 @@ namespace Lombiq.ContentEditors.Controllers
             if (publish && isPublishGroup)
             {
                 _contentManager.Publish(part.ContentItem);
+
+                _contentAsyncEditorEventHandler.Published(part, group);
+            }
+            else
+            {
+                _contentAsyncEditorEventHandler.Saved(part, group, newContent);
             }
 
             return AsyncEditorSaveResult(
@@ -136,6 +146,8 @@ namespace Lombiq.ContentEditors.Controllers
             _asyncEditorService.StoreCompletedEditorGroup(part, group);
 
             part.LastUpdatedEditorGroupName = group;
+
+            _contentAsyncEditorEventHandler.Saved(part, group, newContent);
 
             var nextGroup = _asyncEditorService.GetNextGroupDescriptor(part, group);
             if (nextGroup == null) return AsyncEditorResult(part, group);
