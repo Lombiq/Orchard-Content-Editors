@@ -108,11 +108,11 @@ namespace Lombiq.ContentEditors.Controllers
             {
                 _contentManager.Publish(part.ContentItem);
 
-                _contentAsyncEditorEventHandler.Published(part, group);
+                _contentAsyncEditorEventHandler.Saved(part, group, newContent, true);
             }
             else
             {
-                _contentAsyncEditorEventHandler.Saved(part, group, newContent);
+                _contentAsyncEditorEventHandler.Saved(part, group, newContent, false);
             }
 
             return AsyncEditorSaveResult(
@@ -153,7 +153,7 @@ namespace Lombiq.ContentEditors.Controllers
 
             part.LastUpdatedEditorGroupName = group;
 
-            _contentAsyncEditorEventHandler.Saved(part, group, newContent);
+            _contentAsyncEditorEventHandler.Saved(part, group, newContent, false);
 
             var nextGroup = _asyncEditorService.GetNextGroupDescriptor(part, group);
             if (nextGroup == null) return AsyncEditorResult(part, group);
