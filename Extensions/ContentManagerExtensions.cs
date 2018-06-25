@@ -6,7 +6,7 @@ namespace Orchard.ContentManagement
 {
     public static class ContentManagerExtensions
     {
-        public static IContent NewClone(
+        public static IContent NonPersistentClone(
             this IContentManager contentManager, 
             ContentItem contentItem, 
             IEnumerable<IContentHandler> handlers,

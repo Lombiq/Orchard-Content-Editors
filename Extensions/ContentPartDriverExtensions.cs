@@ -8,7 +8,9 @@ namespace Orchard.ContentManagement.Drivers
 {
     public static class ContentPartDriverExtensions
     {
-        public static void CloneInfoset<TContent>(this ContentPartDriver<TContent> driver, TContent originalPart, TContent clonePart) where TContent : ContentPart, new()
+        public static void CloneInfoset<TContent>(
+            this ContentPartDriver<TContent> driver, 
+            TContent originalPart, TContent clonePart) where TContent : ContentPart, new()
         {
             if (!clonePart.Has<InfosetPart>()) return;
 
