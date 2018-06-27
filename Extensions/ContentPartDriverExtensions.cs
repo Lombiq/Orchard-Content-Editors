@@ -1,5 +1,4 @@
-﻿using Orchard.ContentManagement.Drivers;
-using Orchard.ContentManagement.FieldStorage.InfosetStorage;
+﻿using Orchard.ContentManagement.FieldStorage.InfosetStorage;
 using Orchard.ContentManagement.Handlers;
 using System.Xml;
 using System.Xml.Linq;
@@ -9,7 +8,7 @@ namespace Orchard.ContentManagement.Drivers
     public static class ContentPartDriverExtensions
     {
         public static void CloneInfoset<TContent>(
-            this ContentPartDriver<TContent> driver, 
+            this ContentPartDriver<TContent> driver,
             TContent originalPart, TContent clonePart) where TContent : ContentPart, new()
         {
             if (!clonePart.Has<InfosetPart>()) return;
@@ -18,7 +17,7 @@ namespace Orchard.ContentManagement.Drivers
             if (originalInfosetPart == null) return;
 
             var context = new ExportContentContext(
-                originalPart.ContentItem, 
+                originalPart.ContentItem,
                 new XElement(XmlConvert.EncodeLocalName(originalPart.ContentItem.ContentType)));
 
             void exportInfoset(XElement element, bool versioned)
@@ -37,10 +36,7 @@ namespace Orchard.ContentManagement.Drivers
 
             void importInfoset(XElement element, bool versioned)
             {
-                if (element == null)
-                {
-                    return;
-                }
+                if (element == null) return;
 
                 foreach (var attribute in element.Attributes())
                 {
