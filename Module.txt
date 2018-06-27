@@ -8,4 +8,4 @@ Features:
 		Name: Lombiq Content Editors
 		Description: Managing advanced content editing processes based on editor groups.
 		Category: Content
-		Dependencies: Orchard.Taxonomies, Piedone.HelpfulLibraries.DependencyInjection
+		Dependencies: Orchard.Taxonomies, Piedone.HelpfulExtensions, Piedone.HelpfulLibraries.DependencyInjection
