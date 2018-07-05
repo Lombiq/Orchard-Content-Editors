@@ -106,6 +106,8 @@
     <Compile Include="Drivers\AsyncEditorGroupSettingDriver.cs" />
     <Compile Include="Drivers\AsyncEditorPartDriver.cs" />
     <Compile Include="Authorization\GroupAuthorizationEventHandler.cs" />
+    <Compile Include="Events\IContentAsyncEditorEventHandler.cs" />
+    <Compile Include="Extensions\ContentManagerExtensions.cs" />
     <Compile Include="Extensions\HtmlHelperExtensions.cs" />
     <Compile Include="Extensions\WebViewPageExtensions.cs" />
     <Compile Include="Handlers\AsyncEditorPartHandler.cs" />
@@ -196,6 +198,10 @@
     <ProjectReference Include="..\Orchard.Taxonomies\Orchard.Taxonomies.csproj">
       <Project>{E649EA64-D213-461B-87F7-D67035801443}</Project>
       <Name>Orchard.Taxonomies</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Piedone.HelpfulExtensions\Piedone.HelpfulExtensions.csproj">
+      <Project>{b5329406-c74a-4434-a54d-8b3047cfbf93}</Project>
+      <Name>Piedone.HelpfulExtensions</Name>
     </ProjectReference>
     <ProjectReference Include="..\Piedone.HelpfulLibraries\Piedone.HelpfulLibraries.csproj">
       <Project>{EA61AD10-39D6-41A9-B12B-227F50C54158}</Project>

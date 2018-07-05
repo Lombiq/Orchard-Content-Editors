@@ -14,5 +14,8 @@ namespace Lombiq.ContentEditors.Drivers
 
         protected override void Importing(AsyncEditorPart part, ImportContentContext context) => 
             ImportInfoset(part, context);
+
+        protected override void Cloning(AsyncEditorPart originalPart, AsyncEditorPart clonePart, CloneContentContext context) =>
+            this.CloneInfoset(originalPart, clonePart);
     }
 }

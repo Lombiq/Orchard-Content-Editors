@@ -1,4 +1,5 @@
-﻿using Lombiq.ContentEditors.Models;
+﻿using Lombiq.ContentEditors.Events;
+using Lombiq.ContentEditors.Models;
 using Lombiq.ContentEditors.Services;
 using Orchard.ContentManagement;
 using Orchard.Data;
@@ -10,6 +11,7 @@ namespace Lombiq.ContentEditors.Controllers
 {
     public abstract class AsyncEditorControllerBase : Controller, IUpdateModel
     {
+        protected readonly IContentAsyncEditorEventHandler _contentAsyncEditorEventHandler;
         protected readonly IContentManager _contentManager;
         protected readonly IShapeDisplay _shapeDisplay;
         protected readonly dynamic _shapeFactory;
@@ -25,13 +27,15 @@ namespace Lombiq.ContentEditors.Controllers
             IShapeDisplay shapeDisplay,
             IShapeFactory shapeFactory,
             IAsyncEditorService asyncEditorService,
-            ITransactionManager transactionManager)
+            ITransactionManager transactionManager,
+            IContentAsyncEditorEventHandler contentAsyncEditorEventHandler)
         {
             _contentManager = contentManager;
             _shapeDisplay = shapeDisplay;
             _shapeFactory = shapeFactory;
             _asyncEditorService = asyncEditorService;
             _transactionManager = transactionManager;
+            _contentAsyncEditorEventHandler = contentAsyncEditorEventHandler;
 
             T = NullLocalizer.Instance;
         }
@@ -79,6 +83,9 @@ namespace Lombiq.ContentEditors.Controllers
 
             var newContent = part.Id == 0;
             if (newContent) _contentManager.Create(part.ContentItem, VersionOptions.Draft);
+
+            _contentAsyncEditorEventHandler.BeforeUpdated(part, group, newContent);
+
             _contentManager.UpdateEditor(part.ContentItem, this, group);
 
             if (!ModelState.IsValid)
@@ -100,6 +107,12 @@ namespace Lombiq.ContentEditors.Controllers
             if (publish && isPublishGroup)
             {
                 _contentManager.Publish(part.ContentItem);
+
+                _contentAsyncEditorEventHandler.Saved(part, group, newContent, true);
+            }
+            else
+            {
+                _contentAsyncEditorEventHandler.Saved(part, group, newContent, false);
             }
 
             return AsyncEditorSaveResult(
@@ -124,6 +137,9 @@ namespace Lombiq.ContentEditors.Controllers
 
             var newContent = part.Id == 0;
             if (newContent) _contentManager.Create(part.ContentItem, VersionOptions.Draft);
+
+            _contentAsyncEditorEventHandler.BeforeUpdated(part, group, newContent);
+
             _contentManager.UpdateEditor(part.ContentItem, this, group);
 
             if (!ModelState.IsValid)
@@ -136,6 +152,8 @@ namespace Lombiq.ContentEditors.Controllers
             _asyncEditorService.StoreCompletedEditorGroup(part, group);
 
             part.LastUpdatedEditorGroupName = group;
+
+            _contentAsyncEditorEventHandler.Saved(part, group, newContent, false);
 
             var nextGroup = _asyncEditorService.GetNextGroupDescriptor(part, group);
             if (nextGroup == null) return AsyncEditorResult(part, group);
