@@ -22,17 +22,14 @@
     {
         <h1 class="modalTitle @(DefaultBlockName)__title">@Html.Raw(title)</h1>
     }
-    @if (!headerless)
-    {
-        <div class="modalBody @(DefaultBlockName)__body">
-            <p class="modalHeader @(DefaultBlockName)__header">@Html.Raw(header)</p>
-            @Html.Raw(body)
-        </div>
-    }
-    else
-    {
-        <div class="modalBody @(DefaultBlockName)__body">@Html.Raw(body)</div>
-    }
+   
+     <div class="modalBody @(DefaultBlockName)__body">
+        @if (!headerless)
+         {
+             <p class="modalHeader @(DefaultBlockName)__header">@Html.Raw(header)</p>
+         }
+         @Html.Raw(body)
+     </div>
 </div>
 
 <script type="text/javascript">
