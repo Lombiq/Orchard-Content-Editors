@@ -19,17 +19,17 @@
 
 <div id="@id" class="@BlockName js-@BlockName @DefaultBlockName @(titleless ? $"{DefaultBlockName}_titleless" : "")" hidden>
     @if (!titleless)
-    {
+     {
         <h1 class="modalTitle @(DefaultBlockName)__title">@Html.Raw(title)</h1>
-    }
+     }
    
-     <div class="modalBody @(DefaultBlockName)__body">
+    <div class="modalBody @(DefaultBlockName)__body">
         @if (!headerless)
          {
-             <p class="modalHeader @(DefaultBlockName)__header">@Html.Raw(header)</p>
+            <p class="modalHeader @(DefaultBlockName)__header">@Html.Raw(header)</p>
          }
          @Html.Raw(body)
-     </div>
+    </div>
 </div>
 
 <script type="text/javascript">
