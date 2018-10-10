@@ -26,9 +26,9 @@
      }>
     @if (!titleless)
     {
-        <h1 class="modalTitle @(DefaultBlockName)__title">@Html.Raw(title)</h1>
+        <h1 class="modalTitle @(BlockName)__title">@Html.Raw(title)</h1>
     }
-    <div class="modalBody @(DefaultBlockName)__body">
+    <div class="modalBody @(BlockName)__body">
         @if (bodyShape != null)
         {
             @Display(bodyShape)
