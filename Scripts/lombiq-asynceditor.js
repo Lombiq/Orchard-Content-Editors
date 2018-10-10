@@ -255,19 +255,34 @@
         renderEditorShape: function (editorShape) {
             var plugin = this;
 
-            if (!plugin.$editorContainerElement) return;
+            var $editorContainer = plugin.$editorContainerElement;
+            if (!$editorContainer) return;
 
             if (!editorShape) {
-                plugin.$editorContainerElement.hide();
+                $editorContainer.hide();
 
                 return;
             }
 
             plugin.childPlugin = null;
+            
+            var parsedEditorShape = $.parseHTML(editorShape, true);
 
-            plugin.$editorContainerElement.html($.parseHTML(editorShape, true));
+            $(editorShape).each(function () {
+                console.log($(this));
+                $.each(this.attributes, function () {
+                    // this.attributes is not a plain object, but an array
+                    // of attribute nodes, which contain both the name and value
+                    if (this.specified) {
+                        console.log(this.name, this.value);
+                    }
+                });
+            });
 
-            plugin.$editorContainerElement
+            var displayMode = $(editorShape).attr("data-displaymode");
+            $editorContainer.html(parsedEditorShape);
+
+            $editorContainer
                 .find(plugin.settings.loadEditorActionElementClass)
                 .on("click", function () {
                     var groupName = $(this).attr("data-editorGroupName");
@@ -281,7 +296,7 @@
                     }
                 });
 
-            plugin.currentForm = plugin.$editorContainerElement
+            plugin.currentForm = $editorContainer
                 .find("form")
                 .first();
 
@@ -302,8 +317,24 @@
                     });
             }
 
-            plugin.$editorContainerElement.show();
-            $("html, body").scrollTop(0);
+            if (displayMode === "Modal") {
+
+
+                $editorContainer.children().first().dialog({
+                    dialogClass: "modalContainer",
+                    width: "800px",
+                    closeOnEscape: false,
+                    modal: true,
+                    autoOpen: true
+                });
+
+
+
+            }
+            else {
+                $editorContainer.show();
+                $("html, body").scrollTop(0);
+            }
 
             return plugin;
         },
