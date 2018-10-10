@@ -23,6 +23,10 @@
             editorPosting: pluginName + "_EditorPosting",
             editorPosted: pluginName + "_EditorPosted",
             parentEditorPostRequested: pluginName + "_ParentEditorPostRequested"
+        },
+        displayModes: {
+            inline: "Inline",
+            modal: "Modal"
         }
     };
 
@@ -66,6 +70,8 @@
         childPlugin: null,
         groupNameQueryStringParameter: "",
         contentItemIdQueryStringParameter: "",
+        currentDisplayMode: "",
+        currentDisplayedEditorModal: null,
 
         /**
          * Initializes the Lombiq Async Editor plugin.
@@ -250,9 +256,11 @@
         /**
          * Renders the given editor shape and also registers the necessary event listeners.
          * @param {string} editorShape HTML content of the editor shape.
+         * @param {string} displayMode Optional display mode for the editor shape. By default it's inline.
+         * @param {string} appendEditor Indicates whether the editor shape needs to be appended to its container or replaced. By default it's false.
          * @returns {Object} Returns the current plugin.
          */
-        renderEditorShape: function (editorShape) {
+        renderEditorShape: function (editorShape, displayMode, appendEditor) {
             var plugin = this;
 
             var $editorContainer = plugin.$editorContainerElement;
@@ -264,25 +272,39 @@
                 return;
             }
 
+            if (plugin.currentDisplayedEditorModal) {
+                plugin.currentDisplayedEditorModal.dialog("destroy").remove();
+                plugin.currentDisplayedEditorModal = null;
+            }
+
+            if (!displayMode) {
+                // Try to determine display mode from the editor shape wrapper's attribute.
+                var attributeDisplayMode = $(editorShape).attr("data-displayMode");
+
+                plugin.currentDisplayMode = !attributeDisplayMode ?
+                    staticVariables.displayModes.inline :
+                    attributeDisplayMode;
+            }
+
+            if (appendEditor === undefined) {
+                // Try to determine display mode from the editor shape wrapper's attribute.
+                var attributeAppendEditor = $(editorShape).attr("data-appendEditor");
+
+                appendEditor = attributeAppendEditor === "true" || attributeAppendEditor === "True";
+            }
+
             plugin.childPlugin = null;
             
             var parsedEditorShape = $.parseHTML(editorShape, true);
+            
+            if (appendEditor) {
+                $editorContainer.append(parsedEditorShape);
+            }
+            else {
+                $editorContainer.html(parsedEditorShape);
+            }
 
-            $(editorShape).each(function () {
-                console.log($(this));
-                $.each(this.attributes, function () {
-                    // this.attributes is not a plain object, but an array
-                    // of attribute nodes, which contain both the name and value
-                    if (this.specified) {
-                        console.log(this.name, this.value);
-                    }
-                });
-            });
-
-            var displayMode = $(editorShape).attr("data-displaymode");
-            $editorContainer.html(parsedEditorShape);
-
-            $editorContainer
+            $(parsedEditorShape)
                 .find(plugin.settings.loadEditorActionElementClass)
                 .on("click", function () {
                     var groupName = $(this).attr("data-editorGroupName");
@@ -296,7 +318,7 @@
                     }
                 });
 
-            plugin.currentForm = $editorContainer
+            plugin.currentForm = $(parsedEditorShape)
                 .find("form")
                 .first();
 
@@ -317,19 +339,14 @@
                     });
             }
 
-            if (displayMode === "Modal") {
-
-
-                $editorContainer.children().first().dialog({
+            if (plugin.currentDisplayMode === staticVariables.displayModes.modal) {
+                plugin.currentDisplayedEditorModal = $editorContainer.children().last().dialog({
                     dialogClass: "modalContainer",
                     width: "800px",
                     closeOnEscape: false,
                     modal: true,
                     autoOpen: true
                 });
-
-
-
             }
             else {
                 $editorContainer.show();
