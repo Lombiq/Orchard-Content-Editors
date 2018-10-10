@@ -254,6 +254,18 @@
         },
 
         /**
+         * Closes and destroys displayed editor modal if it was displayed.
+         */
+        destroyDisplayedEditorModal: function () {
+            var plugin = this;
+
+            if (plugin.currentDisplayedEditorModal) {
+                plugin.currentDisplayedEditorModal.dialog("destroy").remove();
+                plugin.currentDisplayedEditorModal = null;
+            }
+        },
+
+        /**
          * Renders the given editor shape and also registers the necessary event listeners.
          * @param {string} editorShape HTML content of the editor shape.
          * @param {string} displayMode Optional display mode for the editor shape. By default it's inline.
@@ -272,10 +284,7 @@
                 return;
             }
 
-            if (plugin.currentDisplayedEditorModal) {
-                plugin.currentDisplayedEditorModal.dialog("destroy").remove();
-                plugin.currentDisplayedEditorModal = null;
-            }
+            plugin.destroyDisplayedEditorModal();
 
             if (!displayMode) {
                 // Try to determine display mode from the editor shape wrapper's attribute.
@@ -293,7 +302,10 @@
                 appendEditor = attributeAppendEditor === "true" || attributeAppendEditor === "True";
             }
 
-            plugin.childPlugin = null;
+            if (plugin.childPlugin) {
+                plugin.childPlugin.destroyDisplayedEditorModal();
+                plugin.childPlugin = null;
+            }
             
             var parsedEditorShape = $.parseHTML(editorShape, true);
             
