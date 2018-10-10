@@ -1,6 +1,4 @@
-﻿@using Orchard.Taxonomies.Models
-
-@{
+﻿@{
     var viewModel = Model.ViewModel as Lombiq.ContentEditors.ViewModels.TaxonomyFieldViewModel;
 
     if ((viewModel == null || viewModel.Terms == null || !viewModel.Terms.Any()) && !viewModel.ShowIfEmpty)
@@ -13,7 +11,7 @@
     string ValueElementName = BlockName + "__value";
     string ValueElementNameWithEmptyModifier = ValueElementName + "_empty";
 
-    viewModel.Terms = TermPart.Sort(viewModel.Terms);
+    //viewModel.Terms = TermPart.Sort(viewModel.Terms);
 }
 
 <div class="@BlockName @viewModel.AdditionalClasses">
