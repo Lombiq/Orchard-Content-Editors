@@ -2,15 +2,17 @@
     Script.Require(Lombiq.ContentEditors.Constants.ResourceNames.jQueryUI);
 
     var title = Model.Title as string ?? "";
+    var header = Model.Header as string ?? "";
     var body = Model.Body as string ?? "";
     var buttonShapes = Model.ButtonShapes as IEnumerable<dynamic> ?? Enumerable.Empty<dynamic>();
     var titleless = string.IsNullOrEmpty(title);
+    var headerless = string.IsNullOrEmpty(header);
 
     const string DefaultBlockName = "modal";
     string BlockName = Model.BlockName as string ?? DefaultBlockName;
     var id = Model.Id as string ?? BlockName;
 
-    const string ModalContainerName = DefaultBlockName + "Container";
+    string ModalContainerName = headerless ? DefaultBlockName + "Container" : DefaultBlockName + "Container" + " modalBorder";
 }
 
 @Display.Lombiq_Modal_Resources()
@@ -20,7 +22,17 @@
     {
         <h1 class="modalTitle @(DefaultBlockName)__title">@Html.Raw(title)</h1>
     }
-    <div class="modalBody @(DefaultBlockName)__body">@Html.Raw(body)</div>
+    @if (!headerless)
+    {
+        <div class="modalBody @(DefaultBlockName)__body">
+            <p class="modalHeader @(DefaultBlockName)__header">@Html.Raw(header)</p>
+            @Html.Raw(body)
+        </div>
+    }
+    else
+    {
+        <div class="modalBody @(DefaultBlockName)__body">@Html.Raw(body)</div>
+    }
 </div>
 
 <script type="text/javascript">
@@ -28,7 +40,7 @@
         $(function () {
             $("#@id").dialog({
                 dialogClass: "@ModalContainerName",
-                width: "535px",
+                width: "460px",
                 closeOnEscape: true,
                 modal: true,
                 autoOpen: false,
