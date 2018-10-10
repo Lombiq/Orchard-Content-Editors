@@ -1,0 +1,41 @@
+﻿@{
+    Script.Require(Lombiq.ContentEditors.Constants.ResourceNames.jQueryUI);
+
+    var title = Model.Title as string ?? "";
+    var body = Model.Body as string ?? "";
+    var bodyShape = Model.BodyShape;
+    var titleless = string.IsNullOrEmpty(title);
+    var additionalAttributes = Model.AdditionalAttributes as IDictionary<string, object>;
+
+    const string DefaultBlockName = "modal";
+    string BlockName = Model.BlockName as string ?? DefaultBlockName;
+    var id = Model.Id as string ?? BlockName;
+}
+
+<div id="@id" 
+     class="@BlockName js-@BlockName @DefaultBlockName @(titleless ? $"{DefaultBlockName}_titleless" : "")" 
+     hidden
+     @if (additionalAttributes != null)
+     {
+         foreach (var attribute in additionalAttributes)
+         {
+             <text>
+                @attribute.Key="@attribute.Value"
+             </text>
+         }
+     }>
+    @if (!titleless)
+    {
+        <h1 class="modalTitle @(DefaultBlockName)__title">@Html.Raw(title)</h1>
+    }
+    <div class="modalBody @(DefaultBlockName)__body">
+        @if (bodyShape != null)
+        {
+            @Display(bodyShape)
+        }
+        else
+        {
+            @Html.Raw(body)
+        }
+    </div>
+</div>
