@@ -43,6 +43,13 @@
         loadEditorActionElementClass: "",
         postEditorActionElementClass: "",
         dirtyFormLeaveConfirmationText: "Are you sure you want to leave this editor group? Changes you made may not be saved.",
+        editorModalSettings: {
+            dialogClass: "modalContainer",
+            width: "800px",
+            closeOnEscape: false,
+            modal: true,
+            autoOpen: true
+        },
         callbacks: {
             parentEditorPostRequestedCallback: function (plugin, submitContext, eventContext) { },
             editorLoadedCallback: function (plugin, apiResponse) { },
@@ -352,13 +359,13 @@
             }
 
             if (plugin.currentDisplayMode === staticVariables.displayModes.modal) {
-                plugin.currentDisplayedEditorModal = $editorContainer.children().last().dialog({
-                    dialogClass: "modalContainer",
-                    width: "800px",
-                    closeOnEscape: false,
-                    modal: true,
-                    autoOpen: true
-                });
+                if (!plugin.settings.editorModalSettings.appendTo) {
+                    plugin.settings.editorModalSettings.appendTo = plugin.element;
+                }
+                plugin.currentDisplayedEditorModal = $editorContainer
+                    .children()
+                    .last()
+                    .dialog(plugin.settings.editorModalSettings);
             }
             else {
                 $editorContainer.show();
