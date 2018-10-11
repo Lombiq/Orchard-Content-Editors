@@ -585,13 +585,21 @@
 
             return parameters;
         },
+        
+        /**
+         * Checks if the form is dirty (ie.e inputs have been changed).
+         * @returns {boolean} True if the form is dirty (i.e. inputs have been changed).
+         */
+        isEditorFormDirty: function () {
+            return this.currentForm.hasClass("dirty");
+        },
 
         /**
          * Checks if the form is dirty. If yes, displays a confirmation text.
          * @returns True if the form is not dirty or the user confirmed to leave dirty form.
          */
         confirmDirtyFormLeave: function () {
-            var isDirty = this.currentForm.hasClass("dirty");
+            var isDirty = this.isEditorFormDirty();
 
             if (!isDirty) return true;
 
