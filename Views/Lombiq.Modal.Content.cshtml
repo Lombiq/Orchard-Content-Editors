@@ -2,18 +2,20 @@
     Script.Require(Lombiq.ContentEditors.Constants.ResourceNames.jQueryUI);
 
     var title = Model.Title as string ?? "";
+    var header = Model.Header as string ?? "";
     var body = Model.Body as string ?? "";
     var bodyShape = Model.BodyShape;
     var titleless = string.IsNullOrEmpty(title);
+    var headerless = string.IsNullOrEmpty(header);
     var additionalAttributes = Model.AdditionalAttributes as IDictionary<string, object>;
 
     const string DefaultBlockName = "modal";
-    string BlockName = Model.BlockName as string ?? DefaultBlockName;
-    var id = Model.Id as string ?? BlockName;
+    var blockName = Model.BlockName as string ?? DefaultBlockName;
+    var id = Model.Id as string ?? blockName;
 }
 
 <div id="@id" 
-     class="@BlockName js-@BlockName @DefaultBlockName @(titleless ? $"{DefaultBlockName}_titleless" : "")" 
+     class="@blockName js-@blockName @DefaultBlockName @(titleless ? $"{DefaultBlockName}_titleless" : "")" 
      hidden
      @if (additionalAttributes != null)
      {
@@ -26,16 +28,21 @@
      }>
     @if (!titleless)
     {
-        <h1 class="modalTitle @(BlockName)__title">@Html.Raw(title)</h1>
+        <h1 class="modalTitle @(blockName)__title">@Html.Raw(title)</h1>
     }
-    <div class="modalBody @(BlockName)__body">
-        @if (bodyShape != null)
+    <div class="modalBody @(blockName)__body">
+        @if (!headerless)
         {
-            @Display(bodyShape)
+            <p class="modalHeader @(DefaultBlockName)__header">@Html.Raw(header)</p>
+        }
+
+        @if (bodyShape == null)
+        {
+            @Html.Raw(body)
         }
         else
         {
-            @Html.Raw(body)
+            @Display(bodyShape)
         }
     </div>
 </div>
