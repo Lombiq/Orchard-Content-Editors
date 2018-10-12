@@ -139,8 +139,8 @@
                 autoTrigger: true,
                 confirmationMessage: confirmationMessage,
                 confirmationRequired: $self.data("confirmationRequired") || (confirmationMessage.length > 0 ? true : false),
-                requestToken: $self.data("requestToken") || "",
-            }
+                requestToken: $self.data("requestToken") || ""
+            };
 
             $self.lombiq_UnsafeAction(options);
 
