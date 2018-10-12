@@ -12,8 +12,8 @@
     string BlockName = Model.BlockName as string ?? DefaultBlockName;
     var id = Model.Id as string ?? BlockName;
 
-    string ModalContainerName = headerless ? DefaultBlockName + "Container" : DefaultBlockName + "Container" + " modalBorder";
-}
+    var modalContainer = DefaultBlockName + "Container" + " modalBorder";
+ }
 
 @Display.Lombiq_Modal_Resources()
 
@@ -36,7 +36,7 @@
     ; (function ($) {
         $(function () {
             $("#@id").dialog({
-                dialogClass: "@ModalContainerName",
+                dialogClass: "@modalContainer",
                 width: "460px",
                 closeOnEscape: true,
                 modal: true,
