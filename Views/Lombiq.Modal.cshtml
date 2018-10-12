@@ -11,8 +11,6 @@
     const string DefaultBlockName = "modal";
     string BlockName = Model.BlockName as string ?? DefaultBlockName;
     var id = Model.Id as string ?? BlockName;
-
-    var modalContainer = DefaultBlockName + "Container" + " modalBorder";
  }
 
 @Display.Lombiq_Modal_Resources()
@@ -36,7 +34,7 @@
     ; (function ($) {
         $(function () {
             $("#@id").dialog({
-                dialogClass: "@modalContainer",
+                dialogClass: "@($"{BlockName}Container {DefaultBlockName}Container modalBorder")",
                 width: "460px",
                 closeOnEscape: true,
                 modal: true,
