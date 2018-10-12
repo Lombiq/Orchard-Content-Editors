@@ -266,7 +266,10 @@
         destroyDisplayedEditorModal: function () {
             var plugin = this;
 
-            if (plugin.currentDisplayedEditorModal) {
+            // Make sure that there is a dialog already opened and not destroyed already (e.g. can happen if grandparent plugin
+            // is being reloaded).
+            if (plugin.currentDisplayedEditorModal &&
+                $(plugin.element).children(".ui-dialog").children("[data-displayMode='Modal']").length > 0) {
                 plugin.currentDisplayedEditorModal.dialog("destroy").remove();
                 plugin.currentDisplayedEditorModal = null;
             }
