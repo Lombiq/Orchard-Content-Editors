@@ -25,9 +25,9 @@
             $("#@id").dialog({
                 dialogClass: "@($"{BlockName}Container {DefaultBlockName}Container modalBorder")",
                 width: "460px",
-                closeOnEscape: true,
+                closeOnEscape: @((Model.CloseOnEscape ?? true).ToString().ToLower()),
                 modal: true,
-                autoOpen: false,
+                autoOpen: @((Model.AutoOpen ?? false).ToString().ToLower()),
                 buttons: [
                     @foreach (var buttonShape in buttonShapes)
                     {
