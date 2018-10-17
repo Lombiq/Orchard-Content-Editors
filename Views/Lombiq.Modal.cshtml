@@ -1,12 +1,7 @@
 ﻿@{
     Script.Require(Lombiq.ContentEditors.Constants.ResourceNames.jQueryUI);
-
-    var title = Model.Title as string ?? "";
-    var header = Model.Header as string ?? "";
-    var body = Model.Body as string ?? "";
+    
     var buttonShapes = Model.ButtonShapes as IEnumerable<dynamic> ?? Enumerable.Empty<dynamic>();
-    var titleless = string.IsNullOrEmpty(title);
-    var headerless = string.IsNullOrEmpty(header);
 
     const string DefaultBlockName = "modal";
     string BlockName = Model.BlockName as string ?? DefaultBlockName;
@@ -15,20 +10,14 @@
 
 @Display.Lombiq_Modal_Resources()
 
-<div id="@id" class="@BlockName js-@BlockName @DefaultBlockName @(titleless ? $"{DefaultBlockName}_titleless" : "")" hidden>
-    @if (!titleless)
-    {
-        <h1 class="modalTitle @(DefaultBlockName)__title">@Html.Raw(title)</h1>
-    }
-
-    <div class="modalBody @(DefaultBlockName)__body">
-        @if (!headerless)
-        {
-            <p class="modalHeader @(DefaultBlockName)__header">@Html.Raw(header)</p>
-        }
-        @Html.Raw(body)
-    </div>
-</div>
+@Display.Lombiq_Modal_Content(
+    Title: Model.Title,
+    Header: Model.Header,
+    Body: Model.Body,
+    BodyShape: Model.BodyShape,
+    AdditionalAttributes: Model.AdditionalAttributes,
+    BlockName: Model.BlockName,
+    Id: Model.Id)
 
 <script type="text/javascript">
     ; (function ($) {
@@ -36,9 +25,9 @@
             $("#@id").dialog({
                 dialogClass: "@($"{BlockName}Container {DefaultBlockName}Container modalBorder")",
                 width: "460px",
-                closeOnEscape: true,
+                closeOnEscape: @((Model.CloseOnEscape ?? true).ToString().ToLower()),
                 modal: true,
-                autoOpen: false,
+                autoOpen: @((Model.AutoOpen ?? false).ToString().ToLower()),
                 buttons: [
                     @foreach (var buttonShape in buttonShapes)
                     {
