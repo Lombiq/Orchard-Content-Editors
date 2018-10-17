@@ -166,7 +166,7 @@
             if (postingContext.cancel) return plugin;
 
             var postEditorAjax = function () {
-                if (plugin.validateForm()) {
+                if (submitContext.formNoValidate || plugin.validateForm()) {
                     plugin.getPostEditorXHR(submitContext);
                 }
             };
@@ -235,7 +235,7 @@
 
                     if (postingContext.cancel) deferred.reject();
                     else if (eventContext.postEditor) {
-                        if (plugin.validateForm()) {
+                        if (submitContext.formNoValidate || plugin.validateForm()) {
                             $.when(plugin.getPostEditorXHR(currentSubmitContext))
                                 .done(function (response) {
                                     if (response.Success && !response.HasValidationErrors) deferred.resolve();
@@ -521,7 +521,8 @@
             return {
                 name: $submitButtonElement.attr("data-submitContext"),
                 submitButtonName: $submitButtonElement.attr("name"),
-                submitButtonValue: $submitButtonElement.attr("value")
+                submitButtonValue: $submitButtonElement.attr("value"),
+                formNoValidate: $submitButtonElement.is("[formnovalidate]")
             };
         },
 
