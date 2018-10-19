@@ -107,12 +107,6 @@
                 plugin.parentPlugin.setChildPlugin(plugin);
             }
 
-            // Load the editor group if the initial data was given.
-            var getEditorGroup = function () {
-                return plugin.getEditorGroupNameFromUrl() ||
-                    plugin.settings.defaultEditorGroupName;
-            }
-
             plugin.reloadEditor();
 
             window.onpopstate = function (e) {
@@ -139,13 +133,7 @@
         reloadEditor: function () {
             var plugin = this;
 
-            var contentItemId = plugin.getContentItemIdFromUrl() ||
-                plugin.settings.initialContentItemId;
-
-            var editorGroup = plugin.getEditorGroupNameFromUrl() ||
-                plugin.settings.defaultEditorGroupName;
-
-            return plugin.loadEditor(contentItemId || plugin.settings.initialContentItemId, editorGroup);
+            return plugin.loadEditor(plugin.getContentItemId(), plugin.getEditorGroupName());
         },
 
         /**
@@ -191,7 +179,7 @@
 
         /**
          * Triggers a form validation and returns the form validity.
-         * @returns True if the form is valid.
+         * @returns {Boolean} True if the form is valid.
          */
         validateForm: function () {
             return this.currentForm[0].checkValidity();
@@ -222,7 +210,7 @@
                 }
 
                 $(plugin.element).trigger(staticVariables.eventNames.parentEditorPostRequested, [plugin, currentSubmitContext, eventContext]);
-                
+
                 if (eventContext.cancel) deferred.reject();
                 else {
                     var postingContext = {
@@ -245,7 +233,7 @@
                         }
                     }
                 }
-            }
+            };
 
             if (plugin.childPlugin) {
                 // Alert children with the original submit context.
@@ -332,8 +320,8 @@
                     var groupName = $(this).attr("data-editorGroupName");
 
                     if (plugin.confirmDirtyFormLeave()) {
-                        if (plugin.currentGroup != groupName) {
-                            plugin.setGroupNameAndItemIdInUrl(groupName, plugin.getContentItemIdFromUrl() || plugin.currentContentItemId)
+                        if (plugin.currentGroup !== groupName) {
+                            plugin.setGroupNameAndItemIdInUrl(groupName, plugin.getContentItemId());
                         }
 
                         if (groupName) plugin.loadEditor(plugin.currentContentItemId, groupName);
@@ -350,7 +338,7 @@
                 });
 
                 plugin.currentForm.areYouSure({
-                    message: plugin.settings.dirtyFormLeaveConfirmationText,
+                    message: plugin.settings.dirtyFormLeaveConfirmationText
                 });
 
                 plugin.currentForm.find("input[type=submit]")
@@ -460,7 +448,7 @@
 
         /**
          * Returns the root plugin from the hierarchy.
-         * @returns Root plugin.
+         * @returns {Plugin} Root plugin.
          */
         getRootPlugin: function () {
             var plugin = this;
@@ -494,7 +482,7 @@
                     plugin.setProcessingIndicatorVisibility(true);
                 },
                 success: function (response) {
-                    if (response.EditorGroup && plugin.currentGroup != response.EditorGroup) {
+                    if (response.EditorGroup && plugin.currentGroup !== response.EditorGroup) {
                         plugin.setGroupNameAndItemIdInUrl(response.EditorGroup, response.ContentItemId);
                     }
 
@@ -527,8 +515,8 @@
         },
 
         /**
-         * Helper for acquiring content item ID from query string.
-         * @returns Content item ID.
+         * Helper for acquiring group name from query string.
+         * @returns {String} Editor group name.
          */
         getEditorGroupNameFromUrl: function () {
             var plugin = this;
@@ -537,13 +525,33 @@
         },
 
         /**
-         * Helper for acquiring group name from query string.
-         * @returns Editor group name.
+         * Helper for acquiring the group name.
+         * @returns {String} Editor group name.
+         */
+        getEditorGroupName: function () {
+            var plugin = this;
+
+            return plugin.getEditorGroupNameFromUrl() || plugin.settings.defaultEditorGroupName;
+        },
+
+        /**
+         * Helper for acquiring content item ID from query string.
+         * @returns {String} Content item ID.
          */
         getContentItemIdFromUrl: function () {
             var plugin = this;
 
             return new URI().search(true)[plugin.contentItemIdQueryStringParameter];
+        },
+
+        /**
+         * Helper for acquiring the content item ID.
+         * @returns {String} Content item ID.
+         */
+        getContentItemId: function () {
+            var plugin = this;
+
+            return plugin.getContentItemIdFromUrl() || plugin.settings.initialContentItemId;
         },
 
         /**
@@ -574,7 +582,7 @@
          * Returns a list of query string parameters used by this async editor plugin. 
          * Optionally includes parameters used by child plugins as well.
          * @param {boolean} deep Include query string parameters used by child plugins.
-         * @returns List of query string parameters.
+         * @returns {Array} List of query string parameters.
          */
         getQueryStringParameterNames: function (deep) {
             var plugin = this;
@@ -600,7 +608,7 @@
 
         /**
          * Checks if the form is dirty. If yes, displays a confirmation text.
-         * @returns True if the form is not dirty or the user confirmed to leave dirty form.
+         * @returns {Boolean} True if the form is not dirty or the user confirmed to leave dirty form.
          */
         confirmDirtyFormLeave: function () {
             var isDirty = this.isEditorFormDirty();
@@ -613,7 +621,7 @@
 
     $.fn[pluginName] = function (options) {
         // Return null if the element query is invalid.
-        if (!this || this.length == 0) return null;
+        if (!this || this.length === 0) return null;
 
         // "map" makes it possible to return the already existing or currently initialized plugin instances.
         return this.map(function () {
