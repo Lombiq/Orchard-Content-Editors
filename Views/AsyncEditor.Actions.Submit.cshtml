@@ -4,24 +4,10 @@
 @using Lombiq.ContentEditors.Services
 
 @{
-    @* TODO: Commented out until the Piedone.HelpfulLibraries and Piedone.HelpfulExtensions repositories are not
-        checked out to the most up-to-date changeset which are currently incompatible with this source code. *@
-    //var contentItem = Model.ContentItem as ContentItem;
-    //var asyncEditorPart = contentItem?.As<AsyncEditorPart>();
-
-    //if (!(asyncEditorPart?.IsAsyncEditorContext ?? false))
-    //{
-    //    return;
-    //}
-
     var contentItem = Model.ContentItem as ContentItem;
-    if (contentItem == null)
-    {
-        return;
-    }
+    var asyncEditorPart = contentItem?.As<AsyncEditorPart>();
 
-    var asyncEditorPart = contentItem.As<AsyncEditorPart>();
-    if (asyncEditorPart == null || !asyncEditorPart.IsAsyncEditorContext || !asyncEditorPart.HasEditorGroups)
+    if (!(asyncEditorPart?.IsAsyncEditorContext ?? false))
     {
         return;
     }
@@ -36,23 +22,14 @@
 
 <div class="@BlockName">
     <input type="submit" name="submit.Save" data-submitContext="Save" class="btn button @SaveButtonElementName" value="@T("Save Draft")" />
-
-    @* TODO: Commented out until the Piedone.HelpfulLibraries and Piedone.HelpfulExtensions repositories are not
-        checked out to the most up-to-date changeset which are currently incompatible with this source code. *@
-    @*@if ((asyncEditorPart.CurrentEditorGroup?.IsPublishGroup ?? true) &&
-            asyncEditorPart.TypeDefinition.Settings.GetModel<ContentTypeSettings>().Draftable &&
-            asyncEditorService.IsAuthorizedToPublish(asyncEditorPart, asyncEditorPart.CurrentEditorGroup?.Name ?? ""))
-        {
-            <input type="submit" name="submit.Publish" data-submitContext="Publish" class="btn button @PublishButtonElementName" value="@T("Publish")" />
-        }*@
-
-    @if ((asyncEditorPart.CurrentEditorGroup == null || asyncEditorPart.CurrentEditorGroup.IsPublishGroup) &&
+    
+    @if ((asyncEditorPart.CurrentEditorGroup?.IsPublishGroup ?? true) && 
         asyncEditorPart.TypeDefinition.Settings.GetModel<ContentTypeSettings>().Draftable &&
-        asyncEditorService.IsAuthorizedToPublish(asyncEditorPart, asyncEditorPart.CurrentEditorGroup == null ? "" : asyncEditorPart.CurrentEditorGroup.Name))
+        asyncEditorService.IsAuthorizedToPublish(asyncEditorPart, asyncEditorPart.CurrentEditorGroup?.Name ?? ""))
     {
         <input type="submit" name="submit.Publish" data-submitContext="Publish" class="btn button @PublishButtonElementName" value="@T("Publish")" />
     }
-
+    
     @if (asyncEditorPart.NextAuthorizedEditorGroup != null)
     {
         <input type="submit" name="submit.SaveAndNext" data-submitContext="SaveAndNext" class="btn button @NextButtonElementName" value="@T("Save and Next")" />

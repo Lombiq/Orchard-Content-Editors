@@ -4,42 +4,19 @@
 @using Orchard.Utility.Extensions
 
 @{
-    @* TODO: Commented out until the Piedone.HelpfulLibraries and Piedone.HelpfulExtensions repositories are not
-        checked out to the most up-to-date changeset which are currently incompatible with this source code. *@
-    //var contentItem = Model.ContentItem as ContentItem;
-    //var asyncEditorPart = contentItem?.As<AsyncEditorPart>();
-    //var editorShape = Model.EditorShape;
-
-    //if (editorShape == null || !(asyncEditorPart?.IsAsyncEditorContext ?? false))
-    //{
-    //    return;
-    //}
-
-    //var contentCreated = Model.ContentCreated as bool? ?? false;
-    //var contentItemId = contentCreated ? contentItem.Id : 0;
-    //var group = asyncEditorPart.CurrentEditorGroup?.Name ?? "";
-    //var contentType = contentItem.ContentType;
-
-
     var contentItem = Model.ContentItem as ContentItem;
-    if (contentItem == null)
-    {
-        return;
-    }
-    var asyncEditorPart = contentItem.As<AsyncEditorPart>();
+    var asyncEditorPart = contentItem?.As<AsyncEditorPart>();
     var editorShape = Model.EditorShape;
 
-    if (editorShape == null || asyncEditorPart == null || !asyncEditorPart.IsAsyncEditorContext)
+    if (editorShape == null || !(asyncEditorPart?.IsAsyncEditorContext ?? false))
     {
         return;
     }
 
-    var contentCreated = Model.ContentCreated as bool?;
-    contentCreated = contentCreated.HasValue ? contentCreated : false;
-    var contentItemId = contentCreated.Value ? contentItem.Id : 0;
-    var group = asyncEditorPart.CurrentEditorGroup == null ? "" : asyncEditorPart.CurrentEditorGroup.Name;
+    var contentCreated = Model.ContentCreated as bool? ?? false;
+    var contentItemId = contentCreated ? contentItem.Id : 0;
+    var group = asyncEditorPart.CurrentEditorGroup?.Name ?? "";
     var contentType = contentItem.ContentType;
-
 
     const string BlockName = "asyncEditor";
     const string ValidationSummaryElementName = BlockName + "__validationSummary";

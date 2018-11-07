@@ -27,10 +27,8 @@
     {
         dropdownAttributes["placeholder"] = viewModel.Placeholder;
     }
-    
-    @* TODO: Commented out until the Piedone.HelpfulLibraries and Piedone.HelpfulExtensions repositories are not
-       checked out to the most up-to-date changeset which are currently incompatible with this source code. *@
-    @*if (viewModel.HasDefaultEmptyValue)
+
+    if (viewModel.HasDefaultEmptyValue)
     {
         var emptySelectListItem = new SelectListItem
         {
@@ -39,20 +37,6 @@
             Selected = !viewModel.SelectList?.Any(selectListItem => selectListItem.Selected) ?? false
         };
         viewModel.SelectList?.Insert(0, emptySelectListItem);
-    }*@
-
-    if (viewModel.HasDefaultEmptyValue)
-    {
-        var emptySelectListItem = new SelectListItem
-        {
-            Text = "",
-            Value = "",
-            Selected = viewModel.SelectList != null ? !viewModel.SelectList.Any(selectListItem => selectListItem.Selected) : false
-        };
-        if (viewModel.SelectList != null)
-        {
-            viewModel.SelectList.Insert(0, emptySelectListItem);
-        }
     }
 }
 

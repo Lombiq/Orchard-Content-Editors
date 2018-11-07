@@ -4,24 +4,10 @@
 @using Lombiq.ContentEditors.Services
 
 @{
-    @* TODO: Commented out until the Piedone.HelpfulLibraries and Piedone.HelpfulExtensions repositories are not
-        checked out to the most up-to-date changeset which are currently incompatible with this source code. *@
-    //var contentItem = Model.ContentItem as ContentItem;
-    //var asyncEditorPart = contentItem?.As<AsyncEditorPart>();
-
-    //if (!(asyncEditorPart?.IsAsyncEditorContext ?? false) || !asyncEditorPart.HasEditorGroups)
-    //{
-    //    return;
-    //}
-
     var contentItem = Model.ContentItem as ContentItem;
-    if (contentItem == null)
-    {
-        return;
-    }
+    var asyncEditorPart = contentItem?.As<AsyncEditorPart>();
 
-    var asyncEditorPart = contentItem.As<AsyncEditorPart>();
-    if (asyncEditorPart == null || !asyncEditorPart.IsAsyncEditorContext || !asyncEditorPart.HasEditorGroups)
+    if (!(asyncEditorPart?.IsAsyncEditorContext ?? false) || !asyncEditorPart.HasEditorGroups)
     {
         return;
     }
