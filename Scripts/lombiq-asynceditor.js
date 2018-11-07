@@ -23,6 +23,10 @@
             editorPosting: pluginName + "_EditorPosting",
             editorPosted: pluginName + "_EditorPosted",
             parentEditorPostRequested: pluginName + "_ParentEditorPostRequested"
+        },
+        displayModes: {
+            inline: "Inline",
+            modal: "Modal"
         }
     };
 
@@ -39,6 +43,13 @@
         loadEditorActionElementClass: "",
         postEditorActionElementClass: "",
         dirtyFormLeaveConfirmationText: "Are you sure you want to leave this editor group? Changes you made may not be saved.",
+        editorModalSettings: {
+            dialogClass: "modalContainer",
+            width: "800px",
+            closeOnEscape: false,
+            modal: true,
+            autoOpen: true
+        },
         callbacks: {
             parentEditorPostRequestedCallback: function (plugin, submitContext, eventContext) { },
             editorLoadedCallback: function (plugin, apiResponse) { },
@@ -66,6 +77,8 @@
         childPlugin: null,
         groupNameQueryStringParameter: "",
         contentItemIdQueryStringParameter: "",
+        currentDisplayMode: "",
+        currentDisplayedEditorModal: null,
 
         /**
          * Initializes the Lombiq Async Editor plugin.
@@ -94,12 +107,6 @@
                 plugin.parentPlugin.setChildPlugin(plugin);
             }
 
-            // Load the editor group if the initial data was given.
-            var getEditorGroup = function () {
-                return plugin.getEditorGroupNameFromUrl() ||
-                    plugin.settings.defaultEditorGroupName;
-            }
-
             plugin.reloadEditor();
 
             window.onpopstate = function (e) {
@@ -126,13 +133,7 @@
         reloadEditor: function () {
             var plugin = this;
 
-            var contentItemId = plugin.getContentItemIdFromUrl() ||
-                plugin.settings.initialContentItemId;
-
-            var editorGroup = plugin.getEditorGroupNameFromUrl() ||
-                plugin.settings.defaultEditorGroupName;
-
-            return plugin.loadEditor(contentItemId || plugin.settings.initialContentItemId, editorGroup);
+            return plugin.loadEditor(plugin.getContentItemId(), plugin.getEditorGroupName());
         },
 
         /**
@@ -153,7 +154,7 @@
             if (postingContext.cancel) return plugin;
 
             var postEditorAjax = function () {
-                if (plugin.validateForm()) {
+                if (submitContext.formNoValidate || plugin.validateForm()) {
                     plugin.getPostEditorXHR(submitContext);
                 }
             };
@@ -178,7 +179,7 @@
 
         /**
          * Triggers a form validation and returns the form validity.
-         * @returns True if the form is valid.
+         * @returns {Boolean} True if the form is valid.
          */
         validateForm: function () {
             return this.currentForm[0].checkValidity();
@@ -209,7 +210,7 @@
                 }
 
                 $(plugin.element).trigger(staticVariables.eventNames.parentEditorPostRequested, [plugin, currentSubmitContext, eventContext]);
-                
+
                 if (eventContext.cancel) deferred.reject();
                 else {
                     var postingContext = {
@@ -222,7 +223,7 @@
 
                     if (postingContext.cancel) deferred.reject();
                     else if (eventContext.postEditor) {
-                        if (plugin.validateForm()) {
+                        if (submitContext.formNoValidate || plugin.validateForm()) {
                             $.when(plugin.getPostEditorXHR(currentSubmitContext))
                                 .done(function (response) {
                                     if (response.Success && !response.HasValidationErrors) deferred.resolve();
@@ -232,7 +233,7 @@
                         }
                     }
                 }
-            }
+            };
 
             if (plugin.childPlugin) {
                 // Alert children with the original submit context.
@@ -248,40 +249,86 @@
         },
 
         /**
-         * Renders the given editor shape and also registers the necessary event listeners.
-         * @param {string} editorShape HTML content of the editor shape.
-         * @returns {Object} Returns the current plugin.
+         * Closes and destroys displayed editor modal if it was displayed.
          */
-        renderEditorShape: function (editorShape) {
+        destroyDisplayedEditorModal: function () {
             var plugin = this;
 
-            if (!plugin.$editorContainerElement) return;
+            // Make sure that there is a dialog already opened and not destroyed already (e.g. can happen if grandparent plugin
+            // is being reloaded).
+            if (plugin.currentDisplayedEditorModal &&
+                $(plugin.element).children(".ui-dialog").children("[data-displayMode='Modal']").length > 0) {
+                plugin.currentDisplayedEditorModal.dialog("destroy").remove();
+                plugin.currentDisplayedEditorModal = null;
+            }
+        },
+
+        /**
+         * Renders the given editor shape and also registers the necessary event listeners.
+         * @param {string} editorShape HTML content of the editor shape.
+         * @param {string} displayMode Optional display mode for the editor shape. By default it's inline.
+         * @param {string} appendEditor Indicates whether the editor shape needs to be appended to its container or replaced. By default it's false.
+         * @returns {Object} Returns the current plugin.
+         */
+        renderEditorShape: function (editorShape, displayMode, appendEditor) {
+            var plugin = this;
+
+            var $editorContainer = plugin.$editorContainerElement;
+            if (!$editorContainer) return;
 
             if (!editorShape) {
-                plugin.$editorContainerElement.hide();
+                $editorContainer.hide();
 
                 return;
             }
 
-            plugin.childPlugin = null;
+            plugin.destroyDisplayedEditorModal();
 
-            plugin.$editorContainerElement.html($.parseHTML(editorShape, true));
+            if (!displayMode) {
+                // Try to determine display mode from the editor shape wrapper's attribute.
+                var attributeDisplayMode = $(editorShape).attr("data-displayMode");
 
-            plugin.$editorContainerElement
+                plugin.currentDisplayMode = !attributeDisplayMode ?
+                    staticVariables.displayModes.inline :
+                    attributeDisplayMode;
+            }
+
+            if (appendEditor === undefined) {
+                // Try to determine display mode from the editor shape wrapper's attribute.
+                var attributeAppendEditor = $(editorShape).attr("data-appendEditor");
+
+                appendEditor = attributeAppendEditor === "true" || attributeAppendEditor === "True";
+            }
+
+            if (plugin.childPlugin) {
+                plugin.childPlugin.destroyDisplayedEditorModal();
+                plugin.childPlugin = null;
+            }
+            
+            var parsedEditorShape = $.parseHTML(editorShape, true);
+            
+            if (appendEditor) {
+                $editorContainer.append(parsedEditorShape);
+            }
+            else {
+                $editorContainer.html(parsedEditorShape);
+            }
+
+            $(parsedEditorShape)
                 .find(plugin.settings.loadEditorActionElementClass)
                 .on("click", function () {
                     var groupName = $(this).attr("data-editorGroupName");
 
                     if (plugin.confirmDirtyFormLeave()) {
-                        if (plugin.currentGroup != groupName) {
-                            plugin.setGroupNameAndItemIdInUrl(groupName, plugin.getContentItemIdFromUrl() || plugin.currentContentItemId)
+                        if (plugin.currentGroup !== groupName) {
+                            plugin.setGroupNameAndItemIdInUrl(groupName, plugin.getContentItemId());
                         }
 
                         if (groupName) plugin.loadEditor(plugin.currentContentItemId, groupName);
                     }
                 });
 
-            plugin.currentForm = plugin.$editorContainerElement
+            plugin.currentForm = $(parsedEditorShape)
                 .find("form")
                 .first();
 
@@ -291,7 +338,7 @@
                 });
 
                 plugin.currentForm.areYouSure({
-                    message: plugin.settings.dirtyFormLeaveConfirmationText,
+                    message: plugin.settings.dirtyFormLeaveConfirmationText
                 });
 
                 plugin.currentForm.find("input[type=submit]")
@@ -302,8 +349,19 @@
                     });
             }
 
-            plugin.$editorContainerElement.show();
-            $("html, body").scrollTop(0);
+            if (plugin.currentDisplayMode === staticVariables.displayModes.modal) {
+                if (!plugin.settings.editorModalSettings.appendTo) {
+                    plugin.settings.editorModalSettings.appendTo = plugin.element;
+                }
+                plugin.currentDisplayedEditorModal = $editorContainer
+                    .children()
+                    .last()
+                    .dialog(plugin.settings.editorModalSettings);
+            }
+            else {
+                $editorContainer.show();
+                $("html, body").scrollTop(0);
+            }
 
             return plugin;
         },
@@ -390,7 +448,7 @@
 
         /**
          * Returns the root plugin from the hierarchy.
-         * @returns Root plugin.
+         * @returns {Plugin} Root plugin.
          */
         getRootPlugin: function () {
             var plugin = this;
@@ -424,7 +482,7 @@
                     plugin.setProcessingIndicatorVisibility(true);
                 },
                 success: function (response) {
-                    if (response.EditorGroup && plugin.currentGroup != response.EditorGroup) {
+                    if (response.EditorGroup && plugin.currentGroup !== response.EditorGroup) {
                         plugin.setGroupNameAndItemIdInUrl(response.EditorGroup, response.ContentItemId);
                     }
 
@@ -451,13 +509,14 @@
             return {
                 name: $submitButtonElement.attr("data-submitContext"),
                 submitButtonName: $submitButtonElement.attr("name"),
-                submitButtonValue: $submitButtonElement.attr("value")
+                submitButtonValue: $submitButtonElement.attr("value"),
+                formNoValidate: $submitButtonElement.is("[formnovalidate]")
             };
         },
 
         /**
-         * Helper for acquiring content item ID from query string.
-         * @returns Content item ID.
+         * Helper for acquiring group name from query string.
+         * @returns {String} Editor group name.
          */
         getEditorGroupNameFromUrl: function () {
             var plugin = this;
@@ -466,13 +525,33 @@
         },
 
         /**
-         * Helper for acquiring group name from query string.
-         * @returns Editor group name.
+         * Helper for acquiring the group name.
+         * @returns {String} Editor group name.
+         */
+        getEditorGroupName: function () {
+            var plugin = this;
+
+            return plugin.getEditorGroupNameFromUrl() || plugin.settings.defaultEditorGroupName;
+        },
+
+        /**
+         * Helper for acquiring content item ID from query string.
+         * @returns {String} Content item ID.
          */
         getContentItemIdFromUrl: function () {
             var plugin = this;
 
             return new URI().search(true)[plugin.contentItemIdQueryStringParameter];
+        },
+
+        /**
+         * Helper for acquiring the content item ID.
+         * @returns {String} Content item ID.
+         */
+        getContentItemId: function () {
+            var plugin = this;
+
+            return plugin.getContentItemIdFromUrl() || plugin.settings.initialContentItemId;
         },
 
         /**
@@ -503,7 +582,7 @@
          * Returns a list of query string parameters used by this async editor plugin. 
          * Optionally includes parameters used by child plugins as well.
          * @param {boolean} deep Include query string parameters used by child plugins.
-         * @returns List of query string parameters.
+         * @returns {Array} List of query string parameters.
          */
         getQueryStringParameterNames: function (deep) {
             var plugin = this;
@@ -518,13 +597,21 @@
 
             return parameters;
         },
+        
+        /**
+         * Checks if the form is dirty (ie.e inputs have been changed).
+         * @returns {boolean} True if the form is dirty (i.e. inputs have been changed).
+         */
+        isEditorFormDirty: function () {
+            return this.currentForm.hasClass("dirty");
+        },
 
         /**
          * Checks if the form is dirty. If yes, displays a confirmation text.
-         * @returns True if the form is not dirty or the user confirmed to leave dirty form.
+         * @returns {Boolean} True if the form is not dirty or the user confirmed to leave dirty form.
          */
         confirmDirtyFormLeave: function () {
-            var isDirty = this.currentForm.hasClass("dirty");
+            var isDirty = this.isEditorFormDirty();
 
             if (!isDirty) return true;
 
@@ -534,7 +621,7 @@
 
     $.fn[pluginName] = function (options) {
         // Return null if the element query is invalid.
-        if (!this || this.length == 0) return null;
+        if (!this || this.length === 0) return null;
 
         // "map" makes it possible to return the already existing or currently initialized plugin instances.
         return this.map(function () {

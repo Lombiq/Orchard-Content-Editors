@@ -186,6 +186,7 @@
     <Content Include="Views\Lombiq.Modal.Button.cshtml" />
     <Content Include="Views\Lombiq.Modals.Information.cshtml" />
     <Content Include="Views\Lombiq.Editors.CheckboxListEditor.cshtml" />
+    <Content Include="Views\Lombiq.Modal.Content.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Orchard\Orchard.Framework.csproj">

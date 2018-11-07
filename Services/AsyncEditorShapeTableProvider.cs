@@ -2,6 +2,7 @@
 using Orchard.ContentManagement;
 using Orchard.DisplayManagement.Descriptors;
 using Orchard.DisplayManagement.Implementation;
+using Orchard.Utility.Extensions;
 using System.Collections.Generic;
 
 namespace Lombiq.ContentEditors.Services
@@ -76,6 +77,14 @@ namespace Lombiq.ContentEditors.Services
                         // [AsyncEditorShapeType]__[ContentType] e.g. AsyncEditor_Actions-MyContentType
                         displaying.ShapeMetadata.Alternates.Add(
                             $"{displaying.ShapeMetadata.Type}__{asyncEditorPart.ContentItem.ContentType}");
+
+                        if (!string.IsNullOrEmpty(asyncEditorPart.CurrentEditorGroup?.Name))
+                        {
+                            var editorGroupName = asyncEditorPart.CurrentEditorGroup.Name.ToSafeName();
+                            // [AsyncEditorShapeType]__[ContentType]__[GroupName] e.g. AsyncEditor_Actions-MyContentType-MyEditorGroup
+                            displaying.ShapeMetadata.Alternates.Add(
+                                $"{displaying.ShapeMetadata.Type}__{asyncEditorPart.ContentItem.ContentType}__{editorGroupName}");
+                        }
                     });
             }
         }

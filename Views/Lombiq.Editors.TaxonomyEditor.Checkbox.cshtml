@@ -16,6 +16,17 @@
     var TooltipElementName = DefaultBlockName + "__tooltip";
     var hasHints = viewModel.Hints != null && viewModel.Hints.Any();
 
+    var selectedTerms = viewModel.TaxonomyFieldViewModel.SelectedTerms;
+    if (selectedTerms != null && selectedTerms.Any())
+    {
+        var notAvailableSelectedTerms = selectedTerms.Where(term => !viewModel.SelectList.Select(listItem => int.Parse(listItem.Value)).Contains(term.Id));
+
+        foreach (var term in notAvailableSelectedTerms)
+        {
+            viewModel.SelectList.Add(new SelectListItem { Value = term.Id.ToString(), Text = term.Name, Selected = true });
+        }
+    }
+
     var termIndex = 0;
 
     var labelAttributes = new Dictionary<string, object>
