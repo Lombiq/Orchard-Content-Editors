@@ -1,7 +1,11 @@
-﻿using Lombiq.ContentEditors.Models;
+﻿using Lombiq.ContentEditors.Constants;
+using Lombiq.ContentEditors.Models;
+using Lombiq.ContentEditors.Services;
 using Orchard.ContentManagement;
 using Orchard.ContentManagement.Aspects;
 using Orchard.Core.Contents;
+using Orchard.Logging;
+using Orchard.Mvc;
 using Orchard.Security;
 using Orchard.Security.Permissions;
 
@@ -15,6 +19,17 @@ namespace Lombiq.ContentEditors.Authorization
     /// </summary>
     public class GroupAuthorizationEventHandler : IAuthorizationServiceEventHandler
     {
+        private readonly IAsyncEditorService _asyncEditorService;
+        private readonly IHttpContextAccessor _hca;
+        
+
+        public GroupAuthorizationEventHandler(IAsyncEditorService asyncEditorService, IHttpContextAccessor hca)
+        {
+            _asyncEditorService = asyncEditorService;
+            _hca = hca;
+        }
+
+
         public void Adjust(CheckAccessContext context) { }
         public void Complete(CheckAccessContext context) { }
 
@@ -35,7 +50,7 @@ namespace Lombiq.ContentEditors.Authorization
             }
 
             var ownerVariation = GetOwnerVariation(context.Permission);
-            if (ownerVariation != null && HasOwnership(context.User, context.Content))
+            if (ownerVariation != null && HasOwnership(context.User, asyncEditorPart))
             {
                 context.Adjusted = true;
                 context.Permission = ownerVariation;
@@ -53,11 +68,19 @@ namespace Lombiq.ContentEditors.Authorization
             }
         }
 
-        private static bool HasOwnership(IUser user, IContent content)
+        private bool HasOwnership(IUser user, AsyncEditorPart asyncEditorPart)
         {
-            if (user == null || content == null) return false;
+            if (user == null)
+            {
+                // If the content is new then the editor cookie won't identify the content editing session
+                // since the ID is 0. Use ownership if that is the case.
+                if (asyncEditorPart.IsNew() || asyncEditorPart.IsContentCreationFailed ||
+                    _asyncEditorService.ValidateEditorSessionCookie(asyncEditorPart)) return true;
 
-            var commonPart = content.As<ICommonPart>();
+                return false;
+            }
+
+            var commonPart = asyncEditorPart.As<ICommonPart>();
             if (commonPart == null || commonPart.Owner == null) return false;
 
             return user.Id == commonPart.Owner.Id;

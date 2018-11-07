@@ -14,8 +14,10 @@ namespace Lombiq.ContentEditors.Drivers
 
         protected override void Importing(AsyncEditorPart part, ImportContentContext context) => 
             ImportInfoset(part, context);
-
-        protected override void Cloning(AsyncEditorPart originalPart, AsyncEditorPart clonePart, CloneContentContext context) =>
-            this.CloneInfoset(originalPart, clonePart);
+        
+        // TODO: Commented out until the Piedone.HelpfulLibraries and Piedone.HelpfulExtensions repositories are not
+        // checked out to the most up-to-date changeset which are currently incompatible with this source code.
+        //protected override void Cloning(AsyncEditorPart originalPart, AsyncEditorPart clonePart, CloneContentContext context) =>
+        //    this.CloneInfoset(originalPart, clonePart);
     }
 }

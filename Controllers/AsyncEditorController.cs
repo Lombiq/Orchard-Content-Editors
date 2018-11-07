@@ -1,7 +1,6 @@
 ﻿using Lombiq.ContentEditors.Events;
 using Lombiq.ContentEditors.Services;
-using Orchard.ContentManagement;
-using Orchard.Data;
+using Orchard;
 using Orchard.DisplayManagement;
 using Orchard.Mvc;
 using System.Web.Mvc;
@@ -11,13 +10,11 @@ namespace Lombiq.ContentEditors.Controllers
     public class AsyncEditorController : AsyncEditorControllerBase
     {
         public AsyncEditorController(
-            IContentManager contentManager, 
+            IOrchardServices orchardServices,
             IShapeDisplay shapeDisplay,
-            IShapeFactory shapeFactory,
             IAsyncEditorService asyncEditorService,
-            ITransactionManager transactionManager,
             IContentAsyncEditorEventHandler contentAsyncEditorEventHandler)
-            : base(contentManager, shapeDisplay, shapeFactory, asyncEditorService, transactionManager, contentAsyncEditorEventHandler)
+            : base(orchardServices, shapeDisplay, asyncEditorService, contentAsyncEditorEventHandler)
         {
         }
 

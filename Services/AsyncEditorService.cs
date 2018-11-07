@@ -1,33 +1,44 @@
-﻿using Lombiq.ContentEditors.Models;
+﻿using Lombiq.ContentEditors.Constants;
+using Lombiq.ContentEditors.Models;
 using Orchard.ContentManagement;
 using Orchard.Core.Contents;
+using Orchard.Mvc;
 using Orchard.Security;
 using Orchard.Security.Permissions;
 using Orchard.Services;
 using Orchard.Validation;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Web;
+using System.Web.Helpers;
 
 namespace Lombiq.ContentEditors.Services
 {
     public class AsyncEditorService : IAsyncEditorService
     {
+        private static readonly DateTime PastDateFoxExpiration = new DateTime(1990, 1, 1);
+
         private readonly IAuthorizer _authorizer;
         private readonly IContentManager _contentManager;
         private readonly IEditorGroupsProviderAccessor _editorGroupsProviderAccessor;
         private readonly IJsonConverter _jsonConverter;
+        private readonly IHttpContextAccessor _hca;
 
 
         public AsyncEditorService(
             IAuthorizer authorizer,
             IContentManager contentManager,
             IEditorGroupsProviderAccessor editorGroupsProviderAccessor,
-            IJsonConverter jsonConverter)
+            IJsonConverter jsonConverter,
+            IHttpContextAccessor hca)
         {
             _authorizer = authorizer;
             _contentManager = contentManager;
             _editorGroupsProviderAccessor = editorGroupsProviderAccessor;
             _jsonConverter = jsonConverter;
+            _hca = hca;
         }
 
 
@@ -159,6 +170,50 @@ namespace Lombiq.ContentEditors.Services
         public EditorGroupsSettings GetEditorGroupsSettings(AsyncEditorPart part) =>
             _editorGroupsProviderAccessor.GetProvider(part.ContentItem.ContentType)?.GetEditorGroupsSettings();
 
+        public bool ValidateEditorSessionCookie(AsyncEditorPart part)
+        {
+            var editorSessionCookie = GetEditorSessionCookieFromRequest();
+            if (editorSessionCookie == null) return false;
+
+            return Crypto.VerifyHashedPassword(
+                editorSessionCookie.Value,
+                Encoding.Unicode.GetString(CombineIdAndEditorSalt(part)));
+        }
+
+        public void SetEditorSessionCookie(AsyncEditorPart part) =>
+            // Hashing the content item ID using the cryptographically secure content item-specific salt
+            // which can be used to identify editor session - typically for anonymous users who have permission
+            // to edit the content item.
+            _hca.Current().Response.SetCookie(new HttpCookie(
+                CookieNames.CurrentEditorSession,
+                Crypto.HashPassword(Encoding.Unicode.GetString(CombineIdAndEditorSalt(part))))
+                {
+                    HttpOnly = true
+                });
+
+        public void RemoveEditorSessionCookie()
+        {
+            if (GetEditorSessionCookieFromRequest() != null)
+            {
+                // A cookie with an already expired date will make the browser to remove the existing cookie.
+                var expiringEditorSessionCookie = new HttpCookie(CookieNames.CurrentEditorSession)
+                {
+                    Expires = PastDateFoxExpiration,
+                    HttpOnly = true
+                };
+
+                _hca.Current().Response.SetCookie(expiringEditorSessionCookie);
+            }
+        }
+
+
+        private HttpCookie GetEditorSessionCookieFromRequest() =>
+            _hca.Current().Request.Cookies[CookieNames.CurrentEditorSession];
+
+        private byte[] CombineIdAndEditorSalt(AsyncEditorPart part) =>
+            Convert.FromBase64String(part.EditorSessionSalt)
+                .Concat(Encoding.Unicode.GetBytes(part.Id.ToString()))
+                .ToArray();
 
         private void SetCurrentGroup(AsyncEditorPart part, string group) =>
             part.CurrentEditorGroup = GetEditorGroupDescriptor(part, group);

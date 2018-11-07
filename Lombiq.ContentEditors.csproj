@@ -99,6 +99,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants\CookieNames.cs" />
     <Compile Include="Constants\ElementNames.cs" />
     <Compile Include="Constants\ResourceNames.cs" />
     <Compile Include="Controllers\AsyncEditorControllerBase.cs" />
@@ -130,6 +131,7 @@
     <Compile Include="Services\IEditorGroupsProviderAccessor.cs" />
     <Compile Include="ViewModels\BoolEditorViewModel.cs" />
     <Compile Include="ViewModels\DateTimeEditorViewModel.cs" />
+    <Compile Include="ViewModels\SingleChoiceEditorViewModel.cs" />
     <Compile Include="ViewModels\TaxonomyEditorViewModel.cs" />
     <Compile Include="ViewModels\InputFieldViewModel.cs" />
     <Compile Include="ViewModels\TaxonomyFieldViewModel.cs" />
@@ -163,10 +165,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
-    <None Include="compilerconfig.json" />
-    <None Include="compilerconfig.json.defaults">
+    <Content Include="compilerconfig.json" />
+    <Content Include="compilerconfig.json.defaults">
       <DependentUpon>compilerconfig.json</DependentUpon>
-    </None>
+    </Content>
     <None Include="Styles\lombiq-loadingindicator.scss" />
     <Content Include="Styles\lombiq-loadingindicator.css">
       <DependentUpon>lombiq-loadingindicator.scss</DependentUpon>
@@ -183,6 +185,7 @@
     <Content Include="Views\Lombiq.Modal.cshtml" />
     <Content Include="Views\Lombiq.Modal.Button.cshtml" />
     <Content Include="Views\Lombiq.Modals.Information.cshtml" />
+    <Content Include="Views\Lombiq.Editors.CheckboxListEditor.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Orchard\Orchard.Framework.csproj">
