@@ -1,0 +1,131 @@
+﻿@using Lombiq.ContentEditors.Constants
+@using Lombiq.ContentEditors.ViewModels
+
+@{
+    var viewModel = Model.ViewModel as CheckboxListEditorViewModel;
+
+    if (!viewModel.ShowIfEmpty && (!viewModel?.Items?.Any() ?? true)) { return; }
+
+    Script.Require(ResourceNames.Lombiq_CheckboxListEditor);
+
+    string CheckboxListEditorDefaultBlockName = "checkboxListEditor";
+    string CheckboxListEditorBlockName = viewModel.BlockName ?? CheckboxListEditorDefaultBlockName;
+    string TechnicalNameBlockName = viewModel.TechnicalName;
+    string LabelElementName = CheckboxListEditorBlockName + "__label";
+    string TechnicalLabelElementName = TechnicalNameBlockName + "__label";
+    string ExpandableLabelElementName = LabelElementName + "__expandable";
+    string ExpandableLabelElementNameWithOpenedModifier = ExpandableLabelElementName + "_open";
+    string ExpandableContainerElementName = CheckboxListEditorBlockName + "__expandableContainer";
+    string TecnicalExpandableContainerElementName = TechnicalNameBlockName + "__expandableContainer";
+    string ValueElementName = CheckboxListEditorBlockName + "__value";
+    string ControlGroupElementName = CheckboxListEditorBlockName + "__controlGroup";
+    string SearchFilterElementName = CheckboxListEditorBlockName + "__searchFilter";
+    string SearchFilterContainerElementName = CheckboxListEditorBlockName + "__searchFilterContainer";
+    string GlyphiconElementName = CheckboxListEditorBlockName + "__glyphicon";
+    string CheckboxItemElementName = CheckboxListEditorBlockName + "__item";
+    string CheckboxSelectAllItemElementName = CheckboxListEditorBlockName + "__selectAllItem";
+    string HiddenInputElementName = CheckboxListEditorBlockName + "__hiddenInput";
+
+
+    string CheckboxBlockName = "checkbox";
+    string SelectAllElementName = CheckboxBlockName + "__selectAllElementName";
+    string CheckboxInputElementName = CheckboxBlockName + "__input";
+    string CheckboxIndicatorElementName = CheckboxBlockName + "__indicator";
+
+    var checkedItems = viewModel.Items.Where(item => item.Checked).Select(item => item.Value);
+
+    var expandableContainerDiv = Tag(Model, "div");
+    expandableContainerDiv.AddCssClass(ExpandableContainerElementName);
+    expandableContainerDiv.AddCssClass($"js-{TecnicalExpandableContainerElementName}");
+
+    if (viewModel.IsCollapsedByDefault)
+    {
+        expandableContainerDiv.AddCssClass("hidden");
+    }
+
+    var labelClasses = LabelElementName;
+    if (viewModel.IsExpandable)
+    {
+        labelClasses += $" {ExpandableLabelElementName} js-{TechnicalLabelElementName}";
+        if (!(viewModel.IsCollapsedByDefault))
+        {
+            labelClasses += $" {ExpandableLabelElementNameWithOpenedModifier}";
+        }
+    }
+}
+
+@Display.Lombiq_Editors_CheckboxListEditor_Resources()
+
+<div id="@TechnicalNameBlockName" class="@CheckboxListEditorBlockName @TechnicalNameBlockName @viewModel.AdditionalClasses @if (CheckboxListEditorBlockName != CheckboxListEditorDefaultBlockName) { <text>@CheckboxListEditorDefaultBlockName</text> }">
+    @if (!string.IsNullOrEmpty(viewModel.Label))
+    {
+        <div class="@labelClasses">@viewModel.Label</div>
+    }
+
+    @if (viewModel.IsExpandable)
+    {
+        @expandableContainerDiv.StartElement
+    }
+    <div class="@SearchFilterContainerElementName js-@SearchFilterContainerElementName">
+        <i class="js-@GlyphiconElementName glyphicon glyphicon-search @GlyphiconElementName"></i>
+        <input type="text" class="@SearchFilterElementName js-@SearchFilterElementName" />
+    </div>
+    <div class="@ControlGroupElementName js-@ControlGroupElementName">
+
+        @if (viewModel.EnableSelectAll && viewModel.Items.Skip(1).Any())
+        {
+            <label class="@CheckboxBlockName @CheckboxItemElementName @CheckboxSelectAllItemElementName js-@SelectAllElementName">
+                @T("Select All")
+                <input type="checkbox" class="@CheckboxInputElementName @SelectAllElementName" checked="@viewModel.Items.All(item => item.Checked)" />
+                <span class="@CheckboxIndicatorElementName"></span>
+            </label>
+        }
+
+        @foreach (var item in viewModel.Items)
+        {
+            <label class="@CheckboxBlockName @CheckboxItemElementName js-@CheckboxBlockName">
+                @item.Label
+                <input type="checkbox" class="js-@CheckboxInputElementName @CheckboxInputElementName" id="@item.Value" checked="@item.Checked" />
+                <span class="@CheckboxIndicatorElementName"></span>
+            </label>
+        }
+        <input type="hidden" class="@HiddenInputElementName js-@HiddenInputElementName" name="@TechnicalNameBlockName" value="@(checkedItems.Any() ? string.Join(",", checkedItems) : "")">
+    </div>
+    @if (viewModel.IsExpandable)
+    {
+        @expandableContainerDiv.EndElement
+    }
+</div>
+
+@using (Script.Foot())
+{
+    <script type="text/javascript">
+        ; (function ($) {
+            $(function () {
+                $("#@TechnicalNameBlockName").lombiq_CheckboxListEditor({
+                    searchFilterElementClass: ".js-@SearchFilterElementName",
+                    searchFilterContainerElementClass: ".js-@SearchFilterContainerElementName",
+                    controlGroupElementClass: ".js-@ControlGroupElementName",
+                    checkboxBlockClass: ".js-@CheckboxBlockName",
+                    checkboxInputElementClass: ".js-@CheckboxInputElementName",
+                    inputCheckboxInputElementSelector: "input.@CheckboxInputElementName",
+                    checkboxSelectAllItemElementClass: ".@CheckboxSelectAllItemElementName",
+                    selectAllElementClass: ".@SelectAllElementName",
+                    inputSelectAllElementSelector: "input.@SelectAllElementName",
+                    checkboxItemElementClass: ".@CheckboxItemElementName",
+                    hiddenInputElementClass: ".js-@HiddenInputElementName"
+                });
+            });
+
+            @if (viewModel.IsExpandable)
+            {
+                <text>
+                    $(".js-@TechnicalLabelElementName").click(function (e) {
+                        $(this).toggleClass("@ExpandableLabelElementNameWithOpenedModifier");
+                        $(this).next(".js-@TecnicalExpandableContainerElementName").slideToggle("fast").removeClass("hidden");
+                    });
+                </text>
+            }
+        })(jQuery);
+    </script>
+}
