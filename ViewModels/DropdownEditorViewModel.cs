@@ -10,6 +10,7 @@ namespace Lombiq.ContentEditors.ViewModels
         public string ParentDropdownEditorName { get; set; }
         public Dictionary<string, Dictionary<string, string>> ValueHierarchy { get; set; }
         public Dictionary<string, string> Hints { get; set; }
+        public Dictionary<string, string> Descriptions { get; set; }
 
         public DropdownEditorViewModel(IEnumerable<string> values)
         {

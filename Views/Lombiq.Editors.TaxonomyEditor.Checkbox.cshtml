@@ -13,8 +13,10 @@
     var CheckBoxElementName = DefaultBlockName + "__checkbox";
     var CheckboxTextLabel = DefaultBlockName + "__textLabel";
     var CheckboxIndicator = DefaultBlockName + "__indicator";
+    var DescriptionElementName = DefaultBlockName + "__description";
     var TooltipElementName = DefaultBlockName + "__tooltip";
     var hasHints = viewModel.Hints != null && viewModel.Hints.Any();
+    var hasDescriptions = viewModel.Descriptions != null && viewModel.Descriptions.Any();
 
     var selectedTerms = viewModel.TaxonomyFieldViewModel.SelectedTerms;
     if (selectedTerms != null && selectedTerms.Any())
@@ -57,9 +59,14 @@
 
                     @selectListItem.Text
 
-                    @if (hasHints && viewModel.Hints.TryGetValue(selectListItem.Value, out string tooltip))
+                    @if (hasHints && viewModel.Hints.TryGetValue(selectListItem.Value, out string tooltip) && !string.IsNullOrEmpty(tooltip))
                     {
                         <span class="@TooltipElementName" title="@tooltip"></span>
+                    }
+
+                    @if (hasDescriptions && viewModel.Descriptions.TryGetValue(selectListItem.Value, out string description) && !string.IsNullOrEmpty(description))
+                    {
+                        <span class="@DescriptionElementName">@Html.Raw(description)</span>
                     }
 
                     <span class="@CheckboxIndicator"></span>
