@@ -130,6 +130,7 @@
     <Compile Include="Services\IAsyncEditorService.cs" />
     <Compile Include="Services\IEditorGroupsProviderAccessor.cs" />
     <Compile Include="ViewModels\BoolEditorViewModel.cs" />
+    <Compile Include="ViewModels\CheckboxListEditorViewModel.cs" />
     <Compile Include="ViewModels\DateTimeEditorViewModel.cs" />
     <Compile Include="ViewModels\TaxonomyEditorViewModel.cs" />
     <Compile Include="ViewModels\InputFieldViewModel.cs" />
@@ -145,6 +146,7 @@
     <Content Include="Content\LC-switch\lc_switch.min.js" />
     <Content Include="Content\URI.js\URI.js" />
     <Content Include="Content\URI.js\URI.min.js" />
+    <Content Include="Scripts\lombiq-checkboxlisteditor.js" />
     <Content Include="Scripts\lombiq-asynceditorwrapper.js" />
     <Content Include="Content\Selectize\selectize.bootstrap3.css" />
     <Content Include="Content\Selectize\selectize.js" />
@@ -185,6 +187,8 @@
     <Content Include="Views\Lombiq.Modal.Button.cshtml" />
     <Content Include="Views\Lombiq.Modals.Information.cshtml" />
     <Content Include="Views\Lombiq.Modal.Content.cshtml" />
+    <Content Include="Views\Lombiq.Editors.CheckboxListEditor.cshtml" />
+    <Content Include="Views\Lombiq.Editors.CheckboxListEditor.Resources.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Orchard\Orchard.Framework.csproj">
