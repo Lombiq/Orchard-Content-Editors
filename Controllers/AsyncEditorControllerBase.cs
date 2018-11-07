@@ -1,16 +1,21 @@
-﻿using Lombiq.ContentEditors.Events;
+﻿using Lombiq.ContentEditors.Constants;
+using Lombiq.ContentEditors.Events;
 using Lombiq.ContentEditors.Models;
 using Lombiq.ContentEditors.Services;
+using Orchard;
 using Orchard.ContentManagement;
 using Orchard.Data;
 using Orchard.DisplayManagement;
 using Orchard.Localization;
+using Orchard.Logging;
+using System;
 using System.Web.Mvc;
 
 namespace Lombiq.ContentEditors.Controllers
 {
     public abstract class AsyncEditorControllerBase : Controller, IUpdateModel
     {
+        protected readonly Lazy<WorkContext> _workContextLazy;
         protected readonly IContentAsyncEditorEventHandler _contentAsyncEditorEventHandler;
         protected readonly IContentManager _contentManager;
         protected readonly IShapeDisplay _shapeDisplay;
@@ -23,24 +28,23 @@ namespace Lombiq.ContentEditors.Controllers
 
 
         public AsyncEditorControllerBase(
-            IContentManager contentManager,
+            IOrchardServices orchardServices,
             IShapeDisplay shapeDisplay,
-            IShapeFactory shapeFactory,
             IAsyncEditorService asyncEditorService,
-            ITransactionManager transactionManager,
             IContentAsyncEditorEventHandler contentAsyncEditorEventHandler)
         {
-            _contentManager = contentManager;
+            _contentManager = orchardServices.ContentManager;
             _shapeDisplay = shapeDisplay;
-            _shapeFactory = shapeFactory;
+            _shapeFactory = orchardServices.New;
             _asyncEditorService = asyncEditorService;
-            _transactionManager = transactionManager;
+            _transactionManager = orchardServices.TransactionManager;
             _contentAsyncEditorEventHandler = contentAsyncEditorEventHandler;
+            _workContextLazy = new Lazy<WorkContext>(() => orchardServices.WorkContext);
 
             T = NullLocalizer.Instance;
         }
 
-        
+
         #region Helpers
 
         protected virtual ActionResult EditResult(AsyncEditorPart part, string group = "")
@@ -182,6 +186,16 @@ namespace Lombiq.ContentEditors.Controllers
             return _shapeDisplay.Display(asyncEditorShape);
         }
 
+        protected virtual void SetEditorSessionCookieForAnonymousUser(AsyncEditorPart part)
+        {
+            if (_workContextLazy.Value.CurrentUser == null) _asyncEditorService.SetEditorSessionCookie(part);
+        }
+
+        protected virtual void RemoveEditorSessionCookieForAnonymousUser()
+        {
+            if (_workContextLazy.Value.CurrentUser == null) _asyncEditorService.RemoveEditorSessionCookie();
+        }
+
         #endregion
 
         #region Success results
@@ -189,16 +203,18 @@ namespace Lombiq.ContentEditors.Controllers
         protected virtual ActionResult AsyncEditorResult(
             AsyncEditorPart part,
             string group,
-            bool contentCreated = true,
             LocalizedString message = null)
         {
             part.LastDisplayedEditorGroupName = group;
 
+            if (part.Id == 0) RemoveEditorSessionCookieForAnonymousUser();
+            else SetEditorSessionCookieForAnonymousUser(part);
+
             return Json(new AsyncEditorGroupResult
             {
                 Success = true,
-                ContentItemId = contentCreated ? part.ContentItem.Id : 0,
-                EditorShape = GetEditorShapeHtml(part, group, contentCreated),
+                ContentItemId = part.ContentItem.Id,
+                EditorShape = GetEditorShapeHtml(part, group, part.ContentItem.Id != 0),
                 EditorGroup = group,
                 ResultMessage = message?.Text
             }, JsonRequestBehavior.AllowGet);
@@ -211,6 +227,10 @@ namespace Lombiq.ContentEditors.Controllers
             LocalizedString message = null)
         {
             part.LastDisplayedEditorGroupName = group;
+            part.IsContentCreationFailed = part.Id != 0 && !contentCreated;
+
+            if (contentCreated) SetEditorSessionCookieForAnonymousUser(part);
+            else RemoveEditorSessionCookieForAnonymousUser();
 
             return Json(new AsyncEditorSaveResult
             {

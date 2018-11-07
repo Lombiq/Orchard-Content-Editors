@@ -108,5 +108,24 @@ namespace Lombiq.ContentEditors.Services
         /// <param name="part">AsyncEditorPart of the content item.</param>
         /// <returns>Editor group settings.</returns>
         EditorGroupsSettings GetEditorGroupsSettings(AsyncEditorPart part);
+
+        /// <summary>
+        /// Validates cookie that identifies the editor session.
+        /// </summary>
+        /// <param name="part">AsyncEditorPart of the content item.</param>
+        /// <returns>Returns true if the session is valid.</returns>
+        bool ValidateEditorSessionCookie(AsyncEditorPart part);
+
+        /// <summary>
+        /// Creates cookie for identifying the current editor session.
+        /// </summary>
+        /// <param name="part">AsyncEditorPart of the content item.</param>
+        void SetEditorSessionCookie(AsyncEditorPart part);
+
+        /// <summary>
+        /// Removes cookie that identifies the current editor session.
+        /// </summary>
+        /// <param name="part">AsyncEditorPart of the content item.</param>
+        void RemoveEditorSessionCookie();
     }
 }

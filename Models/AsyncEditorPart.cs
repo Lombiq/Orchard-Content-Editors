@@ -1,6 +1,8 @@
 ﻿using Orchard.ContentManagement;
 using Orchard.ContentManagement.Utilities;
+using System;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 
 namespace Lombiq.ContentEditors.Models
 {
@@ -8,6 +10,7 @@ namespace Lombiq.ContentEditors.Models
     {
         public bool IsAsyncEditorContext { get; set; }
         public EditorGroupDescriptor CurrentEditorGroup { get; set; }
+        public bool IsContentCreationFailed { get; set; }
 
 
         public string CompletedEditorGroupNamesSerialized
@@ -26,6 +29,24 @@ namespace Lombiq.ContentEditors.Models
         {
             get { return this.Retrieve(x => x.LastDisplayedEditorGroupName); }
             set { this.Store(x => x.LastDisplayedEditorGroupName, value); }
+        }
+
+        public string EditorSessionSalt
+        {
+            get => this.Retrieve(x => x.EditorSessionSalt, () =>
+            {
+                // Generating a random cryptographically secure salt for generating content item-specific
+                // tokens for cookies that will identify the editor session if anonymous users have permission
+                // to edit the content item.
+                var saltBytes = new byte[0x10];
+                using (var cryptoService = new RNGCryptoServiceProvider()) cryptoService.GetBytes(saltBytes);
+
+                var salt = Convert.ToBase64String(saltBytes);
+                EditorSessionSalt = salt;
+
+                return salt;
+            });
+            set => this.Store(x => x.EditorSessionSalt, value);
         }
 
         private readonly LazyField<bool> _hasEditorGroups = new LazyField<bool>();
