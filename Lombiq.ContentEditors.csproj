@@ -131,7 +131,6 @@
     <Compile Include="Services\IEditorGroupsProviderAccessor.cs" />
     <Compile Include="ViewModels\BoolEditorViewModel.cs" />
     <Compile Include="ViewModels\DateTimeEditorViewModel.cs" />
-    <Compile Include="ViewModels\SingleChoiceEditorViewModel.cs" />
     <Compile Include="ViewModels\TaxonomyEditorViewModel.cs" />
     <Compile Include="ViewModels\InputFieldViewModel.cs" />
     <Compile Include="ViewModels\TaxonomyFieldViewModel.cs" />
@@ -185,7 +184,6 @@
     <Content Include="Views\Lombiq.Modal.cshtml" />
     <Content Include="Views\Lombiq.Modal.Button.cshtml" />
     <Content Include="Views\Lombiq.Modals.Information.cshtml" />
-    <Content Include="Views\Lombiq.Editors.CheckboxListEditor.cshtml" />
     <Content Include="Views\Lombiq.Modal.Content.cshtml" />
   </ItemGroup>
   <ItemGroup>
