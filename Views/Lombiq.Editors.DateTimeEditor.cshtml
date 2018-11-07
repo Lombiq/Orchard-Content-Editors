@@ -30,10 +30,18 @@
 
     var editorTypeClass = isDateEditor ? "datePicker" : "timePicker";
 
+    @* TODO: Commented out until the Piedone.HelpfulLibraries and Piedone.HelpfulExtensions repositories are not
+       checked out to the most up-to-date changeset which are currently incompatible with this source code. *@
+    //var dateTimePickerAttributes = viewModel.BuildAttributes(new Dictionary<string, object>
+    //{
+    //    { "type", editorType },
+    //    { "class", $"form-control {editorTypeClass} {DefaultBlockName}__{editorTypeClass} {classifiedName}" }
+    //});
+
     var dateTimePickerAttributes = viewModel.BuildAttributes(new Dictionary<string, object>
     {
         { "type", editorType },
-        { "class", $"form-control {editorTypeClass} {DefaultBlockName}__{editorTypeClass} {classifiedName}" }
+        { "class", string.Join(" ", "form-control", editorTypeClass, (DefaultBlockName + "__" + editorTypeClass), classifiedName) }
     });
 
     var labelAttributes = new Dictionary<string, object>

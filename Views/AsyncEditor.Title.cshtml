@@ -1,18 +1,33 @@
 ﻿@using Orchard.ContentManagement
 @using Lombiq.ContentEditors.Models
 
-@{ 
-    var contentItem = Model.ContentItem as ContentItem;
-    var asyncEditorPart = contentItem?.As<AsyncEditorPart>();
+@{
+    @* TODO: Commented out until the Piedone.HelpfulLibraries and Piedone.HelpfulExtensions repositories are not
+        checked out to the most up-to-date changeset which are currently incompatible with this source code. *@
+    //var contentItem = Model.ContentItem as ContentItem;
+    //var asyncEditorPart = contentItem?.As<AsyncEditorPart>();
 
-    if (!(asyncEditorPart?.IsAsyncEditorContext ?? false))
+    //if (!(asyncEditorPart?.IsAsyncEditorContext ?? false))
+    //{
+    //    return;
+    //}
+
+
+    var contentItem = Model.ContentItem as ContentItem;
+    if (contentItem == null)
+    {
+        return;
+    }
+
+    var asyncEditorPart = contentItem.As<AsyncEditorPart>();
+    if (asyncEditorPart == null || !asyncEditorPart.IsAsyncEditorContext)
     {
         return;
     }
 }
 
 <h2 class="asyncEditorTitle">
-    @T("{0} Details", asyncEditorPart.CurrentEditorGroup != null ? 
+    @T("{0} Details", asyncEditorPart.CurrentEditorGroup != null ?
         asyncEditorPart.CurrentEditorGroup.Title :
         asyncEditorPart.TypeDefinition.DisplayName)
 </h2>
