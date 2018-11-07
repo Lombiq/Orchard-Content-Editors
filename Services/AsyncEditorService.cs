@@ -18,7 +18,7 @@ namespace Lombiq.ContentEditors.Services
 {
     public class AsyncEditorService : IAsyncEditorService
     {
-        private static readonly DateTime PastDateFoxExpiration = new DateTime(1990, 1, 1);
+        private static readonly DateTime PastDateForExpiration = new DateTime(1990, 1, 1);
 
         private readonly IAuthorizer _authorizer;
         private readonly IContentManager _contentManager;
@@ -198,7 +198,7 @@ namespace Lombiq.ContentEditors.Services
                 // A cookie with an already expired date will make the browser to remove the existing cookie.
                 var expiringEditorSessionCookie = new HttpCookie(CookieNames.CurrentEditorSession)
                 {
-                    Expires = PastDateFoxExpiration,
+                    Expires = PastDateForExpiration,
                     HttpOnly = true
                 };
 

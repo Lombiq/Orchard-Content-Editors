@@ -186,12 +186,12 @@ namespace Lombiq.ContentEditors.Controllers
             return _shapeDisplay.Display(asyncEditorShape);
         }
 
-        protected virtual void SetEditorSessionCookieForAnonymousUsers(AsyncEditorPart part)
+        protected virtual void SetEditorSessionCookieForAnonymousUser(AsyncEditorPart part)
         {
             if (_workContextLazy.Value.CurrentUser == null) _asyncEditorService.SetEditorSessionCookie(part);
         }
 
-        protected virtual void RemoveEditorSessionCookieForAnonymousUsers()
+        protected virtual void RemoveEditorSessionCookieForAnonymousUser()
         {
             if (_workContextLazy.Value.CurrentUser == null) _asyncEditorService.RemoveEditorSessionCookie();
         }
@@ -207,8 +207,8 @@ namespace Lombiq.ContentEditors.Controllers
         {
             part.LastDisplayedEditorGroupName = group;
 
-            if (part.Id == 0) RemoveEditorSessionCookieForAnonymousUsers();
-            else SetEditorSessionCookieForAnonymousUsers(part);
+            if (part.Id == 0) RemoveEditorSessionCookieForAnonymousUser();
+            else SetEditorSessionCookieForAnonymousUser(part);
 
             return Json(new AsyncEditorGroupResult
             {
@@ -229,8 +229,8 @@ namespace Lombiq.ContentEditors.Controllers
             part.LastDisplayedEditorGroupName = group;
             part.IsContentCreationFailed = part.Id != 0 && !contentCreated;
 
-            if (contentCreated) SetEditorSessionCookieForAnonymousUsers(part);
-            else RemoveEditorSessionCookieForAnonymousUsers();
+            if (contentCreated) SetEditorSessionCookieForAnonymousUser(part);
+            else RemoveEditorSessionCookieForAnonymousUser();
 
             return Json(new AsyncEditorSaveResult
             {
