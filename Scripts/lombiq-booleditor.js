@@ -21,14 +21,14 @@
         checkboxSettings: {
             onChangedSelectorId: "",
             checkboxButtonClass: "", // The wrapper of the checkbox and label.
-            checkboxClass: "", // The class of the checkbox.
+            checkboxClass: "" // The class of the checkbox.
         },
         toggleSettings: {
             booleanFieldClass: "",
             textTrue: "",
             textFalse: ""
         }
-    }
+    };
 
     function Plugin(element, options) {
         this.element = element;
@@ -69,7 +69,7 @@
 
     $.fn[pluginName] = function (options) {
         // Return null if the element query is invalid.
-        if (!this || this.length == 0) return null;
+        if (!this || this.length === 0) return null;
 
         // "map" makes it possible to return the already existing or currently initialized plugin instances.
         return this.map(function () {
@@ -106,15 +106,15 @@
                         $.each(validationAttributes, function () {
                             self.ReplaceAttribute("." + className, this, this + "-hidden");
                         });
-                    }
+                    };
 
                     var replaceRequiredHiddenAttribute = function (className) {
                         $.each(validationAttributes, function () {
                             self.ReplaceAttribute("." + className, this + "-hidden", this);
                         });
-                    }
+                    };
 
-                    if (actualValue == null) {
+                    if (actualValue === null) {
                         $("." + targetClass).hide();
                         replaceRequiredAttribute(targetClass);
                         if (inverseTargetClass) {
@@ -138,7 +138,7 @@
                             replaceRequiredHiddenAttribute(inverseTargetClass);
                         }
                     }
-                }
+                };
 
                 adjustTargetElementVisibility(initialValue);
 
