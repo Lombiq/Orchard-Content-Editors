@@ -18,6 +18,8 @@
         public const string Lombiq_UnsafeAction = Prefix + "UnsafeAction";
         public const string iOS_StickyInputFocusOverride = Prefix + "iOS.StickyInputFocusOverride";
         public const string Lombiq_ConnectedValueSelector = Prefix + "ConnectedValueSelector";
+        public const string Lombiq_ConnectedElementVisibility = Prefix + "ConnectedElementVisibility";
+        public const string Lombiq_ReplaceElementAttribute = Prefix + "ReplaceElementAttribute";
 
         public const string Selectize = nameof(Selectize);
 

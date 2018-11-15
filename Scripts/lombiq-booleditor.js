@@ -1,6 +1,6 @@
 ﻿/**
  * @summary     Lombiq - Bool Editor
- * @description Initializes Bool Editors based on render mode and extending jQuery with ShowHideClassByBoolEditorId.
+ * @description Initializes Bool Editors based on render mode.
  * @version     1.0
  * @file        lombiq-booleditor.js
  * @author      Lombiq Technologies Ltd.
@@ -84,77 +84,4 @@
             return $.data(this, "plugin_" + pluginName);
         });
     };
-
-    $(function () {
-        $.fn.extend({
-            ShowHideClassByBoolEditorId: function (initialValue, targetClass, inverseTargetClass) {
-                var self = this;
-
-                var adjustTargetElementVisibility = function (value) {
-                    if (typeof value === "undefined") return;
-
-                    var actualValue = typeof value === "boolean" ?
-                        value :
-                        typeof value === "string" ?
-                            value === "true" || value === "True" || value === "false" || value === "False" ?
-                                value === "true" || value === "True" :
-                                null :
-                            null;
-
-                    var validationAttributes = ["required", "min", "max", "pattern"];
-                    var replaceRequiredAttribute = function (className) {
-                        $.each(validationAttributes, function () {
-                            self.ReplaceAttribute("." + className, this, this + "-hidden");
-                        });
-                    };
-
-                    var replaceRequiredHiddenAttribute = function (className) {
-                        $.each(validationAttributes, function () {
-                            self.ReplaceAttribute("." + className, this + "-hidden", this);
-                        });
-                    };
-
-                    if (actualValue === null) {
-                        $("." + targetClass).hide();
-                        replaceRequiredAttribute(targetClass);
-                        if (inverseTargetClass) {
-                            $("." + inverseTargetClass).hide();
-                            replaceRequiredAttribute(inverseTargetClass);
-                        }
-                    }
-                    else if (actualValue) {
-                        $("." + targetClass).show();
-                        replaceRequiredHiddenAttribute(targetClass);
-                        if (inverseTargetClass) {
-                            $("." + inverseTargetClass).hide();
-                            replaceRequiredAttribute(inverseTargetClass);
-                        }
-                    }
-                    else {
-                        $("." + targetClass).hide();
-                        replaceRequiredAttribute(targetClass);
-                        if (inverseTargetClass) {
-                            $("." + inverseTargetClass).show();
-                            replaceRequiredHiddenAttribute(inverseTargetClass);
-                        }
-                    }
-                };
-
-                adjustTargetElementVisibility(initialValue);
-
-                $("#" + this.selector).on("change", function (event, boolEditorValue) {
-                    adjustTargetElementVisibility(boolEditorValue);
-                });
-            },
-
-            ReplaceAttribute: function (selector, attribute, newAttribute) {
-                $(selector).find("[" + attribute + "]").each(function () {
-                    var $self = $(this);
-                    var attrValue = $self.attr(attribute);
-                    $self.removeAttr(attribute);
-                    $self.attr(newAttribute, attrValue);
-                });
-            }
-        });
-    });
 })(jQuery, window, document);
