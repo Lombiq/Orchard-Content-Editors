@@ -48,6 +48,12 @@
             if (typeof value === "boolean") {
                 show = value;
             }
+            else if (value === plugin.settings.valueShow) {
+                show = true;
+            }
+            else if (value === plugin.settings.valueHide) {
+                show = false;
+            }
             else if (typeof value === "number") {
                 if (number === 0) {
                     show = false;
@@ -62,12 +68,6 @@
                     show = value === "true" || value === "True" || value === "false" || value === "False" ?
                         value === "true" || value === "True" :
                         null;
-                }
-                else if (value === plugin.settings.valueShow) {
-                    show = true;
-                }
-                else if (value === plugin.settings.valueHide) {
-                    show = false;
                 }
             }
 
