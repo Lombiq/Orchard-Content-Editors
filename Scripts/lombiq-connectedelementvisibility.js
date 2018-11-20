@@ -34,8 +34,8 @@
 
             plugin.updateVisibility(plugin.settings.initialValue);
 
-            $(plugin.element).on("change", function (event, value) {
-                plugin.updateVisibility(value);
+            $(plugin.element).on("change", function () {
+                plugin.updateVisibility($(this).val());
             });
         },
 
