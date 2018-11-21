@@ -12,7 +12,7 @@
     var pluginName = "lombiq_ConnectedElementVisibility";
 
     var defaults = {
-        initialValue: "false",
+        initialValue: null,
         valueShow: null,
         valueHide: null,
         targetSelector: "",
@@ -34,24 +34,40 @@
 
             plugin.updateVisibility(plugin.settings.initialValue);
 
-            $(plugin.element).on("change", function () {
-                plugin.updateVisibility($(this).val());
+            $(plugin.element).on("change", function (event, value) {
+                var actualValue = null;
+                if (plugin.isValueValid(value)) {
+                    actualValue = value;
+                }
+                else if (plugin.isValueValid($(this).val())) {
+                    actualValue = $(this).val();
+                }
+
+                plugin.updateVisibility(actualValue);
             });
         },
 
-        updateVisibility: function (value) {
-            if (typeof value === "undefined") return;
+        isValueValid: function (value) {
+            if (typeof value === "undefined" || value === null || value === "") {
+                return false;
+            }
 
+            return true;
+        },
+
+        updateVisibility: function (value) {
             var plugin = this;
+
+            if (!plugin.isValueValid(value)) return;
 
             var show = null;
             if (typeof value === "boolean") {
                 show = value;
             }
-            else if (value === plugin.settings.valueShow) {
+            else if (plugin.settings.valueShow !== null && value === plugin.settings.valueShow) {
                 show = true;
             }
-            else if (value === plugin.settings.valueHide) {
+            else if (plugin.settings.valueHide !== null && value === plugin.settings.valueHide) {
                 show = false;
             }
             else if (typeof value === "number") {
