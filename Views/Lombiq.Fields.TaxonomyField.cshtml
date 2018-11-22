@@ -10,6 +10,8 @@
     string LabelElementName = BlockName + "__label";
     string ValueElementName = BlockName + "__value";
     string ValueElementNameWithEmptyModifier = ValueElementName + "_empty";
+    string ListElementName = BlockName + "__list";
+    string ListItemElementName = BlockName + "__listItem";
 
     //viewModel.Terms = TermPart.Sort(viewModel.Terms);
 }
@@ -22,13 +24,25 @@
     <div class="@ValueElementName @(!viewModel.Terms.Any() ? ValueElementNameWithEmptyModifier : "")">
         @if(viewModel != null && viewModel.Terms != null)
         {
-            if (viewModel.IsLink)
+            var termDisplayValues = viewModel.IsLink ?
+                viewModel.Terms.Select(t => Html.ItemDisplayLink(t.Name, t.ContentItem).ToString()).ToArray() :
+                viewModel.Terms.Select(term => term.Name);
+
+            switch (viewModel.DisplayFlavor)
             {
-                @(new HtmlString(string.Join(", ", viewModel.Terms.Select(t => Html.ItemDisplayLink(t.Name, t.ContentItem).ToString()).ToArray())))
-            }
-            else
-            {
-                @(string.Join(", ", viewModel.Terms.Select(term => term.Name)))
+                case Lombiq.ContentEditors.ViewModels.TaxonomyFieldDisplayFlavor.Join:
+                    @(new HtmlString(string.Join(", ", termDisplayValues)))
+
+                    break;
+                case Lombiq.ContentEditors.ViewModels.TaxonomyFieldDisplayFlavor.List:
+                    <ul class="@ListElementName">
+                        @foreach (var value in termDisplayValues)
+                        {
+                            <li class="@ListItemElementName">@value</li>
+                        }
+                    </ul>
+
+                    break;
             }
         }
     </div>

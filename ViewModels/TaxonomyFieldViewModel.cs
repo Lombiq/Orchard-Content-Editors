@@ -7,5 +7,12 @@ namespace Lombiq.ContentEditors.ViewModels
     {
         public IEnumerable<TermPart> Terms { get; set; }
         public bool IsLink { get; set; }
+        public TaxonomyFieldDisplayFlavor DisplayFlavor { get; set; }
+    }
+
+    public enum TaxonomyFieldDisplayFlavor
+    {
+        Join,
+        List
     }
 }
