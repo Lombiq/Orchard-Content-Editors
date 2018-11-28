@@ -16,7 +16,8 @@
     var defaults = {
         parentElementName: "",
         valueHierarchy: "",
-        hasDefaultEmptyValue: false
+        hasDefaultEmptyValue: false,
+        defaultEmptyValue: ""
     };
     
     function Plugin(element, options) {
@@ -52,7 +53,7 @@
                 });
 
                 if (plugin.settings.hasDefaultEmptyValue) {
-                    $(plugin.element).append($("<option>").text("").val(""));
+                    $(plugin.element).append($("<option>").text("").val(plugin.settings.defaultEmptyValue));
                 }
 
                 $.each(Object.keys(sortedCurrentValues), function () {

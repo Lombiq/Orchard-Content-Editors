@@ -30,14 +30,12 @@
 
     if (viewModel.HasDefaultEmptyValue)
     {
-        var emptySelectListItem = new SelectListItem
+        viewModel.SelectList.Insert(0, new SelectListItem
         {
             Text = "",
-            Value = "",
+            Value = "0",
             Selected = !viewModel.SelectList.Any(selectListItem => selectListItem.Selected)
-        };
-
-        viewModel.SelectList.Insert(0, emptySelectListItem);
+        });
     }
 }
 
@@ -69,7 +67,8 @@
                 $("select[name='@(ViewData.TemplateInfo.HtmlFieldPrefix + "." + viewModel.Name)']").lombiq_ConnectedValueSelector({
                     parentElementName: "@viewModel.ParentDropdownEditorName",
                     valueHierarchy: @Html.Raw(Json.Encode(viewModel.ValueHierarchy)),
-                    hasDefaultEmptyValue: @viewModel.HasDefaultEmptyValue.ToString().ToLower()
+                    hasDefaultEmptyValue: @viewModel.HasDefaultEmptyValue.ToString().ToLower(),
+                    defaultEmptyValue: 0
                 });
             });
         })(jQuery);
