@@ -112,6 +112,7 @@
     <Compile Include="Extensions\HtmlHelperExtensions.cs" />
     <Compile Include="Extensions\WebViewPageExtensions.cs" />
     <Compile Include="Handlers\AsyncEditorPartHandler.cs" />
+    <Compile Include="Helpers\HtmlAttributeHelpers.cs" />
     <Compile Include="Helpers\TaxonomyFieldHelpers.cs" />
     <Compile Include="Models\AsyncEditorResult.cs" />
     <Compile Include="Models\AsyncEditorSaveResult.cs" />
