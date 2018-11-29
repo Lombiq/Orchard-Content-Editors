@@ -155,6 +155,12 @@
         if (!settings.silent && !window.aysUnloadSet) {
             window.aysUnloadSet = true;
             $(window).bind('beforeunload', function () {
+                var activeElement = $(document.activeElement);
+                if (activeElement.length > 0 && activeElement.prop("tagName") === "A" &&
+                    (activeElement.attr("target") === "_blank" || activeElement.attr("href").startsWith("mailto:"))) {
+                    return;
+                }
+
                 $dirtyForms = $("form").filter('.' + settings.dirtyClass);
                 if ($dirtyForms.length === 0) {
                     return;

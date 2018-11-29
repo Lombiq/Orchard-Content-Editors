@@ -1,2 +1,3 @@
 ﻿- Code styling (4 space indentation).
 - Fixed JSLint errors.
+- Fixed that the confirmation popup shouldn't be triggered if a target-blank or a mailto link has been activated.
