@@ -53,17 +53,20 @@
     {
         @Html.Label(viewModel.Name, viewModel.Label, labelAttributes)
     }
+    @if (!string.IsNullOrEmpty(viewModel.Description))
+    {
+        <div class="editorDescription @(DefaultBlockName)__editorDescription">@viewModel.Description</div>
+    }
     <div class="@RadioButtonsElementName js-@RadioButtonsElementName">
         <label class="@RadioButtonTextLabel">
             @Html.RadioButton(viewModel.Name, true, trueChecked, boolTrueAttributes) @viewModel.TextTrue
-            <div class="@RadioButtonIndicator"></div>
+            <span class="@RadioButtonIndicator"></span>
         </label>
 
         <label class="@RadioButtonTextLabel">
             @Html.RadioButton(viewModel.Name, false, falseChecked, boolAttributes) @viewModel.TextFalse
-            <div class="@RadioButtonIndicator"></div>
+            <span class="@RadioButtonIndicator"></span>
         </label>
-
     </div>
     @if (!string.IsNullOrEmpty(viewModel.Hint))
     {

@@ -13,7 +13,12 @@
         public string Placeholder { get; set; }
 
         /// <summary>
-        /// Hint text to be displayed next to the HTML field.
+        /// Description text to be displayed above the HTML field.
+        /// </summary>
+        public string Description { get; set; }
+
+        /// <summary>
+        /// Hint text to be displayed under the HTML field.
         /// </summary>
         public string Hint { get; set; }
 
