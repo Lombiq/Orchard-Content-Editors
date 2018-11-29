@@ -1,1 +1,2 @@
 ﻿- Code styling (4 space indentation).
+- Fixed JSLint errors.
