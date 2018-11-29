@@ -140,6 +140,7 @@
     <Compile Include="ViewModels\EditorViewModel.cs" />
     <Compile Include="ViewModels\DropdownEditorViewModel.cs" />
     <Content Include="Content\AreYouSure\jquery.are-you-sure.js" />
+    <Content Include="Content\AreYouSure\Mods.txt" />
     <Content Include="Content\Images\spinner.gif" />
     <Content Include="Content\LC-switch\demo.html" />
     <Content Include="Content\LC-switch\lc_switch.css" />
