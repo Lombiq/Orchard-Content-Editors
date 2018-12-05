@@ -9,12 +9,12 @@ namespace Lombiq.ContentEditors.Helpers
         {
             if (string.IsNullOrEmpty(attribute) || !values.Any()) return;
 
-            var classNamesString = string.Join(" ", values);
+            var valuesString = string.Join(" ", values);
 
             if (htmlAttributes == null) htmlAttributes = new Dictionary<string, object>();
 
-            if (htmlAttributes.ContainsKey(attribute)) htmlAttributes[attribute] += classNamesString;
-            else htmlAttributes.Add(attribute, classNamesString);
+            if (htmlAttributes.ContainsKey(attribute)) htmlAttributes[attribute] += valuesString;
+            else htmlAttributes.Add(attribute, valuesString);
         }
 
         public static string StringifyHtmlAttributes(IDictionary<string, object> htmlAttributes)
