@@ -40,9 +40,11 @@
 
                 var parentValue = $(parentElement).val();
 
-                if (!parentValue) return;
+                if (typeof parentValue === "undefined" || !parentValue || parentValue === 0 || parentValue === "") return;
 
                 var currentValues = plugin.settings.valueHierarchy[parentValue];
+
+                if (typeof currentValues === "undefined") return;
 
                 var sortedCurrentValues = Object.keys(currentValues).map(function (key) {
                     return [key, currentValues[key]];
