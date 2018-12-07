@@ -49,52 +49,41 @@ namespace Lombiq.ContentEditors.Models
             set => this.Store(x => x.EditorSessionSalt, value);
         }
 
-        private readonly LazyField<bool> _hasEditorGroups = new LazyField<bool>();
-        internal LazyField<bool> HasEditorGroupsField => _hasEditorGroups;
-        public bool HasEditorGroups => _hasEditorGroups.Value;
 
-        private readonly LazyField<UnauthorizedEditorGroupBehavior> _unauthorizedEditorGroupBehavior = new LazyField<UnauthorizedEditorGroupBehavior>();
-        internal LazyField<UnauthorizedEditorGroupBehavior> UnauthorizedEditorGroupBehaviorField => _unauthorizedEditorGroupBehavior;
-        public UnauthorizedEditorGroupBehavior UnauthorizedEditorGroupBehavior => _unauthorizedEditorGroupBehavior.Value;
+        internal LazyField<bool> HasEditorGroupsField { get; } = new LazyField<bool>();
+        public bool HasEditorGroups => HasEditorGroupsField.Value;
 
-        private readonly LazyField<IEnumerable<EditorGroupDescriptor>> _completedAuthorizedEditorGroups = new LazyField<IEnumerable<EditorGroupDescriptor>>();
-        internal LazyField<IEnumerable<EditorGroupDescriptor>> CompletedAuthorizedEditorGroupsField => _completedAuthorizedEditorGroups;
-        public IEnumerable<EditorGroupDescriptor> CompletedAuthorizedEditorGroups => _completedAuthorizedEditorGroups.Value;
+        internal LazyField<UnauthorizedEditorGroupBehavior> UnauthorizedEditorGroupBehaviorField { get; } = new LazyField<UnauthorizedEditorGroupBehavior>();
+        public UnauthorizedEditorGroupBehavior UnauthorizedEditorGroupBehavior => UnauthorizedEditorGroupBehaviorField.Value;
 
-        private readonly LazyField<IEnumerable<EditorGroupDescriptor>> _incompleteAuthorizedEditorGroups = new LazyField<IEnumerable<EditorGroupDescriptor>>();
-        internal LazyField<IEnumerable<EditorGroupDescriptor>> IncompleteAuthorizedEditorGroupsField => _incompleteAuthorizedEditorGroups;
-        public IEnumerable<EditorGroupDescriptor> IncompleteAuthorizedEditorGroups => _incompleteAuthorizedEditorGroups.Value;
+        internal LazyField<IEnumerable<EditorGroupDescriptor>> CompletedAuthorizedEditorGroupsField { get; } = new LazyField<IEnumerable<EditorGroupDescriptor>>();
+        public IEnumerable<EditorGroupDescriptor> CompletedAuthorizedEditorGroups => CompletedAuthorizedEditorGroupsField.Value;
 
-        private readonly LazyField<IEnumerable<EditorGroupDescriptor>> _authorizedEditorGroups = new LazyField<IEnumerable<EditorGroupDescriptor>>();
-        internal LazyField<IEnumerable<EditorGroupDescriptor>> AuthorizedEditorGroupsField => _authorizedEditorGroups;
-        public IEnumerable<EditorGroupDescriptor> AuthorizedEditorGroups => _authorizedEditorGroups.Value;
+        internal LazyField<IEnumerable<EditorGroupDescriptor>> IncompleteAuthorizedEditorGroupsField { get; } = new LazyField<IEnumerable<EditorGroupDescriptor>>();
+        public IEnumerable<EditorGroupDescriptor> IncompleteAuthorizedEditorGroups => IncompleteAuthorizedEditorGroupsField.Value;
 
-        private readonly LazyField<IEnumerable<EditorGroupDescriptor>> _availableAuthorizedEditorGroups = new LazyField<IEnumerable<EditorGroupDescriptor>>();
-        internal LazyField<IEnumerable<EditorGroupDescriptor>> AvailableAuthorizedEditorGroupsField => _availableAuthorizedEditorGroups;
-        public IEnumerable<EditorGroupDescriptor> AvailableAuthorizedEditorGroups => _availableAuthorizedEditorGroups.Value;
+        internal LazyField<IEnumerable<EditorGroupDescriptor>> AuthorizedEditorGroupsField { get; } = new LazyField<IEnumerable<EditorGroupDescriptor>>();
+        public IEnumerable<EditorGroupDescriptor> AuthorizedEditorGroups => AuthorizedEditorGroupsField.Value;
 
-        private readonly LazyField<EditorGroupDescriptor> _nextAuthorizedEditorGroup = new LazyField<EditorGroupDescriptor>();
-        internal LazyField<EditorGroupDescriptor> NextAuthorizedEditorGroupField => _nextAuthorizedEditorGroup;
-        public EditorGroupDescriptor NextAuthorizedEditorGroup => _nextAuthorizedEditorGroup.Value;
+        internal LazyField<IEnumerable<EditorGroupDescriptor>> AvailableAuthorizedEditorGroupsField { get; } = new LazyField<IEnumerable<EditorGroupDescriptor>>();
+        public IEnumerable<EditorGroupDescriptor> AvailableAuthorizedEditorGroups => AvailableAuthorizedEditorGroupsField.Value;
 
-        private readonly LazyField<EditorGroupDescriptor> _previousAuthorizedEditorGroup = new LazyField<EditorGroupDescriptor>();
-        internal LazyField<EditorGroupDescriptor> PreviousAuthorizedEditorGroupField => _previousAuthorizedEditorGroup;
-        public EditorGroupDescriptor PreviousAuthorizedEditorGroup => _previousAuthorizedEditorGroup.Value;
+        internal LazyField<EditorGroupDescriptor> NextAuthorizedEditorGroupField { get; } = new LazyField<EditorGroupDescriptor>();
+        public EditorGroupDescriptor NextAuthorizedEditorGroup => NextAuthorizedEditorGroupField.Value;
 
-        private readonly LazyField<EditorGroupDescriptor> _nextEditableAuthorizedGroup = new LazyField<EditorGroupDescriptor>();
-        internal LazyField<EditorGroupDescriptor> NextEditableAuthorizedGroupField => _nextEditableAuthorizedGroup;
-        public EditorGroupDescriptor NextEditableAuthorizedGroup => _nextEditableAuthorizedGroup.Value;
+        internal LazyField<EditorGroupDescriptor> PreviousAuthorizedEditorGroupField { get; } = new LazyField<EditorGroupDescriptor>();
+        public EditorGroupDescriptor PreviousAuthorizedEditorGroup => PreviousAuthorizedEditorGroupField.Value;
 
-        private readonly LazyField<EditorGroupDescriptor> _lastUpdatedEditorGroup = new LazyField<EditorGroupDescriptor>();
-        internal LazyField<EditorGroupDescriptor> LastUpdatedEditorGroupField => _lastUpdatedEditorGroup;
-        public EditorGroupDescriptor LastUpdatedEditorGroup => _lastUpdatedEditorGroup.Value;
+        internal LazyField<EditorGroupDescriptor> NextEditableAuthorizedGroupField { get; } = new LazyField<EditorGroupDescriptor>();
+        public EditorGroupDescriptor NextEditableAuthorizedGroup => NextEditableAuthorizedGroupField.Value;
 
-        private readonly LazyField<bool> _areAllEditorGroupsCompleted = new LazyField<bool>();
-        internal LazyField<bool> AreAllEditorGroupsCompletedField => _areAllEditorGroupsCompleted;
-        public bool AreAllEditorGroupsCompleted => _areAllEditorGroupsCompleted.Value;
+        internal LazyField<EditorGroupDescriptor> LastUpdatedEditorGroupField { get; } = new LazyField<EditorGroupDescriptor>();
+        public EditorGroupDescriptor LastUpdatedEditorGroup => LastUpdatedEditorGroupField.Value;
 
-        private readonly LazyField<EditorGroupDescriptor> _lastDisplayedEditorGroup = new LazyField<EditorGroupDescriptor>();
-        internal LazyField<EditorGroupDescriptor> LastDisplayedEditorGroupField => _lastDisplayedEditorGroup;
-        public EditorGroupDescriptor LastDisplayedEditorGroup => _lastDisplayedEditorGroup.Value;
+        internal LazyField<bool> AreAllEditorGroupsCompletedField { get; } = new LazyField<bool>();
+        public bool AreAllEditorGroupsCompleted => AreAllEditorGroupsCompletedField.Value;
+
+        internal LazyField<EditorGroupDescriptor> LastDisplayedEditorGroupField { get; } = new LazyField<EditorGroupDescriptor>();
+        public EditorGroupDescriptor LastDisplayedEditorGroup => LastDisplayedEditorGroupField.Value;
     }
 }
