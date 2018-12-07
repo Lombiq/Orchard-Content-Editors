@@ -50,7 +50,7 @@ namespace Lombiq.ContentEditors.Handlers
                             .FirstOrDefault(group => group.Name == part.LastUpdatedEditorGroupName) :
                         null);
 
-                part.IsAllEditorGroupsCompletedField.Loader(() => 
+                part.AreAllEditorGroupsCompletedField.Loader(() => 
                     !asyncEditorService.GetIncompleteEditorGroups(part).Any());
 
                 part.LastDisplayedEditorGroupField.Loader(() =>

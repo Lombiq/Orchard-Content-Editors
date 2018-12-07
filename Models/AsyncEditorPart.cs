@@ -89,9 +89,9 @@ namespace Lombiq.ContentEditors.Models
         internal LazyField<EditorGroupDescriptor> LastUpdatedEditorGroupField => _lastUpdatedEditorGroup;
         public EditorGroupDescriptor LastUpdatedEditorGroup => _lastUpdatedEditorGroup.Value;
 
-        private readonly LazyField<bool> _isAllEditorGroupsCompleted = new LazyField<bool>();
-        internal LazyField<bool> IsAllEditorGroupsCompletedField => _isAllEditorGroupsCompleted;
-        public bool IsAllEditorGroupsCompleted => _isAllEditorGroupsCompleted.Value;
+        private readonly LazyField<bool> _areAllEditorGroupsCompleted = new LazyField<bool>();
+        internal LazyField<bool> AreAllEditorGroupsCompletedField => _areAllEditorGroupsCompleted;
+        public bool AreAllEditorGroupsCompleted => _areAllEditorGroupsCompleted.Value;
 
         private readonly LazyField<EditorGroupDescriptor> _lastDisplayedEditorGroup = new LazyField<EditorGroupDescriptor>();
         internal LazyField<EditorGroupDescriptor> LastDisplayedEditorGroupField => _lastDisplayedEditorGroup;
