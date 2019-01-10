@@ -41,7 +41,7 @@
     <div class="@CheckboxButtonElementName js-@CheckboxButtonElementName">
         <label class="@LabelElementName">
             @Html.CheckBox(viewModel.Name, value, boolAttributes)
-            @viewModel.Label
+            @Html.Raw(viewModel.Label)
             <div class="@CheckboxIndicator"></div>
         </label>
     </div>
