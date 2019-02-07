@@ -29,15 +29,15 @@ namespace Lombiq.ContentEditors.ViewModels
         }
 
         public CheckboxListEditorViewModel(
-            NameValueCollection queryString, string technicalName, Dictionary<object, object> valueLabelDictionary)
+            NameValueCollection queryString, string technicalName, IEnumerable<KeyValuePair<string, string>> valueLabelDictionary)
         {
             var checkedItems = queryString.GetQueryStringParameterValues(technicalName);
 
             foreach (var valueLabelItem in valueLabelDictionary)
                 Items.Add(new CheckboxListFieldItemViewModel
                 {
-                    Value = valueLabelItem.Key.ToString(),
-                    Label = valueLabelItem.Value.ToString(),
+                    Value = valueLabelItem.Key?.ToString(),
+                    Label = valueLabelItem.Value?.ToString(),
                     Checked = checkedItems?.Contains(valueLabelItem.Key.ToString()) ?? false
                 });
 
