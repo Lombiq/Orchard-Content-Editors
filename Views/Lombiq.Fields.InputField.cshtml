@@ -16,7 +16,11 @@
 <div class="@BlockName @viewModel.AdditionalClasses">
     @if (!string.IsNullOrEmpty(viewModel.Label))
     {
-        <div class="@LabelElementName">@viewModel.Label:</div>
+        if (!Char.IsPunctuation(viewModel.Label.Last()))
+        {
+            viewModel.Label += ':';
+        }
+        <div class="@LabelElementName">@viewModel.Label</div>
     }
     <div class="@ValueElementName @(string.IsNullOrEmpty(value) ? ValueElementNameWithEmptyModifier : "")">
         @if(viewModel != null)
