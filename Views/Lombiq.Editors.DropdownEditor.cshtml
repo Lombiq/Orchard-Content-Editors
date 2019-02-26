@@ -32,7 +32,7 @@
     {
         var emptySelectListItem = new SelectListItem
         {
-            Text = "",
+            Text = viewModel.EmptyValueText,
             Value = "",
             Selected = !viewModel.SelectList?.Any(selectListItem => selectListItem.Selected) ?? false
         };
