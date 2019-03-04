@@ -20,6 +20,7 @@
         public const string Lombiq_ConnectedValueSelector = Prefix + "ConnectedValueSelector";
         public const string Lombiq_ConnectedElementVisibility = Prefix + "ConnectedElementVisibility";
         public const string Lombiq_ReplaceElementAttribute = Prefix + "ReplaceElementAttribute";
+        public const string Lombiq_DisableEmptyFormInputs = Prefix + "DisableEmptyFormInputs";
 
         public const string Selectize = nameof(Selectize);
 
