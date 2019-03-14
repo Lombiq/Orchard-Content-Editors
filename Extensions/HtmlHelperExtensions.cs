@@ -1,4 +1,5 @@
-﻿using Orchard.ContentManagement;
+﻿using Lombiq.ContentEditors.Helpers;
+using Orchard.ContentManagement;
 using Orchard.Utility.Extensions;
 using System.Web.Mvc.Html;
 
@@ -17,5 +18,8 @@ namespace System.Web.Mvc
 
         public static string ClassifiedName(this HtmlHelper html, string name, string nameForModel) =>
             $"{nameForModel}-{name}".HtmlClassify();
+
+        public static string BuildMultiLineHtmlString(this HtmlHelper html, params string[] lines) =>
+            StringHelpers.BuildMultiLineString("<br />", lines);
     }
 }
