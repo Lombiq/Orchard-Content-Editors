@@ -2,7 +2,6 @@
  * @summary     Lombiq - Connected Value Selector
  * @description Connects a value selector control with a parent control to be able to react
  *              to the parent changing its value by changing the set of selectable values.
- *              Currently only supports select-option structures on both end.
  * @version     1.0
  * @file        lombiq-connectedvalueselector.js
  * @author      Lombiq Technologies Ltd.
@@ -14,12 +13,13 @@
     var pluginName = "lombiq_ConnectedValueSelector";
 
     var defaults = {
-        parentElementName: "",
+        parentElementSelector: "",
+        childElementValueSelector: "option",
         valueHierarchy: "",
         hasDefaultEmptyValue: false,
         defaultEmptyValue: ""
     };
-    
+
     function Plugin(element, options) {
         this.element = element;
         this.settings = $.extend(true, {}, defaults, options);
@@ -32,13 +32,10 @@
     $.extend(Plugin.prototype, {
         init: function () {
             var plugin = this;
-            var parentElement = "select[name='" + plugin.settings.parentElementName + "']";
+            var parentElement = $(plugin.settings.parentElementSelector);
 
             var parentElementChanged = function () {
-                var selectedValue = $(plugin.element).val();
-                $(plugin.element).empty().data("options");
-
-                var parentValue = $(parentElement).val();
+                var parentValue = parentElement.val();
 
                 if (typeof parentValue === "undefined" || !parentValue || parentValue === 0 || parentValue === "") return;
 
@@ -46,36 +43,29 @@
 
                 if (typeof currentValues === "undefined") return;
 
-                var sortedCurrentValues = Object.keys(currentValues).map(function (key) {
-                    return [key, currentValues[key]];
-                });
+                $.each($(plugin.element).children(plugin.settings.childElementValueSelector), function () {
+                    var currentElementValue = $(this).val();
 
-                sortedCurrentValues.sort(function (first, second) {
-                    return first[1].localeCompare(second[1]);
-                });
-
-                if (plugin.settings.hasDefaultEmptyValue) {
-                    $(plugin.element).append($("<option>").text("").val(plugin.settings.defaultEmptyValue));
-                }
-
-                $.each(Object.keys(sortedCurrentValues), function () {
-                    var optionTag = $("<option>").text(sortedCurrentValues[this][1]).val(sortedCurrentValues[this][0]);
-                    if (selectedValue === sortedCurrentValues[this][0]) {
-                        optionTag.attr("selected", "selected");
+                    if (currentValues[currentElementValue]) {
+                        $(this).show();
                     }
-                    $(plugin.element).append(optionTag);
+                    // Don't hide the default empty value.
+                    else if (!plugin.settings.hasDefaultEmptyValue || plugin.settings.defaultEmptyValue !== currentElementValue) {
+                        $(this).hide();
+                        $(this).prop("selected", false);
+                    }
                 });
             };
 
             if (parentElement) {
-                // Initially filter child dropdown options
+                // Initialize with selectable children filtered.
                 parentElementChanged();
 
                 $(parentElement).change(parentElementChanged);
             }
         }
     });
-    
+
     $.fn[pluginName] = function (options) {
         // Return null if the element query is invalid.
         if (!this || this.length === 0) return null;
