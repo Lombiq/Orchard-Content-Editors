@@ -66,10 +66,13 @@
     {
         @expandableContainerDiv.StartElement
     }
-    <div class="@SearchFilterContainerElementName js-@SearchFilterContainerElementName">
-        <i class="js-@GlyphiconElementName glyphicon glyphicon-search @GlyphiconElementName"></i>
-        <input type="text" class="@SearchFilterElementName js-@SearchFilterElementName" />
-    </div>
+    @if (viewModel.IsSearchEnabled)
+    {
+        <div class="@SearchFilterContainerElementName js-@SearchFilterContainerElementName">
+            <i class="js-@GlyphiconElementName glyphicon glyphicon-search @GlyphiconElementName"></i>
+            <input type="text" class="@SearchFilterElementName js-@SearchFilterElementName" />
+        </div>
+    }
     <div class="@ControlGroupElementName js-@ControlGroupElementName">
 
         @if (viewModel.EnableSelectAll && viewModel.Items.Skip(1).Any())
@@ -103,8 +106,11 @@
         ; (function ($) {
             $(function () {
                 $("#@TechnicalNameBlockName").lombiq_CheckboxListEditor({
-                    searchFilterElementClass: ".js-@SearchFilterElementName",
-                    searchFilterContainerElementClass: ".js-@SearchFilterContainerElementName",
+                    @if (viewModel.IsSearchEnabled)
+                    {
+                    <text>searchFilterElementClass: ".js-@SearchFilterElementName",
+                    searchFilterContainerElementClass: ".js-@SearchFilterContainerElementName",</text>
+                    }
                     controlGroupElementClass: ".js-@ControlGroupElementName",
                     checkboxBlockClass: ".js-@CheckboxBlockName",
                     checkboxInputElementClass: ".js-@CheckboxInputElementName",

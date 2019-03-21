@@ -31,6 +31,8 @@
         this._defaults = defaults;
         this._name = pluginName;
 
+        this.settings.isSearchEnabled = this.settings.searchFilterElementClass.length > 0 && this.settings.searchFilterContainerElementClass.length > 0;
+
         this.init();
     }
 
@@ -45,11 +47,12 @@
                 };
             });
 
-            $(plugin.settings.searchFilterElementClass).change(function () {
+            if (plugin.settings.isSearchEnabled) {
+                $(plugin.settings.searchFilterElementClass).change(function () {
                 var filter = $(this).val();
                 var controlGroup = $(this).parents(plugin.settings.searchFilterContainerElementClass).next(plugin.settings.controlGroupElementClass);
 
-                if (filter.length == 0) {
+                if (filter.length === 0) {
                     controlGroup.find(plugin.settings.checkboxBlockClass + ":hidden").show();
                     $(this).prev().removeClass("glyphicon-remove").addClass("glyphicon-search");
                     return;
@@ -61,7 +64,7 @@
                         $(this).next().val("");
                         $(this).removeClass("glyphicon-remove").addClass("glyphicon-search");
                         controlGroup.find(plugin.settings.checkboxItemElementClass + ":hidden").show();
-                    })
+                    });
                 }
 
                 controlGroup.find(plugin.settings.checkboxBlockClass + ":contains('" + filter + "'):hidden").show();
@@ -72,10 +75,11 @@
 
                 recalculateValue(controlGroup);
 
-            }).on("keyup search", function () {
-                $(this).change();
-                reevaluateSelectAllState($(this).parents(plugin.settings.searchFilterContainerElementClass).next(plugin.settings.controlGroupElementClass))
-            });
+                }).on("keyup search", function () {
+                    $(this).change();
+                    reevaluateSelectAllState($(this).parents(plugin.settings.searchFilterContainerElementClass).next(plugin.settings.controlGroupElementClass));
+                });
+            }
 
             var $checkboxes = $(plugin.settings.checkboxInputElementClass);
             $checkboxes.on("change", function () {
@@ -89,12 +93,12 @@
                 var $visibleCheckboxes = $controlGroup.children(plugin.settings.checkboxItemElementClass + ":not(" +
                     plugin.settings.checkboxSelectAllItemElementClass + ")").children(plugin.settings.inputCheckboxInputElementSelector + ":visible");
 
-                if ($visibleCheckboxes.length == 0) {
+                if ($visibleCheckboxes.length === 0) {
                     $selectAll.hide();
                 }
                 else {
                     $selectAll.show();
-                    selectAllInput.prop("checked", $visibleCheckboxes.filter(":not(:checked)").length == 0);
+                    selectAllInput.prop("checked", $visibleCheckboxes.filter(":not(:checked)").length === 0);
                 }
             };
 
@@ -103,7 +107,7 @@
                     return this.id;
                 }).get().join(",");
                 $controlGroup.children(plugin.settings.hiddenInputElementClass).val(ids);
-            }
+            };
 
             var selectAll = $(plugin.settings.selectAllElementClass);
             selectAll.change(function () {
@@ -121,7 +125,10 @@
             var element = $(plugin.element);
             var $controlGroup = element.find(plugin.settings.controlGroupElementClass);
 
-            element.find(plugin.settings.searchFilterElementClass).val("").trigger("keyup");
+            if (plugin.settings.isSearchEnabled) {
+                element.find(plugin.settings.searchFilterElementClass).val("").trigger("keyup");
+            }
+
             $controlGroup.find(plugin.settings.checkboxInputElementClass).filter(":checked").prop("checked", false);
             $controlGroup.children(plugin.settings.hiddenInputElementClass).val("");
 
@@ -131,7 +138,7 @@
 
     $.fn[pluginName] = function (options) {
         // Return null if the element query is invalid.
-        if (!this || this.length == 0) return null;
+        if (!this || this.length === 0) return null;
 
         // "map" makes it possible to return the already existing or currently initialized plugin instances.
         return this.map(function () {

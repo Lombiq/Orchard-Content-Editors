@@ -11,6 +11,7 @@ namespace Lombiq.ContentEditors.ViewModels
         public bool EnableSelectAll { get; set; }
         public bool IsExpandable { get; set; }
         public bool IsCollapsedByDefault { get; set; }
+        public bool IsSearchEnabled { get; set; } = true;
 
 
         public CheckboxListEditorViewModel(
