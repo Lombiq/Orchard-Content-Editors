@@ -8,29 +8,37 @@
 
     Script.Require(ResourceNames.Lombiq_CheckboxListEditor);
 
-    string CheckboxListEditorDefaultBlockName = "checkboxListEditor";
-    string CheckboxListEditorBlockName = viewModel.BlockName ?? CheckboxListEditorDefaultBlockName;
-    string TechnicalNameBlockName = viewModel.TechnicalName;
-    string LabelElementName = CheckboxListEditorBlockName + "__label";
-    string TechnicalLabelElementName = TechnicalNameBlockName + "__label";
-    string ExpandableLabelElementName = LabelElementName + "__expandable";
-    string ExpandableLabelElementNameWithOpenedModifier = ExpandableLabelElementName + "_open";
-    string ExpandableContainerElementName = CheckboxListEditorBlockName + "__expandableContainer";
-    string TecnicalExpandableContainerElementName = TechnicalNameBlockName + "__expandableContainer";
-    string ValueElementName = CheckboxListEditorBlockName + "__value";
-    string ControlGroupElementName = CheckboxListEditorBlockName + "__controlGroup";
-    string SearchFilterElementName = CheckboxListEditorBlockName + "__searchFilter";
-    string SearchFilterContainerElementName = CheckboxListEditorBlockName + "__searchFilterContainer";
-    string GlyphiconElementName = CheckboxListEditorBlockName + "__glyphicon";
-    string CheckboxItemElementName = CheckboxListEditorBlockName + "__item";
-    string CheckboxSelectAllItemElementName = CheckboxListEditorBlockName + "__selectAllItem";
-    string HiddenInputElementName = CheckboxListEditorBlockName + "__hiddenInput";
+    const string CheckboxListEditorDefaultBlockName = "checkboxListEditor";
+    var CheckboxListEditorBlockName = viewModel.BlockName ?? CheckboxListEditorDefaultBlockName;
+    var TechnicalNameBlockName = viewModel.TechnicalName;
+
+    var FilterRelationshipTechnicalName = $"{TechnicalNameBlockName}Relationship";
+    var FilterRelationshipsContainerElementName = TechnicalNameBlockName + "__filterRelationshipsContainer";
+    var FilterRelationshipContainerElementName = TechnicalNameBlockName + "__filterRelationshipContainer";
+    var FilterRelationshipElementName = TechnicalNameBlockName + "__filterRelationship";
+    var FilterRelationshipLabelElementName = TechnicalNameBlockName + "__filterRelationshipLabel";
+    var selectedFilterRelationship = Request.QueryString[FilterRelationshipTechnicalName] ?? FilterRelationship.Or.ToString();
+
+    var LabelElementName = CheckboxListEditorBlockName + "__label";
+    var TechnicalLabelElementName = TechnicalNameBlockName + "__label";
+    var ExpandableLabelElementName = LabelElementName + "__expandable";
+    var ExpandableLabelElementNameWithOpenedModifier = ExpandableLabelElementName + "_open";
+    var ExpandableContainerElementName = CheckboxListEditorBlockName + "__expandableContainer";
+    var TecnicalExpandableContainerElementName = TechnicalNameBlockName + "__expandableContainer";
+    var ValueElementName = CheckboxListEditorBlockName + "__value";
+    var ControlGroupElementName = CheckboxListEditorBlockName + "__controlGroup";
+    var SearchFilterElementName = CheckboxListEditorBlockName + "__searchFilter";
+    var SearchFilterContainerElementName = CheckboxListEditorBlockName + "__searchFilterContainer";
+    var GlyphiconElementName = CheckboxListEditorBlockName + "__glyphicon";
+    var CheckboxItemElementName = CheckboxListEditorBlockName + "__item";
+    var CheckboxSelectAllItemElementName = CheckboxListEditorBlockName + "__selectAllItem";
+    var HiddenInputElementName = CheckboxListEditorBlockName + "__hiddenInput";
 
 
-    string CheckboxBlockName = "checkbox";
-    string SelectAllElementName = CheckboxBlockName + "__selectAllElementName";
-    string CheckboxInputElementName = CheckboxBlockName + "__input";
-    string CheckboxIndicatorElementName = CheckboxBlockName + "__indicator";
+    const string CheckboxBlockName = "checkbox";
+    const string SelectAllElementName = CheckboxBlockName + "__selectAllElementName";
+    const string CheckboxInputElementName = CheckboxBlockName + "__input";
+    const string CheckboxIndicatorElementName = CheckboxBlockName + "__indicator";
 
     var checkedItems = viewModel.Items.Where(item => item.Checked).Select(item => item.Value);
 
@@ -65,6 +73,18 @@
     @if (viewModel.IsExpandable)
     {
         @expandableContainerDiv.StartElement
+    }
+    @if (viewModel.IsFilterRelationShipSelectorEnabled && viewModel.EnabledFilterRelationShips.Any())
+    {
+        <div class="@FilterRelationshipsContainerElementName">
+            @foreach (var relationship in viewModel.EnabledFilterRelationShips)
+            {
+                <div class="@FilterRelationshipContainerElementName">
+                    <input @if (relationship.ToString() == selectedFilterRelationship) { <text>checked</text> } type="radio" id="@(FilterRelationshipTechnicalName)_@(relationship)" name="@FilterRelationshipTechnicalName" value="@relationship" class="@FilterRelationshipElementName" />
+                    <label for="@(FilterRelationshipTechnicalName)_@(relationship)" class="@FilterRelationshipLabelElementName">@relationship</label>
+                </div>
+            }
+        </div>
     }
     @if (viewModel.IsSearchEnabled)
     {

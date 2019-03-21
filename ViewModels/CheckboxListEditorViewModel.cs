@@ -1,17 +1,21 @@
 ﻿using Piedone.HelpfulExtensions;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 
 namespace Lombiq.ContentEditors.ViewModels
 {
-    public class CheckboxListEditorViewModel : FieldViewModel
+    public class CheckboxListEditorViewModel : FieldViewModel, IElementValueFilterRelationshipSelector
     {
         public List<CheckboxListFieldItemViewModel> Items { get; set; } = new List<CheckboxListFieldItemViewModel>();
         public bool EnableSelectAll { get; set; }
         public bool IsExpandable { get; set; }
         public bool IsCollapsedByDefault { get; set; }
         public bool IsSearchEnabled { get; set; } = true;
+
+        public bool IsFilterRelationShipSelectorEnabled { get; set; }
+        public FilterRelationship[] EnabledFilterRelationShips { get; set; } = (FilterRelationship[])Enum.GetValues(typeof(FilterRelationship));
 
 
         public CheckboxListEditorViewModel(
