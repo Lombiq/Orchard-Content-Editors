@@ -17,7 +17,8 @@
     var FilterRelationshipContainerElementName = TechnicalNameBlockName + "__filterRelationshipContainer";
     var FilterRelationshipElementName = TechnicalNameBlockName + "__filterRelationship";
     var FilterRelationshipLabelElementName = TechnicalNameBlockName + "__filterRelationshipLabel";
-    var selectedFilterRelationship = Request.QueryString[FilterRelationshipTechnicalName] ?? FilterRelationship.Or.ToString();
+    var selectedFilterRelationship = Enum.TryParse(Request.QueryString[FilterRelationshipTechnicalName], out FilterRelationship filterRelationship) ?
+        filterRelationship : FilterRelationship.Or;
 
     var LabelElementName = CheckboxListEditorBlockName + "__label";
     var TechnicalLabelElementName = TechnicalNameBlockName + "__label";
@@ -32,15 +33,12 @@
     var GlyphiconElementName = CheckboxListEditorBlockName + "__glyphicon";
     var CheckboxItemElementName = CheckboxListEditorBlockName + "__item";
     var CheckboxSelectAllItemElementName = CheckboxListEditorBlockName + "__selectAllItem";
-    var HiddenInputElementName = CheckboxListEditorBlockName + "__hiddenInput";
 
 
     const string CheckboxBlockName = "checkbox";
     const string SelectAllElementName = CheckboxBlockName + "__selectAllElementName";
     const string CheckboxInputElementName = CheckboxBlockName + "__input";
     const string CheckboxIndicatorElementName = CheckboxBlockName + "__indicator";
-
-    var checkedItems = viewModel.Items.Where(item => item.Checked).Select(item => item.Value);
 
     var expandableContainerDiv = Tag(Model, "div");
     expandableContainerDiv.AddCssClass(ExpandableContainerElementName);
@@ -80,7 +78,10 @@
             @foreach (var relationship in viewModel.EnabledFilterRelationShips)
             {
                 <div class="@FilterRelationshipContainerElementName">
-                    <input @if (relationship.ToString() == selectedFilterRelationship) { <text>checked</text> } type="radio" id="@(FilterRelationshipTechnicalName)_@(relationship)" name="@FilterRelationshipTechnicalName" value="@relationship" class="@FilterRelationshipElementName" />
+                    <input @if (relationship == selectedFilterRelationship) { <text>checked</text> }
+                        type="radio" id="@(FilterRelationshipTechnicalName)_@(relationship)"
+                        name="@FilterRelationshipTechnicalName" class="@FilterRelationshipElementName"
+                        value="@if (relationship != FilterRelationship.Or) { @relationship }" />
                     <label for="@(FilterRelationshipTechnicalName)_@(relationship)" class="@FilterRelationshipLabelElementName">@relationship</label>
                 </div>
             }
@@ -108,11 +109,11 @@
         {
             <label class="@CheckboxBlockName @CheckboxItemElementName js-@CheckboxBlockName">
                 @item.Label
-                <input type="checkbox" class="js-@CheckboxInputElementName @CheckboxInputElementName" id="@item.Value" checked="@item.Checked" />
+                <input type="checkbox" class="js-@CheckboxInputElementName @CheckboxInputElementName" checked="@item.Checked"
+                       name="@TechnicalNameBlockName" value="@item.Value" />
                 <span class="@CheckboxIndicatorElementName"></span>
             </label>
         }
-        <input type="hidden" class="@HiddenInputElementName js-@HiddenInputElementName" name="@TechnicalNameBlockName" value="@(checkedItems.Any() ? string.Join(",", checkedItems) : "")">
     </div>
     @if (viewModel.IsExpandable)
     {
@@ -138,8 +139,7 @@
                     checkboxSelectAllItemElementClass: ".@CheckboxSelectAllItemElementName",
                     selectAllElementClass: ".@SelectAllElementName",
                     inputSelectAllElementSelector: "input.@SelectAllElementName",
-                    checkboxItemElementClass: ".@CheckboxItemElementName",
-                    hiddenInputElementClass: ".js-@HiddenInputElementName"
+                    checkboxItemElementClass: ".@CheckboxItemElementName"
                 });
             });
 

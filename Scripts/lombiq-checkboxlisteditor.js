@@ -21,8 +21,7 @@
         checkboxSelectAllItemElementClass: "",
         selectAllElementClass: "",
         inputSelectAllElementSelector: "",
-        checkboxItemElementClass: "",
-        hiddenInputElementClass: ""
+        checkboxItemElementClass: ""
     };
 
     function Plugin(element, options) {
@@ -73,8 +72,6 @@
                 $itemsToHide.children(plugin.settings.checkboxInputElementClass).prop("checked", false);
                 $itemsToHide.hide();
 
-                recalculateValue(controlGroup);
-
                 }).on("keyup search", function () {
                     $(this).change();
                     reevaluateSelectAllState($(this).parents(plugin.settings.searchFilterContainerElementClass).next(plugin.settings.controlGroupElementClass));
@@ -83,7 +80,6 @@
 
             var $checkboxes = $(plugin.settings.checkboxInputElementClass);
             $checkboxes.on("change", function () {
-                recalculateValue($(this).parents(plugin.settings.controlGroupElementClass));
                 reevaluateSelectAllState($(this).parent().parent());
             });
 
@@ -102,21 +98,12 @@
                 }
             };
 
-            var recalculateValue = function ($controlGroup) {
-                var ids = $controlGroup.find(plugin.settings.checkboxInputElementClass).filter(":checked").map(function () {
-                    return this.id;
-                }).get().join(",");
-                $controlGroup.children(plugin.settings.hiddenInputElementClass).val(ids);
-            };
-
             var selectAll = $(plugin.settings.selectAllElementClass);
             selectAll.change(function () {
                 var checked = this.checked;
                 $(this).parent().siblings(plugin.settings.checkboxBlockClass).children(plugin.settings.checkboxInputElementClass + ":visible").each(function () {
                     this.checked = checked;
                 });
-
-                recalculateValue($(this).parent().parent());
             });
         },
 
@@ -130,7 +117,6 @@
             }
 
             $controlGroup.find(plugin.settings.checkboxInputElementClass).filter(":checked").prop("checked", false);
-            $controlGroup.children(plugin.settings.hiddenInputElementClass).val("");
 
             return plugin;
         }
