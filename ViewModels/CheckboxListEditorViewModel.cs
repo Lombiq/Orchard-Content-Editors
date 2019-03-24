@@ -21,7 +21,7 @@ namespace Lombiq.ContentEditors.ViewModels
         public CheckboxListEditorViewModel(
             NameValueCollection queryString, string technicalName, IEnumerable<string> values)
         {
-            var checkedItems = queryString.GetQueryStringParameterValues(technicalName);
+            var checkedItems = queryString.GetValues(technicalName);
 
             foreach (var value in values)
                 Items.Add(new CheckboxListFieldItemViewModel
@@ -36,7 +36,7 @@ namespace Lombiq.ContentEditors.ViewModels
         public CheckboxListEditorViewModel(
             NameValueCollection queryString, string technicalName, IEnumerable<KeyValuePair<string, string>> valueLabelDictionary)
         {
-            var checkedItems = queryString.GetQueryStringParameterValues(technicalName);
+            var checkedItems = queryString.GetValues(technicalName);
 
             foreach (var valueLabelItem in valueLabelDictionary)
                 Items.Add(new CheckboxListFieldItemViewModel
