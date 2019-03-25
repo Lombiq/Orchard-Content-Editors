@@ -119,6 +119,12 @@
             $controlGroup.find(plugin.settings.checkboxInputElementClass).filter(":checked").prop("checked", false);
 
             return plugin;
+        },
+
+        val: function () {
+            return $(this.settings.checkboxInputElementClass).filter(":checked:not(:disabled)").map(function () {
+                return $(this).val();
+            }).toArray();
         }
     });
 
@@ -138,5 +144,12 @@
             // if the plugin is not instantiated on this element and "options" is undefined.
             return $.data(this, "plugin_" + pluginName);
         });
+    };
+
+    $.fn.originalVal = $.fn.val;
+    $.fn.val = function (value) {
+        var plugin = $(this).lombiq_CheckboxListEditor()[0];
+
+        return plugin ? plugin.val() : value ? $(this).originalVal(value) : $(this).originalVal();
     };
 })(jQuery, window, document);
