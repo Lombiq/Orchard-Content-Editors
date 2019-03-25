@@ -78,7 +78,7 @@
             @foreach (var relationship in viewModel.EnabledFilterRelationShips)
             {
                 <div class="@FilterRelationshipContainerElementName">
-                    <input 
+                    <input @if (relationship == selectedFilterRelationship) { <text>checked</text> }
                         type="radio" id="@(FilterRelationshipTechnicalName)_@(relationship)"
                         name="@FilterRelationshipTechnicalName" class="@FilterRelationshipElementName"
                         value="@if (relationship != FilterRelationship.Or) { @relationship }" />
