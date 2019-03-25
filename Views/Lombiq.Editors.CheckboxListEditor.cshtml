@@ -35,10 +35,10 @@
     var CheckboxSelectAllItemElementName = CheckboxListEditorBlockName + "__selectAllItem";
 
 
-    const string CheckboxBlockName = "checkbox";
-    const string SelectAllElementName = CheckboxBlockName + "__selectAllElementName";
-    const string CheckboxInputElementName = CheckboxBlockName + "__input";
-    const string CheckboxIndicatorElementName = CheckboxBlockName + "__indicator";
+    const string CheckboxContainerBlockName = "checkboxContainer";
+    const string SelectAllElementName = CheckboxContainerBlockName + "__selectAllElementName";
+    const string CheckboxInputElementName = CheckboxContainerBlockName + "__input";
+    const string CheckboxIndicatorElementName = CheckboxContainerBlockName + "__indicator";
 
     var expandableContainerDiv = Tag(Model, "div");
     expandableContainerDiv.AddCssClass(ExpandableContainerElementName);
@@ -78,7 +78,7 @@
             @foreach (var relationship in viewModel.EnabledFilterRelationShips)
             {
                 <div class="@FilterRelationshipContainerElementName">
-                    <input @if (relationship == selectedFilterRelationship) { <text>checked</text> }
+                    <input 
                         type="radio" id="@(FilterRelationshipTechnicalName)_@(relationship)"
                         name="@FilterRelationshipTechnicalName" class="@FilterRelationshipElementName"
                         value="@if (relationship != FilterRelationship.Or) { @relationship }" />
@@ -98,19 +98,19 @@
 
         @if (viewModel.EnableSelectAll && viewModel.Items.Skip(1).Any())
         {
-            <label class="@CheckboxBlockName @CheckboxItemElementName @CheckboxSelectAllItemElementName js-@SelectAllElementName">
+            <label class="@CheckboxItemElementName @CheckboxContainerBlockName @CheckboxSelectAllItemElementName js-@SelectAllElementName">
                 @T("Select All")
-                <input type="checkbox" class="@CheckboxInputElementName @SelectAllElementName" checked="@viewModel.Items.All(item => item.Checked)" />
+                <input type="checkbox" class="@CheckboxInputElementName @SelectAllElementName" checked="@viewModel.Items.All(item => item.Checked)" hidden />
                 <span class="@CheckboxIndicatorElementName"></span>
             </label>
         }
 
         @foreach (var item in viewModel.Items)
         {
-            <label class="@CheckboxBlockName @CheckboxItemElementName js-@CheckboxBlockName">
+            <label class="@CheckboxItemElementName @CheckboxContainerBlockName js-@CheckboxContainerBlockName">
                 @item.Label
-                <input type="checkbox" class="js-@CheckboxInputElementName @CheckboxInputElementName" checked="@item.Checked"
-                       name="@TechnicalNameBlockName" value="@item.Value" />
+                <input type="checkbox" class="js-@CheckboxInputElementName @CheckboxInputElementName" name="@TechnicalNameBlockName"
+                       value="@item.Value" @if (item.Checked) { <text>checked</text> } hidden />
                 <span class="@CheckboxIndicatorElementName"></span>
             </label>
         }
@@ -133,7 +133,7 @@
                     searchFilterContainerElementClass: ".js-@SearchFilterContainerElementName",</text>
                     }
                     controlGroupElementClass: ".js-@ControlGroupElementName",
-                    checkboxBlockClass: ".js-@CheckboxBlockName",
+                    checkboxContainerSelector: ".js-@CheckboxContainerBlockName",
                     checkboxInputElementClass: ".js-@CheckboxInputElementName",
                     inputCheckboxInputElementSelector: "input.@CheckboxInputElementName",
                     checkboxSelectAllItemElementClass: ".@CheckboxSelectAllItemElementName",

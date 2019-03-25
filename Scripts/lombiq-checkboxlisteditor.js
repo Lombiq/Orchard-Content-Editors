@@ -15,7 +15,7 @@
         searchFilterElementClass: "",
         searchFilterContainerElementClass: "",
         controlGroupElementClass: "",
-        checkboxBlockClass: "",
+        checkboxContainerSelector: "",
         checkboxInputElementClass: "",
         inputCheckboxInputElementSelector: "",
         checkboxSelectAllItemElementClass: "",
@@ -52,7 +52,7 @@
                 var controlGroup = $(this).parents(plugin.settings.searchFilterContainerElementClass).next(plugin.settings.controlGroupElementClass);
 
                 if (filter.length === 0) {
-                    controlGroup.find(plugin.settings.checkboxBlockClass + ":hidden").show();
+                    controlGroup.find(plugin.settings.checkboxContainerSelector + ":hidden").show();
                     $(this).prev().removeClass("glyphicon-remove").addClass("glyphicon-search");
                     return;
                 }
@@ -66,9 +66,9 @@
                     });
                 }
 
-                controlGroup.find(plugin.settings.checkboxBlockClass + ":contains('" + filter + "'):hidden").show();
+                controlGroup.find(plugin.settings.checkboxContainerSelector + ":contains('" + filter + "'):hidden").show();
 
-                var $itemsToHide = controlGroup.find(plugin.settings.checkboxBlockClass + ":not(:contains('" + filter + "')):visible");
+                var $itemsToHide = controlGroup.find(plugin.settings.checkboxContainerSelector + ":not(:contains('" + filter + "')):visible");
                 $itemsToHide.children(plugin.settings.checkboxInputElementClass).prop("checked", false);
                 $itemsToHide.hide();
 
@@ -101,7 +101,7 @@
             var selectAll = $(plugin.settings.selectAllElementClass);
             selectAll.change(function () {
                 var checked = this.checked;
-                $(this).parent().siblings(plugin.settings.checkboxBlockClass).children(plugin.settings.checkboxInputElementClass + ":visible").each(function () {
+                $(this).parent().siblings(plugin.settings.checkboxContainerSelector).children(plugin.settings.checkboxInputElementClass + ":visible").each(function () {
                     this.checked = checked;
                 });
             });
