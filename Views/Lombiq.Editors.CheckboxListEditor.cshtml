@@ -13,10 +13,10 @@
     var TechnicalNameBlockName = viewModel.TechnicalName;
 
     var FilterRelationshipTechnicalName = $"{TechnicalNameBlockName}Relationship";
-    var FilterRelationshipsContainerElementName = TechnicalNameBlockName + "__filterRelationshipsContainer";
-    var FilterRelationshipContainerElementName = TechnicalNameBlockName + "__filterRelationshipContainer";
-    var FilterRelationshipElementName = TechnicalNameBlockName + "__filterRelationship";
-    var FilterRelationshipLabelElementName = TechnicalNameBlockName + "__filterRelationshipLabel";
+    var FilterRelationshipsContainerElementName = CheckboxListEditorBlockName + "__filterRelationshipsContainer";
+    var FilterRelationshipContainerElementName = CheckboxListEditorBlockName + "__filterRelationshipContainer";
+    var FilterRelationshipElementName = CheckboxListEditorBlockName + "__filterRelationship";
+    var FilterRelationshipLabelElementName = CheckboxListEditorBlockName + "__filterRelationshipLabel";
     var selectedFilterRelationship = Enum.TryParse(Request.QueryString[FilterRelationshipTechnicalName], out FilterRelationship filterRelationship) ?
         filterRelationship : FilterRelationship.Or;
 
@@ -25,7 +25,7 @@
     var ExpandableLabelElementName = LabelElementName + "__expandable";
     var ExpandableLabelElementNameWithOpenedModifier = ExpandableLabelElementName + "_open";
     var ExpandableContainerElementName = CheckboxListEditorBlockName + "__expandableContainer";
-    var TecnicalExpandableContainerElementName = TechnicalNameBlockName + "__expandableContainer";
+    var TechnicalExpandableContainerElementName = TechnicalNameBlockName + "__expandableContainer";
     var ValueElementName = CheckboxListEditorBlockName + "__value";
     var ControlGroupElementName = CheckboxListEditorBlockName + "__controlGroup";
     var SearchFilterElementName = CheckboxListEditorBlockName + "__searchFilter";
@@ -42,7 +42,7 @@
 
     var expandableContainerDiv = Tag(Model, "div");
     expandableContainerDiv.AddCssClass(ExpandableContainerElementName);
-    expandableContainerDiv.AddCssClass($"js-{TecnicalExpandableContainerElementName}");
+    expandableContainerDiv.AddCssClass($"js-{TechnicalExpandableContainerElementName}");
 
     if (viewModel.IsCollapsedByDefault)
     {
@@ -148,7 +148,7 @@
                 <text>
                     $(".js-@TechnicalLabelElementName").click(function (e) {
                         $(this).toggleClass("@ExpandableLabelElementNameWithOpenedModifier");
-                        $(this).next(".js-@TecnicalExpandableContainerElementName").slideToggle("fast").removeClass("hidden");
+                        $(this).next(".js-@TechnicalExpandableContainerElementName").slideToggle("fast").removeClass("hidden");
                     });
                 </text>
             }
