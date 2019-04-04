@@ -93,22 +93,25 @@
                 }
             }
 
+            var target = $(plugin.settings.targetSelector).not(plugin.element);
+            var inverseTarget = $(plugin.settings.inverseTargetSelector).not(plugin.element);
+
             if (enable === null) {
-                $(plugin.settings.targetSelector).not(plugin.element).disable();
+                target.disable();
                 if (plugin.settings.inverseTargetSelector) {
-                    $(plugin.settings.inverseTargetSelector).not(plugin.element).disable();
+                    inverseTarget.disable();
                 }
             }
             else if (enable) {
-                $(plugin.settings.targetSelector).not(plugin.element).enable();
+                target.enable();
                 if (plugin.settings.inverseTargetSelector) {
-                    $(plugin.settings.inverseTargetSelector).not(plugin.element).disable();
+                    inverseTarget.disable();
                 }
             }
             else {
-                $(plugin.settings.targetSelector).not(plugin.element).disable();
+                target.disable();
                 if (plugin.settings.inverseTargetSelector) {
-                    $(plugin.settings.inverseTargetSelector).not(plugin.element).enable();
+                    inverseTarget.enable();
                 }
             }
         }

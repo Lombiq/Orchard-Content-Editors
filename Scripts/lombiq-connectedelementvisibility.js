@@ -100,27 +100,30 @@
                 });
             };
 
+            var target = $(plugin.settings.targetSelector).not(plugin.element);
+            var inverseTarget = $(plugin.settings.inverseTargetSelector).not(plugin.element);
+
             if (show === null) {
-                $(plugin.settings.targetSelector).not(plugin.element).hide();
+                target.hide();
                 replaceRequiredAttribute(plugin.settings.targetSelector);
                 if (plugin.settings.inverseTargetSelector) {
-                    $(plugin.settings.inverseTargetSelector).not(plugin.element).hide();
+                    inverseTarget.hide();
                     replaceRequiredAttribute(plugin.settings.inverseTargetSelector);
                 }
             }
             else if (show) {
-                $(plugin.settings.targetSelector).not(plugin.element).show();
+                target.show();
                 replaceRequiredHiddenAttribute(plugin.settings.targetSelector);
                 if (plugin.settings.inverseTargetSelector) {
-                    $(plugin.settings.inverseTargetSelector).not(plugin.element).hide();
+                    inverseTarget.hide();
                     replaceRequiredAttribute(plugin.settings.inverseTargetSelector);
                 }
             }
             else {
-                $(plugin.settings.targetSelector).not(plugin.element).hide();
+                target.hide();
                 replaceRequiredAttribute(plugin.settings.targetSelector);
                 if (plugin.settings.inverseTargetSelector) {
-                    $(plugin.settings.inverseTargetSelector).not(plugin.element).show();
+                    inverseTarget.show();
                     replaceRequiredHiddenAttribute(plugin.settings.inverseTargetSelector);
                 }
             }
