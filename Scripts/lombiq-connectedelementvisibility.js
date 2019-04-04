@@ -101,26 +101,26 @@
             };
 
             if (show === null) {
-                $(plugin.settings.targetSelector).hide();
+                $(plugin.settings.targetSelector).not(plugin.element).hide();
                 replaceRequiredAttribute(plugin.settings.targetSelector);
                 if (plugin.settings.inverseTargetSelector) {
-                    $(plugin.settings.inverseTargetSelector).hide();
+                    $(plugin.settings.inverseTargetSelector).not(plugin.element).hide();
                     replaceRequiredAttribute(plugin.settings.inverseTargetSelector);
                 }
             }
             else if (show) {
-                $(plugin.settings.targetSelector).show();
+                $(plugin.settings.targetSelector).not(plugin.element).show();
                 replaceRequiredHiddenAttribute(plugin.settings.targetSelector);
                 if (plugin.settings.inverseTargetSelector) {
-                    $(plugin.settings.inverseTargetSelector).hide();
+                    $(plugin.settings.inverseTargetSelector).not(plugin.element).hide();
                     replaceRequiredAttribute(plugin.settings.inverseTargetSelector);
                 }
             }
             else {
-                $(plugin.settings.targetSelector).hide();
+                $(plugin.settings.targetSelector).not(plugin.element).hide();
                 replaceRequiredAttribute(plugin.settings.targetSelector);
                 if (plugin.settings.inverseTargetSelector) {
-                    $(plugin.settings.inverseTargetSelector).show();
+                    $(plugin.settings.inverseTargetSelector).not(plugin.element).show();
                     replaceRequiredHiddenAttribute(plugin.settings.inverseTargetSelector);
                 }
             }
