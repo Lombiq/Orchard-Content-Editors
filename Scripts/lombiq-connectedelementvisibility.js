@@ -32,6 +32,10 @@
         init: function () {
             var plugin = this;
 
+            if (!plugin.settings.initialValue) {
+                plugin.settings.initialValue = $(plugin.element).val();
+            }
+
             plugin.updateVisibility(plugin.settings.initialValue);
 
             $(plugin.element).on("change", function (event, value) {
