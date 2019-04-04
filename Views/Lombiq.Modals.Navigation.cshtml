@@ -1,0 +1,28 @@
+﻿@{
+    const string BlockName = "navigationModal";
+}
+
+@Display.Lombiq_Modals_Information(
+    Id: Model.Id,
+    BlockName: BlockName,
+    Title: Model.Title,
+    Body: $"<div class=\"{BlockName}__text\"><span class=\"{BlockName}__label\">{Model.Label}</span>{Model.Text}</div>",
+    ButtonText: T("Continue").Text)
+
+@using (Script.Foot())
+{
+    <script type="text/javascript">
+        ; (function ($) {
+            $(function () {
+                $(document).on("click", "@Model.Selector", function (event) {
+                    $("#@Model.Id").dialog("open");
+                    event.preventDefault();
+                });
+
+                $("#@Model.Id").on("confirm", function () {
+                    window.open("@Model.Url", "_blank");
+                });
+            });
+        })(jQuery);
+    </script>
+}
