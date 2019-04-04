@@ -157,6 +157,7 @@
     <Content Include="Content\Selectize\selectize.min.js" />
     <Content Include="Scripts\lombiq-connectedelementvisibility.js" />
     <Content Include="Scripts\lombiq-disableemptyforminputs.js" />
+    <Content Include="Scripts\lombiq-jquery-enabledisable.js" />
     <Content Include="Scripts\lombiq-replaceelementattribute.js" />
     <Content Include="Scripts\lombiq-unsafeaction.js" />
     <Content Include="Scripts\lombiq-loadingindicator.js" />

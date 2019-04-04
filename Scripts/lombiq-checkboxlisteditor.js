@@ -152,4 +152,26 @@
 
         return plugin ? plugin.val() : value ? $(this).originalVal(value) : $(this).originalVal();
     };
+
+    $.fn.originalEnable = $.fn.enable;
+    $.fn.enable = function () {
+        $(this).originalEnable();
+
+        var plugin = $(this).lombiq_CheckboxListEditor()[0];
+
+        if (plugin) {
+            $(this).find(plugin.settings.checkboxItemElementClass).removeClass("disabled");
+        }
+    };
+
+    $.fn.originalDisable = $.fn.disable;
+    $.fn.disable = function () {
+        $(this).originalDisable();
+
+        var plugin = $(this).lombiq_CheckboxListEditor()[0];
+
+        if (plugin) {
+            $(this).find(plugin.settings.checkboxItemElementClass).addClass("disabled");
+        }
+    };
 })(jQuery, window, document);

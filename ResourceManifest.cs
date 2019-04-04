@@ -18,12 +18,14 @@ namespace Lombiq.ContentEditors
 
             manifest.DefineScript(AreYouSure).SetUrl("../Content/AreYouSure/jquery.are-you-sure.js").SetDependencies(jQuery);
 
+            manifest.DefineScript(Lombiq_jQuery_EnableDisable).SetUrl("lombiq-jquery-enabledisable.js").SetDependencies(jQuery);
+
             manifest.DefineScript(Lombiq_LoadingIndicator).SetUrl("lombiq-loadingindicator.js").SetDependencies(jQuery);
             manifest.DefineStyle(Lombiq_LoadingIndicator).SetUrl("lombiq-loadingindicator.min.css", "lombiq-loadingindicator.css");
 
             manifest.DefineScript(Lombiq_AsyncEditor).SetUrl("lombiq-asynceditor.js").SetDependencies(Lombiq_LoadingIndicator, Uri_Js, AreYouSure);
             manifest.DefineScript(Lombiq_AsyncEditorWrapper).SetUrl("lombiq-asynceditorwrapper.js").SetDependencies(Lombiq_LoadingIndicator, Uri_Js);
-            manifest.DefineScript(Lombiq_CheckboxListEditor).SetUrl("lombiq-checkboxlisteditor.js").SetDependencies(jQuery);
+            manifest.DefineScript(Lombiq_CheckboxListEditor).SetUrl("lombiq-checkboxlisteditor.js").SetDependencies(Lombiq_jQuery_EnableDisable);
             manifest.DefineScript(Lombiq_Editors_DateTimeEditor).SetUrl("lombiq-editors-datetimeeditor.js").SetDependencies(jQueryUI, "Moment");
             manifest.DefineScript(Lombiq_BoolEditor).SetUrl("lombiq-booleditor.js").SetDependencies(jQuery);
             manifest.DefineScript(Lombiq_UnsafeAction).SetUrl("lombiq-unsafeaction.js").SetDependencies(jQuery);
