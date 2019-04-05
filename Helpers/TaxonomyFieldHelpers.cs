@@ -62,17 +62,17 @@ namespace Lombiq.ContentEditors.Helpers
             return selectListItems.OrderBy(item => item.Text).ToList();
         }
 
-        public static Dictionary<string, Dictionary<string, string>> CreateValueHierarchyFromTerms(
+        public static Dictionary<string, IEnumerable<string>> CreateValueHierarchyFromTerms(
             TaxonomyFieldViewModel viewModel, int parentLevel = 0, int depth = int.MaxValue)
         {
             var termEntries = viewModel.Terms;
             var topLevelTermEntries = termEntries.Where(term => term.GetLevels() == parentLevel).ToList();
-            var valueHierarchy = new Dictionary<string, Dictionary<string, string>>();
+            var valueHierarchy = new Dictionary<string, IEnumerable<string>>();
 
             foreach (var entry in topLevelTermEntries)
             {
                 var children = termEntries.Where(term => term.Path.Contains(entry.Path + entry.Id) && term.GetLevels() <= depth + parentLevel)
-                    .ToDictionary(term => term.Id.ToString(), term => term.Name);
+                    .Select(term => term.Id.ToString());
                 valueHierarchy.Add(entry.Id.ToString(), children);
             }
 

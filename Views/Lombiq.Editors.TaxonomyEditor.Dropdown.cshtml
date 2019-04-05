@@ -4,7 +4,7 @@
 @{
     var viewModel = Model.ViewModel as DropdownEditorViewModel;
 
-    var hasParent = !string.IsNullOrEmpty(viewModel.ParentDropdownEditorName);
+    var hasParent = !string.IsNullOrEmpty(viewModel.ParentElementSelector);
 
     if (hasParent)
     {
@@ -69,16 +69,16 @@
 
 @if (hasParent)
 {
-    <script type="text/javascript">
+<script type="text/javascript">
         ; (function ($) {
             $(function () {
                 $("select[name='@(ViewData.TemplateInfo.HtmlFieldPrefix + "." + viewModel.Name)']").lombiq_ConnectedValueSelector({
-                    parentElementSelector: "[name='@viewModel.ParentDropdownEditorName']",
-                    valueHierarchy: @Html.Raw(Json.Encode(viewModel.ValueHierarchy)),
+                    parentElementSelector: "@viewModel.ParentElementSelector",
+                    valueHierarchy: @Html.Raw(Json.Encode(viewModel.ParentElementValueHierarchy)),
                     hasDefaultEmptyValue: @viewModel.HasDefaultEmptyValue.ToString().ToLower(),
                     defaultEmptyValue: '0'
                 });
             });
         })(jQuery);
-    </script>
+</script>
 }
