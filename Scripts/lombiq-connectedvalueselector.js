@@ -47,8 +47,9 @@
                     var currentValues = [];
                     if (Array.isArray(parentValue)) {
                         $.each(parentValue, function (index, value) {
-                            if ($.inArray(value, plugin.settings.valueHierarchy)) {
-                                $.merge(currentValues, plugin.settings.valueHierarchy[value]);
+                            var additionalValues = plugin.settings.valueHierarchy[value];
+                            if (typeof additionalValues !== "undefined" && additionalValues.length > 0) {
+                                $.merge(currentValues, additionalValues);
                             }
                         });
                     }
@@ -76,9 +77,9 @@
                             $(currentElement).hide();
                         }
                     });
-                }
 
-                $(plugin.element).trigger("change");
+                    $(plugin.element).trigger("change");
+                }
             };
 
             if (parentElement) {
