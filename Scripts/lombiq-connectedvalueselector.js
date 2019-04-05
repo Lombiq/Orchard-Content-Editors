@@ -35,24 +35,36 @@
             var parentElement = $(plugin.settings.parentElementSelector);
 
             var parentElementChanged = function () {
+                if (typeof parentElement === "undefined" || parentElement.length === 0) return;
+
                 var parentValue = parentElement.val();
 
-                if (typeof parentValue === "undefined" || !parentValue || parentValue === 0 || parentValue === "") return;
+                if (typeof parentValue === "undefined") return;
 
-                var currentValues = plugin.settings.valueHierarchy[parentValue];
+                var currentValues = typeof parentValue === "undefined" ?
+                    [] :
+                    Array.isArray(parentValue) ?
+                        $.unique(parentValue.map(function (value) {
+                            return plugin.settings.valueHierarchy[value];
+                        })) :
+                        plugin.settings.valueHierarchy[parentValue];
 
-                if (typeof currentValues === "undefined") return;
+                $.each($(plugin.element).find(plugin.settings.childElementValueSelector), function () {
+                    var currentElement = $(this);
+                    var currentElementTag = $(currentElement).prop("tagName").toLowerCase();
+                    var hierarchy = currentElementTag !== "input" && currentElementTag !== "option";
 
-                $.each($(plugin.element).children(plugin.settings.childElementValueSelector), function () {
-                    var currentElementValue = $(this).val();
-
-                    if (currentValues[currentElementValue]) {
-                        $(this).show();
+                    // If the current element is not an input or option, then it defines a hierarchy of elements,
+                    // in which case we need to find the element among its children that supplies the value.
+                    var valueElement = hierarchy ? $(currentElement).find("input,option") : $(currentElement);
+                    var value = valueElement.val();
+                    if (typeof currentValues !== "undefined" && (currentValues[value] || $.inArray(value, currentValues) > -1)) {
+                        $(currentElement).show();
                     }
                     // Don't hide the default empty value.
-                    else if (!plugin.settings.hasDefaultEmptyValue || plugin.settings.defaultEmptyValue !== currentElementValue) {
-                        $(this).hide();
-                        $(this).prop("selected", false);
+                    else if (!plugin.settings.hasDefaultEmptyValue || plugin.settings.defaultEmptyValue !== value) {
+                        valueElement.prop("selected", false).prop("checked", false);
+                        $(currentElement).hide();
                     }
                 });
             };
