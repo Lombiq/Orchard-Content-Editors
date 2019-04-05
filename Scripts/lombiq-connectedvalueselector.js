@@ -41,32 +41,44 @@
 
                 if (typeof parentValue === "undefined") return;
 
-                var currentValues = typeof parentValue === "undefined" ?
-                    [] :
-                    Array.isArray(parentValue) ?
-                        $.unique(parentValue.map(function (value) {
-                            return plugin.settings.valueHierarchy[value];
-                        })) :
-                        plugin.settings.valueHierarchy[parentValue];
+                var childElements = $(plugin.element).find(plugin.settings.childElementValueSelector);
 
-                $.each($(plugin.element).find(plugin.settings.childElementValueSelector), function () {
-                    var currentElement = $(this);
-                    var currentElementTag = $(currentElement).prop("tagName").toLowerCase();
-                    var hierarchy = currentElementTag !== "input" && currentElementTag !== "option";
+                if (childElements.length > 0) {
+                    var currentValues = [];
+                    if (Array.isArray(parentValue)) {
+                        $.each(parentValue, function (index, value) {
+                            if ($.inArray(value, plugin.settings.valueHierarchy)) {
+                                $.merge(currentValues, plugin.settings.valueHierarchy[value]);
+                            }
+                        });
+                    }
+                    else {
+                        currentValues = plugin.settings.valueHierarchy[parentValue];
+                    }
 
-                    // If the current element is not an input or option, then it defines a hierarchy of elements,
-                    // in which case we need to find the element among its children that supplies the value.
-                    var valueElement = hierarchy ? $(currentElement).find("input,option") : $(currentElement);
-                    var value = valueElement.val();
-                    if (typeof currentValues !== "undefined" && (currentValues[value] || $.inArray(value, currentValues) > -1)) {
-                        $(currentElement).show();
-                    }
-                    // Don't hide the default empty value.
-                    else if (!plugin.settings.hasDefaultEmptyValue || plugin.settings.defaultEmptyValue !== value) {
-                        valueElement.prop("selected", false).prop("checked", false);
-                        $(currentElement).hide();
-                    }
-                });
+                    $.each(childElements, function () {
+                        var currentElement = $(this);
+                        var currentElementTag = $(currentElement).prop("tagName").toLowerCase();
+                        var hierarchy = currentElementTag !== "input" && currentElementTag !== "option";
+
+                        // If the current element is not an input or option, then it defines a hierarchy of elements,
+                        // in which case we need to find the element among its children that supplies the value.
+                        var valueElement = hierarchy ? $(currentElement).find("input,option") : $(currentElement);
+
+                        var value = valueElement.val();
+
+                        if ($.inArray(value, currentValues) > -1) {
+                            $(currentElement).show();
+                        }
+                        // Don't hide the default empty value.
+                        else if (!plugin.settings.hasDefaultEmptyValue || plugin.settings.defaultEmptyValue !== value) {
+                            valueElement.prop("selected", false).prop("checked", false);
+                            $(currentElement).hide();
+                        }
+                    });
+                }
+
+                $(plugin.element).trigger("change");
             };
 
             if (parentElement) {
