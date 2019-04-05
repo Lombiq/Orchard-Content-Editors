@@ -1,7 +1,15 @@
-﻿@using Lombiq.ContentEditors.ViewModels
+﻿@using Lombiq.ContentEditors.Constants
+@using Lombiq.ContentEditors.ViewModels
 
 @{
     var viewModel = Model.ViewModel as DropdownEditorViewModel;
+
+    var hasParent = !string.IsNullOrEmpty(viewModel.ParentDropdownEditorName);
+
+    if (hasParent)
+    {
+        Script.Require(ResourceNames.Lombiq_ConnectedValueSelector);
+    }
 
     const string DefaultBlockName = "taxonomyDropdownEditor";
     string BlockName = viewModel.BlockName ?? DefaultBlockName;
@@ -59,7 +67,7 @@
 </div>
 
 
-@if (!string.IsNullOrEmpty(viewModel.ParentDropdownEditorName))
+@if (hasParent)
 {
     <script type="text/javascript">
         ; (function ($) {
