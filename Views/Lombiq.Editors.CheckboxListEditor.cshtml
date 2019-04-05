@@ -148,28 +148,28 @@
                     inputSelectAllElementSelector: "input.@SelectAllElementName",
                     checkboxItemElementClass: ".@CheckboxItemElementName"
                 });
+
+                @if (viewModel.IsExpandable)
+                {
+                    <text>
+                        $(".js-@TechnicalLabelElementName").click(function (e) {
+                            $(this).toggleClass("@ExpandableLabelElementNameWithOpenedModifier");
+                            $(this).next(".js-@TechnicalExpandableContainerElementName").slideToggle("fast").removeClass("hidden");
+                        });
+                    </text>
+                }
+
+                @if (hasParent)
+                {
+                    <text>
+                        $("#@TechnicalNameBlockName").lombiq_ConnectedValueSelector({
+                            parentElementSelector: "@viewModel.ParentElementSelector",
+                            valueHierarchy: @Html.Raw(Json.Encode(viewModel.ParentElementValueHierarchy)),
+                            childElementValueSelector: ".@CheckboxItemElementName"
+                        });
+                    </text>
+                }
             });
-
-            @if (viewModel.IsExpandable)
-            {
-                <text>
-                    $(".js-@TechnicalLabelElementName").click(function (e) {
-                        $(this).toggleClass("@ExpandableLabelElementNameWithOpenedModifier");
-                        $(this).next(".js-@TechnicalExpandableContainerElementName").slideToggle("fast").removeClass("hidden");
-                    });
-                </text>
-            }
-
-            @if (hasParent)
-            {
-                <text>
-                    $("#@TechnicalNameBlockName").lombiq_ConnectedValueSelector({
-                        parentElementSelector: "@viewModel.ParentElementSelector",
-                        valueHierarchy: @Html.Raw(Json.Encode(viewModel.ParentElementValueHierarchy)),
-                        childElementValueSelector: ".@CheckboxItemElementName"
-                    });
-                </text>
-            }
         })(jQuery);
     </script>
 }
