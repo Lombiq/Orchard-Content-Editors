@@ -1,4 +1,6 @@
-﻿namespace Lombiq.ContentEditors.ViewModels
+﻿using System;
+
+namespace Lombiq.ContentEditors.ViewModels
 {
     public enum DateTimeEditorType
     {
@@ -14,5 +16,7 @@
         public string FrontEndDateDisplayFormat { get; set; } = "MM/DD/YYYY";
         public string FrontEndDateStoreFormat { get; set; } = "YYYY-MM-DD";
         public string DateFormat { get; set; } = "yyyy-MM-dd";
+        public DateTime? Minimum { get; set; }
+        public DateTime? Maximum { get; set; }
     }
 }
