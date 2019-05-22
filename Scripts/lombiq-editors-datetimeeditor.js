@@ -71,6 +71,15 @@
                 }
             });
 
+            var minAttribute = plugin.$datepicker.attr("min");
+            var maxAttribute = plugin.$datepicker.attr("max");
+            if (typeof minAttribute !== "undefined" && minAttribute !== false) {
+                datepickerOptions.minDate = moment(minAttribute).toDate();
+            }
+            if (typeof maxAttribute !== "undefined" && maxAttribute !== false) {
+                datepickerOptions.maxDate = moment(maxAttribute).toDate();
+            }
+
             plugin.$datepicker.datepicker(datepickerOptions);
 
             plugin.$datepicker.on("change", function () {
