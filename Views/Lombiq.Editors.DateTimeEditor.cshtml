@@ -35,6 +35,14 @@
         { "type", editorType },
         { "class", $"form-control {editorTypeClass} {DefaultBlockName}__{editorTypeClass} {classifiedName}" }
     });
+    if (viewModel.Minimum.HasValue)
+    {
+        dateTimePickerAttributes.Add("min", viewModel.Minimum.Value.ToString(viewModel.DateFormat));
+    }
+    if (viewModel.Maximum.HasValue)
+    {
+        dateTimePickerAttributes.Add("max", viewModel.Maximum.Value.ToString(viewModel.DateFormat));
+    }
 
     var labelAttributes = new Dictionary<string, object>
     {
