@@ -6,7 +6,8 @@ namespace Lombiq.ContentEditors.ViewModels
     {
         Date,
         Time,
-        DateWithTimeZoneConversion
+        DateWithTimeZoneConversion,
+        TimeWithTimeZoneConversion
     }
 
 
