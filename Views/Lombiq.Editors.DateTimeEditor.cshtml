@@ -8,8 +8,7 @@
     var viewModel = Model.ViewModel as DateTimeEditorViewModel;
 
     @* Resources *@
-    var isDateEditor = viewModel.EditorType == DateTimeEditorType.Date ||
-        viewModel.EditorType == DateTimeEditorType.DateWithTimeZoneConversion;
+    var isDateEditor = viewModel.EditorType == DateTimeEditorType.Date || viewModel.EditorType == DateTimeEditorType.DateWithTime;
 
     Script.Require(ResourceNames.Lombiq_Editors_DateTimeEditor).AtHead();
 
@@ -17,6 +16,10 @@
     {
         Style.Require(ResourceNames.Lombiq_Editors_DateTimeEditor);
     }
+
+    var backEndDisplayFormat = isDateEditor ? viewModel.BackEndDateDisplayFormat : viewModel.BackEndTimeDisplayFormat;
+    var frontEndDisplayFormat = isDateEditor ? viewModel.FrontEndDateDisplayFormat : viewModel.FrontEndTimeDisplayFormat;
+    var frontEndStoreFormat = isDateEditor ? viewModel.FrontEndDateStoreFormat : viewModel.FrontEndTimeStoreFormat;
 
     @* BEM *@
     const string DefaultBlockName = "dateTimeEditor";
@@ -56,11 +59,11 @@
 
     if (viewModel.Minimum.HasValue)
     {
-        pickerElementAttributes.Add("min", viewModel.Minimum.Value.ToString(viewModel.DateFormat));
+        pickerElementAttributes.Add("min", viewModel.Minimum.Value.ToString(backEndDisplayFormat));
     }
     if (viewModel.Maximum.HasValue)
     {
-        pickerElementAttributes.Add("max", viewModel.Maximum.Value.ToString(viewModel.DateFormat));
+        pickerElementAttributes.Add("max", viewModel.Maximum.Value.ToString(backEndDisplayFormat));
     }
 
     if (viewModel.Required)
@@ -78,31 +81,18 @@
     var dateLocalizationServices = WorkContext.Resolve<IDateLocalizationServices>();
     var options = new DateLocalizationOptions
     {
-        EnableTimeZoneConversion = viewModel.EditorType == DateTimeEditorType.TimeWithTimeZoneConversion ||
-            viewModel.EditorType == DateTimeEditorType.DateWithTimeZoneConversion,
-        EnableCalendarConversion = viewModel.EditorType == DateTimeEditorType.Date,
+        EnableTimeZoneConversion = viewModel.EditorType == DateTimeEditorType.Time || viewModel.EditorType == DateTimeEditorType.DateWithTime,
+        EnableCalendarConversion = viewModel.EditorType == DateTimeEditorType.Date || viewModel.EditorType == DateTimeEditorType.DateWithTime,
         IgnoreDate = viewModel.EditorType == DateTimeEditorType.Time
     };
 
-    // Assume that the given value is a string and properly formatted.
-    var dateTimeString = viewModel.Value as string;
-
-    // If the value is not string then assume that it is a DateTime object. If so, format it.
-    if (string.IsNullOrEmpty(dateTimeString) && viewModel.Value is DateTime?)
-    {
-        var value = viewModel.Value as DateTime?;
-        dateTimeString = value.HasValue && value.Value != default(DateTime) ?
-            viewModel.Value is string ?
-                (string)viewModel.Value :
-                dateLocalizationServices.ConvertToLocalizedString(value, viewModel.DateFormat, options) :
-            "";
-    }
+    var value = viewModel.Value as DateTime?;
+    var valueString = value.HasValue && value.Value != default(DateTime) ?
+        dateLocalizationServices.ConvertToLocalizedString(value, backEndDisplayFormat, options) :
+        "";
 
     @* Picker element *@
-    var frontEndDisplayFormat = isDateEditor ? viewModel.FrontEndDateDisplayFormat : viewModel.FrontEndTimeDisplayFormat;
-    var frontEndStoreFormat = isDateEditor ? viewModel.FrontEndDateStoreFormat : viewModel.FrontEndTimeStoreFormat;
-
-    pickerElementAttributes["value"] = isDateEditor ? dateTimeString : viewModel.Value;
+    pickerElementAttributes["value"] = valueString;
 
     var datePickerElement = new TagBuilder("input");
     foreach (var attribute in pickerElementAttributes)
@@ -127,7 +117,7 @@
 
     <div class="@(DefaultBlockName)__dateTimePickerContainer">
         @Html.Raw(datePickerElement.ToString(TagRenderMode.SelfClosing))
-        @Html.Hidden(viewModel.Name, dateTimeString)
+        @Html.Hidden(viewModel.Name)
     </div>
 </div>
 

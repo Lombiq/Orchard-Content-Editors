@@ -79,10 +79,7 @@
                 plugin.setValue(plugin.pickerElement.val(), plugin.settings.displayFormat);
             });
 
-            var storedDateMoment = plugin.getStoredValueMoment();
-            if (storedDateMoment !== null) {
-                plugin.setValue(storedDateMoment.toDate());
-            }
+            plugin.setValue(plugin.pickerElement.val(), plugin.settings.displayFormat);
         },
 
         showErrorAndRestore: function (message) {
@@ -167,13 +164,6 @@
             else {
                 plugin.pickerElement.val("");
             }
-        },
-
-        getStoredValueMoment: function () {
-            var plugin = this;
-
-            var storedValue = plugin.inputElement.val();
-            return storedValue ? moment(storedValue, plugin.settings.storeFormat) : null;
         }
     });
 
