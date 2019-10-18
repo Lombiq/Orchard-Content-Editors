@@ -26,7 +26,7 @@ namespace Lombiq.ContentEditors
             manifest.DefineScript(Lombiq_AsyncEditor).SetUrl("lombiq-asynceditor.js").SetDependencies(Lombiq_LoadingIndicator, Uri_Js, AreYouSure);
             manifest.DefineScript(Lombiq_AsyncEditorWrapper).SetUrl("lombiq-asynceditorwrapper.js").SetDependencies(Lombiq_LoadingIndicator, Uri_Js);
             manifest.DefineScript(Lombiq_CheckboxListEditor).SetUrl("lombiq-checkboxlisteditor.js").SetDependencies(Lombiq_jQuery_EnableDisable);
-            manifest.DefineScript(Lombiq_Editors_DateTimeEditor).SetUrl("lombiq-editors-datetimeeditor.js").SetDependencies(jQueryUI, "Moment");
+            manifest.DefineScript(Lombiq_Editors_DateTimeEditor).SetUrl("lombiq-editors-datetimeeditor.js").SetDependencies(jQueryUI, Moment);
             manifest.DefineScript(Lombiq_BoolEditor).SetUrl("lombiq-booleditor.js").SetDependencies(jQuery);
             manifest.DefineScript(Lombiq_UnsafeAction).SetUrl("lombiq-unsafeaction.js").SetDependencies(jQuery);
 

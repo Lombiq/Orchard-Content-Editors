@@ -10,17 +10,12 @@
     @* Resources *@
     var isDateEditor = viewModel.EditorType == DateTimeEditorType.Date ||
         viewModel.EditorType == DateTimeEditorType.DateWithTimeZoneConversion;
-    var isTimeEditor = viewModel.EditorType == DateTimeEditorType.Time ||
-        viewModel.EditorType == DateTimeEditorType.TimeWithTimeZoneConversion;
+
+    Script.Require(ResourceNames.Lombiq_Editors_DateTimeEditor).AtHead();
 
     if (isDateEditor)
     {
-        Script.Require(ResourceNames.Lombiq_Editors_DateTimeEditor).AtHead();
         Style.Require(ResourceNames.Lombiq_Editors_DateTimeEditor);
-    }
-    else if (isTimeEditor)
-    {
-        Script.Require(ResourceNames.jQueryTimeEntry).AtHead();
     }
 
     @* BEM *@
@@ -47,13 +42,14 @@
 
     @* Picker init *@
     var editorType = isDateEditor ? "datePicker" : "timePicker";
+    var inputType = isDateEditor ? "text" : "time";
     var inputId = viewModel.Name.Replace('.', '_');
     var pickerId = inputId + "_Picker";
     var pickerClassifiedName = Html.ClassifiedName(pickerId);
 
     var pickerElementAttributes = viewModel.BuildAttributes(new Dictionary<string, object>
     {
-        { "type", editorType },
+        { "type", inputType },
         { "id", pickerId },
         { "class", $"form-control {editorType} {DefaultBlockName}__{editorType} {pickerClassifiedName}" }
     });
@@ -82,14 +78,11 @@
     var dateLocalizationServices = WorkContext.Resolve<IDateLocalizationServices>();
     var options = new DateLocalizationOptions
     {
-        EnableTimeZoneConversion = viewModel.EditorType == DateTimeEditorType.Time ||
+        EnableTimeZoneConversion = viewModel.EditorType == DateTimeEditorType.TimeWithTimeZoneConversion ||
             viewModel.EditorType == DateTimeEditorType.DateWithTimeZoneConversion,
         EnableCalendarConversion = viewModel.EditorType == DateTimeEditorType.Date,
         IgnoreDate = viewModel.EditorType == DateTimeEditorType.Time
     };
-
-    var frontEndDisplayFormat = isDateEditor ? viewModel.FrontEndDateDisplayFormat : "HH:mm";
-    var frontEndStoreFormat = isDateEditor ? viewModel.FrontEndDateStoreFormat : "HH:mm";
 
     // Assume that the given value is a string and properly formatted.
     var dateTimeString = viewModel.Value as string;
@@ -106,7 +99,10 @@
     }
 
     @* Picker element *@
-    pickerElementAttributes["value"] = dateTimeString;
+    var frontEndDisplayFormat = isDateEditor ? viewModel.FrontEndDateDisplayFormat : viewModel.FrontEndTimeDisplayFormat;
+    var frontEndStoreFormat = isDateEditor ? viewModel.FrontEndDateStoreFormat : viewModel.FrontEndTimeStoreFormat;
+
+    pickerElementAttributes["value"] = isDateEditor ? dateTimeString : viewModel.Value;
 
     var datePickerElement = new TagBuilder("input");
     foreach (var attribute in pickerElementAttributes)
@@ -129,7 +125,7 @@
         <span class="@TooltipElementName" title="@viewModel.Hint"></span>
     }
 
-    <div class="@(DefaultBlockName + "__dateTimePickerContainer")">
+    <div class="@(DefaultBlockName)__dateTimePickerContainer">
         @Html.Raw(datePickerElement.ToString(TagRenderMode.SelfClosing))
         @Html.Hidden(viewModel.Name, dateTimeString)
     </div>
@@ -160,13 +156,14 @@
     ; (function ($) {
         $(function () {
             $("#@pickerId").lombiq_Editors_DateTimeEditor({
+                isDateEditor: @isDateEditor.ToString().ToLower(),
                 inputElementSelector: "#@inputId",
-                dateDisplayFormat: "@frontEndDisplayFormat",
-                dateStoreFormat: "@frontEndStoreFormat",
+                displayFormat: "@frontEndDisplayFormat",
+                storeFormat: "@frontEndStoreFormat",
                 errorMessages: {
-                    invalidDateFormatErrorText: "@HttpUtility.JavaScriptStringEncode(T("Invalid date format given. Expected format: {0}", frontEndDisplayFormat).Text)",
-                    valueIsGreaterThanMaximumText: "@HttpUtility.JavaScriptStringEncode(T("The given date is greater than the maximum date enabled to this field.").Text)",
-                    valueIsSmallerThanMinimumText: "@HttpUtility.JavaScriptStringEncode(T("The given date is smaller than the minimum date enabled to this field.").Text)",
+                    invalidFormatErrorText: "@HttpUtility.JavaScriptStringEncode(T("Invalid value format given. Expected format: {0}", frontEndDisplayFormat).Text)",
+                    valueIsHigherThanMaximumText: "@HttpUtility.JavaScriptStringEncode(T("The given value is higher than the maximum allowed.").Text)",
+                    valueIsLowerThanMinimumText: "@HttpUtility.JavaScriptStringEncode(T("The given value is lower than the minimum allowed.").Text)",
                 }
             });
 
