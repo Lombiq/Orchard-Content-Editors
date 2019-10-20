@@ -14,8 +14,6 @@
     var CheckboxTextLabel = DefaultBlockName + "__textLabel";
     var CheckboxIndicator = DefaultBlockName + "__indicator";
     var DescriptionElementName = DefaultBlockName + "__description";
-    var TooltipElementName = DefaultBlockName + "__tooltip";
-    var hasHints = viewModel.Hints != null && viewModel.Hints.Any();
     var hasDescriptions = viewModel.Descriptions != null && viewModel.Descriptions.Any();
 
     var selectedTerms = viewModel.TaxonomyFieldViewModel.SelectedTerms;
@@ -59,9 +57,9 @@
 
                     @selectListItem.Text
 
-                    @if (hasHints && viewModel.Hints.TryGetValue(selectListItem.Value, out string tooltip) && !string.IsNullOrEmpty(tooltip))
+                    @if (viewModel.Hints.TryGetValue(selectListItem.Value, out string tooltip))
                     {
-                        <span class="@TooltipElementName" title="@tooltip"></span>
+                        @Display.Lombiq_Tooltip(Text: tooltip)
                     }
 
                     @if (hasDescriptions && viewModel.Descriptions.TryGetValue(selectListItem.Value, out string description) && !string.IsNullOrEmpty(description))
@@ -82,20 +80,6 @@
     <script type="text/javascript">
         ; (function ($) {
             $(function () {
-                @if (hasHints)
-                {
-                    <text>
-                    $(".@TooltipElementName").tooltip({
-                        content: function () {
-                            return $(this).prop("title");
-                        },
-                        classes: {
-                            "ui-tooltip": "highlight"
-                        }
-                    });
-                    </text>
-                }
-
                 $(".@CheckBoxElementName").click(function () {
                     @* Trying to match the current field editor as much as possible,
                        so that we don't interfere with other ones,

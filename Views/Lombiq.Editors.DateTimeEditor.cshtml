@@ -25,8 +25,6 @@
     const string DefaultBlockName = "dateTimeEditor";
     string BlockName = viewModel.BlockName ?? DefaultBlockName;
 
-    const string TooltipElementName = DefaultBlockName + "__tooltip";
-
     @* Label init *@
     var labelAttributes = new Dictionary<string, object>();
     var hasLabel = !string.IsNullOrEmpty(viewModel.Label);
@@ -39,9 +37,6 @@
             labelAttributes["class"] = labelAttributes["class"] + " required";
         }
     }
-
-    @* Hint init *@
-    var hasHint = !string.IsNullOrEmpty(viewModel.Hint);
 
     @* Picker init *@
     var editorType = isDateEditor ? "datePicker" : "timePicker";
@@ -110,9 +105,11 @@
         @Html.Label(viewModel.Name, viewModel.Label, labelAttributes)
     }
 
-    @if (hasHint)
+    @Display.Lombiq_Tooltip(Text: viewModel.Tooltip)
+
+    @if (!string.IsNullOrEmpty(viewModel.Hint))
     {
-        <span class="@TooltipElementName" title="@viewModel.Hint"></span>
+        <span class="@(DefaultBlockName)__hint" title="@viewModel.Hint"></span>
     }
 
     <div class="@(DefaultBlockName)__dateTimePickerContainer">
@@ -120,27 +117,6 @@
         @Html.Hidden(viewModel.Name)
     </div>
 </div>
-
-@if (hasHint && this.WasNotDisplayed("Lombiq.Editors.DateTimeEditor.Hint"))
-{
-    using (Script.Foot())
-    {
-        <script type="text/javascript">
-            ; (function ($) {
-                $(function () {
-                    $(".@TooltipElementName").tooltip({
-                        content: function () {
-                            return $(this).prop("title");
-                        },
-                        classes: {
-                            "ui-tooltip": "highlight"
-                        }
-                    });
-                });
-            })(jQuery);
-        </script>
-    }
-}
 
 <script type="text/javascript">
     ; (function ($) {
