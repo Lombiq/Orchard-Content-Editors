@@ -57,7 +57,7 @@
 
                     @selectListItem.Text
 
-                    @if (viewModel.Hints.TryGetValue(selectListItem.Value, out string tooltip))
+                    @if (viewModel.Hints != null && viewModel.Hints.TryGetValue(selectListItem.Value, out string tooltip))
                     {
                         @Display.Lombiq_Tooltip(Text: tooltip)
                     }
