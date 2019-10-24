@@ -49,7 +49,8 @@
     {
         { "type", inputType },
         { "id", pickerId },
-        { "class", $"form-control {editorType} {DefaultBlockName}__{editorType} {pickerClassifiedName}" }
+        { "class", $"form-control {editorType} {DefaultBlockName}__{editorType} {pickerClassifiedName}" },
+        { "autocomplete", "off" }
     });
 
     if (viewModel.Minimum.HasValue)
@@ -74,7 +75,7 @@
 
     @* Localization *@
     var dateLocalizationServices = WorkContext.Resolve<IDateLocalizationServices>();
-    var options = new DateLocalizationOptions
+    var options = viewModel.LocalizationOptions ?? new DateLocalizationOptions
     {
         EnableTimeZoneConversion = viewModel.EditorType == DateTimeEditorType.Time || viewModel.EditorType == DateTimeEditorType.DateWithTime,
         EnableCalendarConversion = viewModel.EditorType == DateTimeEditorType.Date || viewModel.EditorType == DateTimeEditorType.DateWithTime,

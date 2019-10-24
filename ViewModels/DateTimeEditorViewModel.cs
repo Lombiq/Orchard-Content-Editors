@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Orchard.Localization.Models;
+using System;
 
 namespace Lombiq.ContentEditors.ViewModels
 {
@@ -13,6 +14,7 @@ namespace Lombiq.ContentEditors.ViewModels
     public class DateTimeEditorViewModel : EditorViewModel
     {
         public DateTimeEditorType EditorType { get; set; } = DateTimeEditorType.Date;
+        public DateLocalizationOptions LocalizationOptions { get; set; }
 
         public string BackEndDateDisplayFormat { get; set; } = "MM/dd/yyyy";
         public string FrontEndDateDisplayFormat { get; set; } = "MM/DD/YYYY";
