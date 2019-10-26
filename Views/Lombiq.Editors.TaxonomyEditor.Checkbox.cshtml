@@ -4,7 +4,7 @@
 @{
     var viewModel = Model.ViewModel as TaxonomyEditorViewModel;
 
-    Script.Require(ResourceNames.jQuery).AtHead();
+    Script.Require(ResourceNames.jQueryUI).AtHead();
 
     const string DefaultBlockName = "taxonomyCheckboxEditor";
     string BlockName = viewModel.BlockName ?? DefaultBlockName;
