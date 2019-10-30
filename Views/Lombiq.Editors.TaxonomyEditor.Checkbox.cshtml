@@ -51,7 +51,7 @@
     <div class="@CheckBoxesListElementName">
         @foreach (var selectListItem in viewModel.SelectList)
         {
-            <div class="@CheckBoxesListItemElementName">
+            <div class="@CheckBoxesListItemElementName" data-termid="@selectListItem.Value">
                 <label class="forcheckbox @CheckboxTextLabel" for="@Html.Id($"Terms[{termIndex}].IsChecked")">
                     <input class="@CheckBoxElementName" @if (selectListItem.Disabled) { <text> disabled="disabled" </text> } type="checkbox" value="true" @if (selectListItem.Selected) { <text> checked="checked" </text> } name="@Html.Name($"Terms[{termIndex}].IsChecked")" id="@Html.Id($"Terms[{termIndex}].IsChecked")" data-term="@selectListItem.Text" />
 
