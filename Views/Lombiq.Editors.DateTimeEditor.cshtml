@@ -82,7 +82,17 @@
         IgnoreDate = viewModel.EditorType == DateTimeEditorType.Time
     };
 
-    var value = viewModel.Value as DateTime?;
+    DateTime? value;
+    if (viewModel.Value is string)
+    {
+        DateTime.TryParse(viewModel.Value as string, out var parsedValue);
+        value = parsedValue;
+    }
+    else
+    {
+        value = viewModel.Value as DateTime?;
+    }
+    
     var valueString = value.HasValue && value.Value != default(DateTime) ?
         dateLocalizationServices.ConvertToLocalizedString(value, backEndDisplayFormat, options) :
         "";
