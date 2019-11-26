@@ -37,10 +37,14 @@
     {
         @Html.Label(viewModel.Name, viewModel.Label, labelAttributes)
     }
+    
+    @Display.Lombiq_Tooltip(Text: viewModel.Tooltip)
+    
     @if (!string.IsNullOrEmpty(viewModel.Hint))
     {
         <div class="editorHint @(DefaultBlockName)__editorHint">@viewModel.Hint</div>
     }
+    
     @Html.TextArea(viewModel.Name, viewModel.Value?.ToString(), textAreaAttributes)
 </div>
 

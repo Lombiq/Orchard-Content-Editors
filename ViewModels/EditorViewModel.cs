@@ -18,6 +18,11 @@
         public string Description { get; set; }
 
         /// <summary>
+        /// Additional text to be displayed when hovering over an element after the field name.
+        /// </summary>
+        public string Tooltip { get; set; }
+
+        /// <summary>
         /// Hint text to be displayed under the HTML field.
         /// </summary>
         public string Hint { get; set; }
