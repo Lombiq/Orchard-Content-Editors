@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Orchard.Localization.Models;
+using System;
 
 namespace Lombiq.ContentEditors.ViewModels
 {
@@ -6,17 +7,23 @@ namespace Lombiq.ContentEditors.ViewModels
     {
         Date,
         Time,
-        DateWithTimeZoneConversion
+        DateWithTime // Use this to render a Date editor that has a separate Time editor.
     }
 
 
     public class DateTimeEditorViewModel : EditorViewModel
     {
         public DateTimeEditorType EditorType { get; set; } = DateTimeEditorType.Date;
+        public DateLocalizationOptions LocalizationOptions { get; set; }
+
+        public string BackEndDateDisplayFormat { get; set; } = "MM/dd/yyyy";
         public string FrontEndDateDisplayFormat { get; set; } = "MM/DD/YYYY";
         public string FrontEndDateStoreFormat { get; set; } = "YYYY-MM-DD";
-        public string DateFormat { get; set; } = "yyyy-MM-dd";
         public DateTime? Minimum { get; set; }
         public DateTime? Maximum { get; set; }
+
+        public string BackEndTimeDisplayFormat { get; set; } = "HH:mm";
+        public string FrontEndTimeDisplayFormat { get; set; } = "HH:mm";
+        public string FrontEndTimeStoreFormat { get; set; } = "hh:mm:ss A";
     }
 }

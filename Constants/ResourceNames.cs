@@ -8,6 +8,8 @@
         public const string jQueryUI = nameof(jQueryUI);
         public const string jQueryTimeEntry = nameof(jQueryTimeEntry);
 
+        public const string Moment = nameof(Moment);
+
         public const string Lombiq_jQuery_EnableDisable = Prefix + "jQuery.EnableDisable";
 
         public const string Lombiq_AsyncEditor = Prefix + "AsyncEditor";

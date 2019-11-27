@@ -2,146 +2,149 @@
 @using Lombiq.ContentEditors.Constants
 @using Orchard.Localization.Services
 @using Orchard.Localization.Models
+@using Piedone.HelpfulLibraries.Utilities
 
 @{
-    Style.Require(ResourceNames.Lombiq_Editors_DateTimeEditor);
+    var viewModel = Model.ViewModel as DateTimeEditorViewModel;
+
+    @* Resources *@
+    var isDateEditor = viewModel.EditorType == DateTimeEditorType.Date || viewModel.EditorType == DateTimeEditorType.DateWithTime;
 
     Script.Require(ResourceNames.Lombiq_Editors_DateTimeEditor).AtHead();
 
-    var viewModel = Model.ViewModel as DateTimeEditorViewModel;
-
-    if (viewModel.EditorType == DateTimeEditorType.Time)
+    if (isDateEditor)
     {
-        Script.Require(ResourceNames.jQueryTimeEntry).AtHead();
+        Style.Require(ResourceNames.Lombiq_Editors_DateTimeEditor);
     }
 
-    var isDateEditor = viewModel.EditorType == DateTimeEditorType.Date ||
-        viewModel.EditorType == DateTimeEditorType.DateWithTimeZoneConversion;
-    var hasHint = !string.IsNullOrEmpty(viewModel.Hint);
+    var backEndDisplayFormat = isDateEditor ? viewModel.BackEndDateDisplayFormat : viewModel.BackEndTimeDisplayFormat;
+    var frontEndDisplayFormat = isDateEditor ? viewModel.FrontEndDateDisplayFormat : viewModel.FrontEndTimeDisplayFormat;
+    var frontEndStoreFormat = isDateEditor ? viewModel.FrontEndDateStoreFormat : viewModel.FrontEndTimeStoreFormat;
 
-    var classifiedName = Html.ClassifiedName(viewModel.Name);
-    var hiddenFieldClassName = "js-" + classifiedName + "-value";
-    var editorType = isDateEditor ? "text" : "time";
-
+    @* BEM *@
     const string DefaultBlockName = "dateTimeEditor";
     string BlockName = viewModel.BlockName ?? DefaultBlockName;
-    const string DateTimePickerContainerElementName = DefaultBlockName + "__dateTimePickerContainer";
-    const string TooltipElementName = DefaultBlockName + "__tooltip";
 
-    var editorTypeClass = isDateEditor ? "datePicker" : "timePicker";
-
-    var dateTimePickerAttributes = viewModel.BuildAttributes(new Dictionary<string, object>
+    @* Label init *@
+    var labelAttributes = new Dictionary<string, object>();
+    var hasLabel = !string.IsNullOrEmpty(viewModel.Label);
+    if (hasLabel)
     {
-        { "type", editorType },
-        { "class", $"form-control {editorTypeClass} {DefaultBlockName}__{editorTypeClass} {classifiedName}" }
+        labelAttributes["class"] = $"editorLabel {DefaultBlockName}__label";
+
+        if (viewModel.Required)
+        {
+            labelAttributes["class"] = labelAttributes["class"] + " required";
+        }
+    }
+
+    @* Picker init *@
+    var editorType = isDateEditor ? "datePicker" : "timePicker";
+    var inputType = isDateEditor ? "text" : "time";
+    var inputId = viewModel.Name.Replace('.', '_');
+    var pickerId = inputId + "_Picker";
+    var pickerClassifiedName = Html.ClassifiedName(pickerId);
+
+    var pickerElementAttributes = viewModel.BuildAttributes(new Dictionary<string, object>
+    {
+        { "type", inputType },
+        { "id", pickerId },
+        { "class", $"form-control {editorType} {DefaultBlockName}__{editorType} {pickerClassifiedName}" },
+        { "autocomplete", "off" }
     });
+
     if (viewModel.Minimum.HasValue)
     {
-        dateTimePickerAttributes.Add("min", viewModel.Minimum.Value.ToString(viewModel.DateFormat));
+        pickerElementAttributes.Add("min", viewModel.Minimum.Value.ToString(backEndDisplayFormat));
     }
     if (viewModel.Maximum.HasValue)
     {
-        dateTimePickerAttributes.Add("max", viewModel.Maximum.Value.ToString(viewModel.DateFormat));
+        pickerElementAttributes.Add("max", viewModel.Maximum.Value.ToString(backEndDisplayFormat));
     }
-
-    var labelAttributes = new Dictionary<string, object>
-    {
-        { "class", "editorLabel " + DefaultBlockName + "__label" }
-    };
 
     if (viewModel.Required)
     {
-        dateTimePickerAttributes["required"] = true;
-        dateTimePickerAttributes["class"] = dateTimePickerAttributes["class"] + " required";
-        labelAttributes["class"] = labelAttributes["class"] + " required";
+        pickerElementAttributes["required"] = true;
+        pickerElementAttributes["class"] = pickerElementAttributes["class"] + " required";
     }
 
     if (!string.IsNullOrEmpty(viewModel.Placeholder))
     {
-        dateTimePickerAttributes["placeholder"] = viewModel.Placeholder;
+        pickerElementAttributes["placeholder"] = viewModel.Placeholder;
     }
 
+    @* Localization *@
     var dateLocalizationServices = WorkContext.Resolve<IDateLocalizationServices>();
-    var options = new DateLocalizationOptions
+    var options = viewModel.LocalizationOptions ?? new DateLocalizationOptions
     {
-        EnableTimeZoneConversion = viewModel.EditorType == DateTimeEditorType.Time ||
-            viewModel.EditorType == DateTimeEditorType.DateWithTimeZoneConversion,
-        EnableCalendarConversion = viewModel.EditorType == DateTimeEditorType.Date,
+        EnableTimeZoneConversion = viewModel.EditorType == DateTimeEditorType.Time || viewModel.EditorType == DateTimeEditorType.DateWithTime,
+        EnableCalendarConversion = viewModel.EditorType == DateTimeEditorType.Date || viewModel.EditorType == DateTimeEditorType.DateWithTime,
         IgnoreDate = viewModel.EditorType == DateTimeEditorType.Time
     };
 
-    var frontEndDisplayFormat = isDateEditor ? viewModel.FrontEndDateDisplayFormat : "HH:mm";
-    var frontEndStoreFormat = isDateEditor ? viewModel.FrontEndDateStoreFormat : "HH:mm";
-
-    // Assume that the given value is a string and properly formatted.
-    var dateTimeString = viewModel.Value as string;
-
-    // If the value is not string then assume that it is a DateTime object. If so, format it.
-    if (string.IsNullOrEmpty(dateTimeString) && viewModel.Value is DateTime?)
+    DateTime? value;
+    if (viewModel.Value is string)
     {
-        var value = viewModel.Value as DateTime?;
-        dateTimeString = value.HasValue && value.Value != default(DateTime) ?
-            viewModel.Value is string ?
-                (string)viewModel.Value :
-                dateLocalizationServices.ConvertToLocalizedString(value, viewModel.DateFormat, options) :
-            "";
+        DateTime.TryParse(viewModel.Value as string, out var parsedValue);
+        value = parsedValue;
     }
+    else
+    {
+        value = viewModel.Value as DateTime?;
+    }
+    
+    var valueString = value.HasValue && value.Value != default(DateTime) ?
+        dateLocalizationServices.ConvertToLocalizedString(value, backEndDisplayFormat, options) :
+        "";
+
+    @* Picker element *@
+    pickerElementAttributes["value"] = valueString;
 
     var datePickerElement = new TagBuilder("input");
-    foreach (var attribute in dateTimePickerAttributes)
+    foreach (var attribute in pickerElementAttributes)
     {
-        datePickerElement.Attributes.Add(attribute.Key, attribute.Value.ToString());
+        if (attribute.Value != null)
+        {
+            datePickerElement.Attributes.Add(attribute.Key, attribute.Value.ToString());
+        }
     }
-    datePickerElement.Attributes.Add("value", dateTimeString);
 }
 
 <div class="editor editorField form-group @DefaultBlockName @BlockName">
-    @if (!string.IsNullOrEmpty(viewModel.Label))
+    @if (hasLabel)
     {
         @Html.Label(viewModel.Name, viewModel.Label, labelAttributes)
     }
-    @if (hasHint)
+
+    @Display.Lombiq_Tooltip(Text: viewModel.Tooltip)
+
+    @if (!string.IsNullOrEmpty(viewModel.Hint))
     {
-        <span class="@TooltipElementName" title="@viewModel.Hint"></span>
+        <span class="@(DefaultBlockName)__hint" title="@viewModel.Hint"></span>
     }
 
-    <div class="@DateTimePickerContainerElementName">
+    <div class="@(DefaultBlockName)__dateTimePickerContainer">
         @Html.Raw(datePickerElement.ToString(TagRenderMode.SelfClosing))
-        @Html.Hidden(viewModel.Name, dateTimeString, new { @class = hiddenFieldClassName })
+        @Html.Hidden(viewModel.Name)
     </div>
 </div>
 
-@if (isDateEditor)
-{
-    <script type="text/javascript">
-        ; (function ($) {
-            $(function () {
-                @if (hasHint)
-                {
-                    <text>
-                    $(".@TooltipElementName").tooltip({
-                        content: function () {
-                            return $(this).prop("title");
-                        },
-                        classes: {
-                            "ui-tooltip": "highlight"
-                        }
-                    });
-                    </text>
+<script type="text/javascript">
+    ; (function ($) {
+        $(function () {
+            $("#@pickerId").lombiq_Editors_DateTimeEditor({
+                isDateEditor: @isDateEditor.ToString().ToLower(),
+                inputElementSelector: "#@inputId",
+                displayFormat: "@frontEndDisplayFormat",
+                storeFormat: "@frontEndStoreFormat",
+                errorMessages: {
+                    invalidFormatErrorText: "@HttpUtility.JavaScriptStringEncode(T("Invalid value format given. Expected format: {0}", frontEndDisplayFormat).Text)",
+                    valueIsHigherThanMaximumText: "@HttpUtility.JavaScriptStringEncode(T("The given value is higher than the maximum allowed.").Text)",
+                    valueIsLowerThanMinimumText: "@HttpUtility.JavaScriptStringEncode(T("The given value is lower than the minimum allowed.").Text)",
                 }
-                var dateTimeEditorPlugin = $(".@classifiedName").lombiq_Editors_DateTimeEditor({
-                    dateTimeValueInputClassName: ".@hiddenFieldClassName",
-                    dateDisplayFormat: "@frontEndDisplayFormat",
-                    dateStoreFormat: "@frontEndStoreFormat",
-                    errorMessages: {
-                        invalidDateFormatErrorText: "@HttpUtility.JavaScriptStringEncode(T("Invalid date format given. Expected format: {0}", frontEndDisplayFormat).Text)",
-                        valueIsGreaterThanMaximumText: "@HttpUtility.JavaScriptStringEncode(T("The given date is greater than the maximum date enabled to this field.").Text)",
-                        valueIsSmallerThanMinimumText: "@HttpUtility.JavaScriptStringEncode(T("The given date is smaller than the minimum date enabled to this field.").Text)",
-                    }
-                })[0];
-                
-                $(".ui-datepicker").hide();
             });
-        })(jQuery);
-    </script>
-}
+
+            $(".ui-datepicker").hide();
+        });
+    })(jQuery);
+</script>
