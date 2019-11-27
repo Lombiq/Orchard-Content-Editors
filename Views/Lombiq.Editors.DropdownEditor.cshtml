@@ -23,6 +23,11 @@
         labelAttributes["class"] = labelAttributes["class"] + " required";
     }
 
+    if (viewModel.Disabled)
+    {
+        dropdownAttributes["disabled"] = "disabled";
+    }
+
     if (!string.IsNullOrEmpty(viewModel.Placeholder))
     {
         dropdownAttributes["placeholder"] = viewModel.Placeholder;

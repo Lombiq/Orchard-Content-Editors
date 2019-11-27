@@ -1,6 +1,4 @@
-﻿@using Orchard.Utility.Extensions
-
-@model dynamic
+﻿@model dynamic
 
 @{
     string startDateFieldName = Model.StartDateFieldName;
@@ -15,8 +13,8 @@
 <script type="text/javascript">
     ; (function ($) {
         $(function () {
-            var startDatePicker = $(".@(startDateFieldName.HtmlClassify())").lombiq_Editors_DateTimeEditor()[0];
-            var endDatePicker = $(".@(endDateFieldName.HtmlClassify())").lombiq_Editors_DateTimeEditor()[0];
+            var startDatePicker = $("#@(startDateFieldName.Replace('.', '_') + "_Picker")").lombiq_Editors_DateTimeEditor()[0];
+            var endDatePicker = $("#@(endDateFieldName.Replace('.', '_') + "_Picker")").lombiq_Editors_DateTimeEditor()[0];
 
             function setEndDateByStartDate(startDate) {
                 if (startDate) {
