@@ -16,7 +16,9 @@
         valueShow: null,
         valueHide: null,
         targetSelector: "",
-        inverseTargetSelector: ""
+        inverseTargetSelector: "",
+        hideDefault: true,
+        visibilityChangedCallback: function () { }
     };
 
     function Plugin(element, options) {
@@ -107,7 +109,7 @@
             var target = $(plugin.settings.targetSelector).not(plugin.element);
             var inverseTarget = $(plugin.settings.inverseTargetSelector).not(plugin.element);
 
-            if (show === null) {
+            if (show === null && plugin.settings.hideDefault) {
                 target.hide();
                 replaceRequiredAttribute(plugin.settings.targetSelector);
                 if (plugin.settings.inverseTargetSelector) {
@@ -115,7 +117,7 @@
                     replaceRequiredAttribute(plugin.settings.inverseTargetSelector);
                 }
             }
-            else if (show) {
+            else if (show === null && !plugin.settings.hideDefault || show) {
                 target.show();
                 replaceRequiredHiddenAttribute(plugin.settings.targetSelector);
                 if (plugin.settings.inverseTargetSelector) {
@@ -131,6 +133,8 @@
                     replaceRequiredHiddenAttribute(plugin.settings.inverseTargetSelector);
                 }
             }
+
+            plugin.settings.visibilityChangedCallback(target, show === null ? !plugin.settings.hideDefault : show);
         }
     });
 

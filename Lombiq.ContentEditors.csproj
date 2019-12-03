@@ -110,6 +110,7 @@
     <Compile Include="Events\IContentAsyncEditorEventHandler.cs" />
     <Compile Include="Extensions\ContentManagerExtensions.cs" />
     <Compile Include="Extensions\HtmlHelperExtensions.cs" />
+    <Compile Include="Helpers\SelectListItemHelpers.cs" />
     <Compile Include="Helpers\StringHelpers.cs" />
     <Compile Include="Extensions\WebViewPageExtensions.cs" />
     <Compile Include="Handlers\AsyncEditorPartHandler.cs" />
