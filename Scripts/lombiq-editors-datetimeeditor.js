@@ -95,7 +95,7 @@
 
             var storeText = plugin.inputElement.val();
 
-            return storeText.length > 0 ? plugin.pickerElement.datepicker("getDate") : null;
+            return typeof storeText !== "undefined" && storeText.length > 0 ? plugin.pickerElement.datepicker("getDate") : null;
         },
 
         setValue: function (value, format) {
