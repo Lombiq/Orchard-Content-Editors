@@ -12,6 +12,7 @@
     var pluginName = "lombiq_ConnectedElementVisibility";
 
     var defaults = {
+        instanceName: null,
         initialValue: null,
         valueShow: null,
         valueHide: null,
@@ -142,17 +143,25 @@
         // Return null if the element query is invalid.
         if (!this || this.length === 0) return null;
 
+        // If options is available and instance name is defined, we're using that too
+        // to generate the name of this plugin instance, so multiple instances can be
+        // attached to the same DOM element using unique instance names.
+        var pluginInstanceName = "plugin_" + pluginName;
+        if (options && options.instanceName) {
+            pluginInstanceName += "." + options.instanceName;
+        }
+
         // "map" makes it possible to return the already existing or currently initialized plugin instances.
         return this.map(function () {
             // If "options" is defined, but the plugin is not instantiated on this element ...
-            if (options && !$.data(this, "plugin_" + pluginName)) {
+            if (options && !$.data(this, pluginInstanceName)) {
                 // ... then create a plugin instance ...
-                $.data(this, "plugin_" + pluginName, new Plugin($(this), options));
+                $.data(this, pluginInstanceName, new Plugin($(this), options));
             }
 
             // ... and then return the plugin instance, which might be null
             // if the plugin is not instantiated on this element and "options" is undefined.
-            return $.data(this, "plugin_" + pluginName);
+            return $.data(this, pluginInstanceName);
         });
     };
 })(jQuery, window, document);
