@@ -14,6 +14,7 @@
     var defaults = {
         instanceName: null,
         initialValue: null,
+        valueFunction: function (element) { return element.val(); },
         valueShow: null,
         valueHide: null,
         targetSelector: "",
@@ -36,7 +37,7 @@
             var plugin = this;
 
             if (!plugin.settings.initialValue) {
-                plugin.settings.initialValue = $(plugin.element).val();
+                plugin.settings.initialValue = plugin.settings.valueFunction(plugin.element);
             }
 
             plugin.updateVisibility(plugin.settings.initialValue);
@@ -46,8 +47,8 @@
                 if (plugin.isValueValid(value)) {
                     actualValue = value;
                 }
-                else if (plugin.isValueValid($(this).val())) {
-                    actualValue = $(this).val();
+                else if (plugin.isValueValid(plugin.settings.valueFunction($(this)))) {
+                    actualValue = plugin.settings.valueFunction($(this));
                 }
 
                 plugin.updateVisibility(actualValue);
