@@ -102,7 +102,7 @@ namespace Lombiq.ContentEditors.Authorization
             {
                 Name = string.Format(template.Name, typeDefinition.Name, group),
                 Description = string.Format(template.Description, typeDefinition.DisplayName, group),
-                Category = typeDefinition.DisplayName,
+                Category = typeDefinition.DisplayName + " Editor Groups",
                 ImpliedBy = (template.ImpliedBy ?? new Permission[0]).Select(t => CreateDynamicPermission(t, typeDefinition, group))
             };
     }
