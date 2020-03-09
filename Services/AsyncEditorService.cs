@@ -1,4 +1,5 @@
-﻿using Lombiq.ContentEditors.Constants;
+﻿using Lombiq.ContentEditors.Authorization;
+using Lombiq.ContentEditors.Constants;
 using Lombiq.ContentEditors.Models;
 using Orchard.ContentManagement;
 using Orchard.Core.Contents;
@@ -187,9 +188,9 @@ namespace Lombiq.ContentEditors.Services
             _hca.Current().Response.SetCookie(new HttpCookie(
                 CookieNames.CurrentEditorSession,
                 Crypto.HashPassword(Encoding.Unicode.GetString(CombineIdAndEditorSalt(part))))
-                {
-                    HttpOnly = true
-                });
+            {
+                HttpOnly = true
+            });
 
         public void RemoveEditorSessionCookie()
         {
@@ -231,10 +232,15 @@ namespace Lombiq.ContentEditors.Services
             var originalEditorGroup = part.CurrentEditorGroup;
             SetCurrentGroup(part, group);
 
-            var isAuthorized = _authorizer.Authorize(permission, part);
+            DynamicGroupPermissions.GroupPermissionTemplates.TryGetValue(permission.Name, out var dynamicGroupPermissionTemplate);
+            if (dynamicGroupPermissionTemplate == null) return false;
+
+            var dynamicGroupPermission = DynamicGroupPermissions.CreateDynamicPermission(dynamicGroupPermissionTemplate, part.TypeDefinition, group);
+            if (dynamicGroupPermission == null) return false;
 
             part.CurrentEditorGroup = originalEditorGroup;
-            return isAuthorized;
+
+            return _authorizer.Authorize(dynamicGroupPermission, part);
         }
     }
 }
