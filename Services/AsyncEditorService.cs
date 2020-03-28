@@ -229,6 +229,9 @@ namespace Lombiq.ContentEditors.Services
 
         private bool IsAuthorized(AsyncEditorPart part, string group, Permission permission)
         {
+            if (!part.HasEditorGroups || string.IsNullOrEmpty(group))
+                return _authorizer.Authorize(permission, part);
+
             var originalEditorGroup = part.CurrentEditorGroup;
             SetCurrentGroup(part, group);
 
