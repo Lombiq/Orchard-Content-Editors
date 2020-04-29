@@ -11,7 +11,7 @@
     string BlockNameWithModifier = DefaultBlockName + EditorTypeModifier;
 
     var labelAttributes = new Dictionary<string, object>
-    {
+{
         { "class", "editorLabel " + DefaultBlockName + "__label" }
     };
 
@@ -22,6 +22,7 @@
 
     var termIndex = 0;
     var prefix = Html.NameForModel();
+    var selectableIds = viewModel.SelectList.Select(item => int.TryParse(item.Value, out var id) ? id : 0).ToList();
 }
 
 
@@ -38,7 +39,7 @@
 
 
     <ul class="@(DefaultBlockName)__taxonomyTermList">
-        @foreach (var entry in taxonomyViewModel.Terms)
+        @foreach (var entry in taxonomyViewModel.Terms.Where(term => selectableIds.Contains(term.Id)))
         {
             <li>
                 @for (var i = 1; i <= entry.GetLevels(); i++)
@@ -64,11 +65,11 @@
                     }
                     else
                     {
-                        <input @if (disabled) { <text> disabled="disabled" </text> } 
-                               type="checkbox" 
-                               value="true" 
-                               @if (entry.IsChecked) { <text> checked="checked" </text> } 
-                               name="@($"{prefix}.Terms[{termIndex}].IsChecked")" 
+                        <input @if (disabled) { <text> disabled="disabled" </text> }
+                               type="checkbox"
+                               value="true"
+                               @if (entry.IsChecked) { <text> checked="checked" </text> }
+                               name="@($"{prefix}.Terms[{termIndex}].IsChecked")"
                                id="@elementId"
                                class="@(DefaultBlockName)__termCheckbox" />
                     }
