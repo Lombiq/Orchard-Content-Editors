@@ -109,6 +109,7 @@
     <Compile Include="Authorization\GroupAuthorizationEventHandler.cs" />
     <Compile Include="Events\IContentAsyncEditorEventHandler.cs" />
     <Compile Include="Extensions\ContentManagerExtensions.cs" />
+    <Compile Include="Extensions\ContentPartDriverExtensions.cs" />
     <Compile Include="Extensions\HtmlHelperExtensions.cs" />
     <Compile Include="Helpers\SelectListItemHelpers.cs" />
     <Compile Include="Helpers\StringHelpers.cs" />
