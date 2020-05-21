@@ -20,9 +20,9 @@
         {
             viewModel.Label += ':';
         }
-        <div class="@LabelElementName">@viewModel.Label</div>
+        <span class="@LabelElementName">@viewModel.Label</span>
     }
-    <div class="@ValueElementName @(string.IsNullOrEmpty(value) ? ValueElementNameWithEmptyModifier : "")">
+    <span class="@ValueElementName @(string.IsNullOrEmpty(value) ? ValueElementNameWithEmptyModifier : "")">
         @if(viewModel != null)
         {
             if (viewModel.ContentItem != null)
@@ -34,5 +34,5 @@
                 @(new HtmlString(value))
             }
         }
-    </div>
+    </span>
 </div>
