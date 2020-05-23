@@ -1,8 +1,16 @@
-﻿@{
-    var viewModel = Model.ViewModel as Lombiq.ContentEditors.ViewModels.InputFieldViewModel;
-    var value = viewModel?.Value as string;
+﻿@using Lombiq.ContentEditors.ViewModels
 
-    if ((viewModel == null || string.IsNullOrEmpty(value)) && !viewModel.ShowIfEmpty)
+@{
+    var viewModel = Model.ViewModel as InputFieldViewModel;
+
+    if (viewModel == null)
+    {
+        return;
+    }
+
+    var value = viewModel.Value as string;
+
+    if (string.IsNullOrEmpty(value) && !viewModel.ShowIfEmpty)
     {
         return;
     }
