@@ -35,9 +35,11 @@
     var TechnicalExpandableContainerElementName = TechnicalNameBlockName + "__expandableContainer";
     var ValueElementName = CheckboxListEditorBlockName + "__value";
     var ControlGroupElementName = CheckboxListEditorBlockName + "__controlGroup";
-    var SearchFilterElementName = CheckboxListEditorBlockName + "__searchFilter";
-    var SearchFilterContainerElementName = CheckboxListEditorBlockName + "__searchFilterContainer";
-    var GlyphiconElementName = CheckboxListEditorBlockName + "__glyphicon";
+    
+    var FilterContainerElementName = CheckboxListEditorBlockName + "__filterContainer";
+    var FilterIconElementName = CheckboxListEditorBlockName + "__filterIcon";
+    var FilterTextElementName = CheckboxListEditorBlockName + "__filterText";
+    
     var CheckboxItemElementName = CheckboxListEditorBlockName + "__item";
     var CheckboxSelectAllItemElementName = CheckboxListEditorBlockName + "__selectAllItem";
 
@@ -96,9 +98,8 @@
     }
     @if (viewModel.IsSearchEnabled)
     {
-        <div class="@SearchFilterContainerElementName js-@SearchFilterContainerElementName">
-            <i class="js-@GlyphiconElementName glyphicon glyphicon-search @GlyphiconElementName"></i>
-            <input type="text" class="@SearchFilterElementName js-@SearchFilterElementName" />
+        <div class="@FilterContainerElementName js-@FilterContainerElementName">
+            <input type="search" class="@FilterTextElementName js-@FilterTextElementName" />
         </div>
     }
     <div class="@ControlGroupElementName js-@ControlGroupElementName">
@@ -136,8 +137,8 @@
                 $("#@TechnicalNameBlockName").lombiq_CheckboxListEditor({
                     @if (viewModel.IsSearchEnabled)
                     {
-                    <text>searchFilterElementClass: ".js-@SearchFilterElementName",
-                    searchFilterContainerElementClass: ".js-@SearchFilterContainerElementName",</text>
+                    <text>searchFilterElementClass: ".js-@FilterTextElementName",
+                    searchFilterContainerElementClass: ".js-@FilterContainerElementName",</text>
                     }
                     controlGroupElementClass: ".js-@ControlGroupElementName",
                     checkboxContainerSelector: ".js-@CheckboxContainerBlockName",
