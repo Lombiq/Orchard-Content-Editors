@@ -1,6 +1,5 @@
 ﻿@using Orchard.ContentManagement
 @using Lombiq.ContentEditors.Models
-@using Lombiq.ContentEditors.Constants
 @using Orchard.Utility.Extensions
 
 @{
@@ -19,10 +18,7 @@
     var contentType = contentItem.ContentType;
 
     const string BlockName = "asyncEditor";
-    const string ValidationSummaryElementName = BlockName + "__validationSummary";
-    const string TitleElementName = BlockName + "__title";
     const string FormElementName = BlockName + "__form";
-    const string ActionsElementName = BlockName + "__actions";
 }
 
 
@@ -35,16 +31,15 @@
         FormMethod.Post,
         new { @class = string.Join(" ", FormElementName, "js-" + FormElementName) }))
     {
-        <div class="@TitleElementName">
-            @Display.AsyncEditor_Title(ContentItem: contentItem)
-        </div>
-        <div class="@ValidationSummaryElementName">
+        @Display.AsyncEditor_Title(ContentItem: contentItem)
+
+        <div class="@(BlockName)__validationSummary">
             @Display(Model.ValidationSummaryShape)
         </div>
 
         @Display(editorShape)
 
-        <div class="@ActionsElementName">
+        <div class="@(BlockName)__actions">
             @Display.AsyncEditor_Actions(ContentItem: contentItem)
         </div>
     }

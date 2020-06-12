@@ -6,18 +6,19 @@
     var contentItem = Model.ContentItem as ContentItem;
     var asyncEditorPart = contentItem?.As<AsyncEditorPart>();
 
-    if (!(asyncEditorPart?.IsAsyncEditorContext ?? false) || !asyncEditorPart.HasEditorGroups)
+    if (!(asyncEditorPart?.IsAsyncEditorContext ?? false) || !asyncEditorPart.HasEditorGroups
+        || asyncEditorPart.PreviousAuthorizedEditorGroup == null)
     {
         return;
     }
 
-    var actionText = Model.ActionText as string ?? T("Back").Text;
+    var previousAuthorizedEditorGroupName = asyncEditorPart.PreviousAuthorizedEditorGroup.Name;
 }
 
 @if (asyncEditorPart.PreviousAuthorizedEditorGroup != null)
 {
-    <div class="btn button asyncEditorPreviousAction js-@ElementNames.AsyncEditorActions.LoadEditorElementName"
-         data-editorGroupName="@asyncEditorPart.PreviousAuthorizedEditorGroup.Name">
-        @actionText
+    <div class="asyncEditorPreviousAction js-@ElementNames.AsyncEditorActions.LoadEditorElementName"
+         data-editorGroupName="@previousAuthorizedEditorGroupName" title="@T("Go back to {0}", previousAuthorizedEditorGroupName)">
+        @(Model.ActionText as string ?? T("Back").Text)
     </div>
 }

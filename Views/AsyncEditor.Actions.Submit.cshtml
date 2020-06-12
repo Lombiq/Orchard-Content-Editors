@@ -15,23 +15,21 @@
     var asyncEditorService = WorkContext.Resolve<IAsyncEditorService>();
 
     const string BlockName = "asyncEditorSubmitActions";
-    const string SaveButtonElementName = BlockName + "__saveButton";
-    const string PublishButtonElementName = BlockName + "__publishButton";
-    const string NextButtonElementName = BlockName + "__nextButton";
+    const string ActionElementName = BlockName + "__action";
 }
 
 <div class="@BlockName">
-    <input type="submit" name="submit.Save" data-submitContext="Save" class="btn button @SaveButtonElementName" value="@T("Save Draft")" />
-    
-    @if ((asyncEditorPart.CurrentEditorGroup?.IsPublishGroup ?? true) && 
+    <input type="submit" name="submit.Save" data-submitContext="Save" class="@ActionElementName @(BlockName)__saveAction" value="@T("Save Draft")" />
+
+    @if ((asyncEditorPart.CurrentEditorGroup?.IsPublishGroup ?? true) &&
         asyncEditorPart.TypeDefinition.Settings.GetModel<ContentTypeSettings>().Draftable &&
         asyncEditorService.IsAuthorizedToPublish(asyncEditorPart, asyncEditorPart.CurrentEditorGroup?.Name ?? ""))
     {
-        <input type="submit" name="submit.Publish" data-submitContext="Publish" class="btn button @PublishButtonElementName" value="@T("Publish")" />
+        <input type="submit" name="submit.Publish" data-submitContext="Publish" class="@ActionElementName @(BlockName)__publishAction" value="@T("Publish")" />
     }
-    
+
     @if (asyncEditorPart.NextAuthorizedEditorGroup != null)
     {
-        <input type="submit" name="submit.SaveAndNext" data-submitContext="SaveAndNext" class="btn button @NextButtonElementName" value="@T("Save and Next")" />
+        <input type="submit" name="submit.SaveAndNext" data-submitContext="SaveAndNext" class="@ActionElementName @(BlockName)__nextAction" value="@T("Save and Next")" />
     }
 </div>
