@@ -33,11 +33,9 @@
     var ExpandableLabelElementNameWithOpenedModifier = ExpandableLabelElementName + "_open";
     var ExpandableContainerElementName = CheckboxListEditorBlockName + "__expandableContainer";
     var TechnicalExpandableContainerElementName = TechnicalNameBlockName + "__expandableContainer";
-    var ValueElementName = CheckboxListEditorBlockName + "__value";
     var ControlGroupElementName = CheckboxListEditorBlockName + "__controlGroup";
     
     var FilterContainerElementName = CheckboxListEditorBlockName + "__filterContainer";
-    var FilterIconElementName = CheckboxListEditorBlockName + "__filterIcon";
     var FilterTextElementName = CheckboxListEditorBlockName + "__filterText";
     
     var CheckboxItemElementName = CheckboxListEditorBlockName + "__item";
@@ -103,7 +101,6 @@
         </div>
     }
     <div class="@ControlGroupElementName js-@ControlGroupElementName">
-
         @if (viewModel.EnableSelectAll && viewModel.Items.Skip(1).Any())
         {
             <label class="@CheckboxItemElementName @CheckboxContainerBlockName @CheckboxSelectAllItemElementName js-@SelectAllElementName">
@@ -137,8 +134,8 @@
                 $("#@TechnicalNameBlockName").lombiq_CheckboxListEditor({
                     @if (viewModel.IsSearchEnabled)
                     {
-                    <text>searchFilterElementClass: ".js-@FilterTextElementName",
-                    searchFilterContainerElementClass: ".js-@FilterContainerElementName",</text>
+                        <text>searchFilterElementClass: ".js-@FilterTextElementName",
+                        searchFilterContainerElementClass: ".js-@FilterContainerElementName",</text>
                     }
                     controlGroupElementClass: ".js-@ControlGroupElementName",
                     checkboxContainerSelector: ".js-@CheckboxContainerBlockName",
