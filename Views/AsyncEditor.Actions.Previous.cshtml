@@ -17,8 +17,8 @@
 
 @if (asyncEditorPart.PreviousAuthorizedEditorGroup != null)
 {
-    <div class="asyncEditorPreviousAction js-@ElementNames.AsyncEditorActions.LoadEditorElementName"
-         data-editorGroupName="@previousAuthorizedEditorGroupName" title="@T("Go back to {0}", previousAuthorizedEditorGroupName)">
+    <span data-editorGroupName="@previousAuthorizedEditorGroupName" title="@T("Go back to {0}", previousAuthorizedEditorGroupName)"
+          class="@ElementNames.AsyncEditorSubmitActions.ActionElementName @ElementNames.AsyncEditorSubmitActions.PreviousActionElementName js-@ElementNames.AsyncEditorActions.LoadEditorElementName">
         @(Model.ActionText as string ?? T("Back").Text)
-    </div>
+    </span>
 }

@@ -1,5 +1,6 @@
 ﻿@using Orchard.ContentManagement
 @using Orchard.Core.Contents.Settings
+@using Lombiq.ContentEditors.Constants
 @using Lombiq.ContentEditors.Models
 @using Lombiq.ContentEditors.Services
 
@@ -11,25 +12,23 @@
     {
         return;
     }
-
-    var asyncEditorService = WorkContext.Resolve<IAsyncEditorService>();
-
-    const string BlockName = "asyncEditorSubmitActions";
-    const string ActionElementName = BlockName + "__action";
 }
 
-<div class="@BlockName">
-    <input type="submit" name="submit.Save" data-submitContext="Save" class="@ActionElementName @(BlockName)__saveAction" value="@T("Save Draft")" />
+<div class="@ElementNames.AsyncEditorSubmitActions.BlockName">
+    <input type="submit" name="submit.Save" data-submitContext="Save" value="@T("Save Draft")"
+           class="@ElementNames.AsyncEditorSubmitActions.ActionElementName @ElementNames.AsyncEditorSubmitActions.SaveActionElementName" />
 
     @if ((asyncEditorPart.CurrentEditorGroup?.IsPublishGroup ?? true) &&
         asyncEditorPart.TypeDefinition.Settings.GetModel<ContentTypeSettings>().Draftable &&
-        asyncEditorService.IsAuthorizedToPublish(asyncEditorPart, asyncEditorPart.CurrentEditorGroup?.Name ?? ""))
+        WorkContext.Resolve<IAsyncEditorService>().IsAuthorizedToPublish(asyncEditorPart, asyncEditorPart.CurrentEditorGroup?.Name ?? ""))
     {
-        <input type="submit" name="submit.Publish" data-submitContext="Publish" class="@ActionElementName @(BlockName)__publishAction" value="@T("Publish")" />
+        <input type="submit" name="submit.Publish" data-submitContext="Publish" value="@T("Publish")"
+               class="@ElementNames.AsyncEditorSubmitActions.ActionElementName @ElementNames.AsyncEditorSubmitActions.PublishActionElementName" />
     }
 
     @if (asyncEditorPart.NextAuthorizedEditorGroup != null)
     {
-        <input type="submit" name="submit.SaveAndNext" data-submitContext="SaveAndNext" class="@ActionElementName @(BlockName)__nextAction" value="@T("Save and Next")" />
+        <input type="submit" name="submit.SaveAndNext" data-submitContext="SaveAndNext" value="@T("Save and Next")"
+               class="@ElementNames.AsyncEditorSubmitActions.ActionElementName @ElementNames.AsyncEditorSubmitActions.NextActionElementName" />
     }
 </div>
