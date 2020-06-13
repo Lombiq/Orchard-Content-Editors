@@ -12,7 +12,7 @@
         
         public static class AsyncEditorSubmitActions
         {
-            public const string BlockName = "asyncEditorActions";
+            public const string BlockName = "asyncEditorSubmitActions";
 
             public const string ActionElementName = BlockName + "__action";
             
