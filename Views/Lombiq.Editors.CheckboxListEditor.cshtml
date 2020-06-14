@@ -33,11 +33,12 @@
     var ExpandableLabelElementNameWithOpenedModifier = ExpandableLabelElementName + "_open";
     var ExpandableContainerElementName = CheckboxListEditorBlockName + "__expandableContainer";
     var TechnicalExpandableContainerElementName = TechnicalNameBlockName + "__expandableContainer";
+    var ExpandableContainerElementNameWithOpenedModifier = ExpandableContainerElementName + "_open";
     var ControlGroupElementName = CheckboxListEditorBlockName + "__controlGroup";
-    
+
     var FilterContainerElementName = CheckboxListEditorBlockName + "__filterContainer";
     var FilterTextElementName = CheckboxListEditorBlockName + "__filterText";
-    
+
     var CheckboxItemElementName = CheckboxListEditorBlockName + "__item";
     var CheckboxSelectAllItemElementName = CheckboxListEditorBlockName + "__selectAllItem";
 
@@ -51,9 +52,9 @@
     expandableContainerDiv.AddCssClass(ExpandableContainerElementName);
     expandableContainerDiv.AddCssClass($"js-{TechnicalExpandableContainerElementName}");
 
-    if (viewModel.IsCollapsedByDefault)
+    if (!viewModel.IsCollapsedByDefault)
     {
-        expandableContainerDiv.AddCssClass("hidden");
+        expandableContainerDiv.AddCssClass(ExpandableContainerElementNameWithOpenedModifier);
     }
 
     var labelClasses = LabelElementName;
@@ -152,7 +153,7 @@
                     <text>
                         $(".js-@TechnicalLabelElementName").click(function (e) {
                             $(this).toggleClass("@ExpandableLabelElementNameWithOpenedModifier");
-                            $(this).next(".js-@TechnicalExpandableContainerElementName").slideToggle("fast").removeClass("hidden");
+                            $(this).next(".js-@TechnicalExpandableContainerElementName").slideToggle("fast").toggleClass("@ExpandableContainerElementNameWithOpenedModifier");
                         });
                     </text>
                 }
