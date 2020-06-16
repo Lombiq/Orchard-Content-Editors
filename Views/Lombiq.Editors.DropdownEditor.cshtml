@@ -50,6 +50,7 @@
     {
         @Html.Label(viewModel.Label, labelAttributes)
     }
-
-    @Html.DropDownList(viewModel.Name, viewModel.SelectList, dropdownAttributes)
+    <div class="@(DefaultBlockName)__selectContainer">
+        @Html.DropDownList(viewModel.Name, viewModel.SelectList, dropdownAttributes)
+    </div>
 </div>

@@ -53,7 +53,9 @@
         @Html.Label(viewModel.Label, labelAttributes)
     }
 
-    @Html.DropDownList(viewModel.Name, viewModel.SelectList, dropdownAttributes)
+    <div class="@(DefaultBlockName)__selectContainer">
+        @Html.DropDownList(viewModel.Name, viewModel.SelectList, dropdownAttributes)
+    </div>
 
     @if (viewModel.HasDefaultEmptyValue)
     {
@@ -69,7 +71,7 @@
 
 @if (hasParent)
 {
-<script type="text/javascript">
+    <script type="text/javascript">
         ; (function ($) {
             $(function () {
                 $("select[name='@(ViewData.TemplateInfo.HtmlFieldPrefix + "." + viewModel.Name)']").lombiq_ConnectedValueSelector({
@@ -80,5 +82,5 @@
                 });
             });
         })(jQuery);
-</script>
+    </script>
 }
