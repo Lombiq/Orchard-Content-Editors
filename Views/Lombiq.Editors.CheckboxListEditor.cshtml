@@ -45,6 +45,7 @@
 
     const string CheckboxContainerBlockName = "checkboxContainer";
     const string SelectAllElementName = CheckboxContainerBlockName + "__selectAllElementName";
+    const string CheckboxLabelElementName = CheckboxContainerBlockName + "__label";
     const string CheckboxInputElementName = CheckboxContainerBlockName + "__input";
     const string CheckboxIndicatorElementName = CheckboxContainerBlockName + "__indicator";
 
@@ -104,7 +105,7 @@
     <div class="@ControlGroupElementName js-@ControlGroupElementName">
         @if (viewModel.EnableSelectAll && viewModel.Items.Skip(1).Any())
         {
-            <label class="@CheckboxItemElementName @CheckboxContainerBlockName @CheckboxSelectAllItemElementName js-@SelectAllElementName">
+            <label class="@CheckboxItemElementName @CheckboxContainerBlockName @CheckboxLabelElementName @CheckboxSelectAllItemElementName js-@SelectAllElementName">
                 @T("Select All")
                 <input type="checkbox" class="@CheckboxInputElementName @SelectAllElementName" checked="@viewModel.Items.All(item => item.Checked)" hidden />
                 <span class="@CheckboxIndicatorElementName"></span>
@@ -113,7 +114,7 @@
 
         @foreach (var item in viewModel.Items)
         {
-            <label class="@CheckboxItemElementName @CheckboxContainerBlockName js-@CheckboxContainerBlockName">
+            <label class="@CheckboxItemElementName @CheckboxContainerBlockName @CheckboxLabelElementName js-@CheckboxContainerBlockName">
                 @item.Label
                 <input type="checkbox" class="js-@CheckboxInputElementName @CheckboxInputElementName" name="@TechnicalNameBlockName"
                        value="@item.Value" @if (item.Checked) { <text>checked</text> } hidden />
