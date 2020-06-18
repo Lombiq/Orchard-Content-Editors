@@ -23,6 +23,7 @@
     var termIndex = 0;
     var prefix = Html.NameForModel();
     var selectableIds = viewModel.SelectList.Select(item => int.TryParse(item.Value, out var id) ? id : 0).ToList();
+    var selectableTerms = taxonomyViewModel.Terms.Where(term => selectableIds.Contains(term.Id)).ToList();
 }
 
 
@@ -39,7 +40,7 @@
 
 
     <ul class="@(DefaultBlockName)__taxonomyTermList">
-        @foreach (var entry in taxonomyViewModel.Terms.Where(term => selectableIds.Contains(term.Id)))
+        @foreach (var entry in selectableTerms)
         {
             <li>
                 @for (var i = 1; i <= entry.GetLevels(); i++)
@@ -50,14 +51,14 @@
                 @{
                     var disabled = !entry.Selectable ||
                         (taxonomyViewModel.Settings.LeavesOnly &&
-                        taxonomyViewModel.Terms.Any(term => term.Path.Contains(entry.Path + entry.Id)));
+                        selectableTerms.Any(term => term.Path.Contains(entry.Path + entry.Id)));
 
                     var elementId = $"{prefix}-Term-{termIndex}";
                     if (taxonomyViewModel.Settings.SingleChoice)
                     {
                         <input @if (disabled) { <text> disabled="disabled" </text> }
                                type="radio"
-                               value="@taxonomyViewModel.Terms[termIndex].Id"
+                               value="@selectableTerms[termIndex].Id"
                                @if (entry.Id == taxonomyViewModel.SingleTermId) { <text> checked="checked" </text> }
                                name="@($"{prefix}.{nameof(Orchard.Taxonomies.ViewModels.TaxonomyFieldViewModel.SingleTermId)}")"
                                id="@elementId"
@@ -77,7 +78,7 @@
 
                 <label class="forcheckbox @(DefaultBlockName)__termLabel" for="@elementId">@entry.Name</label>
 
-                <input type="hidden" name="@($"{prefix}.Terms[{termIndex}].Id")" value="@taxonomyViewModel.Terms[termIndex].Id" />
+                <input type="hidden" name="@($"{prefix}.Terms[{termIndex}].Id")" value="@selectableTerms[termIndex].Id" />
             </li>
 
             termIndex++;
