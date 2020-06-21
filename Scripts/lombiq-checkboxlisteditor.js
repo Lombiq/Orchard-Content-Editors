@@ -21,7 +21,8 @@
         checkboxSelectAllItemElementClass: "",
         selectAllElementClass: "",
         inputSelectAllElementSelector: "",
-        checkboxItemElementClass: ""
+        checkboxItemElementClass: "",
+        blockClass: ""
     };
 
     function Plugin(element, options) {
@@ -160,6 +161,7 @@
         var plugin = $(this).lombiq_CheckboxListEditor()[0];
 
         if (plugin) {
+            $(this).parent().find(plugin.settings.blockClass).removeClass("disabled");
             $(this).find(plugin.settings.checkboxItemElementClass).removeClass("disabled");
         }
     };
@@ -167,10 +169,10 @@
     $.fn.originalDisable = $.fn.disable;
     $.fn.disable = function () {
         $(this).originalDisable();
-
         var plugin = $(this).lombiq_CheckboxListEditor()[0];
 
         if (plugin) {
+            $(this).parent().find(plugin.settings.blockClass).addClass("disabled");
             $(this).find(plugin.settings.checkboxItemElementClass).addClass("disabled");
         }
     };

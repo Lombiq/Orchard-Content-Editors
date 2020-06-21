@@ -146,16 +146,19 @@
                     checkboxSelectAllItemElementClass: ".@CheckboxSelectAllItemElementName",
                     selectAllElementClass: ".@SelectAllElementName",
                     inputSelectAllElementSelector: "input.@SelectAllElementName",
-                    checkboxItemElementClass: ".@CheckboxItemElementName"
+                    checkboxItemElementClass: ".@CheckboxItemElementName",
+                    blockClass: ".@CheckboxListEditorDefaultBlockName"
                 });
 
                 @if (viewModel.IsExpandable)
                 {
                     <text>
                         $(".js-@TechnicalLabelElementName").click(function (e) {
-                            $(this).toggleClass("@ExpandableLabelElementNameWithOpenedModifier");
-                            $(this).next(".js-@TechnicalExpandableContainerElementName").slideToggle("fast").toggleClass("@ExpandableContainerElementNameWithOpenedModifier");
-                        });
+                            if (!$("#@TechnicalNameBlockName").hasClass("disabled")) {
+                                $(this).toggleClass("@ExpandableLabelElementNameWithOpenedModifier");
+                                $(this).next(".js-@TechnicalExpandableContainerElementName").slideToggle("fast").toggleClass("@ExpandableContainerElementNameWithOpenedModifier");
+                        }});
+
                     </text>
                 }
 
