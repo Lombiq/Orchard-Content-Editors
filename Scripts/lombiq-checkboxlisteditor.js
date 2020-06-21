@@ -113,7 +113,7 @@
             var $controlGroup = element.find(plugin.settings.controlGroupElementClass);
 
             if (plugin.settings.isSearchEnabled) {
-                element.find(plugin.settings.searchFilterElementClass).val("");
+                element.find(plugin.settings.searchFilterElementClass).val([]).keyup();
             }
 
             $controlGroup.find(plugin.settings.checkboxInputElementClass).filter(":checked").prop("checked", false);
