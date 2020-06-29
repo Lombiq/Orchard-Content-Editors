@@ -20,12 +20,9 @@
     var TechnicalNameBlockName = viewModel.TechnicalName;
 
     var FilterRelationshipTechnicalName = $"{TechnicalNameBlockName}Relationship";
-    var FilterRelationshipsContainerElementName = CheckboxListEditorBlockName + "__filterRelationshipsContainer";
-    var FilterRelationshipContainerElementName = CheckboxListEditorBlockName + "__filterRelationshipContainer";
-    var FilterRelationshipElementName = CheckboxListEditorBlockName + "__filterRelationship";
-    var FilterRelationshipLabelElementName = CheckboxListEditorBlockName + "__filterRelationshipLabel";
     var selectedFilterRelationship = Enum.TryParse(Request.QueryString[FilterRelationshipTechnicalName], out FilterRelationship filterRelationship) ?
         filterRelationship : FilterRelationship.Or;
+    const string FilterRelationshipBlockName = "filterRelationship";
 
     var LabelElementName = CheckboxListEditorBlockName + "__label";
     var TechnicalLabelElementName = TechnicalNameBlockName + "__label";
@@ -83,15 +80,18 @@
     }
     @if (viewModel.IsFilterRelationShipSelectorEnabled && viewModel.EnabledFilterRelationShips.Any())
     {
-        <div class="@FilterRelationshipsContainerElementName">
+        <div class="@(CheckboxListEditorBlockName)__filterRelationshipsContainer">
             @foreach (var relationship in viewModel.EnabledFilterRelationShips)
             {
-                <div class="@FilterRelationshipContainerElementName">
-                    <input @if (relationship == selectedFilterRelationship) { <text>checked</text> }
-                        type="radio" id="@(FilterRelationshipTechnicalName)_@(relationship)"
-                        name="@FilterRelationshipTechnicalName" class="@FilterRelationshipElementName"
-                        value="@if (relationship != FilterRelationship.Or) { @relationship }" />
-                    <label for="@(FilterRelationshipTechnicalName)_@(relationship)" class="@FilterRelationshipLabelElementName">@relationship</label>
+                <div class="@(CheckboxListEditorBlockName)__filterRelationshipContainer">
+                    <label for="@(FilterRelationshipTechnicalName)_@(relationship)" class="@(CheckboxListEditorBlockName)__filterRelationshipLabel @(FilterRelationshipBlockName)__label">
+                        @relationship
+                        <input @if (relationship == selectedFilterRelationship) { <text> checked</text> }
+                            type="radio" id="@(FilterRelationshipTechnicalName)_@(relationship)"
+                            name="@FilterRelationshipTechnicalName" class="@(CheckboxListEditorBlockName)__filterRelationship  @(FilterRelationshipBlockName)__input"
+                            value="@if (relationship != FilterRelationship.Or) { @relationship }" />
+                        <span class=" @(FilterRelationshipBlockName)__indicator"></span>
+                    </label>
                 </div>
             }
         </div>
