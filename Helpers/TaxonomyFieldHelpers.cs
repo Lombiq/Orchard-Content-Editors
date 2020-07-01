@@ -1,4 +1,5 @@
 ﻿using Orchard.Taxonomies.Helpers;
+using Orchard.Taxonomies.Models;
 using Orchard.Taxonomies.ViewModels;
 using System.Collections.Generic;
 using System.Linq;
@@ -46,17 +47,20 @@ namespace Lombiq.ContentEditors.Helpers
         public static List<SelectListItem> GetSelectListFromTermsUnderLevel(
             TaxonomyFieldViewModel viewModel, int startingLevel = 0, int depth = int.MaxValue)
         {
-            var selectedTermNames = viewModel.SelectedTerms?.Select(term => term.Name) ?? Enumerable.Empty<string>();
+            if (viewModel.SelectedTerms == null) viewModel.SelectedTerms = Enumerable.Empty<TermPart>();
             var selectListItems = new List<SelectListItem>();
 
             foreach (var entry in viewModel.Terms)
             {
                 var entryLevel = entry.GetLevels();
 
-                if (!entry.Selectable || entryLevel < startingLevel || (entryLevel - startingLevel) >= depth)
+                // Selected Terms should still be returned even if they are no longer selectable to avoid loss of information.
+                if ((!entry.Selectable && !viewModel.SelectedTerms.Select(term => term.Id).Contains(entry.Id)) ||
+                    entryLevel < startingLevel ||
+                    (entryLevel - startingLevel) >= depth)
                     continue;
 
-                selectListItems.Add(CreateSelectListItem(entry, selectedTermNames, entryLevel - startingLevel));
+                selectListItems.Add(CreateSelectListItem(entry, viewModel.SelectedTerms.Select(term => term.Name), entryLevel - startingLevel));
             }
 
             return selectListItems.OrderBy(item => item.Text).ToList();
