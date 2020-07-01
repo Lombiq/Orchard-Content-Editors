@@ -78,6 +78,12 @@
             else if (plugin.settings.valueHide !== null && value === plugin.settings.valueHide) {
                 show = false;
             }
+            else if (Array.isArray(plugin.settings.valueShow) && plugin.settings.valueShow.includes(value)) {
+                show = true;
+            }
+            else if (Array.isArray(plugin.settings.valueHide) && plugin.settings.valueHide.includes(value)) {
+                show = false;
+            }
             else if (typeof value === "number") {
                 if (number === 0) {
                     show = false;
