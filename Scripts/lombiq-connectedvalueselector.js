@@ -70,10 +70,12 @@
 
                         if ($.inArray(value, currentValues) > -1) {
                             $(currentElement).show();
+                            currentElement.prop("disabled", false);
                         }
                         // Don't hide the default empty value.
                         else if (!plugin.settings.hasDefaultEmptyValue || plugin.settings.defaultEmptyValue !== value) {
                             valueElement.prop("selected", false).prop("checked", false);
+                            valueElement.prop("disabled", true);
                             $(currentElement).hide();
                         }
                     });
