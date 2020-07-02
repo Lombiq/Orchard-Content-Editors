@@ -1,4 +1,5 @@
-﻿@using Lombiq.ContentEditors.ViewModels
+﻿@using Lombiq.ContentEditors.Helpers
+@using Lombiq.ContentEditors.ViewModels
 @using Orchard.Utility.Extensions
 
 @{
@@ -51,7 +52,9 @@
 <div id="@onChangedSelectorId" class="editor editorField form-group @DefaultBlockName @BlockName js-@viewModel.Name.HtmlClassify()">
     @if (!string.IsNullOrEmpty(viewModel.Label))
     {
-        @Html.Label(viewModel.Name, viewModel.Label, labelAttributes)
+        <label for="@viewModel.Name.Replace(".", "_")" @Html.Raw(HtmlAttributeHelpers.StringifyHtmlAttributes(labelAttributes))>
+            @Html.Raw(viewModel.Label)
+        </label>
     }
     @if (!string.IsNullOrEmpty(viewModel.Description))
     {
