@@ -22,17 +22,27 @@ namespace Lombiq.ContentEditors.ViewModels
         #endregion
 
 
-        public DropdownEditorViewModel(IEnumerable<string> values)
+        public DropdownEditorViewModel(IEnumerable<string> values, params string[] selectedValues)
         {
-            foreach (var value in values) SelectList.Add(new SelectListItem { Text = value, Value = value });
+            foreach (var value in values) SelectList.Add(new SelectListItem
+            {
+                Text = value,
+                Value = value,
+                Selected = selectedValues.Contains(value)
+            });
         }
 
         public DropdownEditorViewModel(NameValueCollection queryString, string technicalName, IEnumerable<string> values)
         {
-            var selectedValue = queryString.GetQueryStringParameterValues(technicalName)?.FirstOrDefault() ?? "";
+            var selectedValues = queryString.GetQueryStringParameterValues(technicalName) ?? Enumerable.Empty<string>();
 
             foreach (var value in values)
-                SelectList.Add(new SelectListItem { Text = value, Value = value, Selected = value == selectedValue });
+                SelectList.Add(new SelectListItem
+                {
+                    Text = value,
+                    Value = value,
+                    Selected = selectedValues.Contains(value)
+                });
 
             Name = TechnicalName = technicalName;
         }
