@@ -1,5 +1,6 @@
 ﻿@using Lombiq.ContentEditors.ViewModels
 @using Lombiq.ContentEditors.Constants
+@using Orchard.Services
 
 @{
     Script.Require(ResourceNames.Selectize).AtHead();
@@ -12,7 +13,7 @@
     const string DefaultBlockName = "selectizeDropdownEditor";
     string BlockName = viewModel.BlockName ?? DefaultBlockName;
     const string TextBoxElementName = DefaultBlockName + "__textbox";
-    string TechnicalNameModifier = "_" + viewModel.TechnicalName;
+    string TechnicalNameModifier = "_" + viewModel.TechnicalName.Replace('.', '_');
 
     var taxonomyDropdownSelectizeInputId = DefaultBlockName + "__SelectizeInput" + TechnicalNameModifier;
 
@@ -21,10 +22,14 @@
         { "class", TextBoxElementName },
         { "id", @taxonomyDropdownSelectizeInputId }
     };
+
     if (!string.IsNullOrEmpty(viewModel.Label))
     {
         attributes.Add("placeholder", viewModel.Label);
     }
+
+    var jsonConverter = WorkContext.Resolve<IJsonConverter>();
+    var selectedOptions = viewModel.SelectList.Where(option => option.Selected);
 }
 
 <div class="editor editorField form-group @DefaultBlockName @BlockName">
@@ -35,14 +40,20 @@
     ; (function ($) {
         $(function () {
             @* Initializing selectize on input field. *@
-            var $taxonomyDropdownSelectizeInput = $("#@taxonomyDropdownSelectizeInputId");
-            var $taxonomyDropdownSelectize = $taxonomyDropdownSelectizeInput.selectize()[0].selectize;
+            var $selectizeElement = $("#@taxonomyDropdownSelectizeInputId").selectize()[0].selectize;
 
-            @* Adding options. *@
-            @foreach (var listItem in viewModel.SelectList)
+            var options = JSON.parse(@Html.Raw(Json.Encode(jsonConverter.Serialize(viewModel.SelectList))));
+            for (var i = 0; i < options.length; i++) {
+                $selectizeElement.addOption({ value: options[i].Value, text: options[i].Text });
+            }
+
+            @if (selectedOptions.Any())
             {
                 <text>
-                    $taxonomyDropdownSelectize.addOption({ value: "@listItem.Value", text: "@listItem.Text" });
+                var selectedOptions = JSON.parse(@Html.Raw(Json.Encode(jsonConverter.Serialize(selectedOptions))));
+                for (var i = 0; i < selectedOptions.length; i++) {
+                    $selectizeElement.addItem(selectedOptions[i].Value);
+                }
                 </text>
             }
         });
