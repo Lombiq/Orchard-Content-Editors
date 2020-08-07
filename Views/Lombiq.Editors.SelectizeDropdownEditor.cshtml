@@ -13,14 +13,14 @@
     const string DefaultBlockName = "selectizeDropdownEditor";
     string BlockName = viewModel.BlockName ?? DefaultBlockName;
     const string TextBoxElementName = DefaultBlockName + "__textbox";
-    string TechnicalNameModifier = "_" + viewModel.TechnicalName.Replace('.', '_');
+    string TechnicalNameModifier = string.IsNullOrEmpty(viewModel.TechnicalName) ? "" : "_" + viewModel.TechnicalName.Replace('.', '_');
 
-    var taxonomyDropdownSelectizeInputId = DefaultBlockName + "__SelectizeInput" + TechnicalNameModifier;
+    var selectizeInputId = DefaultBlockName + "__SelectizeInput" + TechnicalNameModifier;
 
     var attributes = new Dictionary<string, object>
     {
         { "class", TextBoxElementName },
-        { "id", @taxonomyDropdownSelectizeInputId }
+        { "id", selectizeInputId }
     };
 
     if (!string.IsNullOrEmpty(viewModel.Label))
@@ -40,7 +40,7 @@
     ; (function ($) {
         $(function () {
             @* Initializing selectize on input field. *@
-            var $selectizeElement = $("#@taxonomyDropdownSelectizeInputId").selectize()[0].selectize;
+            var $selectizeElement = $("#@selectizeInputId").selectize()[0].selectize;
 
             var options = JSON.parse(@Html.Raw(Json.Encode(jsonConverter.Serialize(viewModel.SelectList))));
             for (var i = 0; i < options.length; i++) {

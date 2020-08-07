@@ -28,7 +28,7 @@ namespace Lombiq.ContentEditors.ViewModels
             {
                 Text = value,
                 Value = value,
-                Selected = selectedValues.Contains(value)
+                Selected = selectedValues?.Contains(value) ?? false
             });
         }
 
