@@ -99,7 +99,7 @@
 
         setValue: function (value, format) {
             var plugin = this;
-            
+
             var momentValue = null;
             if (value) {
                 if (typeof value === "string") {
@@ -159,6 +159,10 @@
 
             if (date !== null) {
                 plugin.pickerElement.datepicker("setDate", date);
+
+                if (!plugin.settings.isDateEditor) {
+                    plugin.pickerElement.val(moment(date).format("HH:mm"));
+                }
             }
             else {
                 plugin.pickerElement.val("");
