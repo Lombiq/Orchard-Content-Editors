@@ -63,6 +63,21 @@
             return true;
         },
 
+        refresh: function() {
+            var plugin = this;
+            var actualValue = null;
+
+            var value = plugin.element.val();
+            if (plugin.isValueValid(value)) {
+                actualValue = value;
+            }
+            else if (plugin.isValueValid(plugin.settings.valueFunction($(this)))) {
+                actualValue = plugin.settings.valueFunction($(this));
+            }
+
+            plugin.updateVisibility(actualValue);
+        },
+
         updateVisibility: function (value) {
             var plugin = this;
 
