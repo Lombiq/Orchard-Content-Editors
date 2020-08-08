@@ -40,7 +40,7 @@
     }
 
     var jsonConverter = WorkContext.Resolve<IJsonConverter>();
-    var selectedOptions = viewModel.SelectList.Where(option => option.Selected);
+    var selectedValues = viewModel.SelectList.Where(option => option.Selected).Select(option => option.Value);
 }
 
 <div class="editor editorField form-group @DefaultBlockName @BlockName">
@@ -64,6 +64,18 @@
             @Html.Hidden($"Terms[{i}].IsChecked", viewModel.SelectList[i].Selected, new { id = $"{hiddenInputIdPrefix}_{viewModel.SelectList[i].Value}_IsChecked" })
         }
     </div>
+
+    <div hidden id="@(hiddenInputIdPrefix)_SpecialValues">
+        @if (!string.IsNullOrEmpty(viewModel.NoneValueId))
+        {
+            <input type="hidden" id="@($"{hiddenInputIdPrefix}_NoneValue_Selected")" value="@selectedValues.Contains(viewModel.NoneValueId).ToString()" />
+        }
+
+        @if (!string.IsNullOrEmpty(viewModel.OtherValueId))
+        {
+            <input type="hidden" id="@($"{hiddenInputIdPrefix}_OtherValue_Selected")" value="@selectedValues.Contains(viewModel.OtherValueId).ToString()" />
+        }
+    </div>
 </div>
 
 <script type="text/javascript">
@@ -77,12 +89,12 @@
                 $selectizeElement.addOption({ value: options[i].Value, text: options[i].Text });
             }
 
-            @if (selectedOptions.Any())
+            @if (selectedValues.Any())
             {
                 <text>
-                var selectedOptions = JSON.parse(@Html.Raw(Json.Encode(jsonConverter.Serialize(selectedOptions))));
-                for (var i = 0; i < selectedOptions.length; i++) {
-                    $selectizeElement.addItem(selectedOptions[i].Value);
+                var selectedValues = JSON.parse(@Html.Raw(Json.Encode(jsonConverter.Serialize(selectedValues))));
+                for (var i = 0; i < selectedValues.length; i++) {
+                    $selectizeElement.addItem(selectedValues[i]);
                 }
                 </text>
             }
@@ -99,6 +111,20 @@
 
                     for (var i = 0; i < termIds.length; i++) {
                         $("#@(hiddenInputIdPrefix)_" + termIds[i] + "_IsChecked").val("True");
+                    }
+
+                    @if (!string.IsNullOrEmpty(viewModel.NoneValueId))
+                    {
+                        <text>
+                        $("#@(hiddenInputIdPrefix)_NoneValue_Selected").val(termIds.includes("@viewModel.NoneValueId"));
+                        </text>
+                    }
+
+                    @if (!string.IsNullOrEmpty(viewModel.OtherValueId))
+                    {
+                        <text>
+                        $("#@(hiddenInputIdPrefix)_OtherValue_Selected").val(termIds.includes("@viewModel.OtherValueId"));
+                        </text>
                     }
                 }
             });

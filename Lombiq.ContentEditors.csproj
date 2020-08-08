@@ -137,6 +137,7 @@
     <Compile Include="ViewModels\DateTimeEditorViewModel.cs" />
     <Compile Include="ViewModels\IElementValueFilterRelationshipSelector.cs" />
     <Compile Include="ViewModels\IParentElementValueDependency.cs" />
+    <Compile Include="ViewModels\ISelectSpecialValues.cs" />
     <Compile Include="ViewModels\TaxonomyEditorViewModel.cs" />
     <Compile Include="ViewModels\InputFieldViewModel.cs" />
     <Compile Include="ViewModels\TaxonomyFieldViewModel.cs" />

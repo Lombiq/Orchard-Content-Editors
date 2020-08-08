@@ -57,11 +57,7 @@
         },
 
         isValueValid: function (value) {
-            if (typeof value === "undefined" || value === null || value === "") {
-                return false;
-            }
-
-            return true;
+            return !(typeof value === "undefined" || value === null || value === "");
         },
 
         refresh: function () {

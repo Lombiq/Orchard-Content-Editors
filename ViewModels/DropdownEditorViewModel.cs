@@ -6,7 +6,7 @@ using System.Web.Mvc;
 
 namespace Lombiq.ContentEditors.ViewModels
 {
-    public class DropdownEditorViewModel : EditorViewModel, IParentElementValueDependency
+    public class DropdownEditorViewModel : EditorViewModel, IParentElementValueDependency, ISelectSpecialValues
     {
         public List<SelectListItem> SelectList { get; set; } = new List<SelectListItem>();
         public bool HasDefaultEmptyValue { get; set; }
@@ -18,6 +18,13 @@ namespace Lombiq.ContentEditors.ViewModels
 
         public string ParentElementSelector { get; set; }
         public Dictionary<string, IEnumerable<string>> ParentElementValueHierarchy { get; set; } = new Dictionary<string, IEnumerable<string>>();
+
+        #endregion
+
+        #region ISelectSpecialValues implementation
+
+        public string NoneValueId { get; set; } = "";
+        public string OtherValueId { get; set; } = "";
 
         #endregion
 
