@@ -20,6 +20,7 @@
         targetSelector: "",
         inverseTargetSelector: "",
         hideDefault: true,
+        clearTargetInputsOnHide: false,
         visibilityChangedCallback: function () { }
     };
 
@@ -61,6 +62,21 @@
             }
 
             return true;
+        },
+
+        refresh: function () {
+            var plugin = this;
+            var actualValue = null;
+
+            var value = plugin.element.val();
+            if (plugin.isValueValid(value)) {
+                actualValue = value;
+            }
+            else if (plugin.isValueValid(plugin.settings.valueFunction($(this)))) {
+                actualValue = plugin.settings.valueFunction($(this));
+            }
+
+            plugin.updateVisibility(actualValue);
         },
 
         updateVisibility: function (value) {
@@ -124,6 +140,10 @@
                     inverseTarget.hide();
                     replaceRequiredAttribute(plugin.settings.inverseTargetSelector);
                 }
+                if (plugin.settings.clearTargetInputsOnHide) {
+                    target.find("input, textarea").val("");
+                    target.find("select").prop("selectedIndex", 0);
+                }
             }
             else if (show === null && !plugin.settings.hideDefault || show) {
                 target.show();
@@ -139,6 +159,10 @@
                 if (plugin.settings.inverseTargetSelector) {
                     inverseTarget.show();
                     replaceRequiredHiddenAttribute(plugin.settings.inverseTargetSelector);
+                }
+                if (plugin.settings.clearTargetInputsOnHide) {
+                    target.find("input, textarea").val("");
+                    target.find("select").prop("selectedIndex", 0);
                 }
             }
 
