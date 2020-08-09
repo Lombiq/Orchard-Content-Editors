@@ -15,8 +15,9 @@
     const string TextBoxElementName = DefaultBlockName + "__textbox";
     string TechnicalNameModifier = string.IsNullOrEmpty(viewModel.TechnicalName) ? "" : "_" + viewModel.TechnicalName.Replace('.', '_');
 
-    var selectizeInputId = DefaultBlockName + "__SelectizeInput" + TechnicalNameModifier;
-    var hiddenInputIdPrefix = $"{viewModel.Name.Replace('.', '_')}_Terms";
+    var inputIdPrefix = viewModel.Name.Replace('.', '_');
+    var selectizeInputId = $"{inputIdPrefix}__SelectizeInput{TechnicalNameModifier}";
+    var hiddenInputIdPrefix = $"{inputIdPrefix}_Terms";
 
     var selectizeInputAttributes = new Dictionary<string, object>
 {
@@ -89,15 +90,15 @@
                 $selectizeElement.addOption({ value: options[i].Value, text: options[i].Text });
             }
 
-            @if (selectedValues.Any())
-            {
-                <text>
-                var selectedValues = JSON.parse(@Html.Raw(Json.Encode(jsonConverter.Serialize(selectedValues))));
-                for (var i = 0; i < selectedValues.length; i++) {
-                    $selectizeElement.addItem(selectedValues[i]);
-                }
-                </text>
+        @if (selectedValues.Any())
+        {
+            <text>
+            var selectedValues = JSON.parse(@Html.Raw(Json.Encode(jsonConverter.Serialize(selectedValues))));
+            for (var i = 0; i < selectedValues.length; i++) {
+                $selectizeElement.addItem(selectedValues[i]);
             }
+            </text>
+        }
 
             $("#@selectizeInputId").change(function () {
                 @* Setting each checked state to false. *@
@@ -106,31 +107,31 @@
                 });
 
                 var valueString = $(this).val();
-                if (valueString.length > 0) {
-                    var termIds = valueString.split(",");
+                var termIds = valueString.length > 0 ? valueString.split(",") : new Array();
 
+                if (valueString.length > 0) {
                     for (var i = 0; i < termIds.length; i++) {
                         $("#@(hiddenInputIdPrefix)_" + termIds[i] + "_IsChecked").val("True");
                     }
-
-                    @if (!string.IsNullOrEmpty(viewModel.NoneValueId))
-                    {
-                        <text>
-                        var noneValueSelectedElement = $("#@(hiddenInputIdPrefix)_NoneValue_Selected");
-                        noneValueSelectedElement.val(termIds.includes("@viewModel.NoneValueId"));
-                        noneValueSelectedElement.trigger("change");
-                        </text>
-                    }
-
-                    @if (!string.IsNullOrEmpty(viewModel.OtherValueId))
-                    {
-                        <text>
-                        var otherValueSelectedElement = $("#@(hiddenInputIdPrefix)_OtherValue_Selected");
-                        otherValueSelectedElement.val(termIds.includes("@viewModel.OtherValueId"));
-                        otherValueSelectedElement.trigger("change");
-                        </text>
-                    }
                 }
+
+            @if (!string.IsNullOrEmpty(viewModel.NoneValueId))
+            {
+                <text>
+                var noneValueSelectedElement = $("#@(hiddenInputIdPrefix)_NoneValue_Selected");
+                noneValueSelectedElement.val(termIds.includes("@viewModel.NoneValueId"));
+                noneValueSelectedElement.trigger("change");
+                </text>
+            }
+
+            @if (!string.IsNullOrEmpty(viewModel.OtherValueId))
+            {
+                <text>
+                var otherValueSelectedElement = $("#@(hiddenInputIdPrefix)_OtherValue_Selected");
+                otherValueSelectedElement.val(termIds.includes("@viewModel.OtherValueId"));
+                otherValueSelectedElement.trigger("change");
+                </text>
+            }
             });
         });
     })(jQuery);
