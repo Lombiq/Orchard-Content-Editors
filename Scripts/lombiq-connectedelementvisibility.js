@@ -99,13 +99,13 @@
             }
 
             var validationAttributes = ["required", "min", "max", "pattern"];
-            var replaceRequiredAttribute = function (selector) {
+            var replaceValidationAttributes = function (selector) {
                 $.each(validationAttributes, function () {
                     $(document).replaceElementAttribute(selector, this, this + "-hidden");
                 });
             };
 
-            var replaceRequiredHiddenAttribute = function (selector) {
+            var replaceHiddenValidationAttributes = function (selector) {
                 $.each(validationAttributes, function () {
                     $(document).replaceElementAttribute(selector, this + "-hidden", this);
                 });
@@ -116,10 +116,10 @@
 
             if (show === null && plugin.settings.hideDefault) {
                 target.hide();
-                replaceRequiredAttribute(plugin.settings.targetSelector);
+                replaceValidationAttributes(plugin.settings.targetSelector);
                 if (plugin.settings.inverseTargetSelector) {
                     inverseTarget.hide();
-                    replaceRequiredAttribute(plugin.settings.inverseTargetSelector);
+                    replaceValidationAttributes(plugin.settings.inverseTargetSelector);
                 }
                 if (plugin.settings.clearTargetInputsOnHide) {
                     target.find("input, textarea").val("");
@@ -128,18 +128,18 @@
             }
             else if (show === null && !plugin.settings.hideDefault || show) {
                 target.show();
-                replaceRequiredHiddenAttribute(plugin.settings.targetSelector);
+                replaceHiddenValidationAttributes(plugin.settings.targetSelector);
                 if (plugin.settings.inverseTargetSelector) {
                     inverseTarget.hide();
-                    replaceRequiredAttribute(plugin.settings.inverseTargetSelector);
+                    replaceValidationAttributes(plugin.settings.inverseTargetSelector);
                 }
             }
             else {
                 target.hide();
-                replaceRequiredAttribute(plugin.settings.targetSelector);
+                replaceValidationAttributes(plugin.settings.targetSelector);
                 if (plugin.settings.inverseTargetSelector) {
                     inverseTarget.show();
-                    replaceRequiredHiddenAttribute(plugin.settings.inverseTargetSelector);
+                    replaceHiddenValidationAttributes(plugin.settings.inverseTargetSelector);
                 }
                 if (plugin.settings.clearTargetInputsOnHide) {
                     target.find("input, textarea").val("");
