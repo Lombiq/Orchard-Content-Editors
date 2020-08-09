@@ -37,22 +37,12 @@
         init: function () {
             var plugin = this;
 
-            if (!plugin.settings.initialValue) {
-                plugin.settings.initialValue = plugin.settings.valueFunction(plugin.element);
+            if (plugin.settings.initialValue !== null) {
+                plugin.updateVisibility(plugin.settings.initialValue);
             }
 
-            plugin.updateVisibility(plugin.settings.initialValue);
-
-            $(plugin.element).on("change", function (event, value) {
-                var actualValue = null;
-                if (plugin.isValueValid(value)) {
-                    actualValue = value;
-                }
-                else if (plugin.isValueValid(plugin.settings.valueFunction($(this)))) {
-                    actualValue = plugin.settings.valueFunction($(this));
-                }
-
-                plugin.updateVisibility(actualValue);
+            $(plugin.element).change(function (event, value) {
+                plugin.updateVisibility(value);
             });
         },
 
@@ -60,25 +50,20 @@
             return !(typeof value === "undefined" || value === null || value === "");
         },
 
-        refresh: function () {
-            var plugin = this;
-            var actualValue = null;
-
-            var value = plugin.element.val();
-            if (plugin.isValueValid(value)) {
-                actualValue = value;
-            }
-            else if (plugin.isValueValid(plugin.settings.valueFunction($(this)))) {
-                actualValue = plugin.settings.valueFunction($(this));
-            }
-
-            plugin.updateVisibility(actualValue);
-        },
-
         updateVisibility: function (value) {
             var plugin = this;
 
-            if (!plugin.isValueValid(value)) return;
+            if (!plugin.isValueValid(value)) {
+                value = plugin.element.val(); // If the provided value is not valid, try the element value.
+
+                if (!plugin.isValueValid(value)) {
+                    value = plugin.settings.valueFunction(plugin.element); // If the element value is not valid, try the value function.
+
+                    if (!plugin.isValueValid(value)) {
+                        return; // If the value function's result is not valid, then we can't do anything.
+                    }
+                }
+            }
 
             var show = null;
             if (typeof value === "boolean") {
