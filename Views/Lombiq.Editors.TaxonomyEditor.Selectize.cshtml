@@ -22,7 +22,9 @@
     var selectizeInputAttributes = new Dictionary<string, object>
 {
         { "class", TextBoxElementName },
-        { "id", selectizeInputId }
+        { "id", selectizeInputId },
+        { "required", viewModel.Required },
+        { "placeholder", viewModel.Placeholder ?? "" }
     };
 
     var labelAttributes = new Dictionary<string, object>
@@ -33,11 +35,6 @@
     if (viewModel.Required)
     {
         labelAttributes["class"] = labelAttributes["class"] + " required";
-    }
-
-    if (!string.IsNullOrEmpty(viewModel.Placeholder))
-    {
-        selectizeInputAttributes.Add("placeholder", viewModel.Placeholder);
     }
 
     var jsonConverter = WorkContext.Resolve<IJsonConverter>();
@@ -109,7 +106,7 @@
                 var valueString = $(this).val();
                 var termIds = valueString.length > 0 ? valueString.split(",") : new Array();
 
-                if (valueString.length > 0) {
+                if (termIds.length > 0) {
                     for (var i = 0; i < termIds.length; i++) {
                         $("#@(hiddenInputIdPrefix)_" + termIds[i] + "_IsChecked").val("True");
                     }
