@@ -116,14 +116,18 @@
                     @if (!string.IsNullOrEmpty(viewModel.NoneValueId))
                     {
                         <text>
-                        $("#@(hiddenInputIdPrefix)_NoneValue_Selected").val(termIds.includes("@viewModel.NoneValueId"));
+                        var noneValueSelectedElement = $("#@(hiddenInputIdPrefix)_NoneValue_Selected");
+                        noneValueSelectedElement.val(termIds.includes("@viewModel.NoneValueId"));
+                        noneValueSelectedElement.trigger("change");
                         </text>
                     }
 
                     @if (!string.IsNullOrEmpty(viewModel.OtherValueId))
                     {
                         <text>
-                        $("#@(hiddenInputIdPrefix)_OtherValue_Selected").val(termIds.includes("@viewModel.OtherValueId"));
+                        var otherValueSelectedElement = $("#@(hiddenInputIdPrefix)_OtherValue_Selected");
+                        otherValueSelectedElement.val(termIds.includes("@viewModel.OtherValueId"));
+                        otherValueSelectedElement.trigger("change");
                         </text>
                     }
                 }
