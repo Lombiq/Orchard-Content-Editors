@@ -38,11 +38,11 @@
             var plugin = this;
 
             if (plugin.settings.initialValue !== null) {
-                plugin.updateVisibility(plugin.settings.initialValue);
+                plugin.refresh(plugin.settings.initialValue);
             }
 
             $(plugin.element).change(function (event, value) {
-                plugin.updateVisibility(value);
+                plugin.refresh(value);
             });
         },
 
@@ -50,7 +50,7 @@
             return !(typeof value === "undefined" || value === null || value === "");
         },
 
-        updateVisibility: function (value) {
+        refresh: function (value) {
             var plugin = this;
 
             if (!plugin.isValueValid(value)) {
