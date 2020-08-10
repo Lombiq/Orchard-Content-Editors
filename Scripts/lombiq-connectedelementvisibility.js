@@ -37,52 +37,33 @@
         init: function () {
             var plugin = this;
 
-            if (!plugin.settings.initialValue) {
-                plugin.settings.initialValue = plugin.settings.valueFunction(plugin.element);
+            if (plugin.settings.initialValue !== null) {
+                plugin.refresh(plugin.settings.initialValue);
             }
 
-            plugin.updateVisibility(plugin.settings.initialValue);
-
-            $(plugin.element).on("change", function (event, value) {
-                var actualValue = null;
-                if (plugin.isValueValid(value)) {
-                    actualValue = value;
-                }
-                else if (plugin.isValueValid(plugin.settings.valueFunction($(this)))) {
-                    actualValue = plugin.settings.valueFunction($(this));
-                }
-
-                plugin.updateVisibility(actualValue);
+            $(plugin.element).change(function (event, value) {
+                plugin.refresh(value);
             });
         },
 
         isValueValid: function (value) {
-            if (typeof value === "undefined" || value === null || value === "") {
-                return false;
-            }
-
-            return true;
+            return !(typeof value === "undefined" || value === null || value === "");
         },
 
-        refresh: function () {
-            var plugin = this;
-            var actualValue = null;
-
-            var value = plugin.element.val();
-            if (plugin.isValueValid(value)) {
-                actualValue = value;
-            }
-            else if (plugin.isValueValid(plugin.settings.valueFunction($(this)))) {
-                actualValue = plugin.settings.valueFunction($(this));
-            }
-
-            plugin.updateVisibility(actualValue);
-        },
-
-        updateVisibility: function (value) {
+        refresh: function (value) {
             var plugin = this;
 
-            if (!plugin.isValueValid(value)) return;
+            if (!plugin.isValueValid(value)) {
+                value = plugin.element.val(); // If the provided value is not valid, try the element value.
+
+                if (!plugin.isValueValid(value)) {
+                    value = plugin.settings.valueFunction(plugin.element); // If the element value is not valid, try the value function.
+
+                    if (!plugin.isValueValid(value)) {
+                        return; // If the value function's result is not valid, then we can't do anything.
+                    }
+                }
+            }
 
             var show = null;
             if (typeof value === "boolean") {
@@ -118,13 +99,13 @@
             }
 
             var validationAttributes = ["required", "min", "max", "pattern"];
-            var replaceRequiredAttribute = function (selector) {
+            var replaceValidationAttributes = function (selector) {
                 $.each(validationAttributes, function () {
                     $(document).replaceElementAttribute(selector, this, this + "-hidden");
                 });
             };
 
-            var replaceRequiredHiddenAttribute = function (selector) {
+            var replaceHiddenValidationAttributes = function (selector) {
                 $.each(validationAttributes, function () {
                     $(document).replaceElementAttribute(selector, this + "-hidden", this);
                 });
@@ -135,10 +116,10 @@
 
             if (show === null && plugin.settings.hideDefault) {
                 target.hide();
-                replaceRequiredAttribute(plugin.settings.targetSelector);
+                replaceValidationAttributes(plugin.settings.targetSelector);
                 if (plugin.settings.inverseTargetSelector) {
                     inverseTarget.hide();
-                    replaceRequiredAttribute(plugin.settings.inverseTargetSelector);
+                    replaceValidationAttributes(plugin.settings.inverseTargetSelector);
                 }
                 if (plugin.settings.clearTargetInputsOnHide) {
                     target.find("input, textarea").val("");
@@ -147,18 +128,18 @@
             }
             else if (show === null && !plugin.settings.hideDefault || show) {
                 target.show();
-                replaceRequiredHiddenAttribute(plugin.settings.targetSelector);
+                replaceHiddenValidationAttributes(plugin.settings.targetSelector);
                 if (plugin.settings.inverseTargetSelector) {
                     inverseTarget.hide();
-                    replaceRequiredAttribute(plugin.settings.inverseTargetSelector);
+                    replaceValidationAttributes(plugin.settings.inverseTargetSelector);
                 }
             }
             else {
                 target.hide();
-                replaceRequiredAttribute(plugin.settings.targetSelector);
+                replaceValidationAttributes(plugin.settings.targetSelector);
                 if (plugin.settings.inverseTargetSelector) {
                     inverseTarget.show();
-                    replaceRequiredHiddenAttribute(plugin.settings.inverseTargetSelector);
+                    replaceHiddenValidationAttributes(plugin.settings.inverseTargetSelector);
                 }
                 if (plugin.settings.clearTargetInputsOnHide) {
                     target.find("input, textarea").val("");
