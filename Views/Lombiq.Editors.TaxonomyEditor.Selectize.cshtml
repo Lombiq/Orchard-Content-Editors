@@ -23,13 +23,14 @@
 {
         { "class", TextBoxElementName },
         { "id", selectizeInputId },
-        { "required", viewModel.Required },
+        { "required", viewModel.Required.ToString() },
         { "placeholder", viewModel.Placeholder ?? "" }
     };
 
     var labelAttributes = new Dictionary<string, object>
 {
-        { "class", "editorLabel textboxEditor__label " + DefaultBlockName + "__label" }
+        { "class", "editorLabel textboxEditor__label " + DefaultBlockName + "__label" },
+        { "for", selectizeInputId }
     };
 
     if (viewModel.Required)

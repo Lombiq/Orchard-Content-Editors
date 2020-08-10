@@ -30,6 +30,10 @@
         this._defaults = defaults;
         this._name = pluginName;
 
+        var pluginMarkerClass = "lombiq-ConnectedElementVisibility";
+        $(element).addClass(pluginMarkerClass);
+        this.settings.pluginMarkerSelector = "." + pluginMarkerClass;
+
         this.init();
     }
 
@@ -37,13 +41,11 @@
         init: function () {
             var plugin = this;
 
-            if (plugin.settings.initialValue !== null) {
-                plugin.refresh(plugin.settings.initialValue);
-            }
-
             $(plugin.element).change(function (event, value) {
                 plugin.refresh(value);
             });
+
+            plugin.refresh(plugin.settings.initialValue);
         },
 
         isValueValid: function (value) {
@@ -98,17 +100,43 @@
                 }
             }
 
+            // "refreshChildren" is needed so that the attributes of input elements inside child plugins
+            // (i.e. plugins attached to elements whose parent is a target or an inverse target) are correctly set
+            // after this plugin updates input elements in its own element tree.
+            var refreshChildren = function () {
+                var allTargetsSelector = [plugin.settings.targetSelector, plugin.settings.inverseTargetSelector].filter(Boolean).join(",");
+                if (allTargetsSelector.length > 0) {
+                    var allTargetsChildrenPlugins = $(allTargetsSelector)
+                        .find(plugin.settings.pluginMarkerSelector)
+                        .lombiq_ConnectedElementVisibility()
+                        ?? new Array();
+
+                    if (allTargetsChildrenPlugins.length > 0) {
+                        $.each(allTargetsChildrenPlugins, function () {
+                            this.refresh();
+                        });
+                    }
+                }
+            }
+
             var validationAttributes = ["required", "min", "max", "pattern"];
             var replaceValidationAttributes = function (selector) {
                 $.each(validationAttributes, function () {
                     $(document).replaceElementAttribute(selector, this, this + "-hidden");
+                    $(document).replaceElementAttribute(selector + " input:not([type=hidden])", this, this + "-hidden");
                 });
-            };
 
+                $(document).replaceElementAttribute(selector + " textarea", "required", "required-hidden");
+                $(document).replaceElementAttribute(selector + " select", "required", "required-hidden");
+            };
             var replaceHiddenValidationAttributes = function (selector) {
                 $.each(validationAttributes, function () {
                     $(document).replaceElementAttribute(selector, this + "-hidden", this);
+                    $(document).replaceElementAttribute(selector + " input:not([type=hidden])", this + "-hidden", this);
                 });
+
+                $(document).replaceElementAttribute(selector + " textarea", "required-hidden", "required");
+                $(document).replaceElementAttribute(selector + " select", "required-hidden", "required");
             };
 
             var target = $(plugin.settings.targetSelector).not(plugin.element);
@@ -146,6 +174,8 @@
                     target.find("select").prop("selectedIndex", 0);
                 }
             }
+
+            refreshChildren();
 
             plugin.settings.visibilityChangedCallback(target, show === null ? !plugin.settings.hideDefault : show);
         }
