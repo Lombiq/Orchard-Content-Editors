@@ -38,6 +38,7 @@ namespace Lombiq.ContentEditors
             manifest.DefineScript(Lombiq_ConnectedElementVisibility).SetUrl("lombiq-connectedelementvisibility.js").SetDependencies(Lombiq_ReplaceElementAttribute);
             manifest.DefineScript(Lombiq_ConnectedElementEnabledState).SetUrl("lombiq-connectedelementenabledstate.js").SetDependencies(jQuery);
             manifest.DefineScript(Lombiq_DisableEmptyFormInputs).SetUrl("lombiq-disableemptyforminputs.js").SetDependencies(jQuery);
+            manifest.DefineScript(Lombiq_FlattenObject).SetUrl("lombiq-flattenobject.js").SetDependencies(jQuery);
 
             manifest.DefineStyle(Lombiq_Editors_DateTimeEditor).SetDependencies(jQueryUI);
         }
