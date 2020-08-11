@@ -23,8 +23,8 @@
     ; (function ($) {
         $(function () {
             // Avoiding the reinitialization of the jQuery dialog.
-            if ($("#@(id)").length && $("#@(id)").parent().hasClass("ui-dialog")) {
-                $("#@(id)").parent().remove();
+            if ($(".ui-dialog > #@(id)").length) {
+                $(".ui-dialog > #@(id)").parent().remove();
             }
 
             $("#@id").dialog({
