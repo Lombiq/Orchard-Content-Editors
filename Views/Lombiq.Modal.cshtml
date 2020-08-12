@@ -1,12 +1,12 @@
 ﻿@{
     Script.Require(Lombiq.ContentEditors.Constants.ResourceNames.jQueryUI);
-    
+
     var buttonShapes = Model.ButtonShapes as IEnumerable<dynamic> ?? Enumerable.Empty<dynamic>();
 
     const string DefaultBlockName = "modal";
     string BlockName = Model.BlockName as string ?? DefaultBlockName;
     var id = Model.Id as string ?? BlockName;
- }
+}
 
 @Display.Lombiq_Modal_Resources()
 
@@ -22,6 +22,12 @@
 <script type="text/javascript">
     ; (function ($) {
         $(function () {
+            // Avoiding the reinitialization of the jQuery dialog.
+            var existingDialog = $(".ui-dialog > #@(id)");
+            if (existingDialog.length) {
+                existingDialog.parent().remove();
+            }
+
             $("#@id").dialog({
                 dialogClass: "@($"{BlockName}Container {DefaultBlockName}Container modalBorder")",
                 width: "460px",

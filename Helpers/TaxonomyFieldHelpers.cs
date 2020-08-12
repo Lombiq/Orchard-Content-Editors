@@ -25,14 +25,14 @@ namespace Lombiq.ContentEditors.Helpers
                 termEntries.Add(entry);
             }
 
-            return termEntries.OrderBy(entry => entry.Name).ToList();
+            return termEntries.OrderByDescending(term => term.Weight).ThenBy(term => term.Name).ToList();
         }
 
         public static List<SelectListItem> GetSelectListFromTermsUnderParent(
             List<TermEntry> termEntries, int levelOffset = 0, IEnumerable<string> selectedTermNames = null) =>
             termEntries
+                .OrderByDescending(term => term.Weight).ThenBy(term => term.Name)
                 .Select(entry => CreateSelectListItem(entry, selectedTermNames, entry.GetLevels() - levelOffset))
-                .OrderBy(item => item.Text)
                 .ToList();
 
         public static List<SelectListItem> GetSelectListFromTermsUnderParent(
@@ -50,7 +50,7 @@ namespace Lombiq.ContentEditors.Helpers
             if (viewModel.SelectedTerms == null) viewModel.SelectedTerms = Enumerable.Empty<TermPart>();
             var selectListItems = new List<SelectListItem>();
 
-            foreach (var entry in viewModel.Terms)
+            foreach (var entry in viewModel.Terms.OrderByDescending(term => term.Weight).ThenBy(term => term.Name))
             {
                 var entryLevel = entry.GetLevels();
 
@@ -63,7 +63,7 @@ namespace Lombiq.ContentEditors.Helpers
                 selectListItems.Add(CreateSelectListItem(entry, viewModel.SelectedTerms.Select(term => term.Name), entryLevel - startingLevel));
             }
 
-            return selectListItems.OrderBy(item => item.Text).ToList();
+            return selectListItems.ToList();
         }
 
         public static Dictionary<string, IEnumerable<string>> CreateValueHierarchyFromTerms(

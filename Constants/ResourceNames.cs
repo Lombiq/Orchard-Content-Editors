@@ -26,6 +26,7 @@
         public const string Lombiq_ConnectedElementEnabledState = Prefix + "ConnectedElementEnabledState";
         public const string Lombiq_ReplaceElementAttribute = Prefix + "ReplaceElementAttribute";
         public const string Lombiq_DisableEmptyFormInputs = Prefix + "DisableEmptyFormInputs";
+        public const string Lombiq_FlattenObject = Prefix + "FlattenObject";
 
         public const string Selectize = nameof(Selectize);
 

@@ -137,6 +137,7 @@
     <Compile Include="ViewModels\DateTimeEditorViewModel.cs" />
     <Compile Include="ViewModels\IElementValueFilterRelationshipSelector.cs" />
     <Compile Include="ViewModels\IParentElementValueDependency.cs" />
+    <Compile Include="ViewModels\ISelectSpecialValues.cs" />
     <Compile Include="ViewModels\TaxonomyEditorViewModel.cs" />
     <Compile Include="ViewModels\InputFieldViewModel.cs" />
     <Compile Include="ViewModels\TaxonomyFieldViewModel.cs" />
@@ -161,6 +162,7 @@
     <Content Include="Scripts\lombiq-connectedelementvisibility.js" />
     <Content Include="Scripts\lombiq-disableemptyforminputs.js" />
     <Content Include="Scripts\lombiq-jquery-enabledisable.js" />
+    <Content Include="Scripts\lombiq-flattenobject.js" />
     <Content Include="Scripts\lombiq-replaceelementattribute.js" />
     <Content Include="Scripts\lombiq-unsafeaction.js" />
     <Content Include="Scripts\lombiq-loadingindicator.js" />
@@ -202,6 +204,7 @@
     <Content Include="Views\Lombiq.Editors.CheckboxListEditor.Resources.cshtml" />
     <Content Include="Views\Lombiq.Modals.Navigation.cshtml" />
     <Content Include="Views\Lombiq.Tooltip.cshtml" />
+    <Content Include="Views\Lombiq.Editors.TaxonomyEditor.Selectize.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Orchard\Orchard.Framework.csproj">

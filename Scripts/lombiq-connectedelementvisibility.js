@@ -20,6 +20,7 @@
         targetSelector: "",
         inverseTargetSelector: "",
         hideDefault: true,
+        clearTargetInputsOnHide: false,
         visibilityChangedCallback: function () { }
     };
 
@@ -29,6 +30,10 @@
         this._defaults = defaults;
         this._name = pluginName;
 
+        var pluginMarkerClass = "lombiq-ConnectedElementVisibility";
+        $(element).addClass(pluginMarkerClass);
+        this.settings.pluginMarkerSelector = "." + pluginMarkerClass;
+
         this.init();
     }
 
@@ -36,37 +41,31 @@
         init: function () {
             var plugin = this;
 
-            if (!plugin.settings.initialValue) {
-                plugin.settings.initialValue = plugin.settings.valueFunction(plugin.element);
-            }
-
-            plugin.updateVisibility(plugin.settings.initialValue);
-
-            $(plugin.element).on("change", function (event, value) {
-                var actualValue = null;
-                if (plugin.isValueValid(value)) {
-                    actualValue = value;
-                }
-                else if (plugin.isValueValid(plugin.settings.valueFunction($(this)))) {
-                    actualValue = plugin.settings.valueFunction($(this));
-                }
-
-                plugin.updateVisibility(actualValue);
+            $(plugin.element).change(function (event, value) {
+                plugin.refresh(value);
             });
+
+            plugin.refresh(plugin.settings.initialValue);
         },
 
         isValueValid: function (value) {
-            if (typeof value === "undefined" || value === null || value === "") {
-                return false;
-            }
-
-            return true;
+            return !(typeof value === "undefined" || value === null || value === "");
         },
 
-        updateVisibility: function (value) {
+        refresh: function (value) {
             var plugin = this;
 
-            if (!plugin.isValueValid(value)) return;
+            if (!plugin.isValueValid(value)) {
+                value = plugin.element.val(); // If the provided value is not valid, try the element value.
+
+                if (!plugin.isValueValid(value)) {
+                    value = plugin.settings.valueFunction(plugin.element); // If the element value is not valid, try the value function.
+
+                    if (!plugin.isValueValid(value)) {
+                        return; // If the value function's result is not valid, then we can't do anything.
+                    }
+                }
+            }
 
             var show = null;
             if (typeof value === "boolean") {
@@ -101,17 +100,43 @@
                 }
             }
 
+            // "refreshChildren" is needed so that the attributes of input elements inside child plugins
+            // (i.e. plugins attached to elements whose parent is a target or an inverse target) are correctly set
+            // after this plugin updates input elements in its own element tree.
+            var refreshChildren = function () {
+                var allTargetsSelector = [plugin.settings.targetSelector, plugin.settings.inverseTargetSelector].filter(Boolean).join(",");
+                if (allTargetsSelector.length > 0) {
+                    var allTargetsChildrenPlugins = $(allTargetsSelector)
+                        .find(plugin.settings.pluginMarkerSelector)
+                        .lombiq_ConnectedElementVisibility()
+                        ?? new Array();
+
+                    if (allTargetsChildrenPlugins.length > 0) {
+                        $.each(allTargetsChildrenPlugins, function () {
+                            this.refresh();
+                        });
+                    }
+                }
+            }
+
             var validationAttributes = ["required", "min", "max", "pattern"];
-            var replaceRequiredAttribute = function (selector) {
+            var replaceValidationAttributes = function (selector) {
                 $.each(validationAttributes, function () {
                     $(document).replaceElementAttribute(selector, this, this + "-hidden");
+                    $(document).replaceElementAttribute(selector + " input:not([type=hidden])", this, this + "-hidden");
                 });
-            };
 
-            var replaceRequiredHiddenAttribute = function (selector) {
+                $(document).replaceElementAttribute(selector + " textarea", "required", "required-hidden");
+                $(document).replaceElementAttribute(selector + " select", "required", "required-hidden");
+            };
+            var replaceHiddenValidationAttributes = function (selector) {
                 $.each(validationAttributes, function () {
                     $(document).replaceElementAttribute(selector, this + "-hidden", this);
+                    $(document).replaceElementAttribute(selector + " input:not([type=hidden])", this + "-hidden", this);
                 });
+
+                $(document).replaceElementAttribute(selector + " textarea", "required-hidden", "required");
+                $(document).replaceElementAttribute(selector + " select", "required-hidden", "required");
             };
 
             var target = $(plugin.settings.targetSelector).not(plugin.element);
@@ -119,28 +144,38 @@
 
             if (show === null && plugin.settings.hideDefault) {
                 target.hide();
-                replaceRequiredAttribute(plugin.settings.targetSelector);
+                replaceValidationAttributes(plugin.settings.targetSelector);
                 if (plugin.settings.inverseTargetSelector) {
                     inverseTarget.hide();
-                    replaceRequiredAttribute(plugin.settings.inverseTargetSelector);
+                    replaceValidationAttributes(plugin.settings.inverseTargetSelector);
+                }
+                if (plugin.settings.clearTargetInputsOnHide) {
+                    target.find("input, textarea").val("");
+                    target.find("select").prop("selectedIndex", 0);
                 }
             }
             else if (show === null && !plugin.settings.hideDefault || show) {
                 target.show();
-                replaceRequiredHiddenAttribute(plugin.settings.targetSelector);
+                replaceHiddenValidationAttributes(plugin.settings.targetSelector);
                 if (plugin.settings.inverseTargetSelector) {
                     inverseTarget.hide();
-                    replaceRequiredAttribute(plugin.settings.inverseTargetSelector);
+                    replaceValidationAttributes(plugin.settings.inverseTargetSelector);
                 }
             }
             else {
                 target.hide();
-                replaceRequiredAttribute(plugin.settings.targetSelector);
+                replaceValidationAttributes(plugin.settings.targetSelector);
                 if (plugin.settings.inverseTargetSelector) {
                     inverseTarget.show();
-                    replaceRequiredHiddenAttribute(plugin.settings.inverseTargetSelector);
+                    replaceHiddenValidationAttributes(plugin.settings.inverseTargetSelector);
+                }
+                if (plugin.settings.clearTargetInputsOnHide) {
+                    target.find("input, textarea").val("");
+                    target.find("select").prop("selectedIndex", 0);
                 }
             }
+
+            refreshChildren();
 
             plugin.settings.visibilityChangedCallback(target, show === null ? !plugin.settings.hideDefault : show);
         }

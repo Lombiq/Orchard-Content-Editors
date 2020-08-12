@@ -2,7 +2,7 @@
 
 namespace Lombiq.ContentEditors.ViewModels
 {
-    interface IParentElementValueDependency
+    public interface IParentElementValueDependency
     {
         string ParentElementSelector { get; set; }
         Dictionary<string, IEnumerable<string>> ParentElementValueHierarchy { get; set; }
