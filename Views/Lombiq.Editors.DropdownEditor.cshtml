@@ -38,7 +38,7 @@
         var emptySelectListItem = new SelectListItem
         {
             Text = viewModel.EmptyValueText,
-            Value = "",
+            Value = "0",
             Selected = !viewModel.SelectList?.Any(selectListItem => selectListItem.Selected) ?? false
         };
         viewModel.SelectList?.Insert(0, emptySelectListItem);
