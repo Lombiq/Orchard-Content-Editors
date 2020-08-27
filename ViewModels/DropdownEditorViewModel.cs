@@ -10,7 +10,8 @@ namespace Lombiq.ContentEditors.ViewModels
     {
         public List<SelectListItem> SelectList { get; set; } = new List<SelectListItem>();
         public bool HasDefaultEmptyValue { get; set; }
-        public string EmptyValueText { get; set; }
+        public string EmptyValueText { get; set; } = "";
+        public string DefaultEmptyValue { get; set; } = "";
         public Dictionary<string, string> Hints { get; set; }
         public Dictionary<string, string> Descriptions { get; set; }
 
