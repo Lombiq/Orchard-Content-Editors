@@ -33,6 +33,17 @@
         dropdownAttributes["placeholder"] = viewModel.Placeholder;
     }
 
+    if (viewModel.Value is object && !viewModel.SelectList.Any(item => item.Selected))
+    {
+        var valueString = viewModel.Value as string;
+        var selectedItem = viewModel.SelectList.FirstOrDefault(item => item.Value == valueString);
+
+        if (selectedItem is object)
+        {
+            selectedItem.Selected = true;
+        }
+    }
+
     if (viewModel.HasDefaultEmptyValue)
     {
         var emptySelectListItem = new SelectListItem
