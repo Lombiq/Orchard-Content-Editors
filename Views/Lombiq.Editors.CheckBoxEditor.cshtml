@@ -1,41 +1,20 @@
 ﻿@using Lombiq.ContentEditors.ViewModels
 
 @{
-    var viewModel = Model.ViewModel as EditorViewModel;
-    var value = (viewModel.Value as bool?) ?? false;
+    var viewModel = Model.ViewModel as CheckboxEditorViewModel;
 
     const string DefaultBlockName = "checkboxEditor";
     string BlockName = viewModel.BlockName ?? DefaultBlockName;
-
-    var checkBoxAttributes = viewModel.BuildAttributes(new Dictionary<string, object>
-    {
-        { "class", "form-control checkbox " + DefaultBlockName + "__checkbox" }
-    });
-
-    var labelAttributes = new Dictionary<string, object>
-    {
-        { "class", "editorLabel " + DefaultBlockName + "__label" }
-    };
-
-    if (viewModel.Required)
-    {
-        checkBoxAttributes["required"] = true;
-        checkBoxAttributes["class"] = checkBoxAttributes["class"] + " required";
-        labelAttributes["class"] = labelAttributes["class"] + " required";
-    }
-
-    if (!string.IsNullOrEmpty(viewModel.Placeholder))
-    {
-        checkBoxAttributes["placeholder"] = viewModel.Placeholder;
-    }
 }
 
-<div class="editor editorField form-group @DefaultBlockName @BlockName">
-    @Html.CheckBox(viewModel.Name, value, checkBoxAttributes)
-    @if (!string.IsNullOrEmpty(viewModel.Label))
-    {
-        @Html.Label(viewModel.Name, viewModel.Label, labelAttributes)
-    }
+<div class="editor form-group @DefaultBlockName @BlockName">
+    <label class="@(DefaultBlockName)__label @if (viewModel.Required) { <text>required</text> }">
+        @viewModel.Label
+        <input hidden type="checkbox" name="@viewModel.Name" value="@viewModel.Value" class="@(DefaultBlockName)__input"
+               @if (viewModel.Checked) { <text> checked</text> } @if (viewModel.Required) { <text> required</text> } />
+        <span class="@(DefaultBlockName)__indicator"></span>
+    </label>
+
     @if (!string.IsNullOrEmpty(viewModel.Hint))
     {
         <div class="editorHint @(DefaultBlockName)__editorHint">@viewModel.Hint</div>

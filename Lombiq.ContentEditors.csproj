@@ -133,6 +133,7 @@
     <Compile Include="Services\IAsyncEditorService.cs" />
     <Compile Include="Services\IEditorGroupsProviderAccessor.cs" />
     <Compile Include="ViewModels\BoolEditorViewModel.cs" />
+    <Compile Include="ViewModels\CheckboxEditorViewModel.cs" />
     <Compile Include="ViewModels\CheckboxListEditorViewModel.cs" />
     <Compile Include="ViewModels\DateTimeEditorViewModel.cs" />
     <Compile Include="ViewModels\IElementValueFilterRelationshipSelector.cs" />
