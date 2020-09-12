@@ -304,9 +304,9 @@
                 plugin.childPlugin.destroyDisplayedEditorModal();
                 plugin.childPlugin = null;
             }
-            
+
             var parsedEditorShape = $.parseHTML(editorShape, true);
-            
+
             if (appendEditor) {
                 $editorContainer.append(parsedEditorShape);
             }
@@ -319,12 +319,12 @@
                 .on("click", function () {
                     var groupName = $(this).attr("data-editorGroupName");
 
-                    if (plugin.confirmDirtyFormLeave()) {
-                        if (plugin.currentGroup !== groupName) {
-                            plugin.setGroupNameAndItemIdInUrl(groupName, plugin.getContentItemId());
-                        }
+                    if (plugin.confirmDirtyFormLeave() && groupName) {
+                        plugin.setGroupNameAndItemIdInUrl(groupName, plugin.getContentItemId());
 
-                        if (groupName) plugin.loadEditor(plugin.currentContentItemId, groupName);
+                        if (plugin.currentGroup === groupName)
+                            plugin.reloadEditor(plugin.currentContentItemId, groupName);
+                        else plugin.loadEditor(plugin.currentContentItemId, groupName);
                     }
                 });
 
@@ -597,7 +597,7 @@
 
             return parameters;
         },
-        
+
         /**
          * Checks if the form is dirty (ie.e inputs have been changed).
          * @returns {boolean} True if the form is dirty (i.e. inputs have been changed).
