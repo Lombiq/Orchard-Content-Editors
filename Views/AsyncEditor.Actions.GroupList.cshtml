@@ -1,56 +1,22 @@
 ﻿@using Orchard.ContentManagement
 @using Lombiq.ContentEditors.Constants
 @using Lombiq.ContentEditors.Models
-@using Lombiq.ContentEditors.Services
 
 @{
-    var contentItem = Model.ContentItem as ContentItem;
-    var asyncEditorPart = contentItem?.As<AsyncEditorPart>();
+    var asyncEditorPart = (Model.ContentItem as ContentItem)?.As<AsyncEditorPart>();
 
     if (!(asyncEditorPart?.IsAsyncEditorContext ?? false) || !asyncEditorPart.HasEditorGroups)
     {
         return;
     }
-
-    var asyncEditorService = WorkContext.Resolve<IAsyncEditorService>();
-
-    const string BlockName = "asyncEditorGroupList";
-    const string GroupListElementName = BlockName + "__list";
-    const string GroupListItemElementName = BlockName + "__listItem";
-    const string GroupNameElementName = BlockName + "__groupName";
-    const string GroupNameElementNameWithCurrentModifier = GroupNameElementName + "_current";
-    const string GroupNameElementNameWithCompletedModifier = GroupNameElementName + "_completed";
 }
 
-<div class="@BlockName">
-    <ol class="@GroupListElementName">
+<div class="@ElementNames.AsyncEditorGroupListActions.BlockName">
+    <ol class="@ElementNames.AsyncEditorGroupListActions.GroupListElementName">
         @foreach (var editorGroup in asyncEditorPart.AuthorizedEditorGroups)
         {
-            <li class="@GroupListItemElementName">
-                @{
-                    var groupElementBuilder = new TagBuilder("div");
-                    groupElementBuilder.AddCssClass(GroupNameElementName);
-                    groupElementBuilder.InnerHtml = editorGroup.Title;
-
-                    var isCurrent = asyncEditorPart.CurrentEditorGroup.Equals(editorGroup);
-                    if (isCurrent)
-                    {
-                        groupElementBuilder.AddCssClass(GroupNameElementNameWithCurrentModifier);
-                    }
-
-                    if (asyncEditorPart.CompletedAuthorizedEditorGroups.Contains(editorGroup))
-                    {
-                        groupElementBuilder.AddCssClass(GroupNameElementNameWithCompletedModifier);
-
-                        if (!isCurrent)
-                        {
-                            groupElementBuilder.AddCssClass("js-" + ElementNames.AsyncEditorActions.LoadEditorElementName);
-                            groupElementBuilder.Attributes.Add("data-editorGroupName", editorGroup.Name);
-                        }
-                    }
-                }
-
-                @Html.Raw(groupElementBuilder.ToString(TagRenderMode.Normal))
+            <li class="@ElementNames.AsyncEditorGroupListActions.GroupListItemElementName">
+                @Display.AsyncEditor_Actions_GroupListItem(AsyncEditorPart: asyncEditorPart, EditorGroup: editorGroup)
             </li>
         }
     </ol>

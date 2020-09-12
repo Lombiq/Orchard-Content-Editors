@@ -9,19 +9,32 @@
             public const string PostEditorElementName = BlockName + "__postEditor";
             public const string LoadEditorElementName = BlockName + "__loadEditor";
         }
-        
+
         public static class AsyncEditorSubmitActions
         {
             public const string BlockName = "asyncEditorSubmitActions";
 
             public const string ActionElementName = BlockName + "__action";
-            
+
             public const string PreviousActionElementName = BlockName + "__previous";
             public const string SaveActionElementName = BlockName + "__save";
             public const string NextActionElementName = BlockName + "__next";
             public const string PublishActionElementName = BlockName + "__publish";
             public const string CancelActionElementName = BlockName + "__cancel";
             public const string ResumeLaterActionElementName = BlockName + "__resumeLater"; // When saving without validation.
+        }
+
+        public static class AsyncEditorGroupListActions
+        {
+            public const string BlockName = "asyncEditorGroupList";
+
+            public const string GroupListElementName = BlockName + "__list";
+            public const string GroupListItemElementName = BlockName + "__listItem";
+            public const string GroupNameElementName = BlockName + "__groupName";
+
+            public const string GroupNameElementNameWithCurrentModifier = GroupNameElementName + "_current";
+            public const string GroupNameElementNameWithIncompleteModifier = GroupNameElementName + "_incomplete";
+            public const string GroupNameElementNameWithCompletedModifier = GroupNameElementName + "_completed";
         }
 
         public static class AsyncEditorLoader

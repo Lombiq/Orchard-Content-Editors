@@ -206,6 +206,7 @@
     <Content Include="Views\Lombiq.Modals.Navigation.cshtml" />
     <Content Include="Views\Lombiq.Tooltip.cshtml" />
     <Content Include="Views\Lombiq.Editors.TaxonomyEditor.Selectize.cshtml" />
+    <Content Include="Views\AsyncEditor.Actions.GroupListItem.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Orchard\Orchard.Framework.csproj">
