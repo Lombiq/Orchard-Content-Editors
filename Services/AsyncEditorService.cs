@@ -43,12 +43,12 @@ namespace Lombiq.ContentEditors.Services
         }
 
 
-        public dynamic BuildAsyncEditorShape(AsyncEditorPart part, string group = "")
+        public dynamic BuildAsyncEditorShape(AsyncEditorPart part, string group = "", dynamic shape = null)
         {
             SetCurrentGroup(part, group);
-            SetAsyncEditorContext(part);
+            part.IsAsyncEditorContext = true;
 
-            return _contentManager.BuildEditor(part, group);
+            return shape ?? _contentManager.BuildEditor(part, group);
         }
 
         public bool IsAuthorizedToEdit(AsyncEditorPart part, string group = "") =>
@@ -218,9 +218,6 @@ namespace Lombiq.ContentEditors.Services
 
         private void SetCurrentGroup(AsyncEditorPart part, string group) =>
             part.CurrentEditorGroup = GetEditorGroupDescriptor(part, group);
-
-        private void SetAsyncEditorContext(AsyncEditorPart part) =>
-            part.IsAsyncEditorContext = true;
 
         private IList<EditorGroupDescriptor> GetEditorGroupList(AsyncEditorPart part, bool authorizedOnly) =>
             authorizedOnly ?

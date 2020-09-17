@@ -1,5 +1,4 @@
-﻿using Lombiq.ContentEditors.Constants;
-using Lombiq.ContentEditors.Events;
+﻿using Lombiq.ContentEditors.Events;
 using Lombiq.ContentEditors.Models;
 using Lombiq.ContentEditors.Services;
 using Orchard;
@@ -7,7 +6,6 @@ using Orchard.ContentManagement;
 using Orchard.Data;
 using Orchard.DisplayManagement;
 using Orchard.Localization;
-using Orchard.Logging;
 using System;
 using System.Web.Mvc;
 
@@ -90,13 +88,13 @@ namespace Lombiq.ContentEditors.Controllers
 
             _contentAsyncEditorEventHandler.BeforeUpdated(part, group, newContent);
 
-            _contentManager.UpdateEditor(part.ContentItem, this, group);
+            var editor = _contentManager.UpdateEditor(part.ContentItem, this, group);
 
             if (!ModelState.IsValid)
             {
                 _transactionManager.Cancel();
 
-                return AsyncEditorSaveResult(part, group, !newContent);
+                return AsyncEditorSaveResult(part, group, !newContent, editor);
             }
 
             if (part.HasEditorGroups)
@@ -123,6 +121,7 @@ namespace Lombiq.ContentEditors.Controllers
                 part,
                 group,
                 true,
+                null,
                 !isPublishGroup && publish ? T("The current group is not a publish group. Draft has been saved.") : null);
         }
 
@@ -144,13 +143,13 @@ namespace Lombiq.ContentEditors.Controllers
 
             _contentAsyncEditorEventHandler.BeforeUpdated(part, group, newContent);
 
-            _contentManager.UpdateEditor(part.ContentItem, this, group);
+            var editor = _contentManager.UpdateEditor(part.ContentItem, this, group);
 
             if (!ModelState.IsValid)
             {
                 _transactionManager.Cancel();
 
-                return AsyncEditorSaveResult(part, group, !newContent);
+                return AsyncEditorSaveResult(part, group, !newContent, editor);
             }
 
             _asyncEditorService.StoreCompletedEditorGroup(part, group);
@@ -173,18 +172,13 @@ namespace Lombiq.ContentEditors.Controllers
                 _contentManager.New<AsyncEditorPart>(contentType) :
                 _contentManager.Get<AsyncEditorPart>(id, VersionOptions.Latest);
 
-        protected virtual string GetEditorShapeHtml(AsyncEditorPart part, string group, bool contentCreated = true)
-        {
-            var editorShape = _asyncEditorService.BuildAsyncEditorShape(part, group);
-            var asyncEditorShape = _shapeFactory.AsyncEditor_Editor(
+        protected virtual string GetEditorShapeHtml(AsyncEditorPart part, string group, bool contentCreated = true, dynamic shape = null) =>
+            _shapeDisplay.Display(_shapeFactory.AsyncEditor_Editor(
                 ValidationSummaryShape: _shapeFactory.AsyncEditor_ValidationSummary(ModelState: ModelState),
-                EditorShape: editorShape,
+                EditorShape: _asyncEditorService.BuildAsyncEditorShape(part, group, shape),
                 ContentItem: part.ContentItem,
                 ContentCreated: contentCreated,
-                Group: group);
-
-            return _shapeDisplay.Display(asyncEditorShape);
-        }
+                Group: group));
 
         protected virtual void SetEditorSessionCookieForAnonymousUser(AsyncEditorPart part)
         {
@@ -224,6 +218,7 @@ namespace Lombiq.ContentEditors.Controllers
             AsyncEditorPart part,
             string group,
             bool contentCreated = true,
+            dynamic shape = null,
             LocalizedString message = null)
         {
             part.LastDisplayedEditorGroupName = group;
@@ -236,7 +231,7 @@ namespace Lombiq.ContentEditors.Controllers
             {
                 Success = true,
                 ContentItemId = contentCreated ? part.ContentItem.Id : 0,
-                EditorShape = GetEditorShapeHtml(part, group, contentCreated),
+                EditorShape = GetEditorShapeHtml(part, group, contentCreated, shape),
                 EditorGroup = group,
                 HasValidationErrors = !ModelState.IsValid,
                 ResultMessage = message?.Text
