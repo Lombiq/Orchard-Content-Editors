@@ -103,13 +103,6 @@ namespace Lombiq.ContentEditors.Services
         void StoreCompletedEditorGroup(AsyncEditorPart part, string group);
 
         /// <summary>
-        /// Returns the editor group settings including the available editor groups if there is any provider for the given content type.
-        /// </summary>
-        /// <param name="part">AsyncEditorPart of the content item.</param>
-        /// <returns>Editor group settings.</returns>
-        EditorGroupsSettings GetEditorGroupsSettings(AsyncEditorPart part);
-
-        /// <summary>
         /// Validates cookie that identifies the editor session.
         /// </summary>
         /// <param name="part">AsyncEditorPart of the content item.</param>

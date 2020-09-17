@@ -50,6 +50,9 @@ namespace Lombiq.ContentEditors.Models
         }
 
 
+        internal LazyField<EditorGroupsSettings> EditorGroupsSettingsField { get; } = new LazyField<EditorGroupsSettings>();
+        public EditorGroupsSettings EditorGroupsSettings => EditorGroupsSettingsField.Value;
+
         internal LazyField<bool> HasEditorGroupsField { get; } = new LazyField<bool>();
         public bool HasEditorGroups => HasEditorGroupsField.Value;
 

@@ -23,7 +23,6 @@ namespace Lombiq.ContentEditors.Services
 
         private readonly IAuthorizer _authorizer;
         private readonly IContentManager _contentManager;
-        private readonly IEditorGroupsProviderAccessor _editorGroupsProviderAccessor;
         private readonly IJsonConverter _jsonConverter;
         private readonly IHttpContextAccessor _hca;
 
@@ -31,13 +30,11 @@ namespace Lombiq.ContentEditors.Services
         public AsyncEditorService(
             IAuthorizer authorizer,
             IContentManager contentManager,
-            IEditorGroupsProviderAccessor editorGroupsProviderAccessor,
             IJsonConverter jsonConverter,
             IHttpContextAccessor hca)
         {
             _authorizer = authorizer;
             _contentManager = contentManager;
-            _editorGroupsProviderAccessor = editorGroupsProviderAccessor;
             _jsonConverter = jsonConverter;
             _hca = hca;
         }
@@ -59,7 +56,7 @@ namespace Lombiq.ContentEditors.Services
 
         public IEnumerable<EditorGroupDescriptor> GetAuthorizedEditorGroups(AsyncEditorPart part)
         {
-            var editorGroups = GetEditorGroupsSettings(part)?.EditorGroups;
+            var editorGroups = part.EditorGroupsSettings?.EditorGroups;
             if (editorGroups == null) return Enumerable.Empty<EditorGroupDescriptor>();
 
             var authorizedEditorGroups = new List<EditorGroupDescriptor>();
@@ -72,7 +69,7 @@ namespace Lombiq.ContentEditors.Services
                     continue;
                 }
 
-                if (GetEditorGroupsSettings(part).UnauthorizedEditorGroupBehavior ==
+                if (part.UnauthorizedEditorGroupBehavior ==
                     UnauthorizedEditorGroupBehavior.AllowEditingUntilFirstUnauthorizedGroup)
                 {
                     break;
@@ -113,7 +110,7 @@ namespace Lombiq.ContentEditors.Services
         }
 
         public EditorGroupDescriptor GetEditorGroupDescriptor(AsyncEditorPart part, string group) =>
-            GetEditorGroupsSettings(part)?.EditorGroups.FirstOrDefault(editorGroup => editorGroup.Name == group);
+            part.EditorGroupsSettings?.EditorGroups.FirstOrDefault(editorGroup => editorGroup.Name == group);
 
         public bool IsEditorGroupAvailable(AsyncEditorPart part, string group)
         {
@@ -161,15 +158,12 @@ namespace Lombiq.ContentEditors.Services
         {
             Argument.ThrowIfNullOrEmpty(group, nameof(group));
 
-            if (!GetEditorGroupsSettings(part)?.EditorGroups.Any(editorGroup => editorGroup.Name == group) ?? false) return;
+            if (!part.EditorGroupsSettings?.EditorGroups.Any(editorGroup => editorGroup.Name == group) ?? false) return;
 
             var completeGroupNames = GetCompletedEditorGroups(part).Select(editorGroup => editorGroup.Name).Union(new[] { group });
 
             part.CompletedEditorGroupNamesSerialized = _jsonConverter.Serialize(completeGroupNames);
         }
-
-        public EditorGroupsSettings GetEditorGroupsSettings(AsyncEditorPart part) =>
-            _editorGroupsProviderAccessor.GetProvider(part.ContentItem.ContentType)?.GetEditorGroupsSettings();
 
         public bool ValidateEditorSessionCookie(AsyncEditorPart part)
         {
@@ -222,7 +216,7 @@ namespace Lombiq.ContentEditors.Services
         private IList<EditorGroupDescriptor> GetEditorGroupList(AsyncEditorPart part, bool authorizedOnly) =>
             authorizedOnly ?
                 GetAuthorizedEditorGroups(part).ToList() :
-                GetEditorGroupsSettings(part)?.EditorGroups.ToList();
+                part.EditorGroupsSettings?.EditorGroups.ToList();
 
         private bool IsAuthorized(AsyncEditorPart part, string group, Permission permission)
         {

@@ -7,15 +7,19 @@ namespace Lombiq.ContentEditors.Handlers
 {
     public class AsyncEditorPartHandler : ContentHandler
     {
-        public AsyncEditorPartHandler(IAsyncEditorService asyncEditorService)
+        public AsyncEditorPartHandler(
+            IEditorGroupsProviderAccessor editorGroupsProviderAccessor,
+            IAsyncEditorService asyncEditorService)
         {
             OnActivated<AsyncEditorPart>((context, part) =>
             {
-                part.HasEditorGroupsField.Loader(() => 
-                    asyncEditorService.GetEditorGroupsSettings(part) != null);
+                part.EditorGroupsSettingsField.Loader(() =>
+                    editorGroupsProviderAccessor.GetProvider(part.TypeDefinition.Name)?.GetEditorGroupsSettings());
 
-                part.UnauthorizedEditorGroupBehaviorField.Loader(() => 
-                    asyncEditorService.GetEditorGroupsSettings(part)?.UnauthorizedEditorGroupBehavior ?? 
+                part.HasEditorGroupsField.Loader(() => part.EditorGroupsSettings != null);
+
+                part.UnauthorizedEditorGroupBehaviorField.Loader(() =>
+                    part.EditorGroupsSettings?.UnauthorizedEditorGroupBehavior ??
                     UnauthorizedEditorGroupBehavior.AllowEditingAllAuthorizedGroups);
 
                 part.AuthorizedEditorGroupsField.Loader(() => asyncEditorService.GetAuthorizedEditorGroups(part));
@@ -23,7 +27,7 @@ namespace Lombiq.ContentEditors.Handlers
                 part.CompletedAuthorizedEditorGroupsField.Loader(() =>
                     asyncEditorService.GetCompletedEditorGroups(part, true));
 
-                part.IncompleteAuthorizedEditorGroupsField.Loader(() => 
+                part.IncompleteAuthorizedEditorGroupsField.Loader(() =>
                     asyncEditorService.GetIncompleteEditorGroups(part, true));
 
                 part.AvailableAuthorizedEditorGroupsField.Loader(() =>
@@ -40,7 +44,7 @@ namespace Lombiq.ContentEditors.Handlers
                         asyncEditorService.GetPreviousGroupDescriptor(part, part.CurrentEditorGroup.Name, true));
 
                 part.NextEditableAuthorizedGroupField.Loader(() =>
-                    asyncEditorService.GetIncompleteEditorGroups(part, true).FirstOrDefault() ?? 
+                    asyncEditorService.GetIncompleteEditorGroups(part, true).FirstOrDefault() ??
                         asyncEditorService.GetCompletedEditorGroups(part, true).LastOrDefault());
 
                 part.LastUpdatedEditorGroupField.Loader(() =>
@@ -50,7 +54,7 @@ namespace Lombiq.ContentEditors.Handlers
                             .FirstOrDefault(group => group.Name == part.LastUpdatedEditorGroupName) :
                         null);
 
-                part.AreAllEditorGroupsCompletedField.Loader(() => 
+                part.AreAllEditorGroupsCompletedField.Loader(() =>
                     !asyncEditorService.GetIncompleteEditorGroups(part).Any());
 
                 part.LastDisplayedEditorGroupField.Loader(() =>
