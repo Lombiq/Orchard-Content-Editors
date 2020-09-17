@@ -1,5 +1,4 @@
 ﻿using Lombiq.ContentEditors.Models;
-using Lombiq.ContentEditors.Services;
 using Orchard.ContentManagement.Drivers;
 using Orchard.ContentManagement.Handlers;
 using Orchard.ContentManagement.MetaData;
@@ -16,15 +15,6 @@ namespace Lombiq.ContentEditors.Drivers
     /// </summary>
     public class AsyncEditorGroupSettingDriver : IContentPartDriver
     {
-        private readonly IAsyncEditorService _asyncEditorService;
-
-
-        public AsyncEditorGroupSettingDriver(IAsyncEditorService asyncEditorService)
-        {
-            _asyncEditorService = asyncEditorService;
-        }
-
-
         public DriverResult BuildDisplay(BuildDisplayContext context) => null;
 
         public DriverResult BuildEditor(BuildEditorContext context) => null;
@@ -60,7 +50,7 @@ namespace Lombiq.ContentEditors.Drivers
             var asyncEditorPart = context.Content.AsAsyncEditorPart();
 
             if (asyncEditorPart != null)
-                asyncEditorPart.CurrentEditorGroup = _asyncEditorService.GetEditorGroupDescriptor(asyncEditorPart, context.GroupId);
+                asyncEditorPart.CurrentEditorGroup = asyncEditorPart.GetEditorGroupDescriptor(context.GroupId);
 
             return null;
         }

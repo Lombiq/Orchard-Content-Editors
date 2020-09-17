@@ -104,7 +104,7 @@ namespace Lombiq.ContentEditors.Controllers
 
             part.LastUpdatedEditorGroupName = group;
 
-            var currentEditorGroupDescriptor = _asyncEditorService.GetEditorGroupDescriptor(part, group);
+            var currentEditorGroupDescriptor = part.GetEditorGroupDescriptor(group);
             var isPublishGroup = currentEditorGroupDescriptor?.IsPublishGroup ?? true;
             if (publish && isPublishGroup)
             {

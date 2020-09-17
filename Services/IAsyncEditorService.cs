@@ -62,14 +62,6 @@ namespace Lombiq.ContentEditors.Services
         dynamic BuildAsyncEditorShape(AsyncEditorPart part, string group = "", dynamic shape = null);
 
         /// <summary>
-        /// Returns the editor group details including its technical name and title and other possible options.
-        /// </summary>
-        /// <param name="part">AsyncEditorPart of the content item.</param>
-        /// <param name="group">Technical name of the group that identifies the editor group.</param>
-        /// <returns>Editor group details.</returns>
-        EditorGroupDescriptor GetEditorGroupDescriptor(AsyncEditorPart part, string group);
-
-        /// <summary>
         /// Returns the next editor group in the sequence after the given group.
         /// </summary>
         /// <param name="part">AsyncEditorPart of the content item.</param>

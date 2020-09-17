@@ -3,6 +3,7 @@ using Orchard.ContentManagement.Utilities;
 using Piedone.HelpfulLibraries.Contents;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Cryptography;
 
 namespace Lombiq.ContentEditors.Models
@@ -99,5 +100,8 @@ namespace Lombiq.ContentEditors.Models
 
         public static AsyncEditorPart AsAsyncEditorPartOrThrow(this IContent content) =>
             content.AsOrThrow<AsyncEditorPart>();
+
+        public static EditorGroupDescriptor GetEditorGroupDescriptor(this AsyncEditorPart part, string group) =>
+            part.EditorGroupsSettings?.EditorGroups.FirstOrDefault(editorGroup => editorGroup.Name == group);
     }
 }
