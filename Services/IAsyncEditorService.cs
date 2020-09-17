@@ -1,5 +1,7 @@
 ﻿using Lombiq.ContentEditors.Models;
 using Orchard;
+using Orchard.Core.Contents;
+using Orchard.Security.Permissions;
 using System.Collections.Generic;
 
 namespace Lombiq.ContentEditors.Services
@@ -7,20 +9,14 @@ namespace Lombiq.ContentEditors.Services
     public interface IAsyncEditorService : IDependency
     {
         /// <summary>
-        /// Checks if the user is authorized to edit the given content.
+        /// Checks the current User is authorized with the specified permission
+        /// on a given editor group of a content.
         /// </summary>
         /// <param name="part">AsyncEditorPart of the content item.</param>
+        /// <param name="permission">Permission to check.</param>
         /// <param name="group">Editor group to be authorized on.</param>
         /// <returns>True if the current user is authorized.</returns>
-        bool IsAuthorizedToEdit(AsyncEditorPart part, string group = "");
-
-        /// <summary>
-        /// Checks if the user is authorized to edit the given content.
-        /// </summary>
-        /// <param name="part">AsyncEditorPart of the content item.</param>
-        /// <param name="group">Editor group to be authorized on.</param>
-        /// <returns>True if the current user is authorized.</returns>
-        bool IsAuthorizedToPublish(AsyncEditorPart part, string group = "");
+        bool IsAuthorized(AsyncEditorPart part, Permission permission, string group = "");
 
         /// <summary>
         /// Returns editor groups that are completed.
@@ -112,5 +108,21 @@ namespace Lombiq.ContentEditors.Services
         /// </summary>
         /// <param name="part">AsyncEditorPart of the content item.</param>
         void RemoveEditorSessionCookie();
+    }
+
+
+    public static class AsyncEditorServiceExtensions
+    {
+        public static bool IsAuthorizedToEdit(
+            this IAsyncEditorService service,
+            AsyncEditorPart part,
+            string group = "") =>
+            service.IsAuthorized(part, Permissions.EditContent, group);
+
+        public static bool IsAuthorizedToPublish(
+            this IAsyncEditorService service,
+            AsyncEditorPart part,
+            string group = "") =>
+            service.IsAuthorized(part, Permissions.PublishContent, group);
     }
 }

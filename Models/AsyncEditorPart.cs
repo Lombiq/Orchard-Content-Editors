@@ -103,5 +103,8 @@ namespace Lombiq.ContentEditors.Models
 
         public static EditorGroupDescriptor GetEditorGroupDescriptor(this AsyncEditorPart part, string group) =>
             part.EditorGroupsSettings?.EditorGroups.FirstOrDefault(editorGroup => editorGroup.Name == group);
+
+        public static void SetCurrentEditorGroup(this AsyncEditorPart part, string group) =>
+            part.CurrentEditorGroup = part.GetEditorGroupDescriptor(group);
     }
 }

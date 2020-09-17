@@ -2,7 +2,6 @@
 using Lombiq.ContentEditors.Constants;
 using Lombiq.ContentEditors.Models;
 using Orchard.ContentManagement;
-using Orchard.Core.Contents;
 using Orchard.Mvc;
 using Orchard.Security;
 using Orchard.Security.Permissions;
@@ -42,17 +41,30 @@ namespace Lombiq.ContentEditors.Services
 
         public dynamic BuildAsyncEditorShape(AsyncEditorPart part, string group = "", dynamic shape = null)
         {
-            SetCurrentGroup(part, group);
+            part.SetCurrentEditorGroup(group);
             part.IsAsyncEditorContext = true;
 
             return shape ?? _contentManager.BuildEditor(part, group);
         }
 
-        public bool IsAuthorizedToEdit(AsyncEditorPart part, string group = "") =>
-            IsAuthorized(part, group, Permissions.EditContent);
+        public bool IsAuthorized(AsyncEditorPart part, Permission permission, string group = null)
+        {
+            if (!part.HasEditorGroups || string.IsNullOrEmpty(group))
+                return _authorizer.Authorize(permission, part);
 
-        public bool IsAuthorizedToPublish(AsyncEditorPart part, string group = "") =>
-            IsAuthorized(part, group, Permissions.PublishContent);
+            var originalEditorGroup = part.CurrentEditorGroup;
+            part.SetCurrentEditorGroup(group);
+
+            DynamicGroupPermissions.GroupPermissionTemplates.TryGetValue(permission.Name, out var dynamicGroupPermissionTemplate);
+            if (dynamicGroupPermissionTemplate == null) return false;
+
+            var dynamicGroupPermission = DynamicGroupPermissions.CreateDynamicPermission(dynamicGroupPermissionTemplate, part.TypeDefinition, group);
+            if (dynamicGroupPermission == null) return false;
+
+            part.CurrentEditorGroup = originalEditorGroup;
+
+            return _authorizer.Authorize(dynamicGroupPermission, part);
+        }
 
         public IEnumerable<EditorGroupDescriptor> GetAuthorizedEditorGroups(AsyncEditorPart part)
         {
@@ -62,7 +74,7 @@ namespace Lombiq.ContentEditors.Services
             var authorizedEditorGroups = new List<EditorGroupDescriptor>();
             foreach (var editorGroup in editorGroups)
             {
-                if (IsAuthorizedToEdit(part, editorGroup.Name))
+                if (this.IsAuthorizedToEdit(part, editorGroup.Name))
                 {
                     authorizedEditorGroups.Add(editorGroup);
 
@@ -207,31 +219,9 @@ namespace Lombiq.ContentEditors.Services
                 .Concat(Encoding.Unicode.GetBytes(part.Id.ToString()))
                 .ToArray();
 
-        private void SetCurrentGroup(AsyncEditorPart part, string group) =>
-            part.CurrentEditorGroup = part.GetEditorGroupDescriptor(group);
-
         private IList<EditorGroupDescriptor> GetEditorGroupList(AsyncEditorPart part, bool authorizedOnly) =>
             authorizedOnly ?
                 GetAuthorizedEditorGroups(part).ToList() :
                 part.EditorGroupsSettings?.EditorGroups.ToList();
-
-        private bool IsAuthorized(AsyncEditorPart part, string group, Permission permission)
-        {
-            if (!part.HasEditorGroups || string.IsNullOrEmpty(group))
-                return _authorizer.Authorize(permission, part);
-
-            var originalEditorGroup = part.CurrentEditorGroup;
-            SetCurrentGroup(part, group);
-
-            DynamicGroupPermissions.GroupPermissionTemplates.TryGetValue(permission.Name, out var dynamicGroupPermissionTemplate);
-            if (dynamicGroupPermissionTemplate == null) return false;
-
-            var dynamicGroupPermission = DynamicGroupPermissions.CreateDynamicPermission(dynamicGroupPermissionTemplate, part.TypeDefinition, group);
-            if (dynamicGroupPermission == null) return false;
-
-            part.CurrentEditorGroup = originalEditorGroup;
-
-            return _authorizer.Authorize(dynamicGroupPermission, part);
-        }
     }
 }
