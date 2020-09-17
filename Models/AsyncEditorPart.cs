@@ -1,5 +1,6 @@
 ﻿using Orchard.ContentManagement;
 using Orchard.ContentManagement.Utilities;
+using Piedone.HelpfulLibraries.Contents;
 using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;
@@ -88,5 +89,15 @@ namespace Lombiq.ContentEditors.Models
 
         internal LazyField<EditorGroupDescriptor> LastDisplayedEditorGroupField { get; } = new LazyField<EditorGroupDescriptor>();
         public EditorGroupDescriptor LastDisplayedEditorGroup => LastDisplayedEditorGroupField.Value;
+    }
+
+
+    public static class AsyncEditorPartExtensions
+    {
+        public static AsyncEditorPart AsAsyncEditorPart(this IContent content) =>
+            content?.As<AsyncEditorPart>();
+
+        public static AsyncEditorPart AsAsyncEditorPartOrThrow(this IContent content) =>
+            content.AsOrThrow<AsyncEditorPart>();
     }
 }

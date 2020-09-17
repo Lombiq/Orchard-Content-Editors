@@ -1,10 +1,9 @@
-﻿using System.Collections.Generic;
-using Lombiq.ContentEditors.Models;
+﻿using Lombiq.ContentEditors.Models;
 using Lombiq.ContentEditors.Services;
-using Orchard.ContentManagement;
 using Orchard.ContentManagement.Drivers;
 using Orchard.ContentManagement.Handlers;
 using Orchard.ContentManagement.MetaData;
+using System.Collections.Generic;
 
 namespace Lombiq.ContentEditors.Drivers
 {
@@ -30,25 +29,15 @@ namespace Lombiq.ContentEditors.Drivers
 
         public DriverResult BuildEditor(BuildEditorContext context) => null;
 
-        public void Cloned(CloneContentContext context)
-        {
-        }
+        public void Cloned(CloneContentContext context) { }
 
-        public void Cloning(CloneContentContext context)
-        {
-        }
+        public void Cloning(CloneContentContext context) { }
 
-        public void Exported(ExportContentContext context)
-        {
-        }
+        public void Exported(ExportContentContext context) { }
 
-        public void Exporting(ExportContentContext context)
-        {
-        }
+        public void Exporting(ExportContentContext context) { }
 
-        public void GetContentItemMetadata(GetContentItemMetadataContext context)
-        {
-        }
+        public void GetContentItemMetadata(GetContentItemMetadataContext context) { }
 
         public IEnumerable<ContentPartInfo> GetPartInfo() =>
             new[]
@@ -60,25 +49,19 @@ namespace Lombiq.ContentEditors.Drivers
                 }
             };
 
-        public void ImportCompleted(ImportContentContext context)
-        {
-        }
+        public void ImportCompleted(ImportContentContext context) { }
 
-        public void Imported(ImportContentContext context)
-        {
-        }
+        public void Imported(ImportContentContext context) { }
 
-        public void Importing(ImportContentContext context)
-        {
-        }
+        public void Importing(ImportContentContext context) { }
 
         public DriverResult UpdateEditor(UpdateEditorContext context)
         {
-            var asyncEditorPart = context.Content.As<AsyncEditorPart>();
+            var asyncEditorPart = context.Content.AsAsyncEditorPart();
+
             if (asyncEditorPart != null)
-            {
                 asyncEditorPart.CurrentEditorGroup = _asyncEditorService.GetEditorGroupDescriptor(asyncEditorPart, context.GroupId);
-            }
+
             return null;
         }
     }

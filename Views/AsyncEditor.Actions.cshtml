@@ -3,18 +3,17 @@
 
 @{
     var contentItem = Model.ContentItem as ContentItem;
-    var asyncEditorPart = contentItem?.As<AsyncEditorPart>();
 
-    if (!(asyncEditorPart?.IsAsyncEditorContext ?? false))
+    if (!(contentItem.AsAsyncEditorPart()?.IsAsyncEditorContext ?? false))
     {
         return;
     }
 }
 
 <div class="asyncEditorActions">
-    @Display.AsyncEditor_Actions_Previous(ContentItem: Model.ContentItem)
+    @Display.AsyncEditor_Actions_Previous(ContentItem: contentItem)
 
-    @Display.AsyncEditor_Actions_GroupList(ContentItem: Model.ContentItem)
+    @Display.AsyncEditor_Actions_GroupList(ContentItem: contentItem)
 
-    @Display.AsyncEditor_Actions_Submit(ContentItem: Model.ContentItem)
+    @Display.AsyncEditor_Actions_Submit(ContentItem: contentItem)
 </div>

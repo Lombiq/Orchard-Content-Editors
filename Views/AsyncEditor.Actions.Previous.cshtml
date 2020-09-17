@@ -3,11 +3,10 @@
 @using Lombiq.ContentEditors.Models
 
 @{
-    var contentItem = Model.ContentItem as ContentItem;
-    var asyncEditorPart = contentItem?.As<AsyncEditorPart>();
+    var asyncEditorPart = (Model.ContentItem as ContentItem).AsAsyncEditorPart();
 
-    if (!(asyncEditorPart?.IsAsyncEditorContext ?? false) || !asyncEditorPart.HasEditorGroups
-        || asyncEditorPart.PreviousAuthorizedEditorGroup == null)
+    if (!(asyncEditorPart?.IsAsyncEditorContext ?? false) || !asyncEditorPart.HasEditorGroups ||
+        asyncEditorPart.PreviousAuthorizedEditorGroup == null)
     {
         return;
     }
