@@ -28,6 +28,8 @@ namespace Lombiq.ContentEditors.Handlers
 
                 part.HasEditorGroupsField.Loader(() => part.EditorGroupsSettings != null);
 
+                part.AreAllEditorGroupsCompletedField.Loader(() => !part.GetIncompleteEditorGroups().Any());
+
                 part.UnauthorizedEditorGroupBehaviorField.Loader(() =>
                     part.EditorGroupsSettings?.UnauthorizedEditorGroupBehavior ??
                     UnauthorizedEditorGroupBehavior.AllowEditingAllAuthorizedGroups);
@@ -59,8 +61,7 @@ namespace Lombiq.ContentEditors.Handlers
 
                 part.CompletedAuthorizedEditorGroupsField.Loader(() => part.GetCompletedEditorGroups(true));
 
-                part.IncompleteAuthorizedEditorGroupsField.Loader(() =>
-                    asyncEditorServiceLazy.Value.GetIncompleteEditorGroups(part, true));
+                part.IncompleteAuthorizedEditorGroupsField.Loader(() => part.GetIncompleteEditorGroups(true));
 
                 part.AvailableAuthorizedEditorGroupsField.Loader(() =>
                     asyncEditorServiceLazy.Value.GetAvailableEditorGroups(part, true));
@@ -74,15 +75,11 @@ namespace Lombiq.ContentEditors.Handlers
                         null : asyncEditorServiceLazy.Value.GetPreviousGroupDescriptor(part, part.CurrentEditorGroup.Name, true));
 
                 part.NextEditableAuthorizedGroupField.Loader(() =>
-                    asyncEditorServiceLazy.Value.GetIncompleteEditorGroups(part, true).FirstOrDefault() ??
-                        part.GetCompletedEditorGroups(true).LastOrDefault());
+                    part.GetIncompleteEditorGroups(true).FirstOrDefault() ?? part.GetCompletedEditorGroups(true).LastOrDefault());
 
                 part.LastUpdatedEditorGroupField.Loader(() =>
                     !string.IsNullOrEmpty(part.LastUpdatedEditorGroupName) ?
                         part.AuthorizedEditorGroups.FirstOrDefault(group => group.Name == part.LastUpdatedEditorGroupName) : null);
-
-                part.AreAllEditorGroupsCompletedField.Loader(() =>
-                    !asyncEditorServiceLazy.Value.GetIncompleteEditorGroups(part).Any());
 
                 part.LastDisplayedEditorGroupField.Loader(() =>
                     !string.IsNullOrEmpty(part.LastDisplayedEditorGroupName) ?
