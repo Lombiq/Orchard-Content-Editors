@@ -61,36 +61,6 @@ namespace Lombiq.ContentEditors.Services
             return _authorizer.Authorize(dynamicGroupPermission, part);
         }
 
-        public EditorGroupDescriptor GetNextGroupDescriptor(AsyncEditorPart part, string group, bool authorizedOnly = false)
-        {
-            Argument.ThrowIfNullOrEmpty(group, nameof(group));
-
-            var editorGroups = part.GetEditorGroupList(authorizedOnly);
-            if (!editorGroups?.Any() ?? false) return null;
-
-            var groupDescriptor = editorGroups.FirstOrDefault(editorGroup => editorGroup.Name == group);
-            if (groupDescriptor == null) return null;
-
-            return groupDescriptor.Equals(editorGroups.Last()) ?
-                null :
-                editorGroups[editorGroups.IndexOf(groupDescriptor) + 1];
-        }
-
-        public EditorGroupDescriptor GetPreviousGroupDescriptor(AsyncEditorPart part, string group, bool authorizedOnly = false)
-        {
-            Argument.ThrowIfNullOrEmpty(group, nameof(group));
-
-            var editorGroups = part.GetEditorGroupList(authorizedOnly);
-            if (!editorGroups?.Any() ?? false) return null;
-
-            var groupDescriptor = editorGroups.FirstOrDefault(editorGroup => editorGroup.Name == group);
-            if (groupDescriptor == null) return null;
-
-            return groupDescriptor == editorGroups.First() ?
-                null :
-                editorGroups[editorGroups.IndexOf(groupDescriptor) - 1];
-        }
-
         public void StoreCompletedEditorGroup(AsyncEditorPart part, string group)
         {
             Argument.ThrowIfNullOrEmpty(group, nameof(group));

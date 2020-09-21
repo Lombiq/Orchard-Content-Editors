@@ -217,5 +217,53 @@ namespace Lombiq.ContentEditors.Models
 
             return editorGroups.Where(editorGroup => part.IsEditorGroupAvailable(editorGroup.Name));
         }
+
+        /// <summary>
+        /// Returns the next editor group in the sequence after the given group.
+        /// </summary>
+        /// <param name="part">AsyncEditorPart of the content item.</param>
+        /// <param name="group">Name of the group in the sequence.</param>
+        /// <param name="authorizedOnly">If this is true, then it operates only with groups that the user is authorized to edit.</param>
+        /// <returns>Editor group details after the given group.</returns>
+        public static EditorGroupDescriptor GetNextGroupDescriptor(this AsyncEditorPart part, string group, bool authorizedOnly = false)
+        {
+            Argument.ThrowIfNullOrEmpty(group, nameof(group));
+
+            var editorGroups = part.GetEditorGroupList(authorizedOnly);
+
+            if (!editorGroups?.Any() ?? false) return null;
+
+            var groupDescriptor = editorGroups.FirstOrDefault(editorGroup => editorGroup.Name == group);
+
+            return groupDescriptor == null ?
+                null :
+                groupDescriptor == editorGroups.Last() ?
+                    null :
+                    editorGroups[editorGroups.IndexOf(groupDescriptor) + 1];
+        }
+
+        /// <summary>
+        /// Returns the previous editor group in the sequence before the given group.
+        /// </summary>
+        /// <param name="part">AsyncEditorPart of the content item.</param>
+        /// <param name="group">Name of the group in the sequence.</param>
+        /// <param name="authorizedOnly">If this is true, then it operates only with groups that the user is authorized to edit.</param>
+        /// <returns>Editor group details before the given group.</returns>
+        public static EditorGroupDescriptor GetPreviousGroupDescriptor(this AsyncEditorPart part, string group, bool authorizedOnly = false)
+        {
+            Argument.ThrowIfNullOrEmpty(group, nameof(group));
+
+            var editorGroups = part.GetEditorGroupList(authorizedOnly);
+
+            if (!editorGroups?.Any() ?? false) return null;
+
+            var groupDescriptor = editorGroups.FirstOrDefault(editorGroup => editorGroup.Name == group);
+
+            return groupDescriptor == null ?
+                null :
+                groupDescriptor == editorGroups.First() ?
+                    null :
+                    editorGroups[editorGroups.IndexOf(groupDescriptor) - 1];
+        }
     }
 }

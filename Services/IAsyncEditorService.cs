@@ -26,24 +26,6 @@ namespace Lombiq.ContentEditors.Services
         dynamic BuildAsyncEditorShape(AsyncEditorPart part, string group = "", dynamic shape = null);
 
         /// <summary>
-        /// Returns the next editor group in the sequence after the given group.
-        /// </summary>
-        /// <param name="part">AsyncEditorPart of the content item.</param>
-        /// <param name="group">Name of the group in the sequence.</param>
-        /// <param name="authorizedOnly">If this is true, then it operates only with groups that the user is authorized to edit.</param>
-        /// <returns>Editor group details after the given group.</returns>
-        EditorGroupDescriptor GetNextGroupDescriptor(AsyncEditorPart part, string group, bool authorizedOnly = false);
-
-        /// <summary>
-        /// Returns the previous editor group in the sequence before the given group.
-        /// </summary>
-        /// <param name="part">AsyncEditorPart of the content item.</param>
-        /// <param name="group">Name of the group in the sequence.</param>
-        /// <param name="authorizedOnly">If this is true, then it operates only with groups that the user is authorized to edit.</param>
-        /// <returns>Editor group details before the given group.</returns>
-        EditorGroupDescriptor GetPreviousGroupDescriptor(AsyncEditorPart part, string group, bool authorizedOnly = false);
-
-        /// <summary>
         /// Registers the given editor group as complete.
         /// </summary>
         /// <param name="part">AsyncEditorPart of the content item.</param>

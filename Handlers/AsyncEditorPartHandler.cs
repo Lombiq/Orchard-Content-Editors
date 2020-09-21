@@ -67,11 +67,11 @@ namespace Lombiq.ContentEditors.Handlers
 
                 part.NextAuthorizedEditorGroupField.Loader(() =>
                     part.CurrentEditorGroup == null ?
-                        null : asyncEditorServiceLazy.Value.GetNextGroupDescriptor(part, part.CurrentEditorGroup.Name, true));
+                        null : part.GetNextGroupDescriptor(part.CurrentEditorGroup.Name, true));
 
                 part.PreviousAuthorizedEditorGroupField.Loader(() =>
                     part.CurrentEditorGroup == null ?
-                        null : asyncEditorServiceLazy.Value.GetPreviousGroupDescriptor(part, part.CurrentEditorGroup.Name, true));
+                        null : part.GetPreviousGroupDescriptor(part.CurrentEditorGroup.Name, true));
 
                 part.NextEditableAuthorizedGroupField.Loader(() =>
                     part.GetIncompleteEditorGroups(true).FirstOrDefault() ?? part.GetCompletedEditorGroups(true).LastOrDefault());

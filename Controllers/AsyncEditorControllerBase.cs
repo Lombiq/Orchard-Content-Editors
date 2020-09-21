@@ -158,10 +158,9 @@ namespace Lombiq.ContentEditors.Controllers
 
             _contentAsyncEditorEventHandler.Saved(part, group, newContent, false);
 
-            var nextGroup = _asyncEditorService.GetNextGroupDescriptor(part, group);
-            if (nextGroup == null) return AsyncEditorResult(part, group);
+            var nextGroup = part.GetNextGroupDescriptor(group);
 
-            return AsyncEditorSaveResult(part, nextGroup.Name);
+            return nextGroup == null ? AsyncEditorResult(part, group) : AsyncEditorSaveResult(part, nextGroup.Name);
         }
 
         protected virtual ActionResult SaveAndNextResult(int contentItemId, string group, string contentType = "") =>
