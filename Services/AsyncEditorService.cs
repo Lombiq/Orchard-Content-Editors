@@ -68,7 +68,7 @@ namespace Lombiq.ContentEditors.Services
 
         public IEnumerable<EditorGroupDescriptor> GetCompletedEditorGroups(AsyncEditorPart part, bool authorizedOnly = false)
         {
-            var editorGroups = GetEditorGroupList(part, authorizedOnly);
+            var editorGroups = part.GetEditorGroupList(authorizedOnly);
             if (editorGroups == null) return Enumerable.Empty<EditorGroupDescriptor>();
 
             var completeGroupNames = !string.IsNullOrEmpty(part.CompletedEditorGroupNamesSerialized) ?
@@ -82,7 +82,7 @@ namespace Lombiq.ContentEditors.Services
 
         public IEnumerable<EditorGroupDescriptor> GetIncompleteEditorGroups(AsyncEditorPart part, bool authorizedOnly = false)
         {
-            var editorGroups = GetEditorGroupList(part, authorizedOnly);
+            var editorGroups = part.GetEditorGroupList(authorizedOnly);
             if (editorGroups == null) return Enumerable.Empty<EditorGroupDescriptor>();
 
             return editorGroups.Except(GetCompletedEditorGroups(part));
@@ -90,7 +90,7 @@ namespace Lombiq.ContentEditors.Services
 
         public IEnumerable<EditorGroupDescriptor> GetAvailableEditorGroups(AsyncEditorPart part, bool authorizedOnly = false)
         {
-            var editorGroups = GetEditorGroupList(part, authorizedOnly);
+            var editorGroups = part.GetEditorGroupList(authorizedOnly);
             if (editorGroups == null) return Enumerable.Empty<EditorGroupDescriptor>();
 
             return editorGroups.Where(editorGroup => IsEditorGroupAvailable(part, editorGroup.Name));
@@ -112,7 +112,7 @@ namespace Lombiq.ContentEditors.Services
         {
             Argument.ThrowIfNullOrEmpty(group, nameof(group));
 
-            var editorGroups = GetEditorGroupList(part, authorizedOnly);
+            var editorGroups = part.GetEditorGroupList(authorizedOnly);
             if (!editorGroups?.Any() ?? false) return null;
 
             var groupDescriptor = editorGroups.FirstOrDefault(editorGroup => editorGroup.Name == group);
@@ -127,7 +127,7 @@ namespace Lombiq.ContentEditors.Services
         {
             Argument.ThrowIfNullOrEmpty(group, nameof(group));
 
-            var editorGroups = GetEditorGroupList(part, authorizedOnly);
+            var editorGroups = part.GetEditorGroupList(authorizedOnly);
             if (!editorGroups?.Any() ?? false) return null;
 
             var groupDescriptor = editorGroups.FirstOrDefault(editorGroup => editorGroup.Name == group);
@@ -193,10 +193,5 @@ namespace Lombiq.ContentEditors.Services
             Convert.FromBase64String(part.EditorSessionSalt)
                 .Concat(Encoding.Unicode.GetBytes(part.Id.ToString()))
                 .ToArray();
-
-        private IList<EditorGroupDescriptor> GetEditorGroupList(AsyncEditorPart part, bool authorizedOnly) =>
-            authorizedOnly ?
-                part.AuthorizedEditorGroups.ToList() :
-                part.EditorGroupsSettings?.EditorGroups.ToList();
     }
 }

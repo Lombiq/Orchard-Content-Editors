@@ -139,5 +139,10 @@ namespace Lombiq.ContentEditors.Models
 
             part.CurrentEditorGroup = part.GetEditorGroupDescriptor(group);
         }
+
+        public static IList<EditorGroupDescriptor> GetEditorGroupList(this AsyncEditorPart part, bool authorizedOnly = false) =>
+            authorizedOnly ?
+                part.AuthorizedEditorGroups.ToList() :
+                part.EditorGroupsSettings?.EditorGroups.ToList();
     }
 }
