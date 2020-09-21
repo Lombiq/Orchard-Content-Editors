@@ -1,5 +1,6 @@
 ﻿using Orchard.ContentManagement;
 using Orchard.ContentManagement.Utilities;
+using Orchard.Validation;
 using Piedone.HelpfulLibraries.Contents;
 using System;
 using System.Collections.Generic;
@@ -63,8 +64,13 @@ namespace Lombiq.ContentEditors.Models
         internal LazyField<bool> HasEditorGroupsField { get; } = new LazyField<bool>();
         public bool HasEditorGroups => HasEditorGroupsField.Value;
 
+        internal LazyField<bool> AreAllEditorGroupsCompletedField { get; } = new LazyField<bool>();
+        public bool AreAllEditorGroupsCompleted => AreAllEditorGroupsCompletedField.Value;
+
         internal LazyField<UnauthorizedEditorGroupBehavior> UnauthorizedEditorGroupBehaviorField { get; } = new LazyField<UnauthorizedEditorGroupBehavior>();
         public UnauthorizedEditorGroupBehavior UnauthorizedEditorGroupBehavior => UnauthorizedEditorGroupBehaviorField.Value;
+
+        #region Lazy fields for retrieving multiple Editor Group Desriptors based on certain conditions.
 
         internal LazyField<IEnumerable<EditorGroupDescriptor>> CompletedAuthorizedEditorGroupsField { get; } = new LazyField<IEnumerable<EditorGroupDescriptor>>();
         public IEnumerable<EditorGroupDescriptor> CompletedAuthorizedEditorGroups => CompletedAuthorizedEditorGroupsField.Value;
@@ -83,6 +89,10 @@ namespace Lombiq.ContentEditors.Models
         internal LazyField<IEnumerable<EditorGroupDescriptor>> AvailableAuthorizedEditorGroupsField { get; } = new LazyField<IEnumerable<EditorGroupDescriptor>>();
         public IEnumerable<EditorGroupDescriptor> AvailableAuthorizedEditorGroups => AvailableAuthorizedEditorGroupsField.Value;
 
+        #endregion
+
+        #region Lazy fields for retrieving an Editor Group Descriptor for a specific scenario.
+
         internal LazyField<EditorGroupDescriptor> NextAuthorizedEditorGroupField { get; } = new LazyField<EditorGroupDescriptor>();
         public EditorGroupDescriptor NextAuthorizedEditorGroup => NextAuthorizedEditorGroupField.Value;
 
@@ -95,11 +105,10 @@ namespace Lombiq.ContentEditors.Models
         internal LazyField<EditorGroupDescriptor> LastUpdatedEditorGroupField { get; } = new LazyField<EditorGroupDescriptor>();
         public EditorGroupDescriptor LastUpdatedEditorGroup => LastUpdatedEditorGroupField.Value;
 
-        internal LazyField<bool> AreAllEditorGroupsCompletedField { get; } = new LazyField<bool>();
-        public bool AreAllEditorGroupsCompleted => AreAllEditorGroupsCompletedField.Value;
-
         internal LazyField<EditorGroupDescriptor> LastDisplayedEditorGroupField { get; } = new LazyField<EditorGroupDescriptor>();
         public EditorGroupDescriptor LastDisplayedEditorGroup => LastDisplayedEditorGroupField.Value;
+
+        #endregion
     }
 
 
@@ -117,10 +126,18 @@ namespace Lombiq.ContentEditors.Models
         /// <param name="part">AsyncEditorPart of the content item.</param>
         /// <param name="group">Technical name of the editor group.</param>
         /// <returns>Editor group details.</returns>
-        public static EditorGroupDescriptor GetEditorGroupDescriptor(this AsyncEditorPart part, string group) =>
-            part.EditorGroupsSettings?.EditorGroups.FirstOrDefault(editorGroup => editorGroup.Name == group);
+        public static EditorGroupDescriptor GetEditorGroupDescriptor(this AsyncEditorPart part, string group)
+        {
+            Argument.ThrowIfNullOrEmpty(group, nameof(group));
 
-        public static void SetCurrentEditorGroup(this AsyncEditorPart part, string group) =>
+            return part.EditorGroupsSettings?.EditorGroups.FirstOrDefault(editorGroup => editorGroup.Name == group);
+        }
+
+        public static void SetCurrentEditorGroup(this AsyncEditorPart part, string group)
+        {
+            Argument.ThrowIfNullOrEmpty(group, nameof(group));
+
             part.CurrentEditorGroup = part.GetEditorGroupDescriptor(group);
+        }
     }
 }
