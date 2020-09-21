@@ -97,10 +97,7 @@ namespace Lombiq.ContentEditors.Controllers
                 return AsyncEditorSaveResult(part, group, !newContent, editor);
             }
 
-            if (part.HasEditorGroups)
-            {
-                _asyncEditorService.StoreCompletedEditorGroup(part, group);
-            }
+            if (part.HasEditorGroups) part.StoreCompletedEditorGroup(group);
 
             part.LastUpdatedEditorGroupName = group;
 
@@ -152,7 +149,7 @@ namespace Lombiq.ContentEditors.Controllers
                 return AsyncEditorSaveResult(part, group, !newContent, editor);
             }
 
-            _asyncEditorService.StoreCompletedEditorGroup(part, group);
+            part.StoreCompletedEditorGroup(group);
 
             part.LastUpdatedEditorGroupName = group;
 

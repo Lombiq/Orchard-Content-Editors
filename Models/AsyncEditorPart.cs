@@ -156,6 +156,23 @@ namespace Lombiq.ContentEditors.Models
         }
 
         /// <summary>
+        /// Registers the given editor group as complete.
+        /// </summary>
+        /// <param name="part">AsyncEditorPart of the content item.</param>
+        /// <param name="group">Name of the group that needs to be stored.</param>
+        public static void StoreCompletedEditorGroup(this AsyncEditorPart part, string group)
+        {
+            Argument.ThrowIfNullOrEmpty(group, nameof(group));
+
+            if (!part.EditorGroupsSettings?.EditorGroups.Any(editorGroup => editorGroup.Name == group) ?? false) return;
+
+            part.CompletedEditorGroupNames = part.GetCompletedEditorGroups()
+                .Select(editorGroup => editorGroup.Name)
+                .Union(new[] { group })
+                .Distinct();
+        }
+
+        /// <summary>
         /// Returns editor groups that are completed.
         /// </summary>
         /// <param name="part">AsyncEditorPart of the content item.</param>

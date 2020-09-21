@@ -5,7 +5,6 @@ using Orchard.ContentManagement;
 using Orchard.Mvc;
 using Orchard.Security;
 using Orchard.Security.Permissions;
-using Orchard.Validation;
 using System;
 using System.Linq;
 using System.Text;
@@ -50,26 +49,22 @@ namespace Lombiq.ContentEditors.Services
             var originalEditorGroup = part.CurrentEditorGroup;
             part.SetCurrentEditorGroup(group);
 
-            DynamicGroupPermissions.GroupPermissionTemplates.TryGetValue(permission.Name, out var dynamicGroupPermissionTemplate);
+            DynamicGroupPermissions.GroupPermissionTemplates.TryGetValue(
+                permission.Name,
+                out var dynamicGroupPermissionTemplate);
+
             if (dynamicGroupPermissionTemplate == null) return false;
 
-            var dynamicGroupPermission = DynamicGroupPermissions.CreateDynamicPermission(dynamicGroupPermissionTemplate, part.TypeDefinition, group);
+            var dynamicGroupPermission = DynamicGroupPermissions.CreateDynamicPermission(
+                dynamicGroupPermissionTemplate,
+                part.TypeDefinition,
+                group);
+
             if (dynamicGroupPermission == null) return false;
 
             part.CurrentEditorGroup = originalEditorGroup;
 
             return _authorizer.Authorize(dynamicGroupPermission, part);
-        }
-
-        public void StoreCompletedEditorGroup(AsyncEditorPart part, string group)
-        {
-            Argument.ThrowIfNullOrEmpty(group, nameof(group));
-
-            if (!part.EditorGroupsSettings?.EditorGroups.Any(editorGroup => editorGroup.Name == group) ?? false) return;
-
-            part.CompletedEditorGroupNames = part.GetCompletedEditorGroups()
-                .Select(editorGroup => editorGroup.Name)
-                .Union(new[] { group });
         }
 
         public bool ValidateEditorSessionCookie(AsyncEditorPart part)

@@ -26,13 +26,6 @@ namespace Lombiq.ContentEditors.Services
         dynamic BuildAsyncEditorShape(AsyncEditorPart part, string group = "", dynamic shape = null);
 
         /// <summary>
-        /// Registers the given editor group as complete.
-        /// </summary>
-        /// <param name="part">AsyncEditorPart of the content item.</param>
-        /// <param name="group">Name of the group that needs to be stored.</param>
-        void StoreCompletedEditorGroup(AsyncEditorPart part, string group);
-
-        /// <summary>
         /// Validates cookie that identifies the editor session.
         /// </summary>
         /// <param name="part">AsyncEditorPart of the content item.</param>
