@@ -19,14 +19,6 @@ namespace Lombiq.ContentEditors.Services
         bool IsAuthorized(AsyncEditorPart part, Permission permission, string group = "");
 
         /// <summary>
-        /// Returns editor groups that are completed.
-        /// </summary>
-        /// <param name="part">AsyncEditorPart of the content item.</param>
-        /// <param name="authorizedOnly">If this is true, then it operates only with groups that the user is authorized to edit.</param>
-        /// <returns>Completed editor groups.</returns>
-        IEnumerable<EditorGroupDescriptor> GetCompletedEditorGroups(AsyncEditorPart part, bool authorizedOnly = false);
-
-        /// <summary>
         /// Returns editor groups that are incomplete.
         /// </summary>
         /// <param name="part">AsyncEditorPart of the content item.</param>

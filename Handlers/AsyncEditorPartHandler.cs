@@ -57,8 +57,7 @@ namespace Lombiq.ContentEditors.Handlers
                     return authorizedEditorGroups;
                 });
 
-                part.CompletedAuthorizedEditorGroupsField.Loader(() =>
-                    asyncEditorServiceLazy.Value.GetCompletedEditorGroups(part, true));
+                part.CompletedAuthorizedEditorGroupsField.Loader(() => part.GetCompletedEditorGroups(true));
 
                 part.IncompleteAuthorizedEditorGroupsField.Loader(() =>
                     asyncEditorServiceLazy.Value.GetIncompleteEditorGroups(part, true));
@@ -76,7 +75,7 @@ namespace Lombiq.ContentEditors.Handlers
 
                 part.NextEditableAuthorizedGroupField.Loader(() =>
                     asyncEditorServiceLazy.Value.GetIncompleteEditorGroups(part, true).FirstOrDefault() ??
-                        asyncEditorServiceLazy.Value.GetCompletedEditorGroups(part, true).LastOrDefault());
+                        part.GetCompletedEditorGroups(true).LastOrDefault());
 
                 part.LastUpdatedEditorGroupField.Loader(() =>
                     !string.IsNullOrEmpty(part.LastUpdatedEditorGroupName) ?

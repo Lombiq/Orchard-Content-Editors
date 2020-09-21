@@ -130,6 +130,11 @@ namespace Lombiq.ContentEditors.Models
         public static AsyncEditorPart AsAsyncEditorPartOrThrow(this IContent content) =>
             content.AsOrThrow<AsyncEditorPart>();
 
+        public static IList<EditorGroupDescriptor> GetEditorGroupList(this AsyncEditorPart part, bool authorizedOnly = false) =>
+            authorizedOnly ?
+                part.AuthorizedEditorGroups.ToList() :
+                part.EditorGroupsSettings?.EditorGroups.ToList();
+
         /// <summary>
         /// Returns the editor group details including its technical name and title and other possible options.
         /// </summary>
@@ -150,9 +155,16 @@ namespace Lombiq.ContentEditors.Models
             part.CurrentEditorGroup = part.GetEditorGroupDescriptor(group);
         }
 
-        public static IList<EditorGroupDescriptor> GetEditorGroupList(this AsyncEditorPart part, bool authorizedOnly = false) =>
-            authorizedOnly ?
-                part.AuthorizedEditorGroups.ToList() :
-                part.EditorGroupsSettings?.EditorGroups.ToList();
+        public static IEnumerable<EditorGroupDescriptor> GetCompletedEditorGroups(this AsyncEditorPart part, bool authorizedOnly = false)
+        {
+            var editorGroups = part.GetEditorGroupList(authorizedOnly);
+            if (editorGroups == null) return Enumerable.Empty<EditorGroupDescriptor>();
+
+            var completeGroupNames = part.CompletedEditorGroupNames;
+
+            return completeGroupNames
+                .Select(groupName => editorGroups.FirstOrDefault(group => group.Name == groupName))
+                .Where(group => group != null);
+        }
     }
 }

@@ -5,7 +5,6 @@ using Orchard.ContentManagement;
 using Orchard.Mvc;
 using Orchard.Security;
 using Orchard.Security.Permissions;
-using Orchard.Services;
 using Orchard.Validation;
 using System;
 using System.Collections.Generic;
@@ -22,19 +21,16 @@ namespace Lombiq.ContentEditors.Services
 
         private readonly IAuthorizer _authorizer;
         private readonly IContentManager _contentManager;
-        private readonly IJsonConverter _jsonConverter;
         private readonly IHttpContextAccessor _hca;
 
 
         public AsyncEditorService(
             IAuthorizer authorizer,
             IContentManager contentManager,
-            IJsonConverter jsonConverter,
             IHttpContextAccessor hca)
         {
             _authorizer = authorizer;
             _contentManager = contentManager;
-            _jsonConverter = jsonConverter;
             _hca = hca;
         }
 
@@ -66,24 +62,12 @@ namespace Lombiq.ContentEditors.Services
             return _authorizer.Authorize(dynamicGroupPermission, part);
         }
 
-        public IEnumerable<EditorGroupDescriptor> GetCompletedEditorGroups(AsyncEditorPart part, bool authorizedOnly = false)
-        {
-            var editorGroups = part.GetEditorGroupList(authorizedOnly);
-            if (editorGroups == null) return Enumerable.Empty<EditorGroupDescriptor>();
-
-            var completeGroupNames = part.CompletedEditorGroupNames;
-
-            return completeGroupNames
-                .Select(groupName => editorGroups.FirstOrDefault(group => group.Name == groupName))
-                .Where(group => group != null);
-        }
-
         public IEnumerable<EditorGroupDescriptor> GetIncompleteEditorGroups(AsyncEditorPart part, bool authorizedOnly = false)
         {
             var editorGroups = part.GetEditorGroupList(authorizedOnly);
             if (editorGroups == null) return Enumerable.Empty<EditorGroupDescriptor>();
 
-            return editorGroups.Except(GetCompletedEditorGroups(part));
+            return editorGroups.Except(part.GetCompletedEditorGroups());
         }
 
         public IEnumerable<EditorGroupDescriptor> GetAvailableEditorGroups(AsyncEditorPart part, bool authorizedOnly = false)
@@ -101,7 +85,7 @@ namespace Lombiq.ContentEditors.Services
             var editorGroup = part.GetEditorGroupDescriptor(group);
             if (editorGroup == null) return false;
 
-            if (GetCompletedEditorGroups(part).Contains(editorGroup)) return true;
+            if (part.GetCompletedEditorGroups().Contains(editorGroup)) return true;
 
             return editorGroup.Equals(GetIncompleteEditorGroups(part).FirstOrDefault());
         }
@@ -142,7 +126,7 @@ namespace Lombiq.ContentEditors.Services
 
             if (!part.EditorGroupsSettings?.EditorGroups.Any(editorGroup => editorGroup.Name == group) ?? false) return;
 
-            part.CompletedEditorGroupNames = GetCompletedEditorGroups(part)
+            part.CompletedEditorGroupNames = part.GetCompletedEditorGroups()
                 .Select(editorGroup => editorGroup.Name)
                 .Union(new[] { group });
         }
