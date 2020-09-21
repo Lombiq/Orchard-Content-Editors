@@ -22,7 +22,7 @@
         groupElementBuilder.AddCssClass(ElementNames.AsyncEditorGroupListActions.GroupNameElementNameWithCurrentModifier);
     }
 
-    if (asyncEditorPart.CompletedAuthorizedEditorGroups.Contains(editorGroup))
+    if (asyncEditorPart.GetCompletedEditorGroups(true).Contains(editorGroup))
     {
         groupElementBuilder.AddCssClass(ElementNames.AsyncEditorGroupListActions.GroupNameElementNameWithCompletedModifier);
         groupElementBuilder.AddCssClass("js-" + ElementNames.AsyncEditorActions.LoadEditorElementName);

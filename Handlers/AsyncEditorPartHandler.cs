@@ -28,8 +28,6 @@ namespace Lombiq.ContentEditors.Handlers
 
                 part.HasEditorGroupsField.Loader(() => part.EditorGroupsSettings != null);
 
-                part.AreAllEditorGroupsCompletedField.Loader(() => !part.GetIncompleteEditorGroups().Any());
-
                 part.UnauthorizedEditorGroupBehaviorField.Loader(() =>
                     part.EditorGroupsSettings?.UnauthorizedEditorGroupBehavior ??
                     UnauthorizedEditorGroupBehavior.AllowEditingAllAuthorizedGroups);
@@ -58,12 +56,6 @@ namespace Lombiq.ContentEditors.Handlers
 
                     return authorizedEditorGroups;
                 });
-
-                part.CompletedAuthorizedEditorGroupsField.Loader(() => part.GetCompletedEditorGroups(true));
-
-                part.IncompleteAuthorizedEditorGroupsField.Loader(() => part.GetIncompleteEditorGroups(true));
-
-                part.AvailableAuthorizedEditorGroupsField.Loader(() => part.GetAvailableEditorGroups(true));
 
                 part.NextAuthorizedEditorGroupField.Loader(() =>
                     part.CurrentEditorGroup == null ?

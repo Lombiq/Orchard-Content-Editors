@@ -74,19 +74,8 @@ namespace Lombiq.ContentEditors.Models
         internal LazyField<bool> HasEditorGroupsField { get; } = new LazyField<bool>();
         public bool HasEditorGroups => HasEditorGroupsField.Value;
 
-        internal LazyField<bool> AreAllEditorGroupsCompletedField { get; } = new LazyField<bool>();
-        public bool AreAllEditorGroupsCompleted => AreAllEditorGroupsCompletedField.Value;
-
         internal LazyField<UnauthorizedEditorGroupBehavior> UnauthorizedEditorGroupBehaviorField { get; } = new LazyField<UnauthorizedEditorGroupBehavior>();
         public UnauthorizedEditorGroupBehavior UnauthorizedEditorGroupBehavior => UnauthorizedEditorGroupBehaviorField.Value;
-
-        #region Lazy fields for retrieving multiple Editor Group Desriptors based on certain conditions.
-
-        internal LazyField<IEnumerable<EditorGroupDescriptor>> CompletedAuthorizedEditorGroupsField { get; } = new LazyField<IEnumerable<EditorGroupDescriptor>>();
-        public IEnumerable<EditorGroupDescriptor> CompletedAuthorizedEditorGroups => CompletedAuthorizedEditorGroupsField.Value;
-
-        internal LazyField<IEnumerable<EditorGroupDescriptor>> IncompleteAuthorizedEditorGroupsField { get; } = new LazyField<IEnumerable<EditorGroupDescriptor>>();
-        public IEnumerable<EditorGroupDescriptor> IncompleteAuthorizedEditorGroups => IncompleteAuthorizedEditorGroupsField.Value;
 
         internal LazyField<IEnumerable<EditorGroupDescriptor>> AuthorizedEditorGroupsField { get; } = new LazyField<IEnumerable<EditorGroupDescriptor>>();
         /// <summary>
@@ -95,11 +84,6 @@ namespace Lombiq.ContentEditors.Models
         /// <param name="part">AsyncEditorPart of the content item.</param>
         /// <returns>Authorized editor groups.</returns>
         public IEnumerable<EditorGroupDescriptor> AuthorizedEditorGroups => AuthorizedEditorGroupsField.Value;
-
-        internal LazyField<IEnumerable<EditorGroupDescriptor>> AvailableAuthorizedEditorGroupsField { get; } = new LazyField<IEnumerable<EditorGroupDescriptor>>();
-        public IEnumerable<EditorGroupDescriptor> AvailableAuthorizedEditorGroups => AvailableAuthorizedEditorGroupsField.Value;
-
-        #endregion
 
         #region Lazy fields for retrieving an Editor Group Descriptor for a specific scenario.
 
