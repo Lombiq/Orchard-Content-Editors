@@ -164,6 +164,7 @@ namespace Lombiq.ContentEditors.Models
         public static IEnumerable<EditorGroupDescriptor> GetCompletedEditorGroups(this AsyncEditorPart part, bool authorizedOnly = false)
         {
             var editorGroups = part.GetEditorGroupList(authorizedOnly);
+
             if (editorGroups == null) return Enumerable.Empty<EditorGroupDescriptor>();
 
             var completeGroupNames = part.CompletedEditorGroupNames;
@@ -182,9 +183,25 @@ namespace Lombiq.ContentEditors.Models
         public static IEnumerable<EditorGroupDescriptor> GetIncompleteEditorGroups(this AsyncEditorPart part, bool authorizedOnly = false)
         {
             var editorGroups = part.GetEditorGroupList(authorizedOnly);
-            if (editorGroups == null) return Enumerable.Empty<EditorGroupDescriptor>();
 
-            return editorGroups.Except(part.GetCompletedEditorGroups());
+            return editorGroups == null ?
+                Enumerable.Empty<EditorGroupDescriptor>() : editorGroups.Except(part.GetCompletedEditorGroups());
+        }
+
+        /// <summary>
+        /// Checks if the group is available to edit (i.e. it's a complete group or the one after the last complete group).
+        /// </summary>
+        /// <param name="part">AsyncEditorPart of the content item.</param>
+        /// <param name="group">Name of the group that needs to be checked.</param>
+        /// <returns>True if the editor group is available.</returns>
+        public static bool IsEditorGroupAvailable(this AsyncEditorPart part, string group)
+        {
+            Argument.ThrowIfNullOrEmpty(group, nameof(group));
+
+            var editorGroup = part.GetEditorGroupDescriptor(group);
+
+            return editorGroup != null &&
+                (part.GetCompletedEditorGroups().Contains(editorGroup) || editorGroup.Equals(part.GetIncompleteEditorGroups().FirstOrDefault()));
         }
     }
 }

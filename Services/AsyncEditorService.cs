@@ -67,19 +67,7 @@ namespace Lombiq.ContentEditors.Services
             var editorGroups = part.GetEditorGroupList(authorizedOnly);
             if (editorGroups == null) return Enumerable.Empty<EditorGroupDescriptor>();
 
-            return editorGroups.Where(editorGroup => IsEditorGroupAvailable(part, editorGroup.Name));
-        }
-
-        public bool IsEditorGroupAvailable(AsyncEditorPart part, string group)
-        {
-            Argument.ThrowIfNullOrEmpty(group, nameof(group));
-
-            var editorGroup = part.GetEditorGroupDescriptor(group);
-            if (editorGroup == null) return false;
-
-            if (part.GetCompletedEditorGroups().Contains(editorGroup)) return true;
-
-            return editorGroup.Equals(part.GetIncompleteEditorGroups().FirstOrDefault());
+            return editorGroups.Where(editorGroup => part.IsEditorGroupAvailable(editorGroup.Name));
         }
 
         public EditorGroupDescriptor GetNextGroupDescriptor(AsyncEditorPart part, string group, bool authorizedOnly = false)

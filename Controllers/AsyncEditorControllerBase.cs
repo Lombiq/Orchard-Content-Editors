@@ -58,8 +58,8 @@ namespace Lombiq.ContentEditors.Controllers
 
             if (!_asyncEditorService.IsAuthorizedToEdit(part, group)) return UnauthorizedEditorResult();
 
-            if (!string.IsNullOrEmpty(group) &&
-                !_asyncEditorService.IsEditorGroupAvailable(part, group)) return GroupUnavailableResult();
+            if (!string.IsNullOrEmpty(group) && !part.IsEditorGroupAvailable(group))
+                return GroupUnavailableResult();
 
             return AsyncEditorResult(part, group);
         }
@@ -80,8 +80,8 @@ namespace Lombiq.ContentEditors.Controllers
                 return ErrorResult(T("You are not authorized to publish this content item."));
             }
 
-            if (!string.IsNullOrEmpty(group) &&
-                !_asyncEditorService.IsEditorGroupAvailable(part, group)) return GroupUnavailableResult();
+            if (!string.IsNullOrEmpty(group) && !part.IsEditorGroupAvailable(group))
+                return GroupUnavailableResult();
 
             var newContent = part.Id == 0;
             if (newContent) _contentManager.Create(part.ContentItem, VersionOptions.Draft);
@@ -136,7 +136,7 @@ namespace Lombiq.ContentEditors.Controllers
 
             if (!_asyncEditorService.IsAuthorizedToEdit(part, group)) return UnauthorizedEditorResult();
 
-            if (!_asyncEditorService.IsEditorGroupAvailable(part, group)) return GroupUnavailableResult();
+            if (!part.IsEditorGroupAvailable(group)) return GroupUnavailableResult();
 
             var newContent = part.Id == 0;
             if (newContent) _contentManager.Create(part.ContentItem, VersionOptions.Draft);

@@ -53,14 +53,6 @@ namespace Lombiq.ContentEditors.Services
         EditorGroupDescriptor GetPreviousGroupDescriptor(AsyncEditorPart part, string group, bool authorizedOnly = false);
 
         /// <summary>
-        /// Checks if the group is available to edit (i.e. it's a complete group or the one after the last complete group).
-        /// </summary>
-        /// <param name="part">AsyncEditorPart of the content item.</param>
-        /// <param name="group">Name of the group that needs to be checked.</param>
-        /// <returns>True if the editor group is available.</returns>
-        bool IsEditorGroupAvailable(AsyncEditorPart part, string group);
-
-        /// <summary>
         /// Registers the given editor group as complete.
         /// </summary>
         /// <param name="part">AsyncEditorPart of the content item.</param>
