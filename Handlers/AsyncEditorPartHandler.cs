@@ -63,8 +63,7 @@ namespace Lombiq.ContentEditors.Handlers
 
                 part.IncompleteAuthorizedEditorGroupsField.Loader(() => part.GetIncompleteEditorGroups(true));
 
-                part.AvailableAuthorizedEditorGroupsField.Loader(() =>
-                    asyncEditorServiceLazy.Value.GetAvailableEditorGroups(part, true));
+                part.AvailableAuthorizedEditorGroupsField.Loader(() => part.GetAvailableEditorGroups(true));
 
                 part.NextAuthorizedEditorGroupField.Loader(() =>
                     part.CurrentEditorGroup == null ?

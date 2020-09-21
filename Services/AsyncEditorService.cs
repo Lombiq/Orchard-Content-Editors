@@ -7,7 +7,6 @@ using Orchard.Security;
 using Orchard.Security.Permissions;
 using Orchard.Validation;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Web;
@@ -60,14 +59,6 @@ namespace Lombiq.ContentEditors.Services
             part.CurrentEditorGroup = originalEditorGroup;
 
             return _authorizer.Authorize(dynamicGroupPermission, part);
-        }
-
-        public IEnumerable<EditorGroupDescriptor> GetAvailableEditorGroups(AsyncEditorPart part, bool authorizedOnly = false)
-        {
-            var editorGroups = part.GetEditorGroupList(authorizedOnly);
-            if (editorGroups == null) return Enumerable.Empty<EditorGroupDescriptor>();
-
-            return editorGroups.Where(editorGroup => part.IsEditorGroupAvailable(editorGroup.Name));
         }
 
         public EditorGroupDescriptor GetNextGroupDescriptor(AsyncEditorPart part, string group, bool authorizedOnly = false)

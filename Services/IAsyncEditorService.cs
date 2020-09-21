@@ -2,7 +2,6 @@
 using Orchard;
 using Orchard.Core.Contents;
 using Orchard.Security.Permissions;
-using System.Collections.Generic;
 
 namespace Lombiq.ContentEditors.Services
 {
@@ -17,14 +16,6 @@ namespace Lombiq.ContentEditors.Services
         /// <param name="group">Editor group to be authorized on.</param>
         /// <returns>True if the current user is authorized.</returns>
         bool IsAuthorized(AsyncEditorPart part, Permission permission, string group = "");
-
-        /// <summary>
-        /// Returns editor groups that are available to edit (i.e. complete groups or the one after the last complete group).
-        /// </summary>
-        /// <param name="part">AsyncEditorPart of the content item.</param>
-        /// <param name="authorizedOnly">If this is true, then it operates only with groups that the user is authorized to edit.</param>
-        /// <returns>Available editor groups.</returns>
-        IEnumerable<EditorGroupDescriptor> GetAvailableEditorGroups(AsyncEditorPart part, bool authorizedOnly = false);
 
         /// <summary>
         /// Initializes the given content item to be edited async and also returns the generated editor shape.

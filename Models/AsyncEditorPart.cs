@@ -203,5 +203,19 @@ namespace Lombiq.ContentEditors.Models
             return editorGroup != null &&
                 (part.GetCompletedEditorGroups().Contains(editorGroup) || editorGroup.Equals(part.GetIncompleteEditorGroups().FirstOrDefault()));
         }
+
+        /// <summary>
+        /// Returns editor groups that are available to edit (i.e. complete groups or the one after the last complete group).
+        /// </summary>
+        /// <param name="part">AsyncEditorPart of the content item.</param>
+        /// <param name="authorizedOnly">If this is true, then it operates only with groups that the user is authorized to edit.</param>
+        /// <returns>Available editor groups.</returns>
+        public static IEnumerable<EditorGroupDescriptor> GetAvailableEditorGroups(this AsyncEditorPart part, bool authorizedOnly = false)
+        {
+            var editorGroups = part.GetEditorGroupList(authorizedOnly);
+            if (editorGroups == null) return Enumerable.Empty<EditorGroupDescriptor>();
+
+            return editorGroups.Where(editorGroup => part.IsEditorGroupAvailable(editorGroup.Name));
+        }
     }
 }
