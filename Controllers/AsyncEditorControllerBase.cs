@@ -51,7 +51,7 @@ namespace Lombiq.ContentEditors.Controllers
 
             if (part.HasEditorGroups && string.IsNullOrEmpty(group))
             {
-                group = part.LastDisplayedEditorGroup?.Name ?? part.NextEditableAuthorizedGroup?.Name;
+                group = part.GetLastDisplayedGroupDescriptor()?.Name ?? part.NextEditableAuthorizedGroup?.Name;
 
                 if (string.IsNullOrEmpty(group)) return GroupNameCannotBeEmptyResult();
             }

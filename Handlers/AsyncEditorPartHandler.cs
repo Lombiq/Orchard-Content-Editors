@@ -59,14 +59,6 @@ namespace Lombiq.ContentEditors.Handlers
 
                 part.NextEditableAuthorizedGroupField.Loader(() =>
                     part.GetIncompleteEditorGroups(true).FirstOrDefault() ?? part.GetCompletedEditorGroups(true).LastOrDefault());
-
-                part.LastUpdatedEditorGroupField.Loader(() =>
-                    !string.IsNullOrEmpty(part.LastUpdatedEditorGroupName) ?
-                        part.AuthorizedEditorGroups.FirstOrDefault(group => group.Name == part.LastUpdatedEditorGroupName) : null);
-
-                part.LastDisplayedEditorGroupField.Loader(() =>
-                    !string.IsNullOrEmpty(part.LastDisplayedEditorGroupName) ?
-                        part.AuthorizedEditorGroups.FirstOrDefault(group => group.Name == part.LastDisplayedEditorGroupName) : null);
             });
         }
     }
