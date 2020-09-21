@@ -43,13 +43,6 @@ namespace Lombiq.ContentEditors.Services
         IEnumerable<EditorGroupDescriptor> GetAvailableEditorGroups(AsyncEditorPart part, bool authorizedOnly = false);
 
         /// <summary>
-        /// Returns editor groups that the current user is authorized to edit.
-        /// </summary>
-        /// <param name="part">AsyncEditorPart of the content item.</param>
-        /// <returns>Authorized editor groups.</returns>
-        IEnumerable<EditorGroupDescriptor> GetAuthorizedEditorGroups(AsyncEditorPart part);
-
-        /// <summary>
         /// Initializes the given content item to be edited async and also returns the generated editor shape.
         /// </summary>
         /// <param name="part">AsyncEditorPart of the content item.</param>

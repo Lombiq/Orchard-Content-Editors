@@ -53,6 +53,11 @@ namespace Lombiq.ContentEditors.Models
 
 
         internal LazyField<EditorGroupsSettings> EditorGroupsSettingsField { get; } = new LazyField<EditorGroupsSettings>();
+        /// <summary>
+        /// Returns the editor group settings including the available editor groups if there is any provider for the given content type.
+        /// </summary>
+        /// <param name="part">AsyncEditorPart of the content item.</param>
+        /// <returns>Editor group settings.</returns>
         public EditorGroupsSettings EditorGroupsSettings => EditorGroupsSettingsField.Value;
 
         internal LazyField<bool> HasEditorGroupsField { get; } = new LazyField<bool>();
@@ -68,6 +73,11 @@ namespace Lombiq.ContentEditors.Models
         public IEnumerable<EditorGroupDescriptor> IncompleteAuthorizedEditorGroups => IncompleteAuthorizedEditorGroupsField.Value;
 
         internal LazyField<IEnumerable<EditorGroupDescriptor>> AuthorizedEditorGroupsField { get; } = new LazyField<IEnumerable<EditorGroupDescriptor>>();
+        /// <summary>
+        /// Returns editor groups that the current user is authorized to edit.
+        /// </summary>
+        /// <param name="part">AsyncEditorPart of the content item.</param>
+        /// <returns>Authorized editor groups.</returns>
         public IEnumerable<EditorGroupDescriptor> AuthorizedEditorGroups => AuthorizedEditorGroupsField.Value;
 
         internal LazyField<IEnumerable<EditorGroupDescriptor>> AvailableAuthorizedEditorGroupsField { get; } = new LazyField<IEnumerable<EditorGroupDescriptor>>();
@@ -101,6 +111,12 @@ namespace Lombiq.ContentEditors.Models
         public static AsyncEditorPart AsAsyncEditorPartOrThrow(this IContent content) =>
             content.AsOrThrow<AsyncEditorPart>();
 
+        /// <summary>
+        /// Returns the editor group details including its technical name and title and other possible options.
+        /// </summary>
+        /// <param name="part">AsyncEditorPart of the content item.</param>
+        /// <param name="group">Technical name of the editor group.</param>
+        /// <returns>Editor group details.</returns>
         public static EditorGroupDescriptor GetEditorGroupDescriptor(this AsyncEditorPart part, string group) =>
             part.EditorGroupsSettings?.EditorGroups.FirstOrDefault(editorGroup => editorGroup.Name == group);
 

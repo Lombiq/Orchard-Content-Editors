@@ -1,6 +1,7 @@
 ﻿using Lombiq.ContentEditors.Models;
 using Lombiq.ContentEditors.Services;
 using Orchard.ContentManagement.Handlers;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Lombiq.ContentEditors.Handlers
@@ -22,7 +23,30 @@ namespace Lombiq.ContentEditors.Handlers
                     part.EditorGroupsSettings?.UnauthorizedEditorGroupBehavior ??
                     UnauthorizedEditorGroupBehavior.AllowEditingAllAuthorizedGroups);
 
-                part.AuthorizedEditorGroupsField.Loader(() => asyncEditorService.GetAuthorizedEditorGroups(part));
+                part.AuthorizedEditorGroupsField.Loader(() =>
+                {
+                    var editorGroups = part.EditorGroupsSettings?.EditorGroups;
+                    if (editorGroups == null) return Enumerable.Empty<EditorGroupDescriptor>();
+
+                    var authorizedEditorGroups = new List<EditorGroupDescriptor>();
+                    foreach (var editorGroup in editorGroups)
+                    {
+                        if (asyncEditorService.IsAuthorizedToEdit(part, editorGroup.Name))
+                        {
+                            authorizedEditorGroups.Add(editorGroup);
+
+                            continue;
+                        }
+
+                        if (part.UnauthorizedEditorGroupBehavior ==
+                            UnauthorizedEditorGroupBehavior.AllowEditingUntilFirstUnauthorizedGroup)
+                        {
+                            break;
+                        }
+                    }
+
+                    return authorizedEditorGroups;
+                });
 
                 part.CompletedAuthorizedEditorGroupsField.Loader(() =>
                     asyncEditorService.GetCompletedEditorGroups(part, true));
@@ -35,13 +59,11 @@ namespace Lombiq.ContentEditors.Handlers
 
                 part.NextAuthorizedEditorGroupField.Loader(() =>
                     part.CurrentEditorGroup == null ?
-                        null :
-                        asyncEditorService.GetNextGroupDescriptor(part, part.CurrentEditorGroup.Name, true));
+                        null : asyncEditorService.GetNextGroupDescriptor(part, part.CurrentEditorGroup.Name, true));
 
                 part.PreviousAuthorizedEditorGroupField.Loader(() =>
                     part.CurrentEditorGroup == null ?
-                        null :
-                        asyncEditorService.GetPreviousGroupDescriptor(part, part.CurrentEditorGroup.Name, true));
+                        null : asyncEditorService.GetPreviousGroupDescriptor(part, part.CurrentEditorGroup.Name, true));
 
                 part.NextEditableAuthorizedGroupField.Loader(() =>
                     asyncEditorService.GetIncompleteEditorGroups(part, true).FirstOrDefault() ??
@@ -49,20 +71,14 @@ namespace Lombiq.ContentEditors.Handlers
 
                 part.LastUpdatedEditorGroupField.Loader(() =>
                     !string.IsNullOrEmpty(part.LastUpdatedEditorGroupName) ?
-                        asyncEditorService
-                            .GetAuthorizedEditorGroups(part)
-                            .FirstOrDefault(group => group.Name == part.LastUpdatedEditorGroupName) :
-                        null);
+                        part.AuthorizedEditorGroups.FirstOrDefault(group => group.Name == part.LastUpdatedEditorGroupName) : null);
 
                 part.AreAllEditorGroupsCompletedField.Loader(() =>
                     !asyncEditorService.GetIncompleteEditorGroups(part).Any());
 
                 part.LastDisplayedEditorGroupField.Loader(() =>
                     !string.IsNullOrEmpty(part.LastDisplayedEditorGroupName) ?
-                        asyncEditorService
-                            .GetAuthorizedEditorGroups(part)
-                            .FirstOrDefault(group => group.Name == part.LastDisplayedEditorGroupName) :
-                        null);
+                        part.AuthorizedEditorGroups.FirstOrDefault(group => group.Name == part.LastDisplayedEditorGroupName) : null);
             });
         }
     }

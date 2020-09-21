@@ -66,31 +66,6 @@ namespace Lombiq.ContentEditors.Services
             return _authorizer.Authorize(dynamicGroupPermission, part);
         }
 
-        public IEnumerable<EditorGroupDescriptor> GetAuthorizedEditorGroups(AsyncEditorPart part)
-        {
-            var editorGroups = part.EditorGroupsSettings?.EditorGroups;
-            if (editorGroups == null) return Enumerable.Empty<EditorGroupDescriptor>();
-
-            var authorizedEditorGroups = new List<EditorGroupDescriptor>();
-            foreach (var editorGroup in editorGroups)
-            {
-                if (this.IsAuthorizedToEdit(part, editorGroup.Name))
-                {
-                    authorizedEditorGroups.Add(editorGroup);
-
-                    continue;
-                }
-
-                if (part.UnauthorizedEditorGroupBehavior ==
-                    UnauthorizedEditorGroupBehavior.AllowEditingUntilFirstUnauthorizedGroup)
-                {
-                    break;
-                }
-            }
-
-            return authorizedEditorGroups;
-        }
-
         public IEnumerable<EditorGroupDescriptor> GetCompletedEditorGroups(AsyncEditorPart part, bool authorizedOnly = false)
         {
             var editorGroups = GetEditorGroupList(part, authorizedOnly);
@@ -221,7 +196,7 @@ namespace Lombiq.ContentEditors.Services
 
         private IList<EditorGroupDescriptor> GetEditorGroupList(AsyncEditorPart part, bool authorizedOnly) =>
             authorizedOnly ?
-                GetAuthorizedEditorGroups(part).ToList() :
+                part.AuthorizedEditorGroups.ToList() :
                 part.EditorGroupsSettings?.EditorGroups.ToList();
     }
 }
