@@ -11,6 +11,8 @@
     {
         return;
     }
+
+    var currentEditorGroupName = asyncEditorPart.CurrentEditorGroup?.Name ?? "";
 }
 
 <div class="@ElementNames.AsyncEditorSubmitActions.BlockName">
@@ -19,13 +21,13 @@
 
     @if ((asyncEditorPart.CurrentEditorGroup?.IsPublishGroup ?? true) &&
         asyncEditorPart.TypeDefinition.Settings.GetModel<ContentTypeSettings>().Draftable &&
-        WorkContext.Resolve<IAsyncEditorService>().IsAuthorizedToPublish(asyncEditorPart, asyncEditorPart.CurrentEditorGroup?.Name ?? ""))
+        WorkContext.Resolve<IAsyncEditorService>().IsAuthorizedToPublish(asyncEditorPart, currentEditorGroupName))
     {
         <input type="submit" name="submit.Publish" data-submitContext="Publish" value="@T("Publish")"
                class="@ElementNames.AsyncEditorSubmitActions.ActionElementName @ElementNames.AsyncEditorSubmitActions.PublishActionElementName" />
     }
 
-    @if (asyncEditorPart.NextAuthorizedEditorGroup != null)
+    @if (asyncEditorPart.GetNextGroupDescriptor(currentEditorGroupName, true) != null)
     {
         <input type="submit" name="submit.SaveAndNext" data-submitContext="SaveAndNext" value="@T("Save and Next")"
                class="@ElementNames.AsyncEditorSubmitActions.ActionElementName @ElementNames.AsyncEditorSubmitActions.NextActionElementName" />

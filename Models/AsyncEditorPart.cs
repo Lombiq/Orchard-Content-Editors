@@ -87,12 +87,6 @@ namespace Lombiq.ContentEditors.Models
 
         #region Lazy fields for retrieving an Editor Group Descriptor for a specific scenario.
 
-        internal LazyField<EditorGroupDescriptor> NextAuthorizedEditorGroupField { get; } = new LazyField<EditorGroupDescriptor>();
-        public EditorGroupDescriptor NextAuthorizedEditorGroup => NextAuthorizedEditorGroupField.Value;
-
-        internal LazyField<EditorGroupDescriptor> PreviousAuthorizedEditorGroupField { get; } = new LazyField<EditorGroupDescriptor>();
-        public EditorGroupDescriptor PreviousAuthorizedEditorGroup => PreviousAuthorizedEditorGroupField.Value;
-
         internal LazyField<EditorGroupDescriptor> NextEditableAuthorizedGroupField { get; } = new LazyField<EditorGroupDescriptor>();
         public EditorGroupDescriptor NextEditableAuthorizedGroup => NextEditableAuthorizedGroupField.Value;
 
@@ -228,7 +222,7 @@ namespace Lombiq.ContentEditors.Models
         /// <returns>Editor group details after the given group.</returns>
         public static EditorGroupDescriptor GetNextGroupDescriptor(this AsyncEditorPart part, string group, bool authorizedOnly = false)
         {
-            Argument.ThrowIfNullOrEmpty(group, nameof(group));
+            if (string.IsNullOrEmpty(group)) return null;
 
             var editorGroups = part.GetEditorGroupList(authorizedOnly);
 
@@ -252,7 +246,7 @@ namespace Lombiq.ContentEditors.Models
         /// <returns>Editor group details before the given group.</returns>
         public static EditorGroupDescriptor GetPreviousGroupDescriptor(this AsyncEditorPart part, string group, bool authorizedOnly = false)
         {
-            Argument.ThrowIfNullOrEmpty(group, nameof(group));
+            if (string.IsNullOrEmpty(group)) return null;
 
             var editorGroups = part.GetEditorGroupList(authorizedOnly);
 

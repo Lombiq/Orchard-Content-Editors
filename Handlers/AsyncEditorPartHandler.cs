@@ -57,14 +57,6 @@ namespace Lombiq.ContentEditors.Handlers
                     return authorizedEditorGroups;
                 });
 
-                part.NextAuthorizedEditorGroupField.Loader(() =>
-                    part.CurrentEditorGroup == null ?
-                        null : part.GetNextGroupDescriptor(part.CurrentEditorGroup.Name, true));
-
-                part.PreviousAuthorizedEditorGroupField.Loader(() =>
-                    part.CurrentEditorGroup == null ?
-                        null : part.GetPreviousGroupDescriptor(part.CurrentEditorGroup.Name, true));
-
                 part.NextEditableAuthorizedGroupField.Loader(() =>
                     part.GetIncompleteEditorGroups(true).FirstOrDefault() ?? part.GetCompletedEditorGroups(true).LastOrDefault());
 
