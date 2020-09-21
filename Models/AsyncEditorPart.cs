@@ -15,12 +15,22 @@ namespace Lombiq.ContentEditors.Models
         public EditorGroupDescriptor CurrentEditorGroup { get; set; }
         public bool IsContentCreationFailed { get; set; }
 
+        #region List of the names of the completed Editor Groups stored as JSON.
 
         public string CompletedEditorGroupNamesSerialized
         {
             get { return this.Retrieve(x => x.CompletedEditorGroupNamesSerialized); }
             set { this.Store(x => x.CompletedEditorGroupNamesSerialized, value); }
         }
+
+        internal LazyField<IEnumerable<string>> CompletedEditorGroupNamesField { get; } = new LazyField<IEnumerable<string>>();
+        public IEnumerable<string> CompletedEditorGroupNames
+        {
+            get => CompletedEditorGroupNamesField.Value;
+            set => CompletedEditorGroupNamesField.Value = value;
+        }
+
+        #endregion
 
         public string LastUpdatedEditorGroupName
         {

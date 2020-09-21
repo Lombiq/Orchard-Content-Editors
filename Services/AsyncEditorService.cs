@@ -71,9 +71,7 @@ namespace Lombiq.ContentEditors.Services
             var editorGroups = part.GetEditorGroupList(authorizedOnly);
             if (editorGroups == null) return Enumerable.Empty<EditorGroupDescriptor>();
 
-            var completeGroupNames = !string.IsNullOrEmpty(part.CompletedEditorGroupNamesSerialized) ?
-                _jsonConverter.Deserialize<IEnumerable<string>>(part.CompletedEditorGroupNamesSerialized) :
-                Enumerable.Empty<string>();
+            var completeGroupNames = part.CompletedEditorGroupNames;
 
             return completeGroupNames
                 .Select(groupName => editorGroups.FirstOrDefault(group => group.Name == groupName))
@@ -144,9 +142,9 @@ namespace Lombiq.ContentEditors.Services
 
             if (!part.EditorGroupsSettings?.EditorGroups.Any(editorGroup => editorGroup.Name == group) ?? false) return;
 
-            var completeGroupNames = GetCompletedEditorGroups(part).Select(editorGroup => editorGroup.Name).Union(new[] { group });
-
-            part.CompletedEditorGroupNamesSerialized = _jsonConverter.Serialize(completeGroupNames);
+            part.CompletedEditorGroupNames = GetCompletedEditorGroups(part)
+                .Select(editorGroup => editorGroup.Name)
+                .Union(new[] { group });
         }
 
         public bool ValidateEditorSessionCookie(AsyncEditorPart part)
