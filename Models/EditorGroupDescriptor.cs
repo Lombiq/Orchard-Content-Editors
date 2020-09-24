@@ -7,12 +7,8 @@
         public bool IsPublishGroup { get; set; }
 
 
-        public override bool Equals(object other)
-        {
-            var otherGroup = other as EditorGroupDescriptor;
-
-            return otherGroup == null ? base.Equals(other) : otherGroup.Name == Name;
-        }
+        public override bool Equals(object other) =>
+            other is EditorGroupDescriptor otherGroup ? otherGroup.Name == Name : base.Equals(other);
 
         public override int GetHashCode() => Name.GetHashCode();
     }
