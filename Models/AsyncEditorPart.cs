@@ -170,7 +170,7 @@ namespace Lombiq.ContentEditors.Models
             var editorGroups = part.GetEditorGroupList(authorizedOnly);
 
             return editorGroups == null ?
-                Enumerable.Empty<EditorGroupDescriptor>() : editorGroups.Except(part.GetCompletedEditorGroups());
+                Enumerable.Empty<EditorGroupDescriptor>() : editorGroups.Except(part.GetCompletedEditorGroups(authorizedOnly));
         }
 
         /// <summary>
