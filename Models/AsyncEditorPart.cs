@@ -26,7 +26,7 @@ namespace Lombiq.ContentEditors.Models
         internal LazyField<IEnumerable<string>> CompletedEditorGroupNamesField { get; } = new LazyField<IEnumerable<string>>();
         public IEnumerable<string> CompletedEditorGroupNames
         {
-            get => CompletedEditorGroupNamesField.Value;
+            get => CompletedEditorGroupNamesField.Value ?? Enumerable.Empty<string>();
             set => CompletedEditorGroupNamesField.Value = value;
         }
 
