@@ -109,19 +109,11 @@ namespace Lombiq.ContentEditors.Models
         /// <param name="part">AsyncEditorPart of the content item.</param>
         /// <param name="group">Technical name of the editor group.</param>
         /// <returns>Editor group details.</returns>
-        public static EditorGroupDescriptor GetEditorGroupDescriptor(this AsyncEditorPart part, string group)
-        {
-            Argument.ThrowIfNullOrEmpty(group, nameof(group));
+        public static EditorGroupDescriptor GetEditorGroupDescriptor(this AsyncEditorPart part, string group) =>
+            part.EditorGroupsSettings?.EditorGroups.FirstOrDefault(editorGroup => editorGroup.Name == group);
 
-            return part.EditorGroupsSettings?.EditorGroups.FirstOrDefault(editorGroup => editorGroup.Name == group);
-        }
-
-        public static void SetCurrentEditorGroup(this AsyncEditorPart part, string group)
-        {
-            Argument.ThrowIfNullOrEmpty(group, nameof(group));
-
+        public static void SetCurrentEditorGroup(this AsyncEditorPart part, string group) =>
             part.CurrentEditorGroup = part.GetEditorGroupDescriptor(group);
-        }
 
         /// <summary>
         /// Registers the given editor group as complete.
