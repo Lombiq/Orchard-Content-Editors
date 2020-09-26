@@ -1,7 +1,6 @@
 ﻿using Lombiq.ContentEditors.Authorization;
 using Lombiq.ContentEditors.Constants;
 using Lombiq.ContentEditors.Models;
-using Orchard.ContentManagement;
 using Orchard.Mvc;
 using Orchard.Security;
 using Orchard.Security.Permissions;
@@ -18,28 +17,15 @@ namespace Lombiq.ContentEditors.Services
         private static readonly DateTime PastDateForExpiration = new DateTime(1990, 1, 1);
 
         private readonly IAuthorizer _authorizer;
-        private readonly IContentManager _contentManager;
         private readonly IHttpContextAccessor _hca;
 
 
-        public AsyncEditorService(
-            IAuthorizer authorizer,
-            IContentManager contentManager,
-            IHttpContextAccessor hca)
+        public AsyncEditorService(IAuthorizer authorizer, IHttpContextAccessor hca)
         {
             _authorizer = authorizer;
-            _contentManager = contentManager;
             _hca = hca;
         }
 
-
-        public dynamic BuildAsyncEditorShape(AsyncEditorPart part, string group = "", dynamic shape = null)
-        {
-            part.SetCurrentEditorGroup(group);
-            part.IsAsyncEditorContext = true;
-
-            return shape ?? _contentManager.BuildEditor(part, group);
-        }
 
         public bool IsAuthorized(AsyncEditorPart part, Permission permission, string group = null)
         {

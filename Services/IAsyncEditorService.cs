@@ -18,14 +18,6 @@ namespace Lombiq.ContentEditors.Services
         bool IsAuthorized(AsyncEditorPart part, Permission permission, string group = "");
 
         /// <summary>
-        /// Initializes the given content item to be edited async and also returns the generated editor shape.
-        /// </summary>
-        /// <param name="part">AsyncEditorPart of the content item.</param>
-        /// <param name="group">Optionally the editor group that the editor shape is generated for.</param>
-        /// <returns>Editor shape for the given editor group.</returns>
-        dynamic BuildAsyncEditorShape(AsyncEditorPart part, string group = "", dynamic shape = null);
-
-        /// <summary>
         /// Validates cookie that identifies the editor session.
         /// </summary>
         /// <param name="part">AsyncEditorPart of the content item.</param>

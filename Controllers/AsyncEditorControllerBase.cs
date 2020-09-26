@@ -166,13 +166,18 @@ namespace Lombiq.ContentEditors.Controllers
                 _contentManager.New<AsyncEditorPart>(contentType) :
                 _contentManager.Get<AsyncEditorPart>(id, VersionOptions.Latest);
 
-        protected virtual string GetEditorShapeHtml(AsyncEditorPart part, string group, bool contentCreated = true, dynamic shape = null) =>
-            _shapeDisplay.Display(_shapeFactory.AsyncEditor_Editor(
+        protected virtual string GetEditorShapeHtml(AsyncEditorPart part, string group, bool contentCreated = true, dynamic shape = null)
+        {
+            part.SetCurrentEditorGroup(group);
+            part.IsAsyncEditorContext = true;
+
+            return _shapeDisplay.Display(_shapeFactory.AsyncEditor_Editor(
                 ValidationSummaryShape: _shapeFactory.AsyncEditor_ValidationSummary(ModelState: ModelState),
-                EditorShape: _asyncEditorService.BuildAsyncEditorShape(part, group, shape),
+                EditorShape: shape ?? _contentManager.BuildEditor(part, group),
                 ContentItem: part.ContentItem,
                 ContentCreated: contentCreated,
                 Group: group));
+        }
 
         protected virtual void SetEditorSessionCookieForAnonymousUser(AsyncEditorPart part)
         {
