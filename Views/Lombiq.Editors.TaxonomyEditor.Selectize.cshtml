@@ -6,7 +6,7 @@
     Script.Require(ResourceNames.Selectize).AtHead();
     Style.Require(ResourceNames.Selectize).AtHead();
 
-    var viewModel = Model.ViewModel as DropdownEditorViewModel;
+    var viewModel = Model.ViewModel as TaxonomyEditorViewModel;
 
     if (!viewModel?.SelectList?.Any() ?? true) { return; }
 
@@ -40,6 +40,11 @@
 
     var jsonConverter = WorkContext.Resolve<IJsonConverter>();
     var selectedValues = viewModel.SelectList.Where(option => option.Selected).Select(option => option.Value);
+
+    var options = new Dictionary<string, object>
+    {
+        { "maxItems", viewModel.TaxonomyFieldViewModel.Settings.SingleChoice ? "1" : null }
+    };
 }
 
 <div class="editor editorField form-group @DefaultBlockName @BlockName">
@@ -81,11 +86,13 @@
     ; (function ($) {
         $(function () {
             @* Initializing selectize on input field. *@
-            var $selectizeElement = $("#@selectizeInputId").selectize()[0].selectize;
+            var $selectizeElement = $("#@selectizeInputId")
+                .selectize(JSON.parse(@Html.Raw(Json.Encode(jsonConverter.Serialize(options)))))[0]
+                .selectize;
 
-            var options = JSON.parse(@Html.Raw(Json.Encode(jsonConverter.Serialize(viewModel.SelectList))));
-            for (var i = 0; i < options.length; i++) {
-                $selectizeElement.addOption({ value: options[i].Value, text: options[i].Text });
+            var selectList = JSON.parse(@Html.Raw(Json.Encode(jsonConverter.Serialize(viewModel.SelectList))));
+            for (var i = 0; i < selectList.length; i++) {
+                $selectizeElement.addOption({ value: selectList[i].Value, text: selectList[i].Text });
             }
 
         @if (selectedValues.Any())
