@@ -107,6 +107,7 @@
     <Compile Include="Drivers\AsyncEditorGroupSettingDriver.cs" />
     <Compile Include="Drivers\AsyncEditorPartDriver.cs" />
     <Compile Include="Authorization\GroupAuthorizationEventHandler.cs" />
+    <Compile Include="Handlers\DefaultAsyncEditorEventHandler.cs" />
     <Compile Include="Events\IAsyncEditorEventHandler.cs" />
     <Compile Include="Extensions\ContentManagerExtensions.cs" />
     <Compile Include="Extensions\ContentPartDriverExtensions.cs" />

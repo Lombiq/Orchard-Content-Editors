@@ -99,12 +99,7 @@ namespace Lombiq.ContentEditors.Controllers
                 return AsyncEditorSaveResult(part, group, !newContent, editor);
             }
 
-            if (part.HasEditorGroups) part.StoreCompletedEditorGroup(group);
-
-            part.LastUpdatedEditorGroupName = group;
-
-            var currentEditorGroupDescriptor = part.GetEditorGroupDescriptor(group);
-            var isPublishGroup = currentEditorGroupDescriptor?.IsPublishGroup ?? true;
+            var isPublishGroup = part.GetEditorGroupDescriptor(group)?.IsPublishGroup ?? true;
 
             if (publish && isPublishGroup) _contentManager.Publish(part.ContentItem);
 
@@ -147,10 +142,6 @@ namespace Lombiq.ContentEditors.Controllers
                 return AsyncEditorSaveResult(part, group, !newContent, editor);
             }
 
-            part.StoreCompletedEditorGroup(group);
-
-            part.LastUpdatedEditorGroupName = group;
-
             _asyncEditorEventHandler.Saved(part, group, newContent, false);
 
             var nextGroup = part.GetNextGroupDescriptor(group);
@@ -166,18 +157,13 @@ namespace Lombiq.ContentEditors.Controllers
                 _contentManager.New<AsyncEditorPart>(contentType) :
                 _contentManager.Get<AsyncEditorPart>(id, VersionOptions.Latest);
 
-        protected virtual string GetEditorShapeHtml(AsyncEditorPart part, string group, bool contentCreated = true, dynamic shape = null)
-        {
-            part.SetCurrentEditorGroup(group);
-            part.IsAsyncEditorContext = true;
-
-            return _shapeDisplay.Display(_shapeFactory.AsyncEditor_Editor(
+        protected virtual string GetEditorShapeHtml(AsyncEditorPart part, string group, bool contentCreated = true, dynamic shape = null) =>
+            _shapeDisplay.Display(_shapeFactory.AsyncEditor_Editor(
                 ValidationSummaryShape: _shapeFactory.AsyncEditor_ValidationSummary(ModelState: ModelState),
                 EditorShape: shape ?? _contentManager.BuildEditor(part, group),
                 ContentItem: part.ContentItem,
                 ContentCreated: contentCreated,
                 Group: group));
-        }
 
         protected virtual void SetEditorSessionCookieForAnonymousUser(AsyncEditorPart part)
         {
@@ -198,7 +184,7 @@ namespace Lombiq.ContentEditors.Controllers
             string group,
             LocalizedString message = null)
         {
-            part.LastDisplayedEditorGroupName = group;
+            _asyncEditorEventHandler.Displaying(part, group);
 
             if (part.Id == 0) RemoveEditorSessionCookieForAnonymousUser();
             else SetEditorSessionCookieForAnonymousUser(part);
@@ -220,7 +206,8 @@ namespace Lombiq.ContentEditors.Controllers
             dynamic shape = null,
             LocalizedString message = null)
         {
-            part.LastDisplayedEditorGroupName = group;
+            _asyncEditorEventHandler.Displaying(part, group);
+
             part.IsContentCreationFailed = part.Id != 0 && !contentCreated;
 
             if (contentCreated) SetEditorSessionCookieForAnonymousUser(part);
