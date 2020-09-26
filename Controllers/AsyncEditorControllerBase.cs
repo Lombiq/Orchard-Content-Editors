@@ -86,7 +86,7 @@ namespace Lombiq.ContentEditors.Controllers
             var newContent = part.Id == 0;
             if (newContent) _contentManager.Create(part.ContentItem, VersionOptions.Draft);
 
-            _contentAsyncEditorEventHandler.BeforeUpdated(part, group, newContent);
+            _contentAsyncEditorEventHandler.Updating(part, group, newContent);
 
             var editor = _contentManager.UpdateEditor(part.ContentItem, this, group);
 
@@ -138,7 +138,7 @@ namespace Lombiq.ContentEditors.Controllers
             var newContent = part.Id == 0;
             if (newContent) _contentManager.Create(part.ContentItem, VersionOptions.Draft);
 
-            _contentAsyncEditorEventHandler.BeforeUpdated(part, group, newContent);
+            _contentAsyncEditorEventHandler.Updating(part, group, newContent);
 
             var editor = _contentManager.UpdateEditor(part.ContentItem, this, group);
 
