@@ -90,6 +90,8 @@ namespace Lombiq.ContentEditors.Controllers
 
             var editor = _contentManager.UpdateEditor(part.ContentItem, this, group);
 
+            _contentAsyncEditorEventHandler.Updated(part, group, newContent, ModelState.IsValid);
+
             if (!ModelState.IsValid)
             {
                 _transactionManager.Cancel();
@@ -103,16 +105,10 @@ namespace Lombiq.ContentEditors.Controllers
 
             var currentEditorGroupDescriptor = part.GetEditorGroupDescriptor(group);
             var isPublishGroup = currentEditorGroupDescriptor?.IsPublishGroup ?? true;
-            if (publish && isPublishGroup)
-            {
-                _contentManager.Publish(part.ContentItem);
 
-                _contentAsyncEditorEventHandler.Saved(part, group, newContent, true);
-            }
-            else
-            {
-                _contentAsyncEditorEventHandler.Saved(part, group, newContent, false);
-            }
+            if (publish && isPublishGroup) _contentManager.Publish(part.ContentItem);
+
+            _contentAsyncEditorEventHandler.Saved(part, group, newContent, publish && isPublishGroup);
 
             return AsyncEditorSaveResult(
                 part,
@@ -141,6 +137,8 @@ namespace Lombiq.ContentEditors.Controllers
             _contentAsyncEditorEventHandler.Updating(part, group, newContent);
 
             var editor = _contentManager.UpdateEditor(part.ContentItem, this, group);
+
+            _contentAsyncEditorEventHandler.Updated(part, group, newContent, ModelState.IsValid);
 
             if (!ModelState.IsValid)
             {
