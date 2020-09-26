@@ -14,7 +14,7 @@ namespace Lombiq.ContentEditors.Controllers
     public abstract class AsyncEditorControllerBase : Controller, IUpdateModel
     {
         protected readonly Lazy<WorkContext> _workContextLazy;
-        protected readonly IContentAsyncEditorEventHandler _contentAsyncEditorEventHandler;
+        protected readonly IAsyncEditorEventHandler _asyncEditorEventHandler;
         protected readonly IContentManager _contentManager;
         protected readonly IShapeDisplay _shapeDisplay;
         protected readonly dynamic _shapeFactory;
@@ -29,14 +29,14 @@ namespace Lombiq.ContentEditors.Controllers
             IOrchardServices orchardServices,
             IShapeDisplay shapeDisplay,
             IAsyncEditorService asyncEditorService,
-            IContentAsyncEditorEventHandler contentAsyncEditorEventHandler)
+            IAsyncEditorEventHandler asyncEditorEventHandler)
         {
             _contentManager = orchardServices.ContentManager;
             _shapeDisplay = shapeDisplay;
             _shapeFactory = orchardServices.New;
             _asyncEditorService = asyncEditorService;
             _transactionManager = orchardServices.TransactionManager;
-            _contentAsyncEditorEventHandler = contentAsyncEditorEventHandler;
+            _asyncEditorEventHandler = asyncEditorEventHandler;
             _workContextLazy = new Lazy<WorkContext>(() => orchardServices.WorkContext);
 
             T = NullLocalizer.Instance;
@@ -86,11 +86,11 @@ namespace Lombiq.ContentEditors.Controllers
             var newContent = part.Id == 0;
             if (newContent) _contentManager.Create(part.ContentItem, VersionOptions.Draft);
 
-            _contentAsyncEditorEventHandler.Updating(part, group, newContent);
+            _asyncEditorEventHandler.Updating(part, group, newContent);
 
             var editor = _contentManager.UpdateEditor(part.ContentItem, this, group);
 
-            _contentAsyncEditorEventHandler.Updated(part, group, newContent, ModelState.IsValid);
+            _asyncEditorEventHandler.Updated(part, group, newContent, ModelState.IsValid);
 
             if (!ModelState.IsValid)
             {
@@ -108,7 +108,7 @@ namespace Lombiq.ContentEditors.Controllers
 
             if (publish && isPublishGroup) _contentManager.Publish(part.ContentItem);
 
-            _contentAsyncEditorEventHandler.Saved(part, group, newContent, publish && isPublishGroup);
+            _asyncEditorEventHandler.Saved(part, group, newContent, publish && isPublishGroup);
 
             return AsyncEditorSaveResult(
                 part,
@@ -134,11 +134,11 @@ namespace Lombiq.ContentEditors.Controllers
             var newContent = part.Id == 0;
             if (newContent) _contentManager.Create(part.ContentItem, VersionOptions.Draft);
 
-            _contentAsyncEditorEventHandler.Updating(part, group, newContent);
+            _asyncEditorEventHandler.Updating(part, group, newContent);
 
             var editor = _contentManager.UpdateEditor(part.ContentItem, this, group);
 
-            _contentAsyncEditorEventHandler.Updated(part, group, newContent, ModelState.IsValid);
+            _asyncEditorEventHandler.Updated(part, group, newContent, ModelState.IsValid);
 
             if (!ModelState.IsValid)
             {
@@ -151,7 +151,7 @@ namespace Lombiq.ContentEditors.Controllers
 
             part.LastUpdatedEditorGroupName = group;
 
-            _contentAsyncEditorEventHandler.Saved(part, group, newContent, false);
+            _asyncEditorEventHandler.Saved(part, group, newContent, false);
 
             var nextGroup = part.GetNextGroupDescriptor(group);
 

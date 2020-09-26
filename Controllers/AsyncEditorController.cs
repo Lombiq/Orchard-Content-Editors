@@ -13,7 +13,7 @@ namespace Lombiq.ContentEditors.Controllers
             IOrchardServices orchardServices,
             IShapeDisplay shapeDisplay,
             IAsyncEditorService asyncEditorService,
-            IContentAsyncEditorEventHandler contentAsyncEditorEventHandler)
+            IAsyncEditorEventHandler contentAsyncEditorEventHandler)
             : base(orchardServices, shapeDisplay, asyncEditorService, contentAsyncEditorEventHandler)
         {
         }
