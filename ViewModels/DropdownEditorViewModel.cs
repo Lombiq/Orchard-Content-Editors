@@ -9,6 +9,7 @@ namespace Lombiq.ContentEditors.ViewModels
     public class DropdownEditorViewModel : EditorViewModel, IParentElementValueDependency, ISelectSpecialValues
     {
         public List<SelectListItem> SelectList { get; set; } = new List<SelectListItem>();
+        public bool SingleChoice { get; set; }
         public bool HasDefaultEmptyValue { get; set; }
         public string EmptyValueText { get; set; } = "";
         public string DefaultEmptyValue { get; set; } = "";

@@ -30,6 +30,11 @@
 
     var jsonConverter = WorkContext.Resolve<IJsonConverter>();
     var selectedOptions = viewModel.SelectList.Where(option => option.Selected);
+
+    var options = new Dictionary<string, object>
+    {
+        { "maxItems", viewModel.SingleChoice ? "1" : null }
+    };
 }
 
 <div class="editor editorField form-group @DefaultBlockName @BlockName">
@@ -40,7 +45,9 @@
     ; (function ($) {
         $(function () {
             @* Initializing selectize on input field. *@
-            var $selectizeElement = $("#@selectizeInputId").selectize()[0].selectize;
+            var $selectizeElement = $("#@selectizeInputId")
+                .selectize(JSON.parse(@Html.Raw(Json.Encode(jsonConverter.Serialize(options)))))[0]
+                .selectize;
 
             var options = JSON.parse(@Html.Raw(Json.Encode(jsonConverter.Serialize(viewModel.SelectList))));
             for (var i = 0; i < options.length; i++) {
