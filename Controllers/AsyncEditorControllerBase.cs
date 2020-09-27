@@ -14,7 +14,7 @@ namespace Lombiq.ContentEditors.Controllers
     public abstract class AsyncEditorControllerBase : Controller, IUpdateModel
     {
         protected readonly Lazy<WorkContext> _workContextLazy;
-        protected readonly IContentAsyncEditorEventHandler _contentAsyncEditorEventHandler;
+        protected readonly IAsyncEditorEventHandler _asyncEditorEventHandler;
         protected readonly IContentManager _contentManager;
         protected readonly IShapeDisplay _shapeDisplay;
         protected readonly dynamic _shapeFactory;
@@ -29,14 +29,14 @@ namespace Lombiq.ContentEditors.Controllers
             IOrchardServices orchardServices,
             IShapeDisplay shapeDisplay,
             IAsyncEditorService asyncEditorService,
-            IContentAsyncEditorEventHandler contentAsyncEditorEventHandler)
+            IAsyncEditorEventHandler asyncEditorEventHandler)
         {
             _contentManager = orchardServices.ContentManager;
             _shapeDisplay = shapeDisplay;
             _shapeFactory = orchardServices.New;
             _asyncEditorService = asyncEditorService;
             _transactionManager = orchardServices.TransactionManager;
-            _contentAsyncEditorEventHandler = contentAsyncEditorEventHandler;
+            _asyncEditorEventHandler = asyncEditorEventHandler;
             _workContextLazy = new Lazy<WorkContext>(() => orchardServices.WorkContext);
 
             T = NullLocalizer.Instance;
@@ -51,15 +51,15 @@ namespace Lombiq.ContentEditors.Controllers
 
             if (part.HasEditorGroups && string.IsNullOrEmpty(group))
             {
-                group = part.LastDisplayedEditorGroup?.Name ?? part.NextEditableAuthorizedGroup?.Name;
+                group = part.GetLastDisplayedGroupDescriptor()?.Name ?? part.NextEditableAuthorizedGroup?.Name;
 
                 if (string.IsNullOrEmpty(group)) return GroupNameCannotBeEmptyResult();
             }
 
             if (!_asyncEditorService.IsAuthorizedToEdit(part, group)) return UnauthorizedEditorResult();
 
-            if (!string.IsNullOrEmpty(group) &&
-                !_asyncEditorService.IsEditorGroupAvailable(part, group)) return GroupUnavailableResult();
+            if (!string.IsNullOrEmpty(group) && !part.IsEditorGroupAvailable(group))
+                return GroupUnavailableResult();
 
             return AsyncEditorResult(part, group);
         }
@@ -80,15 +80,17 @@ namespace Lombiq.ContentEditors.Controllers
                 return ErrorResult(T("You are not authorized to publish this content item."));
             }
 
-            if (!string.IsNullOrEmpty(group) &&
-                !_asyncEditorService.IsEditorGroupAvailable(part, group)) return GroupUnavailableResult();
+            if (!string.IsNullOrEmpty(group) && !part.IsEditorGroupAvailable(group))
+                return GroupUnavailableResult();
 
             var newContent = part.Id == 0;
             if (newContent) _contentManager.Create(part.ContentItem, VersionOptions.Draft);
 
-            _contentAsyncEditorEventHandler.BeforeUpdated(part, group, newContent);
+            _asyncEditorEventHandler.Updating(part, group, newContent);
 
             var editor = _contentManager.UpdateEditor(part.ContentItem, this, group);
+
+            _asyncEditorEventHandler.Updated(part, group, newContent, ModelState.IsValid);
 
             if (!ModelState.IsValid)
             {
@@ -97,25 +99,11 @@ namespace Lombiq.ContentEditors.Controllers
                 return AsyncEditorSaveResult(part, group, !newContent, editor);
             }
 
-            if (part.HasEditorGroups)
-            {
-                _asyncEditorService.StoreCompletedEditorGroup(part, group);
-            }
+            var isPublishGroup = part.GetEditorGroupDescriptor(group)?.IsPublishGroup ?? true;
 
-            part.LastUpdatedEditorGroupName = group;
+            if (publish && isPublishGroup) _contentManager.Publish(part.ContentItem);
 
-            var currentEditorGroupDescriptor = _asyncEditorService.GetEditorGroupDescriptor(part, group);
-            var isPublishGroup = currentEditorGroupDescriptor?.IsPublishGroup ?? true;
-            if (publish && isPublishGroup)
-            {
-                _contentManager.Publish(part.ContentItem);
-
-                _contentAsyncEditorEventHandler.Saved(part, group, newContent, true);
-            }
-            else
-            {
-                _contentAsyncEditorEventHandler.Saved(part, group, newContent, false);
-            }
+            _asyncEditorEventHandler.Saved(part, group, newContent, publish && isPublishGroup);
 
             return AsyncEditorSaveResult(
                 part,
@@ -136,14 +124,16 @@ namespace Lombiq.ContentEditors.Controllers
 
             if (!_asyncEditorService.IsAuthorizedToEdit(part, group)) return UnauthorizedEditorResult();
 
-            if (!_asyncEditorService.IsEditorGroupAvailable(part, group)) return GroupUnavailableResult();
+            if (!part.IsEditorGroupAvailable(group)) return GroupUnavailableResult();
 
             var newContent = part.Id == 0;
             if (newContent) _contentManager.Create(part.ContentItem, VersionOptions.Draft);
 
-            _contentAsyncEditorEventHandler.BeforeUpdated(part, group, newContent);
+            _asyncEditorEventHandler.Updating(part, group, newContent);
 
             var editor = _contentManager.UpdateEditor(part.ContentItem, this, group);
+
+            _asyncEditorEventHandler.Updated(part, group, newContent, ModelState.IsValid);
 
             if (!ModelState.IsValid)
             {
@@ -152,16 +142,11 @@ namespace Lombiq.ContentEditors.Controllers
                 return AsyncEditorSaveResult(part, group, !newContent, editor);
             }
 
-            _asyncEditorService.StoreCompletedEditorGroup(part, group);
+            _asyncEditorEventHandler.Saved(part, group, newContent, false);
 
-            part.LastUpdatedEditorGroupName = group;
+            var nextGroup = part.GetNextGroupDescriptor(group);
 
-            _contentAsyncEditorEventHandler.Saved(part, group, newContent, false);
-
-            var nextGroup = _asyncEditorService.GetNextGroupDescriptor(part, group);
-            if (nextGroup == null) return AsyncEditorResult(part, group);
-
-            return AsyncEditorSaveResult(part, nextGroup.Name);
+            return nextGroup == null ? AsyncEditorResult(part, group) : AsyncEditorSaveResult(part, nextGroup.Name);
         }
 
         protected virtual ActionResult SaveAndNextResult(int contentItemId, string group, string contentType = "") =>
@@ -175,7 +160,7 @@ namespace Lombiq.ContentEditors.Controllers
         protected virtual string GetEditorShapeHtml(AsyncEditorPart part, string group, bool contentCreated = true, dynamic shape = null) =>
             _shapeDisplay.Display(_shapeFactory.AsyncEditor_Editor(
                 ValidationSummaryShape: _shapeFactory.AsyncEditor_ValidationSummary(ModelState: ModelState),
-                EditorShape: _asyncEditorService.BuildAsyncEditorShape(part, group, shape),
+                EditorShape: shape ?? _contentManager.BuildEditor(part, group),
                 ContentItem: part.ContentItem,
                 ContentCreated: contentCreated,
                 Group: group));
@@ -199,7 +184,7 @@ namespace Lombiq.ContentEditors.Controllers
             string group,
             LocalizedString message = null)
         {
-            part.LastDisplayedEditorGroupName = group;
+            _asyncEditorEventHandler.Displaying(part, group);
 
             if (part.Id == 0) RemoveEditorSessionCookieForAnonymousUser();
             else SetEditorSessionCookieForAnonymousUser(part);
@@ -221,7 +206,8 @@ namespace Lombiq.ContentEditors.Controllers
             dynamic shape = null,
             LocalizedString message = null)
         {
-            part.LastDisplayedEditorGroupName = group;
+            _asyncEditorEventHandler.Displaying(part, group);
+
             part.IsContentCreationFailed = part.Id != 0 && !contentCreated;
 
             if (contentCreated) SetEditorSessionCookieForAnonymousUser(part);

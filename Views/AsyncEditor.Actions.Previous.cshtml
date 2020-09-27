@@ -3,22 +3,18 @@
 @using Lombiq.ContentEditors.Models
 
 @{
-    var contentItem = Model.ContentItem as ContentItem;
-    var asyncEditorPart = contentItem?.As<AsyncEditorPart>();
+    var asyncEditorPart = (Model.ContentItem as ContentItem).AsAsyncEditorPart();
+    var previousAuthorizedEditorGroup = asyncEditorPart.GetPreviousGroupDescriptor(asyncEditorPart.CurrentEditorGroup?.Name, true);
 
-    if (!(asyncEditorPart?.IsAsyncEditorContext ?? false) || !asyncEditorPart.HasEditorGroups
-        || asyncEditorPart.PreviousAuthorizedEditorGroup == null)
+    if (!(asyncEditorPart?.IsAsyncEditorContext ?? false) ||
+        !asyncEditorPart.HasEditorGroups ||
+        previousAuthorizedEditorGroup == null)
     {
         return;
     }
-
-    var previousAuthorizedEditorGroupName = asyncEditorPart.PreviousAuthorizedEditorGroup.Name;
 }
 
-@if (asyncEditorPart.PreviousAuthorizedEditorGroup != null)
-{
-    <span data-editorGroupName="@previousAuthorizedEditorGroupName" title="@T("Go back to {0}", previousAuthorizedEditorGroupName)"
-          class="@ElementNames.AsyncEditorSubmitActions.ActionElementName @ElementNames.AsyncEditorSubmitActions.PreviousActionElementName js-@ElementNames.AsyncEditorActions.LoadEditorElementName">
-        @(Model.ActionText as string ?? T("Back").Text)
-    </span>
-}
+<span data-editorGroupName="@previousAuthorizedEditorGroup.Name" title="@T("Go back to {0}", previousAuthorizedEditorGroup.Name)"
+      class="@ElementNames.AsyncEditorSubmitActions.ActionElementName @ElementNames.AsyncEditorSubmitActions.PreviousActionElementName js-@ElementNames.AsyncEditorActions.LoadEditorElementName">
+    @(Model.ActionText as string ?? T("Back").Text)
+</span>

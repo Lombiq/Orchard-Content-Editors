@@ -91,12 +91,10 @@ namespace Lombiq.ContentEditors.Services
 
         private AsyncEditorPart GetValidAsyncEditorPart(ShapeDisplayingContext context)
         {
-            var shape = context.Shape;
-
-            var contentItem = context.Shape.ContentItem as ContentItem;
+            ContentItem contentItem = context.Shape.ContentItem;
             if (contentItem == null) return null;
 
-            var asyncEditorPart = contentItem.As<AsyncEditorPart>();
+            var asyncEditorPart = contentItem.AsAsyncEditorPart();
             if (asyncEditorPart == null || !asyncEditorPart.IsAsyncEditorContext) return null;
 
             return asyncEditorPart;

@@ -3,7 +3,7 @@
 @using Lombiq.ContentEditors.Models
 
 @{
-    var asyncEditorPart = (Model.ContentItem as ContentItem)?.As<AsyncEditorPart>();
+    var asyncEditorPart = (Model.ContentItem as ContentItem).AsAsyncEditorPart();
 
     if (!(asyncEditorPart?.IsAsyncEditorContext ?? false) || !asyncEditorPart.HasEditorGroups)
     {
