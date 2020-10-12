@@ -23,7 +23,6 @@
 {
         { "class", TextBoxElementName },
         { "id", selectizeInputId },
-        { "required", viewModel.Required.ToString() },
         { "placeholder", viewModel.Placeholder ?? "" }
     };
 
@@ -36,6 +35,7 @@
     if (viewModel.Required)
     {
         labelAttributes["class"] = labelAttributes["class"] + " required";
+        selectizeInputAttributes["required"] = "";
     }
 
     var jsonConverter = WorkContext.Resolve<IJsonConverter>();
