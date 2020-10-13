@@ -18,14 +18,14 @@
 
     if (viewModel.Required)
     {
-        textboxAttributes["required"] = true;
+        textboxAttributes["required"] = "";
         textboxAttributes["class"] = textboxAttributes["class"] + " required";
         labelAttributes["class"] = labelAttributes["class"] + " required";
     }
 
     if (viewModel.Disabled)
     {
-        textboxAttributes["disabled"] = true;
+        textboxAttributes["disabled"] = "";
     }
 
     if (!string.IsNullOrEmpty(viewModel.Placeholder))
