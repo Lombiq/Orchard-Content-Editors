@@ -21,5 +21,13 @@ namespace Orchard.ContentManagement.Drivers
             Func<EditorViewModel> viewModelFactory) where TContent : ContentPart, new() =>
                 driver.ContentShape(shapeName, () =>
                     (shapeFactory as dynamic).Lombiq_Editors_TextboxEditor(ViewModel: viewModelFactory()));
+
+        public static ContentShapeResult DateTimeEditorShape<TContent>(
+            this ContentPartDriver<TContent> driver,
+            string shapeName,
+            IShapeFactory shapeFactory,
+            Func<DateTimeEditorViewModel> viewModelFactory) where TContent : ContentPart, new() =>
+                driver.ContentShape(shapeName, () =>
+                    (shapeFactory as dynamic).Lombiq_Editors_DateTimeEditor(ViewModel: viewModelFactory()));
     }
 }
