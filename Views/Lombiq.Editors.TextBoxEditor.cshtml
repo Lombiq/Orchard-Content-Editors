@@ -23,6 +23,11 @@
         labelAttributes["class"] = labelAttributes["class"] + " required";
     }
 
+    if (viewModel.Disabled)
+    {
+        textboxAttributes["disabled"] = true;
+    }
+
     if (!string.IsNullOrEmpty(viewModel.Placeholder))
     {
         textboxAttributes["placeholder"] = viewModel.Placeholder;
