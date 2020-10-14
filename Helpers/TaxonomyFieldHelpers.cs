@@ -25,13 +25,13 @@ namespace Lombiq.ContentEditors.Helpers
                 termEntries.Add(entry);
             }
 
-            return termEntries.OrderByDescending(term => term.Weight).ThenBy(term => term.Name).ToList();
+            return termEntries.OrderBy(term => term.Weight).ThenBy(term => term.Name).ToList();
         }
 
         public static List<SelectListItem> GetSelectListFromTermsUnderParent(
             List<TermEntry> termEntries, int levelOffset = 0, IEnumerable<string> selectedTermNames = null) =>
             termEntries
-                .OrderByDescending(term => term.Weight).ThenBy(term => term.Name)
+                .OrderBy(term => term.Weight).ThenBy(term => term.Name)
                 .Select(entry => CreateSelectListItem(entry, selectedTermNames, entry.GetLevels() - levelOffset))
                 .ToList();
 
@@ -50,7 +50,7 @@ namespace Lombiq.ContentEditors.Helpers
             if (viewModel.SelectedTerms == null) viewModel.SelectedTerms = Enumerable.Empty<TermPart>();
             var selectListItems = new List<SelectListItem>();
 
-            foreach (var entry in viewModel.Terms.OrderByDescending(term => term.Weight).ThenBy(term => term.Name))
+            foreach (var entry in viewModel.Terms.OrderBy(term => term.Weight).ThenBy(term => term.Name))
             {
                 var entryLevel = entry.GetLevels();
 
