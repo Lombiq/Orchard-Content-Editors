@@ -51,15 +51,15 @@ namespace Lombiq.ContentEditors.Controllers
 
             if (part.HasEditorGroups && string.IsNullOrEmpty(group))
             {
-                group = part.GetLastDisplayedGroupDescriptor()?.Name ?? part.NextEditableAuthorizedGroup?.Name;
+                group = part.GetFallbackEditorGroupName();
 
                 if (string.IsNullOrEmpty(group)) return GroupNameCannotBeEmptyResult();
             }
 
-            if (!_asyncEditorService.IsAuthorizedToEdit(part, group)) return UnauthorizedEditorResult();
-
             if (!string.IsNullOrEmpty(group) && !part.IsEditorGroupAvailable(group))
-                return GroupUnavailableResult();
+                group = part.GetFallbackEditorGroupName();
+
+            if (!_asyncEditorService.IsAuthorizedToEdit(part, group)) return UnauthorizedEditorResult();
 
             return AsyncEditorResult(part, group);
         }
