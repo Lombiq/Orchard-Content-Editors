@@ -248,5 +248,8 @@ namespace Lombiq.ContentEditors.Models
 
         public static EditorGroupDescriptor GetLastDisplayedGroupDescriptor(this AsyncEditorPart part) =>
             part.AuthorizedEditorGroups.FirstOrDefault(group => group.Name == part.LastDisplayedEditorGroupName);
+
+        public static string GetFallbackEditorGroupName(this AsyncEditorPart part) =>
+            part.GetLastDisplayedGroupDescriptor()?.Name ?? part.NextEditableAuthorizedGroup?.Name;
     }
 }
