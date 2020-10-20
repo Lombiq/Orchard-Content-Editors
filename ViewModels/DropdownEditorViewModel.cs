@@ -65,14 +65,20 @@ namespace Lombiq.ContentEditors.ViewModels
     {
         public static DropdownEditorViewModel WithDefaultBooleanOptions(
             this DropdownEditorViewModel viewModel,
-            LocalizedString trueLabel,
-            LocalizedString falseLabel,
+            Localizer T,
+            bool? selectedValue) => viewModel.WithDefaultBooleanOptions(T("Yes").Text, T("No").Text, selectedValue);
+
+        public static DropdownEditorViewModel WithDefaultBooleanOptions(
+            this DropdownEditorViewModel viewModel,
+            string trueLabel,
+            string falseLabel,
             bool? selectedValue)
         {
-            viewModel.SelectList = new[] {
-                new SelectListItem() { Text = trueLabel.Text, Value = "True", Selected = selectedValue == true },
-                new SelectListItem() { Text = falseLabel.Text, Value = "False", Selected = selectedValue == false }
-            }.ToList();
+            viewModel.SelectList = new List<SelectListItem>()
+            {
+                new SelectListItem() { Text = trueLabel ?? "True", Value = "True", Selected = selectedValue == true },
+                new SelectListItem() { Text = falseLabel ?? "False", Value = "False", Selected = selectedValue == false }
+            };
 
             return viewModel;
         }
