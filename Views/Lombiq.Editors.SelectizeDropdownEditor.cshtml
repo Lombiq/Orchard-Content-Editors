@@ -23,9 +23,15 @@
         { "id", selectizeInputId }
     };
 
-    if (!string.IsNullOrEmpty(viewModel.Label))
+    var labelAttributes = new Dictionary<string, object>
     {
-        attributes.Add("placeholder", viewModel.Label);
+        { "class", "editorLabel textboxEditor__label " + DefaultBlockName + "__label" },
+        { "for", selectizeInputId }
+    };
+
+    if (!string.IsNullOrEmpty(viewModel.Placeholder))
+    {
+        attributes.Add("placeholder", viewModel.Placeholder);
     }
 
     var jsonConverter = WorkContext.Resolve<IJsonConverter>();
@@ -38,6 +44,11 @@
 }
 
 <div class="editor editorField form-group @DefaultBlockName @BlockName">
+    @if (!string.IsNullOrEmpty(viewModel.Label))
+    {
+        @Html.Label(viewModel.Label, labelAttributes)
+    }
+
     @Html.TextBox(viewModel.TechnicalName, "", attributes)
 </div>
 

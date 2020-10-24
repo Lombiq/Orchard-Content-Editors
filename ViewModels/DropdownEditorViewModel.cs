@@ -1,4 +1,5 @@
-﻿using Piedone.HelpfulExtensions;
+﻿using Orchard.Localization;
+using Piedone.HelpfulExtensions;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
@@ -31,6 +32,8 @@ namespace Lombiq.ContentEditors.ViewModels
         #endregion
 
 
+        public DropdownEditorViewModel() { }
+
         public DropdownEditorViewModel(IEnumerable<string> values, params string[] selectedValues)
         {
             foreach (var value in values) SelectList.Add(new SelectListItem
@@ -55,7 +58,29 @@ namespace Lombiq.ContentEditors.ViewModels
 
             Name = TechnicalName = technicalName;
         }
+    }
 
-        public DropdownEditorViewModel() { }
+
+    public static class DropdownEditorViewModelExtensions
+    {
+        public static DropdownEditorViewModel WithDefaultBooleanOptions(
+            this DropdownEditorViewModel viewModel,
+            Localizer T,
+            bool? selectedValue) => viewModel.WithDefaultBooleanOptions(T("Yes").Text, T("No").Text, selectedValue);
+
+        public static DropdownEditorViewModel WithDefaultBooleanOptions(
+            this DropdownEditorViewModel viewModel,
+            string trueLabel,
+            string falseLabel,
+            bool? selectedValue)
+        {
+            viewModel.SelectList = new List<SelectListItem>()
+            {
+                new SelectListItem() { Text = trueLabel ?? "True", Value = "True", Selected = selectedValue == true },
+                new SelectListItem() { Text = falseLabel ?? "False", Value = "False", Selected = selectedValue == false }
+            };
+
+            return viewModel;
+        }
     }
 }
