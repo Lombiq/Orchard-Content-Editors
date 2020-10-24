@@ -44,6 +44,9 @@ namespace Lombiq.ContentEditors.ViewModels
             });
         }
 
+        public DropdownEditorViewModel(string technicalName, IEnumerable<string> values)
+            : this(new NameValueCollection(), technicalName, values) { }
+
         public DropdownEditorViewModel(NameValueCollection queryString, string technicalName, IEnumerable<string> values)
         {
             var selectedValues = queryString.GetQueryStringParameterValues(technicalName) ?? Enumerable.Empty<string>();

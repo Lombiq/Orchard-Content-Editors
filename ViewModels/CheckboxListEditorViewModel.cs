@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Piedone.HelpfulExtensions;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
@@ -27,11 +28,13 @@ namespace Lombiq.ContentEditors.ViewModels
 
         #endregion
 
+        public CheckboxListEditorViewModel(string technicalName, IEnumerable<string> values)
+            : this(new NameValueCollection(), technicalName, values) { }
 
         public CheckboxListEditorViewModel(
             NameValueCollection queryString, string technicalName, IEnumerable<string> values)
         {
-            var checkedItems = queryString.GetValues(technicalName);
+            var checkedItems = queryString.GetQueryStringParameterValues(technicalName) ?? Enumerable.Empty<string>();
 
             foreach (var value in values)
                 Items.Add(new CheckboxListFieldItemViewModel
@@ -43,10 +46,13 @@ namespace Lombiq.ContentEditors.ViewModels
             TechnicalName = technicalName;
         }
 
+        public CheckboxListEditorViewModel(string technicalName, IEnumerable<KeyValuePair<string, string>> valueLabelDictionary)
+            : this(new NameValueCollection(), technicalName, valueLabelDictionary) { }
+
         public CheckboxListEditorViewModel(
             NameValueCollection queryString, string technicalName, IEnumerable<KeyValuePair<string, string>> valueLabelDictionary)
         {
-            var checkedItems = queryString.GetValues(technicalName);
+            var checkedItems = queryString.GetQueryStringParameterValues(technicalName) ?? Enumerable.Empty<string>();
 
             foreach (var valueLabelItem in valueLabelDictionary)
                 Items.Add(new CheckboxListFieldItemViewModel
