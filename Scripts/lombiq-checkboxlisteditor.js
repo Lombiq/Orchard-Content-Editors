@@ -123,7 +123,7 @@
         },
 
         val: function () {
-            return $(this.settings.checkboxInputElementClass).filter(":checked:not(:disabled)").map(function () {
+            return $(this.element).find(this.settings.checkboxInputElementClass).filter(":checked:not(:disabled)").map(function () {
                 return $(this).val();
             }).toArray();
         }
