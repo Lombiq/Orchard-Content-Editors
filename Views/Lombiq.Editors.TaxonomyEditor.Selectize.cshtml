@@ -50,7 +50,7 @@
 <div class="editor editorField form-group @DefaultBlockName @BlockName">
     @if (!string.IsNullOrEmpty(viewModel.Label))
     {
-        @Html.Label(viewModel.Label, labelAttributes)
+        @Html.Label(viewModel.SingleChoice ? viewModel.Label : T("{0} (you can select multiple)", viewModel.Label).Text, labelAttributes)
     }
 
     @Html.TextBox("SelectizeInput", "", selectizeInputAttributes)
