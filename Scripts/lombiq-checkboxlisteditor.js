@@ -49,29 +49,29 @@
 
             if (plugin.settings.isSearchEnabled) {
                 $(plugin.settings.searchFilterElementClass).change(function () {
-                var filter = $(this).val();
-                var controlGroup = $(this).parents(plugin.settings.searchFilterContainerElementClass).next(plugin.settings.controlGroupElementClass);
+                    var filter = $(this).val();
+                    var controlGroup = $(this).parents(plugin.settings.searchFilterContainerElementClass).next(plugin.settings.controlGroupElementClass);
 
-                if (filter.length === 0) {
-                    controlGroup.find(plugin.settings.checkboxContainerSelector + ":hidden").show();
-                    $(this).prev().removeClass("glyphicon-remove").addClass("glyphicon-search");
-                    return;
-                }
-                else {
-                    $(this).prev().removeClass("glyphicon-search").addClass("glyphicon-remove");
+                    if (filter.length === 0) {
+                        controlGroup.find(plugin.settings.checkboxContainerSelector + ":hidden").show();
+                        $(this).prev().removeClass("glyphicon-remove").addClass("glyphicon-search");
+                        return;
+                    }
+                    else {
+                        $(this).prev().removeClass("glyphicon-search").addClass("glyphicon-remove");
 
-                    $(".glyphicon-remove").click(function () {
-                        $(this).next().val("");
-                        $(this).removeClass("glyphicon-remove").addClass("glyphicon-search");
-                        controlGroup.find(plugin.settings.checkboxItemElementClass + ":hidden").show();
-                    });
-                }
+                        $(".glyphicon-remove").click(function () {
+                            $(this).next().val("");
+                            $(this).removeClass("glyphicon-remove").addClass("glyphicon-search");
+                            controlGroup.find(plugin.settings.checkboxItemElementClass + ":hidden").show();
+                        });
+                    }
 
-                controlGroup.find(plugin.settings.checkboxContainerSelector + ":contains('" + filter + "'):hidden").show();
+                    controlGroup.find(plugin.settings.checkboxContainerSelector + ":contains('" + filter + "'):hidden").show();
 
-                var $itemsToHide = controlGroup.find(plugin.settings.checkboxContainerSelector + ":not(:contains('" + filter + "')):visible");
-                $itemsToHide.children(plugin.settings.checkboxInputElementClass).prop("checked", false);
-                $itemsToHide.hide();
+                    var $itemsToHide = controlGroup.find(plugin.settings.checkboxContainerSelector + ":not(:contains('" + filter + "')):visible");
+                    $itemsToHide.children(plugin.settings.checkboxInputElementClass).prop("checked", false);
+                    $itemsToHide.hide();
 
                 }).on("keyup search", function () {
                     $(this).change();
