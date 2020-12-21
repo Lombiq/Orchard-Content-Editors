@@ -22,7 +22,8 @@
         selectAllElementClass: "",
         inputSelectAllElementSelector: "",
         checkboxItemElementClass: "",
-        blockClass: ""
+        blockClass: "",
+        deselectFilteredItems: false // When set to true, options that are filtered out by the text search will be deselected too.
     };
 
     function Plugin(element, options) {
@@ -70,7 +71,11 @@
                     controlGroup.find(plugin.settings.checkboxContainerSelector + ":contains('" + filter + "'):hidden").show();
 
                     var $itemsToHide = controlGroup.find(plugin.settings.checkboxContainerSelector + ":not(:contains('" + filter + "')):visible");
-                    $itemsToHide.children(plugin.settings.checkboxInputElementClass).prop("checked", false);
+
+                    if (plugin.settings.deselectFilteredItems) {
+                        $itemsToHide.children(plugin.settings.checkboxInputElementClass).prop("checked", false);
+                    }
+
                     $itemsToHide.hide();
 
                 }).on("keyup search", function () {
