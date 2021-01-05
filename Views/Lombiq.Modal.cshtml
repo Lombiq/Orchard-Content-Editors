@@ -30,7 +30,7 @@
 
             $("#@id").dialog({
                 dialogClass: "@($"{BlockName}Container {DefaultBlockName}Container modalBorder")",
-                width: "460px",
+                width: @(Model.Width ?? "460"),
                 closeOnEscape: @((Model.CloseOnEscape ?? true).ToString().ToLower()),
                 modal: true,
                 autoOpen: @((Model.AutoOpen ?? false).ToString().ToLower()),
