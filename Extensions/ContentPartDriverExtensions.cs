@@ -22,6 +22,14 @@ namespace Orchard.ContentManagement.Drivers
                 driver.ContentShape(shapeName, () =>
                     (shapeFactory as dynamic).Lombiq_Editors_TextboxEditor(ViewModel: viewModelFactory()));
 
+        public static ContentShapeResult TextareaEditorShape<TContent>(
+            this ContentPartDriver<TContent> driver,
+            string shapeName,
+            IShapeFactory shapeFactory,
+            Func<EditorViewModel> viewModelFactory) where TContent : ContentPart, new() =>
+                driver.ContentShape(shapeName, () =>
+                    (shapeFactory as dynamic).Lombiq_Editors_TextareaEditor(ViewModel: viewModelFactory()));
+
         public static ContentShapeResult DateTimeEditorShape<TContent>(
             this ContentPartDriver<TContent> driver,
             string shapeName,
