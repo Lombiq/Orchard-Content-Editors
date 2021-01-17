@@ -3,6 +3,7 @@
 @{
     var viewModel = Model.ViewModel as BoolEditorViewModel;
     var value = (viewModel.Value as bool?) ?? false;
+    var label = viewModel.Label;
     const string DefaultBlockName = "toggleBoolEditor";
     var BlockName = viewModel.BlockName ?? DefaultBlockName;
 
@@ -20,7 +21,11 @@
 
 <div class="editor form-group @BlockName">
     @checkboxContainerDiv.StartElement
-        <input class="@BooleanFieldElementName" type="checkbox" name="@viewModel.Name" value="@Json.Encode(value)" @(value ? "checked=checked" : "") @if (viewModel.Disabled) { <text> disabled="disabled" </text> }/>
+        @if (!string.IsNullOrEmpty(label))
+        {
+            <label class="@(BooleanFieldElementName)Label" for="@viewModel.Id">@label</label>
+        }
+        <input id="@viewModel.Id" class="@BooleanFieldElementName" type="checkbox" name="@viewModel.Name" value="@Json.Encode(value)" @(value ? "checked=checked" : "") @if (viewModel.Disabled) { <text> disabled="disabled" </text> }/>
     @checkboxContainerDiv.EndElement
 </div>
 
