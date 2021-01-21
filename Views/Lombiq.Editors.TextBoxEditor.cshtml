@@ -7,12 +7,12 @@
     string BlockName = viewModel.BlockName ?? DefaultBlockName;
 
     var textboxAttributes = viewModel.BuildAttributes(new Dictionary<string, object>
-    {
+{
         { "class", "form-control textbox " + DefaultBlockName + "__textbox" }
     });
 
     var labelAttributes = new Dictionary<string, object>
-    {
+{
         { "class", "editorLabel " + DefaultBlockName + "__label" }
     };
 
@@ -39,6 +39,12 @@
     {
         @Html.Label(viewModel.Name, viewModel.Label, labelAttributes)
     }
+
+    @if (!string.IsNullOrEmpty(viewModel.Tooltip))
+    {
+        @Display.Lombiq_Tooltip(Text: viewModel.Tooltip)
+    }
+
     @if (!string.IsNullOrEmpty(viewModel.Hint))
     {
         <div class="editorHint @(DefaultBlockName)__editorHint">@viewModel.Hint</div>
