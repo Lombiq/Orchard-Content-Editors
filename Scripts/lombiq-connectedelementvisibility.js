@@ -149,10 +149,10 @@
             var inverseTarget = $(plugin.settings.inverseTargetSelector).not(plugin.element);
 
             if (show === null && plugin.settings.hideDefault) {
-                target.hide();
+                target.hide("slow");
                 replaceValidationAttributes(plugin.settings.targetSelector);
                 if (plugin.settings.inverseTargetSelector) {
-                    inverseTarget.hide();
+                    inverseTarget.hide("slow");
                     replaceValidationAttributes(plugin.settings.inverseTargetSelector);
                 }
                 if (plugin.settings.clearTargetInputsOnHide) {
@@ -161,18 +161,18 @@
                 }
             }
             else if (show === null && !plugin.settings.hideDefault || show) {
-                target.show();
+                target.show("slow");
                 replaceHiddenValidationAttributes(plugin.settings.targetSelector);
                 if (plugin.settings.inverseTargetSelector) {
-                    inverseTarget.hide();
+                    inverseTarget.hide("slow");
                     replaceValidationAttributes(plugin.settings.inverseTargetSelector);
                 }
             }
             else {
-                target.hide();
+                target.hide("slow");
                 replaceValidationAttributes(plugin.settings.targetSelector);
                 if (plugin.settings.inverseTargetSelector) {
-                    inverseTarget.show();
+                    inverseTarget.show("slow");
                     replaceHiddenValidationAttributes(plugin.settings.inverseTargetSelector);
                 }
                 if (plugin.settings.clearTargetInputsOnHide) {
