@@ -5,7 +5,8 @@
         Default,
         Dropdown,
         Checkbox,
-        Selectize
+        Selectize,
+        Radio
     }
 
     public class TaxonomyEditorViewModel : DropdownEditorViewModel

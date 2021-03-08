@@ -6,7 +6,8 @@
 
     Script.Require(ResourceNames.jQueryUI).AtHead();
 
-    const string DefaultBlockName = "taxonomyCheckboxEditor";
+    var DefaultBlockName = $"taxonomy{viewModel.Flavor.ToString()}Editor";
+
     string BlockName = viewModel.BlockName ?? DefaultBlockName;
     var CheckBoxElementName = DefaultBlockName + "__checkbox";
     var hasDescriptions = viewModel.Descriptions != null && viewModel.Descriptions.Any();
@@ -41,12 +42,17 @@
         @Html.Label(viewModel.Label, labelAttributes)
     }
 
+    @if (!string.IsNullOrEmpty(viewModel.Hint))
+    {
+        <div class="editorHint @(DefaultBlockName)__editorHint">@viewModel.Hint</div>
+    }
+
     <div class="@(DefaultBlockName)__list">
         @foreach (var selectListItem in viewModel.SelectList)
         {
             <div class="@(DefaultBlockName)__listItem" data-termid="@selectListItem.Value">
                 <label class="forcheckbox @(DefaultBlockName)__label" for="@Html.Id($"Terms[{termIndex}].IsChecked")">
-                    <input class="@CheckBoxElementName @(DefaultBlockName)__input" @if (selectListItem.Disabled) { <text> disabled="disabled" </text> } type="checkbox" value="true" @if (selectListItem.Selected) { <text> checked="checked" </text> } name="@Html.Name($"Terms[{termIndex}].IsChecked")" id="@Html.Id($"Terms[{termIndex}].IsChecked")" data-term="@selectListItem.Text" />
+                    <input class="@CheckBoxElementName @(DefaultBlockName)__input" @if (selectListItem.Disabled) { <text> disabled="disabled" </text> } type="@viewModel.Flavor.ToString().ToLower()" value="true" @if (selectListItem.Selected) { <text> checked="checked" </text> } name="@Html.Name($"Terms[{termIndex}].IsChecked")" id="@Html.Id($"Terms[{termIndex}].IsChecked")" data-term="@selectListItem.Text" />
 
                     @Html.Hidden($"Terms[{termIndex}].Id", selectListItem.Value)
 
