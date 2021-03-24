@@ -158,6 +158,7 @@
                 if (plugin.settings.clearTargetInputsOnHide) {
                     target.find("input, textarea").val("");
                     target.find("select").prop("selectedIndex", 0);
+                    target.find("[type = radio]").removeAttr("checked").trigger("change", false);
                 }
             }
             else if (show === null && !plugin.settings.hideDefault || show) {
@@ -178,6 +179,7 @@
                 if (plugin.settings.clearTargetInputsOnHide) {
                     target.find("input, textarea").val("");
                     target.find("select").prop("selectedIndex", 0);
+                    target.find("[type = radio]").removeAttr("checked").trigger("change", false);
                 }
             }
 
