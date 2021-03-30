@@ -1,0 +1,99 @@
+﻿@using Lombiq.ContentEditors.Constants
+@using Lombiq.ContentEditors.ViewModels
+
+@{
+    var viewModel = Model.ViewModel as TaxonomyEditorViewModel;
+
+    Script.Require(ResourceNames.jQueryUI).AtHead();
+
+    var isRadioButton = viewModel.Flavor == TaxonomyEditorFlavor.RadioButton;
+
+    var DefaultBlockName = isRadioButton ? "taxonomyRadioButtonEditor" : "taxonomyCheckboxEditor";
+
+    var BlockName = viewModel.BlockName ?? DefaultBlockName;
+
+    var InputElementName = DefaultBlockName + (isRadioButton ? "__radioButton" : "__checkbox");
+
+    var hasDescriptions = viewModel.Descriptions != null && viewModel.Descriptions.Any();
+
+    var selectedTerms = viewModel.TaxonomyFieldViewModel.SelectedTerms;
+    if (selectedTerms != null && selectedTerms.Any())
+    {
+        var notAvailableSelectedTerms = selectedTerms.Where(term => !viewModel.SelectList.Select(listItem => int.Parse(listItem.Value)).Contains(term.Id));
+
+        foreach (var term in notAvailableSelectedTerms)
+        {
+            viewModel.SelectList.Add(new SelectListItem { Value = term.Id.ToString(), Text = term.Name, Selected = true });
+        }
+    }
+
+    var termIndex = 0;
+
+    var labelAttributes = new Dictionary<string, object>
+    {
+        { "class", "editorLabel " + DefaultBlockName + "__label" }
+    };
+
+    if (viewModel.Required)
+    {
+        labelAttributes["class"] = labelAttributes["class"] + " required";
+    }
+}
+
+<div class="editor editorField form-group @DefaultBlockName @BlockName">
+    @if (!string.IsNullOrEmpty(viewModel.Label))
+    {
+        @Html.Label(viewModel.Label, labelAttributes)
+    }
+
+    @if (!string.IsNullOrEmpty(viewModel.Hint))
+    {
+        <div class="editorHint @(DefaultBlockName)__editorHint">@viewModel.Hint</div>
+    }
+
+    <div class="@(DefaultBlockName)__list">
+        @foreach (var selectListItem in viewModel.SelectList)
+        {
+            <div class="@(DefaultBlockName)__listItem" data-termid="@selectListItem.Value">
+                <label class="forcheckbox @(DefaultBlockName)__label" for="@Html.Id($"Terms[{termIndex}].IsChecked")">
+                    <input class="@InputElementName @(DefaultBlockName)__input" @if (selectListItem.Disabled) { <text> disabled="disabled" </text> } type="@(isRadioButton ? "checkbox": "radio")" value="true" @if (selectListItem.Selected) { <text> checked="checked" </text> } name="@Html.Name($"Terms[{termIndex}].IsChecked")" id="@Html.Id($"Terms[{termIndex}].IsChecked")" data-term="@selectListItem.Text" />
+
+                    @Html.Hidden($"Terms[{termIndex}].Id", selectListItem.Value)
+
+                    @selectListItem.Text
+
+                    @if (viewModel.Hints != null && viewModel.Hints.TryGetValue(selectListItem.Value, out string tooltip))
+                    {
+                        @Display.Lombiq_Tooltip(Text: tooltip)
+                    }
+
+                    @if (hasDescriptions && viewModel.Descriptions.TryGetValue(selectListItem.Value, out string description) && !string.IsNullOrEmpty(description))
+                    {
+                        <span class="@(DefaultBlockName)__description">@Html.Raw(description)</span>
+                    }
+
+                    <span class="@(DefaultBlockName)__indicator"></span>
+                </label>
+            </div>
+            termIndex++;
+        }
+    </div>
+</div>
+
+@if (viewModel.TaxonomyFieldViewModel.Settings.SingleChoice)
+{
+    <script type="text/javascript">
+        ; (function ($) {
+            $(function () {
+                $(".@InputElementName").click(function () {
+                    @* Trying to match the current field editor as much as possible,
+                       so that we don't interfere with other ones,
+                       but that requires the BlockName to be defined. *@
+                    if (!$(this).parents().eq(3).hasClass("@BlockName")) return;
+
+                    $(this).parent().parent().siblings().find(".@InputElementName").prop("checked", false);
+                });
+            });
+        })(jQuery);
+    </script>
+}
