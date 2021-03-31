@@ -19,7 +19,8 @@
     var selectedTerms = viewModel.TaxonomyFieldViewModel.SelectedTerms;
     if (selectedTerms != null && selectedTerms.Any())
     {
-        var notAvailableSelectedTerms = selectedTerms.Where(term => !viewModel.SelectList.Select(listItem => int.Parse(listItem.Value)).Contains(term.Id));
+        var notAvailableSelectedTerms = selectedTerms
+            .Where(term => !viewModel.SelectList.Select(listItem => int.Parse(listItem.Value)).Contains(term.Id));
 
         foreach (var term in notAvailableSelectedTerms)
         {
@@ -56,7 +57,11 @@
         {
             <div class="@(DefaultBlockName)__listItem" data-termid="@selectListItem.Value">
                 <label class="forcheckbox @(DefaultBlockName)__label" for="@Html.Id($"Terms[{termIndex}].IsChecked")">
-                    <input class="@InputElementName @(DefaultBlockName)__input" @if (selectListItem.Disabled) { <text> disabled="disabled" </text> } type="@(isRadioButton ? "checkbox": "radio")" value="true" @if (selectListItem.Selected) { <text> checked="checked" </text> } name="@Html.Name($"Terms[{termIndex}].IsChecked")" id="@Html.Id($"Terms[{termIndex}].IsChecked")" data-term="@selectListItem.Text" />
+                    <input @if (selectListItem.Disabled) { <text> disabled="disabled" </text> }
+                           @if (selectListItem.Selected) { <text> checked="checked" </text> }
+                           type="@(isRadioButton ? "checkbox": "radio")" value="true"
+                           name="@Html.Name($"Terms[{termIndex}].IsChecked")" id="@Html.Id($"Terms[{termIndex}].IsChecked")"
+                           class="@InputElementName @(DefaultBlockName)__input" data-term="@selectListItem.Text" />
 
                     @Html.Hidden($"Terms[{termIndex}].Id", selectListItem.Value)
 
