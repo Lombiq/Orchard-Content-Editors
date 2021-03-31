@@ -90,10 +90,10 @@
                 show = false;
             }
             else if (typeof value === "number") {
-                if (number === 0) {
+                if (value === 0) {
                     show = false;
                 }
-                else if (number === 1) {
+                else if (value === 1) {
                     show = true;
                 }
             }
