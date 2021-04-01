@@ -1,5 +1,6 @@
 ﻿@using Lombiq.ContentEditors.Constants
 @using Lombiq.ContentEditors.ViewModels
+@using Piedone.HelpfulLibraries.Utilities
 
 @{
     var viewModel = Model.ViewModel as TaxonomyEditorViewModel;
@@ -85,7 +86,7 @@
     </div>
 </div>
 
-@if (viewModel.TaxonomyFieldViewModel.Settings.SingleChoice)
+@if (this.WasNotDisplayed("Lombiq.Editors.TaxonomyEditor.Checkbox") && viewModel.TaxonomyFieldViewModel.Settings.SingleChoice)
 {
     <script type="text/javascript">
         ; (function ($) {
