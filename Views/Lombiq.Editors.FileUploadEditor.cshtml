@@ -1,4 +1,5 @@
 ﻿@using Lombiq.ContentEditors.ViewModels
+@using Piedone.HelpfulLibraries.Utilities
 
 @{
     var viewModel = Model.ViewModel as EditorViewModel;
@@ -6,9 +7,13 @@
     const string DefaultBlockName = "fileUpload";
     string BlockName = viewModel.BlockName ?? DefaultBlockName;
 
+    const string FileUploadContainerElementName = DefaultBlockName + "__fileUploadContainer";
+    const string FileUploadPlaceholderElementName = DefaultBlockName + "__fileUploadPlaceholder";
+    const string FileUploadElementName = DefaultBlockName + "__fileUpload";
+
     var fileUploadAttributes = viewModel.BuildAttributes(new Dictionary<string, object>
     {
-        { "class", "form-control fileUpload " + DefaultBlockName + "__fileUpload" },
+        { "class", "form-control fileUpload " + FileUploadElementName },
         { "type", "file" }
     });
 
@@ -24,9 +29,9 @@
         labelAttributes["class"] += " required";
     }
 
-    if (!string.IsNullOrEmpty(viewModel.Placeholder))
+    if (string.IsNullOrEmpty(viewModel.Placeholder))
     {
-        fileUploadAttributes["placeholder"] = viewModel.Placeholder;
+        viewModel.Placeholder = T("Browse").Text;
     }
 }
 
@@ -35,9 +40,38 @@
     {
         @Html.Label(viewModel.Name, viewModel.Label, labelAttributes)
     }
+
+    <div class="@FileUploadContainerElementName">
+        <span class="@FileUploadPlaceholderElementName">@viewModel.Placeholder</span>
+        @Html.TextBox(viewModel.Name, null, fileUploadAttributes)
+    </div>
+
     @if (!string.IsNullOrEmpty(viewModel.Hint))
     {
         <div class="editorHint @(DefaultBlockName)__editorHint">@viewModel.Hint</div>
     }
-    @Html.TextBox(viewModel.Name, null, fileUploadAttributes)
 </div>
+
+@if (this.WasNotDisplayed("Lombiq.Editors.FileUploadEditor"))
+{
+    <script type="text/javascript">
+        ; (function ($) {
+            $(function () {
+                $(".@FileUploadContainerElementName").click(function () {
+                    $(this).find(".@FileUploadElementName").trigger("click");
+                });
+
+                $(".@FileUploadElementName").click(function (event) {
+                    event.stopPropagation();
+                });
+
+                $(".@FileUploadElementName").change(function (event) {
+                    var filePath = $(this).val();
+
+                    $(this).siblings(".@FileUploadPlaceholderElementName").text(filePath.length === 0
+                        ? "@viewModel.Placeholder" : filePath.split('\\').pop() + " @T("Selected").Text");
+                });
+            });
+        })(jQuery);
+    </script>
+}
