@@ -319,7 +319,7 @@
     <Content Include="Views\Lombiq.Editors.BoolEditor.Checkbox.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Lombiq.Editors.TaxonomyEditor.CheckboxOrRadioButton.cshtml" />
+    <Content Include="Views\Lombiq.Editors.TaxonomyEditor.Checkbox.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\LC-switch\LICENSE" />
