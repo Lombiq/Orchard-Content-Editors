@@ -5,6 +5,7 @@
         Default,
         Dropdown,
         Checkbox,
+        RadioButton,
         Selectize
     }
 

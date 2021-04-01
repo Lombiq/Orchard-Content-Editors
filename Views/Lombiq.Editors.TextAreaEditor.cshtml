@@ -32,7 +32,7 @@
     }
 }
 
-<div class="editor editorField form-group @DefaultBlockName">
+<div class="editor editorField form-group @DefaultBlockName @BlockName">
     @if (!string.IsNullOrEmpty(viewModel.Label))
     {
         @Html.Label(viewModel.Name, viewModel.Label, labelAttributes)
