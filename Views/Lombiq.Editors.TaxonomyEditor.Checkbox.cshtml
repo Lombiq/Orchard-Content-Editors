@@ -60,7 +60,7 @@
                 <label class="forcheckbox @(DefaultBlockName)__label" for="@Html.Id($"Terms[{termIndex}].IsChecked")">
                     <input @if (selectListItem.Disabled) { <text> disabled="disabled" </text> }
                            @if (selectListItem.Selected) { <text> checked="checked" </text> }
-                           type="@(isRadioButton ? "checkbox": "radio")" value="true"
+                           type="@(isRadioButton ? "radio": "checkbox")" value="true"
                            name="@Html.Name($"Terms[{termIndex}].IsChecked")" id="@Html.Id($"Terms[{termIndex}].IsChecked")"
                            class="@InputElementName @(DefaultBlockName)__input" data-term="@selectListItem.Text" />
 
@@ -86,7 +86,7 @@
     </div>
 </div>
 
-@if (this.WasNotDisplayed("Lombiq.Editors.TaxonomyEditor.Checkbox") && viewModel.TaxonomyFieldViewModel.Settings.SingleChoice)
+@if (viewModel.TaxonomyFieldViewModel.Settings.SingleChoice)
 {
     <script type="text/javascript">
         ; (function ($) {
