@@ -182,6 +182,21 @@ namespace Lombiq.ContentEditors.Models
         }
 
         /// <summary>
+        /// Checks if the group is already complete.
+        /// </summary>
+        /// <param name="part">AsyncEditorPart of the content item.</param>
+        /// <param name="group">Name of the group that needs to be checked.</param>
+        /// <returns>True if the editor group is completed.</returns>
+        public static bool IsEditorGroupAlreadyComplete(this AsyncEditorPart part, string group)
+        {
+            Argument.ThrowIfNullOrEmpty(group, nameof(group));
+
+            var editorGroup = part.GetEditorGroupDescriptor(group);
+
+            return editorGroup != null && part.GetCompletedEditorGroups().Contains(editorGroup);
+        }
+
+        /// <summary>
         /// Returns editor groups that are available to edit (i.e. complete groups or the one after the last complete group).
         /// </summary>
         /// <param name="part">AsyncEditorPart of the content item.</param>
