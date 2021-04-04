@@ -7,6 +7,13 @@ using System.Web.Mvc;
 
 namespace Lombiq.ContentEditors.ViewModels
 {
+    public enum OrderBy
+    {
+        Ascending,
+        Descending,
+        None
+    }
+
     public class DropdownEditorViewModel : EditorViewModel, IParentElementValueDependency, ISelectSpecialValues
     {
         public List<SelectListItem> SelectList { get; set; } = new List<SelectListItem>();
@@ -14,6 +21,9 @@ namespace Lombiq.ContentEditors.ViewModels
         public bool HasDefaultEmptyValue { get; set; }
         public string EmptyValueText { get; set; } = "";
         public string DefaultEmptyValue { get; set; } = "";
+        public OrderBy OrderBy { get; set; } = OrderBy.None;
+        public string FirstValueText { get; set; } = "";
+        public string LastValueText { get; set; } = "";
         public Dictionary<string, string> Hints { get; set; }
         public Dictionary<string, string> Descriptions { get; set; }
 
@@ -62,7 +72,6 @@ namespace Lombiq.ContentEditors.ViewModels
             Name = TechnicalName = technicalName;
         }
     }
-
 
     public static class DropdownEditorViewModelExtensions
     {
