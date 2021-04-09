@@ -51,17 +51,17 @@
 @if (this.IsInternetExplorer(Request.UserAgent))
 {
     <script type="text/javascript">
-            ; (function ($) {
-                $(function () {
-                    $(".@ClassNameForScripts").resizable({
-                        minWidth: 40,
-                        minHeight: 30,
-                        start: function () {
-                            $(this).children(".ui-resizable-se").css({ "bottom": "15px" });
-                        }
-                    }).removeAttr("style").parent().removeAttr("style")
-                        .css({ "height": "auto", "min-width": "100%", "max-width": "100%", "position": "relative" });
-                });
-            })(jQuery);
+        ; (function ($) {
+            $(function () {
+                $(".@ClassNameForScripts").resizable({
+                    minWidth: 40,
+                    minHeight: 30,
+                    start: function () {
+                        $(this).children(".ui-resizable-se").css({ "bottom": "15px" });
+                    }
+                }).removeAttr("style").parent().removeAttr("style")
+                    .css({ "height": "auto", "min-width": "100%", "max-width": "100%", "position": "relative" });
+            });
+        })(jQuery);
     </script>
 }

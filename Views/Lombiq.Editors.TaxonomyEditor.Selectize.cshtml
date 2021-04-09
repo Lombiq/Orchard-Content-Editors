@@ -1,5 +1,5 @@
-﻿@using Lombiq.ContentEditors.ViewModels
-@using Lombiq.ContentEditors.Constants
+﻿@using Lombiq.ContentEditors.Constants
+@using Lombiq.ContentEditors.ViewModels
 @using Orchard.Services
 
 @{
@@ -20,14 +20,14 @@
     var hiddenInputIdPrefix = $"{inputIdPrefix}_Terms";
 
     var selectizeInputAttributes = new Dictionary<string, object>
-{
+    {
         { "class", TextBoxElementName },
         { "id", selectizeInputId },
         { "placeholder", viewModel.Placeholder ?? "" }
     };
 
     var labelAttributes = new Dictionary<string, object>
-{
+    {
         { "class", "editorLabel textboxEditor__label " + DefaultBlockName + "__label" },
         { "for", selectizeInputId }
     };
@@ -45,6 +45,8 @@
     {
         { "maxItems", viewModel.TaxonomyFieldViewModel.Settings.SingleChoice ? "1" : null }
     };
+
+    viewModel.SortSelectListByText();
 }
 
 <div class="editor editorField form-group @DefaultBlockName @BlockName">

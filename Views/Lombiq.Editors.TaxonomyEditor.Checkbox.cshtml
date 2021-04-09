@@ -1,6 +1,5 @@
 ﻿@using Lombiq.ContentEditors.Constants
 @using Lombiq.ContentEditors.ViewModels
-@using Piedone.HelpfulLibraries.Utilities
 
 @{
     var viewModel = Model.ViewModel as TaxonomyEditorViewModel;
@@ -40,6 +39,8 @@
     {
         labelAttributes["class"] = labelAttributes["class"] + " required";
     }
+
+    viewModel.SortSelectListByText();
 }
 
 <div class="editor editorField form-group @DefaultBlockName @BlockName">

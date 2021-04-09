@@ -1,4 +1,5 @@
-﻿using Orchard.Localization;
+﻿using Lombiq.ContentEditors.Extensions;
+using Orchard.Localization;
 using Piedone.HelpfulExtensions;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -16,6 +17,7 @@ namespace Lombiq.ContentEditors.ViewModels
         public string DefaultEmptyValue { get; set; } = "";
         public Dictionary<string, string> Hints { get; set; }
         public Dictionary<string, string> Descriptions { get; set; }
+        public bool? OrderByAscending { get; set; } = true;
 
         #region IParentElementValueDependency implementation
 
@@ -27,7 +29,9 @@ namespace Lombiq.ContentEditors.ViewModels
         #region ISelectSpecialValues implementation
 
         public string NoneValueId { get; set; } = "";
+        public int? NoneValueSortIndex { get; set; } = int.MaxValue;
         public string OtherValueId { get; set; } = "";
+        public int? OtherValueSortIndex { get; set; } = 0;
 
         #endregion
 
@@ -61,8 +65,19 @@ namespace Lombiq.ContentEditors.ViewModels
 
             Name = TechnicalName = technicalName;
         }
-    }
 
+        public void SortSelectListByText()
+        {
+            if (OrderByAscending.HasValue)
+            {
+                SelectList = SelectList.SortByText(OrderByAscending.Value);
+            }
+
+            SelectList.MoveItemByValue(NoneValueId, NoneValueSortIndex.Value);
+
+            SelectList.MoveItemByValue(OtherValueId, OtherValueSortIndex.Value);
+        }
+    }
 
     public static class DropdownEditorViewModelExtensions
     {

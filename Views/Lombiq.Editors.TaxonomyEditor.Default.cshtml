@@ -24,6 +24,8 @@
     var prefix = Html.NameForModel();
     var selectableIds = viewModel.SelectList.Select(item => int.TryParse(item.Value, out var id) ? id : 0).ToList();
     var selectableTerms = taxonomyViewModel.Terms.Where(term => selectableIds.Contains(term.Id)).ToList();
+
+    viewModel.SortSelectListByText();
 }
 
 

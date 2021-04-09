@@ -45,6 +45,8 @@
             Selected = !viewModel.SelectList.Any(selectListItem => selectListItem.Selected)
         });
     }
+
+    viewModel.SortSelectListByText();
 }
 
 <div class="editor editorField form-group @DefaultBlockName @BlockName">
