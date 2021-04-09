@@ -1,4 +1,5 @@
-﻿using Orchard.Localization;
+﻿using Lombiq.ContentEditors.Extensions;
+using Orchard.Localization;
 using Piedone.HelpfulExtensions;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -7,13 +8,6 @@ using System.Web.Mvc;
 
 namespace Lombiq.ContentEditors.ViewModels
 {
-    public enum OrderBy
-    {
-        Ascending,
-        Descending,
-        None
-    }
-
     public class DropdownEditorViewModel : EditorViewModel, IParentElementValueDependency, ISelectSpecialValues
     {
         public List<SelectListItem> SelectList { get; set; } = new List<SelectListItem>();
@@ -21,11 +15,9 @@ namespace Lombiq.ContentEditors.ViewModels
         public bool HasDefaultEmptyValue { get; set; }
         public string EmptyValueText { get; set; } = "";
         public string DefaultEmptyValue { get; set; } = "";
-        public OrderBy OrderBy { get; set; } = OrderBy.None;
-        public string FirstValueText { get; set; } = "";
-        public string LastValueText { get; set; } = "";
         public Dictionary<string, string> Hints { get; set; }
         public Dictionary<string, string> Descriptions { get; set; }
+        public bool? OrderByAscending { get; set; } = true;
 
         #region IParentElementValueDependency implementation
 
@@ -37,7 +29,9 @@ namespace Lombiq.ContentEditors.ViewModels
         #region ISelectSpecialValues implementation
 
         public string NoneValueId { get; set; } = "";
+        public int? NoneValueSortIndex { get; set; } = int.MaxValue;
         public string OtherValueId { get; set; } = "";
+        public int? OtherValueSortIndex { get; set; } = 0;
 
         #endregion
 
@@ -70,6 +64,18 @@ namespace Lombiq.ContentEditors.ViewModels
                 });
 
             Name = TechnicalName = technicalName;
+        }
+
+        public void SortSelectListByText()
+        {
+            if (OrderByAscending.HasValue)
+            {
+                SelectList = SelectList.SortByText(OrderByAscending.Value);
+            }
+
+            SelectList.MoveItemByValue(NoneValueId, NoneValueSortIndex.Value);
+
+            SelectList.MoveItemByValue(OtherValueId, OtherValueSortIndex.Value);
         }
     }
 

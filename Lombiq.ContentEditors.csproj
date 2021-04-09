@@ -108,7 +108,7 @@
     <Compile Include="Drivers\AsyncEditorPartDriver.cs" />
     <Compile Include="Authorization\GroupAuthorizationEventHandler.cs" />
     <Compile Include="Extensions\ContentFieldDriverExtensions.cs" />
-    <Compile Include="Extensions\SelectListItemExtensions.cs" />
+    <Compile Include="Extensions\SelectListExtensions.cs" />
     <Compile Include="Handlers\DefaultAsyncEditorEventHandler.cs" />
     <Compile Include="Events\IAsyncEditorEventHandler.cs" />
     <Compile Include="Extensions\ContentManagerExtensions.cs" />

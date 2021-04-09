@@ -1,6 +1,5 @@
-﻿@using Lombiq.ContentEditors.ViewModels
-@using Lombiq.ContentEditors.Constants
-@using Lombiq.ContentEditors.Extensions
+﻿@using Lombiq.ContentEditors.Constants
+@using Lombiq.ContentEditors.ViewModels
 @using Orchard.Services
 
 @{
@@ -47,10 +46,7 @@
         { "maxItems", viewModel.TaxonomyFieldViewModel.Settings.SingleChoice ? "1" : null }
     };
 
-    viewModel.SelectList = viewModel.SelectList.OrderListValues(viewModel.OrderBy);
-
-    viewModel.SelectList.MoveIfItemByTextIsAvailable(viewModel.FirstValueText, 0);
-    viewModel.SelectList.MoveIfItemByTextIsAvailable(viewModel.LastValueText, viewModel.SelectList.Count);
+    viewModel.SortSelectListByText();
 }
 
 <div class="editor editorField form-group @DefaultBlockName @BlockName">

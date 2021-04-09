@@ -1,5 +1,4 @@
 ﻿@using Lombiq.ContentEditors.ViewModels
-@using Lombiq.ContentEditors.Extensions
 
 @{
     var viewModel = Model.ViewModel as DropdownEditorViewModel;
@@ -56,10 +55,7 @@
         viewModel.SelectList?.Insert(0, emptySelectListItem);
     }
 
-    viewModel.SelectList = viewModel.SelectList.OrderListValues(viewModel.OrderBy);
-
-    viewModel.SelectList.MoveIfItemByTextIsAvailable(viewModel.FirstValueText, 0);
-    viewModel.SelectList.MoveIfItemByTextIsAvailable(viewModel.LastValueText, viewModel.SelectList.Count);
+    viewModel.SortSelectListByText();
 }
 
 <div class="editor editorField form-group @DefaultBlockName @BlockName">
