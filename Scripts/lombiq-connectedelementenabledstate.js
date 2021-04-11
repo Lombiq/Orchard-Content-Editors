@@ -12,7 +12,7 @@
     var pluginName = "lombiq_ConnectedElementEnabledState";
 
     var defaults = {
-        initialValue: null,
+        initialValue: undefined,
         emptyNotEmptyMode: false,
         valueEnable: null,
         valueDisable: null,
@@ -33,23 +33,11 @@
         init: function () {
             var plugin = this;
 
-            if (!plugin.settings.initialValue) {
-                plugin.settings.initialValue = $(plugin.element).val();
-            }
-
-            plugin.updateState(plugin.settings.initialValue);
-
-            $(plugin.element).on("change", function (event, value) {
-                var actualValue = null;
-                if (plugin.isValueValid(value)) {
-                    actualValue = value;
-                }
-                else if (plugin.isValueValid($(this).val())) {
-                    actualValue = $(this).val();
-                }
-
-                plugin.updateState(actualValue);
+            $(plugin.element).change(function (event, value) {
+                plugin.refresh(value);
             });
+
+            plugin.refresh(plugin.settings.initialValue);
         },
 
         isValueValid: function (value) {
@@ -60,41 +48,19 @@
             return true;
         },
 
-        updateState: function (value) {
+        refresh: function (value) {
             var plugin = this;
             var enable = null;
 
-            if (plugin.settings.emptyNotEmptyMode) {
-                enable = plugin.isValueValid(value);
+            if (typeof value === "undefined") {
+                value = plugin.element.val(); // If the provided value is not valid, try the element value.
+            }
+
+            if (plugin.settings.emptyNotEmptyMode && typeof value !== "undefined") {
+                enable = true;
             }
             else {
-                if (!plugin.isValueValid(value)) return;
-
-                if (typeof value === "boolean") {
-                    enable = value;
-                }
-                else if (plugin.settings.valueEnable !== null && value === plugin.settings.valueEnable) {
-                    enable = true;
-                }
-                else if (plugin.settings.valueDisable !== null && value === plugin.settings.valueDisable) {
-                    enable = false;
-                }
-                else if (typeof value === "number") {
-                    if (number === 0) {
-                        enable = false;
-                    }
-                    else if (number === 1) {
-                        enable = true;
-                    }
-                }
-                else if (typeof value === "string") {
-                    // When there are no values supplied to compare the current value with, try to interpret the value as a boolean.
-                    if (plugin.settings.valueEnable === null || plugin.settings.valueDisable === null) {
-                        enable = value === "true" || value === "True" || value === "false" || value === "False" ?
-                            value === "true" || value === "True" :
-                            null;
-                    }
-                }
+                enable = $(document).dynamicComparer(value, plugin.settings.valueEnable, plugin.settings.valueDisable);
             }
 
             var target = $(plugin.settings.targetSelector).not(plugin.element);

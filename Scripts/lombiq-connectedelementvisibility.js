@@ -13,7 +13,7 @@
 
     var defaults = {
         instanceName: null,
-        initialValue: null,
+        initialValue: undefined,
         valueFunction: function (element) { return element.val(); },
         valueShow: null,
         valueHide: null,

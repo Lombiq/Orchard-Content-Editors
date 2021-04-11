@@ -1,8 +1,12 @@
 ﻿; (function ($, window, document, undefined) {
     $.fn.extend({
         dynamicComparer: function (value, matchValue, noMatchValue) {
-            var match = null;
-            if (typeof value === "boolean") {
+            let match;
+
+            if (typeof value === "undefined") {
+                match = null;
+            }
+            else if (typeof value === "boolean") {
                 match = value;
             }
             else if (matchValue !== null && value === matchValue) {
