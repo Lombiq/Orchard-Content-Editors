@@ -165,6 +165,7 @@
     <Content Include="Scripts\lombiq-connectedelementenabledstate.js" />
     <Content Include="Scripts\lombiq-connectedelementvisibility.js" />
     <Content Include="Scripts\lombiq-disableemptyforminputs.js" />
+    <Content Include="Scripts\lombiq-dynamiccomparer.js" />
     <Content Include="Scripts\lombiq-jquery-enabledisable.js" />
     <Content Include="Scripts\lombiq-flattenobject.js" />
     <Content Include="Scripts\lombiq-replaceelementattribute.js" />

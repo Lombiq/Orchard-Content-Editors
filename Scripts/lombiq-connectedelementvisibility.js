@@ -48,63 +48,22 @@
             plugin.refresh(plugin.settings.initialValue);
         },
 
-        isValueValid: function (value) {
-            return !(typeof value === "undefined" || value === null || value === "");
-        },
-
         refresh: function (value) {
             var plugin = this;
 
-            if (!plugin.isValueValid(value)) {
+            if (typeof value === "undefined") {
                 value = plugin.element.val(); // If the provided value is not valid, try the element value.
 
-                if (!plugin.isValueValid(value)) {
+                if (typeof value === "undefined") {
                     value = plugin.settings.valueFunction(plugin.element); // If the element value is not valid, try the value function.
 
-                    if (!plugin.isValueValid(value)) {
+                    if (typeof value === "undefined") {
                         return; // If the value function's result is not valid, then we can't do anything.
                     }
                 }
             }
 
-            var show = null;
-            if (typeof value === "boolean") {
-                show = value;
-            }
-            else if (plugin.settings.valueShow !== null && value === plugin.settings.valueShow) {
-                show = true;
-            }
-            else if (plugin.settings.valueHide !== null && value === plugin.settings.valueHide) {
-                show = false;
-            }
-            else if (Array.isArray(plugin.settings.valueShow) && plugin.settings.valueShow.includes(value)) {
-                show = true;
-            }
-            else if (Array.isArray(plugin.settings.valueHide) && plugin.settings.valueHide.includes(value)) {
-                show = false;
-            }
-            else if (Array.isArray(plugin.settings.valueShow) && Array.isArray(value) && plugin.settings.valueShow.some(item => value.includes(item))) {
-                show = true;
-            }
-            else if (Array.isArray(plugin.settings.valueHide) && Array.isArray(value) && plugin.settings.valueHide.some(item => value.includes(item))) {
-                show = false;
-            }
-            else if (typeof value === "number") {
-                if (value === 0) {
-                    show = false;
-                }
-                else if (value === 1) {
-                    show = true;
-                }
-            }
-            else if (typeof value === "string") {
-                // When there are no values supplied to compare the current value with, try to interpret the value as a boolean.
-                if (plugin.settings.valueShow === null || plugin.settings.valueHide === null) {
-                    show = value === "true" || value === "True" || value === "false" || value === "False" ?
-                        value === "true" || value === "True" :
-                        null;
-                }
-            }
+            var show = $(document).dynamicComparer(value, plugin.settings.valueShow, plugin.settings.valueHide);
 
             // "refreshChildren" is needed so that the attributes of input elements inside child plugins
             // (i.e. plugins attached to elements whose parent is a target or an inverse target) are correctly set

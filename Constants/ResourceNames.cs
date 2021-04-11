@@ -18,6 +18,7 @@
         public const string Lombiq_BoolEditor = Prefix + "BoolEditor";
         public const string Lombiq_BoolEditor_Toggle = Prefix + "BoolEditorToggle";
         public const string Lombiq_CheckboxListEditor = Prefix + "CheckboxListEditor";
+        public const string Lombiq_DynamicComparer = Prefix + "DynamicComparer";
         public const string Lombiq_Editors_DateTimeEditor = Prefix + "Editors.DateTimeEditor";
         public const string Lombiq_UnsafeAction = Prefix + "UnsafeAction";
         public const string iOS_StickyInputFocusOverride = Prefix + "iOS.StickyInputFocusOverride";
