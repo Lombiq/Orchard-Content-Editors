@@ -6,6 +6,7 @@ using Orchard.ContentManagement;
 using Orchard.Data;
 using Orchard.DisplayManagement;
 using Orchard.Localization;
+using Orchard.Security;
 using System;
 using System.Web.Mvc;
 
@@ -17,6 +18,7 @@ namespace Lombiq.ContentEditors.Controllers
         protected readonly IAsyncEditorEventHandler _asyncEditorEventHandler;
         protected readonly IContentManager _contentManager;
         protected readonly IShapeDisplay _shapeDisplay;
+        protected readonly IAuthorizer _authorizer;
         protected readonly dynamic _shapeFactory;
         protected readonly IAsyncEditorService _asyncEditorService;
         protected readonly ITransactionManager _transactionManager;
@@ -33,6 +35,7 @@ namespace Lombiq.ContentEditors.Controllers
         {
             _contentManager = orchardServices.ContentManager;
             _shapeDisplay = shapeDisplay;
+            _authorizer = orchardServices.Authorizer;
             _shapeFactory = orchardServices.New;
             _asyncEditorService = asyncEditorService;
             _transactionManager = orchardServices.TransactionManager;
