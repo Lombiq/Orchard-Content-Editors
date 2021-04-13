@@ -76,6 +76,11 @@ namespace Lombiq.ContentEditors.ViewModels
             SelectList.MoveItemByValue(NoneValueId, NoneValueSortIndex.Value);
 
             SelectList.MoveItemByValue(OtherValueId, OtherValueSortIndex.Value);
+
+            if (HasDefaultEmptyValue)
+            {
+                SelectList.MoveItemByValue(DefaultEmptyValue, 0);
+            }
         }
     }
 

@@ -38,10 +38,15 @@
 
     if (viewModel.HasDefaultEmptyValue)
     {
+        if (string.IsNullOrEmpty(viewModel.DefaultEmptyValue))
+        {
+            viewModel.DefaultEmptyValue = "0";
+        }
+
         viewModel.SelectList.Insert(0, new SelectListItem
         {
             Text = "",
-            Value = "0",
+            Value = viewModel.DefaultEmptyValue,
             Selected = !viewModel.SelectList.Any(selectListItem => selectListItem.Selected)
         });
     }
