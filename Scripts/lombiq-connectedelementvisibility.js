@@ -48,16 +48,20 @@
             plugin.refresh(plugin.settings.initialValue);
         },
 
+        isValueValid: function (value) {
+            return !(typeof value === "undefined" || value === null || value === "");
+        },
+
         refresh: function (value) {
             var plugin = this;
 
-            if (typeof value === "undefined") {
+            if (!plugin.isValueValid(value)) {
                 value = plugin.element.val(); // If the provided value is not valid, try the element value.
 
-                if (typeof value === "undefined") {
+                if (!plugin.isValueValid(value)) {
                     value = plugin.settings.valueFunction(plugin.element); // If the element value is not valid, try the value function.
 
-                    if (typeof value === "undefined") {
+                    if (!plugin.isValueValid(value)) {
                         return; // If the value function's result is not valid, then we can't do anything.
                     }
                 }
