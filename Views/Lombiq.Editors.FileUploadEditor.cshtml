@@ -7,14 +7,21 @@
     const string DefaultBlockName = "fileUpload";
     string BlockName = viewModel.BlockName ?? DefaultBlockName;
 
-    const string FileUploadContainerElementName = DefaultBlockName + "__fileUploadContainer";
-    const string FileUploadPlaceholderElementName = DefaultBlockName + "__fileUploadPlaceholder";
-    const string FileUploadElementName = DefaultBlockName + "__fileUpload";
+    const string FileUploadContainerElementName = DefaultBlockName + "__container";
+    const string FileUploadControlElementName = DefaultBlockName + "__control";
+    const string FileUploadCancelElementName = DefaultBlockName + "__cancel";
+
+    if (string.IsNullOrEmpty(viewModel.Placeholder))
+    {
+        viewModel.Placeholder = T("Browse File or Drag and Drop File Here").Text;
+    }
 
     var fileUploadAttributes = viewModel.BuildAttributes(new Dictionary<string, object>
     {
-        { "class", "form-control fileUpload " + FileUploadElementName },
-        { "type", "file" }
+        { "class", "form-control fileUpload " + FileUploadControlElementName },
+        { "type", "file" },
+        { "data-beforebuttontext", viewModel.Placeholder },
+        { "title", " " }
     });
 
     var labelAttributes = new Dictionary<string, object>
@@ -28,11 +35,6 @@
         fileUploadAttributes["class"] += " required";
         labelAttributes["class"] += " required";
     }
-
-    if (string.IsNullOrEmpty(viewModel.Placeholder))
-    {
-        viewModel.Placeholder = T("Browse").Text;
-    }
 }
 
 <div class="editor editorField form-group @DefaultBlockName @BlockName">
@@ -42,8 +44,8 @@
     }
 
     <div class="@FileUploadContainerElementName">
-        <span class="@FileUploadPlaceholderElementName">@viewModel.Placeholder</span>
         @Html.TextBox(viewModel.Name, null, fileUploadAttributes)
+        <span hidden class="@FileUploadCancelElementName"></span>
     </div>
 
     @if (!string.IsNullOrEmpty(viewModel.Hint))
@@ -57,19 +59,18 @@
     <script type="text/javascript">
         ; (function ($) {
             $(function () {
-                $(".@FileUploadContainerElementName").click(function () {
-                    $(this).find(".@FileUploadElementName").trigger("click");
+                $(".@FileUploadCancelElementName").click(function (event) {
+                    $(this).siblings(".@FileUploadControlElementName").val(null);
+                    $(this).hide();
                 });
 
-                $(".@FileUploadElementName").click(function (event) {
-                    event.stopPropagation();
-                });
-
-                $(".@FileUploadElementName").change(function (event) {
-                    var filePath = $(this).val();
-
-                    $(this).siblings(".@FileUploadPlaceholderElementName").text(filePath.length === 0
-                        ? "@viewModel.Placeholder" : filePath.split('\\').pop() + " @T("Selected").Text");
+                $(".@FileUploadControlElementName").change(function () {
+                    if ($(this).val() && $(this).val().length > 0) {
+                        $(this).siblings(".@FileUploadCancelElementName").show();
+                    }
+                    else {
+                        $(this).siblings(".@FileUploadCancelElementName").hide();
+                    }
                 });
             });
         })(jQuery);
