@@ -14,12 +14,11 @@
     var defaults = {
         instanceName: null,
         initialValue: undefined,
-        valueFunction: function (element) { return element.val(); },
-        valueShow: null,
-        valueHide: null,
+        valueFunction: undefined,
+        valueShow: undefined,
+        valueHide: undefined,
         targetSelector: "",
         inverseTargetSelector: "",
-        hideDefault: true,
         clearTargetInputsOnHide: false,
         visibilityChangedCallback: function () { }
     };
@@ -51,19 +50,23 @@
         refresh: function (value) {
             var plugin = this;
 
-            if (typeof value === "undefined") {
-                value = plugin.element.val(); // If the provided value is not valid, try the element value.
+            var show = $(document).dynamicComparer(value, plugin.settings.valueShow, plugin.settings.valueHide);
 
-                if (typeof value === "undefined") {
-                    value = plugin.settings.valueFunction(plugin.element); // If the element value is not valid, try the value function.
+            if (show === null) {
+                // If the provided value is not valid, try the element value.
+                show = $(document).dynamicComparer(plugin.element.val(), plugin.settings.valueShow, plugin.settings.valueHide);
 
-                    if (typeof value === "undefined") {
-                        return; // If the value function's result is not valid, then we can't do anything.
+                if (show === null) {
+                    if (typeof plugin.settings.valueFunction !== "undefined") {
+                        // If the element value is not valid, try the value function.
+                        show = $(document).dynamicComparer(plugin.settings.valueFunction(plugin.element), plugin.settings.valueShow, plugin.settings.valueHide);
+                    }
+
+                    if (show === null) {
+                        return;
                     }
                 }
             }
-
-            var show = $(document).dynamicComparer(value, plugin.settings.valueShow, plugin.settings.valueHide);
 
             // "refreshChildren" is needed so that the attributes of input elements inside child plugins
             // (i.e. plugins attached to elements whose parent is a target or an inverse target) are correctly set
@@ -107,34 +110,24 @@
             var target = $(plugin.settings.targetSelector).not(plugin.element);
             var inverseTarget = $(plugin.settings.inverseTargetSelector).not(plugin.element);
 
-            if (show === null && plugin.settings.hideDefault) {
-                target.hide("slow");
-                replaceValidationAttributes(plugin.settings.targetSelector);
-                if (plugin.settings.inverseTargetSelector) {
-                    inverseTarget.hide("slow");
-                    replaceValidationAttributes(plugin.settings.inverseTargetSelector);
-                }
-                if (plugin.settings.clearTargetInputsOnHide) {
-                    target.find("input, textarea").val("");
-                    target.find("select").prop("selectedIndex", 0);
-                    target.find("[type = radio]").removeAttr("checked").trigger("change", false);
-                }
-            }
-            else if (show === null && !plugin.settings.hideDefault || show) {
+            if (show === true) {
                 target.show("slow");
                 replaceHiddenValidationAttributes(plugin.settings.targetSelector);
+
                 if (plugin.settings.inverseTargetSelector) {
                     inverseTarget.hide("slow");
                     replaceValidationAttributes(plugin.settings.inverseTargetSelector);
                 }
             }
-            else {
+            else if (show === false) {
                 target.hide("slow");
                 replaceValidationAttributes(plugin.settings.targetSelector);
+
                 if (plugin.settings.inverseTargetSelector) {
                     inverseTarget.show("slow");
                     replaceHiddenValidationAttributes(plugin.settings.inverseTargetSelector);
                 }
+
                 if (plugin.settings.clearTargetInputsOnHide) {
                     target.find("input, textarea").val("");
                     target.find("select").prop("selectedIndex", 0);
@@ -144,7 +137,7 @@
 
             refreshChildren();
 
-            plugin.settings.visibilityChangedCallback(target, show === null ? !plugin.settings.hideDefault : show);
+            plugin.settings.visibilityChangedCallback(target, show);
         }
     });
 

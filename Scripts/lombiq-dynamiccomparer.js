@@ -9,39 +9,29 @@
             else if (typeof value === "boolean") {
                 match = value;
             }
-            else if (matchValue !== null && value === matchValue) {
-                match = true;
+            else if (typeof value === typeof matchValue) {
+                match = value === matchValue;
             }
-            else if (noMatchValue !== null && value === noMatchValue) {
-                match = false;
+            else if (typeof value === typeof noMatchValue) {
+                match = !(value === noMatchValue);
             }
-            else if (Array.isArray(matchValue) && matchValue.includes(value)) {
-                match = true;
-            }
-            else if (Array.isArray(noMatchValue) && noMatchValue.includes(value)) {
-                match = false;
-            }
-            else if (Array.isArray(matchValue) && Array.isArray(value) && matchValue.some(item => value.includes(item))) {
-                match = true;
-            }
-            else if (Array.isArray(noMatchValue) && Array.isArray(value) && noMatchValue.some(item => value.includes(item))) {
-                match = false;
-            }
-            else if (typeof value === "number") {
-                if (value === 0) {
-                    match = false;
-                }
-                else if (value === 1) {
-                    match = true;
-                }
-            }
-            else if (typeof value === "string") {
+            else if (typeof value === "string" && typeof matchValue === "undefined" && typeof noMatchValue === "undefined") {
                 // When there are no values supplied to compare the current value with, try to interpret the value as a boolean.
-                if (matchValue === null || noMatchValue === null) {
-                    match = value === "true" || value === "True" || value === "false" || value === "False" ?
-                        value === "true" || value === "True" :
-                        null;
-                }
+                match = value === "true" || value === "True" || value === "false" || value === "False" ?
+                    value === "true" || value === "True" :
+                    null;
+            }
+            else if (Array.isArray(matchValue)) {
+                match = matchValue.includes(value);
+            }
+            else if (Array.isArray(noMatchValue)) {
+                match = !noMatchValue.includes(value);
+            }
+            else if (Array.isArray(matchValue) && Array.isArray(value)) {
+                match = matchValue.some(item => value.includes(item));
+            }
+            else if (Array.isArray(noMatchValue) && Array.isArray(value)) {
+                match = !noMatchValue.some(item => value.includes(item));
             }
 
             return match;
