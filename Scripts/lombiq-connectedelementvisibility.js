@@ -53,14 +53,14 @@
             var show = $(document).dynamicComparer(value, plugin.settings.valueShow, plugin.settings.valueHide);
 
             if (show === null) {
-                // If the provided value is not valid, try the element value.
-                show = $(document).dynamicComparer(plugin.element.val(), plugin.settings.valueShow, plugin.settings.valueHide);
+                if (typeof plugin.settings.valueFunction !== "undefined") {
+                    // If the element value is not valid, try the value function.
+                    show = $(document).dynamicComparer(plugin.settings.valueFunction(plugin.element), plugin.settings.valueShow, plugin.settings.valueHide);
+                }
 
                 if (show === null) {
-                    if (typeof plugin.settings.valueFunction !== "undefined") {
-                        // If the element value is not valid, try the value function.
-                        show = $(document).dynamicComparer(plugin.settings.valueFunction(plugin.element), plugin.settings.valueShow, plugin.settings.valueHide);
-                    }
+                    // If the provided value is not valid, try the element value.
+                    show = $(document).dynamicComparer(plugin.element.val(), plugin.settings.valueShow, plugin.settings.valueHide);
 
                     if (show === null) {
                         return;
