@@ -18,10 +18,9 @@
 
     var fileUploadAttributes = viewModel.BuildAttributes(new Dictionary<string, object>
     {
-        { "class", "form-control fileUpload " + FileUploadControlElementName },
+        { "class", "form-control " + FileUploadControlElementName },
         { "type", "file" },
         { "data-beforebuttontext", viewModel.Placeholder },
-        { "title", " " }
     });
 
     var labelAttributes = new Dictionary<string, object>
