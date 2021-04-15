@@ -42,7 +42,7 @@
     
     @if (!string.IsNullOrEmpty(viewModel.Hint))
     {
-        <div class="editorHint @(DefaultBlockName)__editorHint">@viewModel.Hint</div>
+        <div class="editorHint @(DefaultBlockName)__editorHint">@Html.Raw(viewModel.Hint)</div>
     }
     
     @Html.TextArea(viewModel.Name, viewModel.Value?.ToString(), textAreaAttributes)
