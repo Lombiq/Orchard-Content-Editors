@@ -48,7 +48,9 @@
                     $(plugin.settings.radioButtonsSettings.onChangedSelectorId + " " + plugin.settings.radioButtonsSettings.radioButtonsClass).on("click", function (event) {
                         var boolEditorValue = $(this).find(plugin.settings.radioButtonsSettings.radioButtonTrueId).is(":checked");
 
-                        $(plugin.settings.radioButtonsSettings.onChangedSelectorId).trigger("change", [boolEditorValue]);
+                        if (typeof boolEditorValue === "boolean") {
+                            $(plugin.settings.radioButtonsSettings.onChangedSelectorId).trigger("change", boolEditorValue);
+                        }
                     });
                     break;
                 case "Toggle":
@@ -58,7 +60,9 @@
                     $(plugin.settings.checkboxSettings.onChangedSelectorId + " " + plugin.settings.checkboxSettings.checkboxButtonClass).on("click", function (event) {
                         var boolEditorValue = $(this).find(plugin.settings.checkboxSettings.checkboxClass).is(":checked");
 
-                        $(plugin.settings.checkboxSettings.onChangedSelectorId).trigger("change", [boolEditorValue]);
+                        if (typeof boolEditorValue === "boolean") {
+                            $(plugin.settings.checkboxSettings.onChangedSelectorId).trigger("change", boolEditorValue);
+                        }
                     });
                     break;
                 default:
