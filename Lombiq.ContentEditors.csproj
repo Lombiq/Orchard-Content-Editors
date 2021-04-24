@@ -157,6 +157,7 @@
     <Content Include="Content\LC-switch\lc_switch.min.js" />
     <Content Include="Content\URI.js\URI.js" />
     <Content Include="Content\URI.js\URI.min.js" />
+    <Content Include="Scripts\lombiq-selectizeeditor.js" />
     <Content Include="Scripts\lombiq-checkboxlisteditor.js" />
     <Content Include="Scripts\lombiq-asynceditorwrapper.js" />
     <Content Include="Content\Selectize\selectize.bootstrap3.css" />
