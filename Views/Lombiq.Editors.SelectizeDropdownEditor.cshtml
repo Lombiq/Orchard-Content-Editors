@@ -17,11 +17,11 @@
 
     var selectizeInputId = DefaultBlockName + "__SelectizeInput" + TechnicalNameModifier;
 
-    var attributes = new Dictionary<string, object>
+    var attributes = viewModel.BuildAttributes(new Dictionary<string, object>
     {
         { "class", TextBoxElementName },
         { "id", selectizeInputId }
-    };
+    });
 
     var labelAttributes = new Dictionary<string, object>
     {
