@@ -29,6 +29,7 @@
         public const string Lombiq_DisableEmptyFormInputs = Prefix + "DisableEmptyFormInputs";
         public const string Lombiq_FlattenObject = Prefix + "FlattenObject";
         public const string Lombiq_SelectizeEditor = Prefix + "SelectizeEditor";
+        public const string Lombiq_DatatablesSelectizeInterop = Prefix + "DatatablesSelectizeInterop";
 
         public const string Selectize = nameof(Selectize);
 
