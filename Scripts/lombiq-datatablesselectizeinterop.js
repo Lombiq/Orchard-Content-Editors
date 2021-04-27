@@ -7,8 +7,8 @@
  * @author      Lombiq Technologies Ltd.
  */
 
-$(document).on("lombiq_DataTables_OnInitComplete", function (plugin) {
-    $(plugin.target).find(".selectizeDropdownEditor input").each(function () {
+$(document).on("init.dt", function (event) {
+    $(event.target).find(".selectizeDropdownEditor input").each(function () {
         $(this).lombiq_SelectizeEditor();
     });
 });
