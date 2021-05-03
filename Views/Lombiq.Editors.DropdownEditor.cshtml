@@ -44,6 +44,8 @@
         }
     }
 
+    viewModel.SortSelectListByText();
+
     if (viewModel.HasDefaultEmptyValue)
     {
         if (string.IsNullOrEmpty(viewModel.DefaultEmptyValue))
@@ -58,8 +60,6 @@
             Selected = !viewModel.SelectList.Any(selectListItem => selectListItem.Selected)
         });
     }
-
-    viewModel.SortSelectListByText();
 }
 
 <div class="editor editorField form-group @DefaultBlockName @BlockName">
