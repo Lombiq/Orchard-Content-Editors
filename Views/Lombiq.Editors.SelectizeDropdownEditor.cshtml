@@ -29,6 +29,11 @@
         { "for", selectizeInputId }
     };
 
+    if (viewModel.Disabled)
+    {
+        attributes["disabled"] = "disabled";
+    }
+
     if (!string.IsNullOrEmpty(viewModel.Placeholder))
     {
         attributes.Add("placeholder", viewModel.Placeholder);
