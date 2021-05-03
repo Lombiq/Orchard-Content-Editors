@@ -38,13 +38,12 @@
         selectizeInputAttributes["required"] = "";
     }
 
+    viewModel.SortSelectListByText();
+
     var jsonConverter = WorkContext.Resolve<IJsonConverter>();
     var availableSelectListItems = viewModel.SelectList.Select(option => new { option.Text, option.Value });
     var selectedSelectListItems = viewModel.SelectList.Where(option => option.Selected);
     var selectedValues = selectedSelectListItems.Select(option => option.Value);
-
-
-    viewModel.SortSelectListByText();
 }
 
 <div class="editor editorField form-group @DefaultBlockName @BlockName">

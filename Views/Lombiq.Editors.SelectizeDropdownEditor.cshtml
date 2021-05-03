@@ -39,11 +39,11 @@
         attributes.Add("placeholder", viewModel.Placeholder);
     }
 
+    viewModel.SortSelectListByText();
+
     var jsonConverter = WorkContext.Resolve<IJsonConverter>();
     var availableSelectListItems = viewModel.SelectList.Select(option => new { option.Text, option.Value });
     var selectedSelectListItems = viewModel.SelectList.Where(option => option.Selected).Select(option => new { option.Text, option.Value });
-
-    viewModel.SortSelectListByText();
 }
 
 <div class="editor editorField form-group @DefaultBlockName @BlockName">
