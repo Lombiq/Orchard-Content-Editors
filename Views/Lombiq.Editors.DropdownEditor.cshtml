@@ -46,13 +46,17 @@
 
     if (viewModel.HasDefaultEmptyValue)
     {
-        var emptySelectListItem = new SelectListItem
+        if (string.IsNullOrEmpty(viewModel.DefaultEmptyValue))
         {
-            Text = viewModel.EmptyValueText,
+            viewModel.DefaultEmptyValue = "0";
+        }
+
+        viewModel.SelectList.Insert(0, new SelectListItem
+        {
+            Text = "",
             Value = viewModel.DefaultEmptyValue,
-            Selected = !viewModel.SelectList?.Any(selectListItem => selectListItem.Selected) ?? false
-        };
-        viewModel.SelectList?.Insert(0, emptySelectListItem);
+            Selected = !viewModel.SelectList.Any(selectListItem => selectListItem.Selected)
+        });
     }
 
     viewModel.SortSelectListByText();
