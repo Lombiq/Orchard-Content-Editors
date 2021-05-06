@@ -3,7 +3,7 @@
 @using Orchard.Services
 
 @{
-    Script.Require(ResourceNames.Selectize).AtHead();
+    Script.Require(ResourceNames.Lombiq_SelectizeEditor).AtHead();
     Style.Require(ResourceNames.Selectize).AtHead();
 
     var viewModel = Model.ViewModel as TaxonomyEditorViewModel;
@@ -38,15 +38,12 @@
         selectizeInputAttributes["required"] = "";
     }
 
-    var jsonConverter = WorkContext.Resolve<IJsonConverter>();
-    var selectedValues = viewModel.SelectList.Where(option => option.Selected).Select(option => option.Value);
-
-    var options = new Dictionary<string, object>
-    {
-        { "maxItems", viewModel.TaxonomyFieldViewModel.Settings.SingleChoice ? "1" : null }
-    };
-
     viewModel.SortSelectListByText();
+
+    var jsonConverter = WorkContext.Resolve<IJsonConverter>();
+    var availableSelectListItems = viewModel.SelectList.Select(option => new { option.Text, option.Value });
+    var selectedSelectListItems = viewModel.SelectList.Where(option => option.Selected);
+    var selectedValues = selectedSelectListItems.Select(option => option.Value);
 }
 
 <div class="editor editorField form-group @DefaultBlockName @BlockName">
@@ -87,25 +84,11 @@
 <script type="text/javascript">
     ; (function ($) {
         $(function () {
-            @* Initializing selectize on input field. *@
-            var $selectizeElement = $("#@selectizeInputId")
-                .selectize(JSON.parse(@Html.Raw(Json.Encode(jsonConverter.Serialize(options)))))[0]
-                .selectize;
-
-            var selectList = JSON.parse(@Html.Raw(Json.Encode(jsonConverter.Serialize(viewModel.SelectList))));
-            for (var i = 0; i < selectList.length; i++) {
-                $selectizeElement.addOption({ value: selectList[i].Value, text: selectList[i].Text });
-            }
-
-        @if (selectedValues.Any())
-        {
-            <text>
-            var selectedValues = JSON.parse(@Html.Raw(Json.Encode(jsonConverter.Serialize(selectedValues))));
-            for (var i = 0; i < selectedValues.length; i++) {
-                $selectizeElement.addItem(selectedValues[i]);
-            }
-            </text>
-        }
+            $("#@selectizeInputId").lombiq_SelectizeEditor({
+                singleChoice: @viewModel.TaxonomyFieldViewModel.Settings.SingleChoice.ToString().ToLower(),
+                selectizeOptions: JSON.parse(@Html.Raw(Json.Encode(jsonConverter.Serialize(availableSelectListItems)))),
+                selectizeSelectedOptions: JSON.parse(@Html.Raw(Json.Encode(jsonConverter.Serialize(selectedSelectListItems.Select(option => new { option.Text, option.Value })))))
+            });
 
             $("#@selectizeInputId").change(function () {
                 @* Setting each checked state to false. *@

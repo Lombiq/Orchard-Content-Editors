@@ -3,7 +3,7 @@
 @using Orchard.Services
 
 @{
-    Script.Require(ResourceNames.Selectize).AtHead();
+    Script.Require(ResourceNames.Lombiq_SelectizeEditor).AtHead();
     Style.Require(ResourceNames.Selectize).AtHead();
 
     var viewModel = Model.ViewModel as DropdownEditorViewModel;
@@ -17,11 +17,11 @@
 
     var selectizeInputId = DefaultBlockName + "__SelectizeInput" + TechnicalNameModifier;
 
-    var attributes = new Dictionary<string, object>
+    var attributes = viewModel.BuildAttributes(new Dictionary<string, object>
     {
         { "class", TextBoxElementName },
         { "id", selectizeInputId }
-    };
+    });
 
     var labelAttributes = new Dictionary<string, object>
     {
@@ -29,20 +29,21 @@
         { "for", selectizeInputId }
     };
 
+    if (viewModel.Disabled)
+    {
+        attributes["disabled"] = "disabled";
+    }
+
     if (!string.IsNullOrEmpty(viewModel.Placeholder))
     {
         attributes.Add("placeholder", viewModel.Placeholder);
     }
 
-    var jsonConverter = WorkContext.Resolve<IJsonConverter>();
-    var selectedOptions = viewModel.SelectList.Where(option => option.Selected);
-
-    var options = new Dictionary<string, object>
-    {
-        { "maxItems", viewModel.SingleChoice ? "1" : null }
-    };
-
     viewModel.SortSelectListByText();
+
+    var jsonConverter = WorkContext.Resolve<IJsonConverter>();
+    var availableSelectListItems = viewModel.SelectList.Select(option => new { option.Text, option.Value });
+    var selectedSelectListItems = viewModel.SelectList.Where(option => option.Selected).Select(option => new { option.Text, option.Value });
 }
 
 <div class="editor editorField form-group @DefaultBlockName @BlockName">
@@ -57,25 +58,11 @@
 <script type="text/javascript">
     ; (function ($) {
         $(function () {
-            @* Initializing selectize on input field. *@
-            var $selectizeElement = $("#@selectizeInputId")
-                .selectize(JSON.parse(@Html.Raw(Json.Encode(jsonConverter.Serialize(options)))))[0]
-                .selectize;
-
-            var options = JSON.parse(@Html.Raw(Json.Encode(jsonConverter.Serialize(viewModel.SelectList))));
-            for (var i = 0; i < options.length; i++) {
-                $selectizeElement.addOption({ value: options[i].Value, text: options[i].Text });
-            }
-
-            @if (selectedOptions.Any())
-            {
-                <text>
-                var selectedOptions = JSON.parse(@Html.Raw(Json.Encode(jsonConverter.Serialize(selectedOptions))));
-                for (var i = 0; i < selectedOptions.length; i++) {
-                    $selectizeElement.addItem(selectedOptions[i].Value);
-                }
-                </text>
-            }
+            $("#@selectizeInputId").lombiq_SelectizeEditor({
+                singleChoice: @viewModel.SingleChoice.ToString().ToLower(),
+                selectizeOptions: JSON.parse(@Html.Raw(Json.Encode(jsonConverter.Serialize(availableSelectListItems)))),
+                selectizeSelectedOptions: JSON.parse(@Html.Raw(Json.Encode(jsonConverter.Serialize(selectedSelectListItems))))
+            });
         });
     })(jQuery);
 </script>

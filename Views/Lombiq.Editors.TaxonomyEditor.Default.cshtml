@@ -11,7 +11,7 @@
     string BlockNameWithModifier = DefaultBlockName + EditorTypeModifier;
 
     var labelAttributes = new Dictionary<string, object>
-{
+    {
         { "class", "editorLabel " + DefaultBlockName + "__label" }
     };
 
@@ -20,14 +20,13 @@
         labelAttributes["class"] = labelAttributes["class"] + " required";
     }
 
+    viewModel.SortSelectListByText();
+
     var termIndex = 0;
     var prefix = Html.NameForModel();
     var selectableIds = viewModel.SelectList.Select(item => int.TryParse(item.Value, out var id) ? id : 0).ToList();
     var selectableTerms = taxonomyViewModel.Terms.Where(term => selectableIds.Contains(term.Id)).ToList();
-
-    viewModel.SortSelectListByText();
 }
-
 
 <div class="editor editorField form-group @DefaultBlockName @BlockName @BlockNameWithModifier">
     @if (!string.IsNullOrEmpty(viewModel.Label))
