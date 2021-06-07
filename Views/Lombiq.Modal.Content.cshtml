@@ -7,6 +7,7 @@
     var bodyShape = Model.BodyShape;
     var titleless = string.IsNullOrEmpty(title);
     var headerless = string.IsNullOrEmpty(header);
+    var showCloseButton = Model.ShowCloseButton as bool? ?? false;
     var additionalAttributes = Model.AdditionalAttributes as IDictionary<string, object>;
 
     const string DefaultBlockName = "modal";
@@ -14,8 +15,8 @@
     var id = Model.Id as string ?? blockName;
 }
 
-<div id="@id" 
-     class="@blockName js-@blockName @DefaultBlockName @(titleless ? $"{DefaultBlockName}_titleless" : "")" 
+<div id="@id"
+     class="@blockName js-@blockName @DefaultBlockName @(titleless ? $"{DefaultBlockName}_titleless" : "")"
      hidden
      @if (additionalAttributes != null)
      {
@@ -36,6 +37,11 @@
             <p class="modalHeader @(DefaultBlockName)__header">@Html.Raw(header)</p>
         }
 
+        @if (showCloseButton == true)
+        {
+            <div class="modalCloseButton @(DefaultBlockName)__closeButton">@T("Close")</div>
+        }
+
         @if (bodyShape == null)
         {
             @Html.Raw(body)
@@ -46,3 +52,16 @@
         }
     </div>
 </div>
+
+<script type="text/javascript">
+    ; (function ($) {
+        $(function () {
+            var closeButton = $(".modalCloseButton");
+            if (closeButton.length) {
+                closeButton.click(function () {
+                    $("#@id").dialog("close")
+                });
+            }
+        });
+    })(jQuery);
+</script>
