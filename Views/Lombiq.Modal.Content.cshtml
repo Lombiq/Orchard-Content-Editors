@@ -1,5 +1,8 @@
-﻿@{
-    Script.Require(Lombiq.ContentEditors.Constants.ResourceNames.jQueryUI);
+﻿@using Lombiq.ContentEditors.Constants
+
+@{
+    Script.Require(ResourceNames.jQueryUI);
+    Script.Require(ResourceNames.Lombiq_Modal);
 
     var title = Model.Title as string ?? "";
     var header = Model.Header as string ?? "";
@@ -16,17 +19,17 @@
 }
 
 <div id="@id"
-     class="@blockName js-@blockName @DefaultBlockName @(titleless ? $"{DefaultBlockName}_titleless" : "")"
-     hidden
-     @if (additionalAttributes != null)
-     {
-         foreach (var attribute in additionalAttributes)
-         {
-             <text>
+    class="@blockName js-@blockName @DefaultBlockName @(titleless ? $"{DefaultBlockName}_titleless" : "")"
+    hidden
+    @if (additionalAttributes != null) 
+    { 
+        foreach (var attribute in additionalAttributes) 
+        { 
+            <text>
                 @attribute.Key="@attribute.Value"
-             </text>
-         }
-     }>
+            </text>
+        } 
+    }>
     @if (!titleless)
     {
         <div class="modalTitle @(blockName)__title">@Html.Raw(title)</div>
@@ -52,16 +55,3 @@
         }
     </div>
 </div>
-
-<script type="text/javascript">
-    ; (function ($) {
-        $(function () {
-            var closeButton = $(".modalCloseButton");
-            if (closeButton.length) {
-                closeButton.click(function () {
-                    $("#@id").dialog("close")
-                });
-            }
-        });
-    })(jQuery);
-</script>

@@ -16,6 +16,7 @@
         public const string Lombiq_AsyncEditorWrapper = Prefix + "AsyncEditorWrapper";
         public const string Lombiq_LoadingIndicator = Prefix + "LoadingIndicator";
         public const string Lombiq_BoolEditor = Prefix + "BoolEditor";
+        public const string Lombiq_Modal = Prefix + "Modal";
         public const string Lombiq_BoolEditor_Toggle = Prefix + "BoolEditorToggle";
         public const string Lombiq_CheckboxListEditor = Prefix + "CheckboxListEditor";
         public const string Lombiq_DynamicComparer = Prefix + "DynamicComparer";

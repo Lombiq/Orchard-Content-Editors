@@ -28,6 +28,7 @@ namespace Lombiq.ContentEditors
             manifest.DefineScript(Lombiq_CheckboxListEditor).SetUrl("lombiq-checkboxlisteditor.js").SetDependencies(Lombiq_jQuery_EnableDisable);
             manifest.DefineScript(Lombiq_Editors_DateTimeEditor).SetUrl("lombiq-editors-datetimeeditor.js").SetDependencies(jQueryUI, Moment);
             manifest.DefineScript(Lombiq_BoolEditor).SetUrl("lombiq-booleditor.js").SetDependencies(jQuery);
+            manifest.DefineScript(Lombiq_Modal).SetUrl("lombiq-modal.js").SetDependencies(jQuery);
             manifest.DefineScript(Lombiq_UnsafeAction).SetUrl("lombiq-unsafeaction.js").SetDependencies(jQuery);
             manifest.DefineScript(Lombiq_SelectizeEditor).SetUrl("lombiq-selectizeeditor.js").SetDependencies(Selectize);
             manifest.DefineScript(Lombiq_DataTablesSelectizeInterop).SetUrl("lombiq-datatablesselectizeinterop.js").SetDependencies(Lombiq_SelectizeEditor, "Lombiq.DataTables");
