@@ -47,7 +47,7 @@
             var $editorPlaceholder = plugin.element.find(plugin.settings.editorPlaceholderElementClass);
 
             if (plugin.settings.addNewItemActionElementClass) {
-                plugin.element.find(plugin.settings.addNewItemActionElementClass).first().on("click", function () {
+                $(plugin.settings.addNewItemActionElementClass).first().on("click", function () {
                     plugin.loadEditor($(this).attr("data-contentItemId"), $editorPlaceholder);
                 });
             }
