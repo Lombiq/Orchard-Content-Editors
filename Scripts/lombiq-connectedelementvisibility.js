@@ -117,6 +117,12 @@
                 if (plugin.settings.inverseTargetSelector) {
                     inverseTarget.hide("slow");
                     replaceValidationAttributes(plugin.settings.inverseTargetSelector);
+
+                    if (plugin.settings.clearTargetInputsOnHide) {
+                        inverseTarget.find("input, textarea").val("");
+                        inverseTarget.find("select").prop("selectedIndex", 0);
+                        inverseTarget.find("[type = radio]").removeAttr("checked").trigger("change", false);
+                    }
                 }
             }
             else if (show === false) {
