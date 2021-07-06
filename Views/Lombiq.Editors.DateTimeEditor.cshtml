@@ -34,7 +34,12 @@
 
         if (viewModel.Required)
         {
-            labelAttributes["class"] = labelAttributes["class"] + " required";
+            labelAttributes["class"] += " required";
+        }
+
+        if (!string.IsNullOrEmpty(viewModel.Tooltip))
+        {
+            labelAttributes["class"] += " hasTooltip";
         }
     }
 
