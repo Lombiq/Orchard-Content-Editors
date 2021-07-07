@@ -39,6 +39,12 @@
         attributes.Add("placeholder", viewModel.Placeholder);
     }
 
+    if (viewModel.Required)
+    {
+        labelAttributes["class"] += " required";
+        attributes["required"] = "";
+    }
+
     viewModel.SortSelectListByText();
 
     var jsonConverter = WorkContext.Resolve<IJsonConverter>();
