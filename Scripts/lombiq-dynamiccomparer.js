@@ -13,7 +13,7 @@
                 match = value === matchValue;
             }
             else if (typeof value === typeof noMatchValue) {
-                match = !(value === noMatchValue);
+                match = value !== noMatchValue;
             }
             else if (typeof value === "string" && typeof matchValue === "undefined" && typeof noMatchValue === "undefined") {
                 // When there are no values supplied to compare the current value with, try to interpret the value as a boolean.
