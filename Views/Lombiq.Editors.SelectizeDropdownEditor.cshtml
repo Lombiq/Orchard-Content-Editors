@@ -16,7 +16,7 @@
     string TechnicalNameModifier = string.IsNullOrEmpty(viewModel.TechnicalName) ? "" : "_" + viewModel.TechnicalName.Replace('.', '_');
 
     var selectizeInputId = $"{DefaultBlockName}__SelectizeInput{TechnicalNameModifier}";
-    var hiddenInputIdPrefix = $"{viewModel.Name.Replace('.', '_')}_Options";
+    var hiddenInputIdPrefix = $"{(viewModel.Name ?? BlockName).Replace('.', '_')}_Options";
 
     var attributes = viewModel.BuildAttributes(new Dictionary<string, object>
     {
