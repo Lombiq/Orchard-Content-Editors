@@ -1,5 +1,8 @@
-﻿@{
-    Script.Require(Lombiq.ContentEditors.Constants.ResourceNames.jQueryUI);
+﻿@using Lombiq.ContentEditors.Constants
+
+@{
+    Script.Require(ResourceNames.jQueryUI);
+    Script.Require(ResourceNames.Lombiq_Modal);
 
     var title = Model.Title as string ?? "";
     var header = Model.Header as string ?? "";
@@ -7,6 +10,7 @@
     var bodyShape = Model.BodyShape;
     var titleless = string.IsNullOrEmpty(title);
     var headerless = string.IsNullOrEmpty(header);
+    var showCloseButton = Model.ShowCloseButton as bool? ?? false;
     var additionalAttributes = Model.AdditionalAttributes as IDictionary<string, object>;
 
     const string DefaultBlockName = "modal";
@@ -14,8 +18,8 @@
     var id = Model.Id as string ?? blockName;
 }
 
-<div id="@id" 
-     class="@blockName js-@blockName @DefaultBlockName @(titleless ? $"{DefaultBlockName}_titleless" : "")" 
+<div id="@id"
+     class="@blockName js-@blockName @DefaultBlockName @(titleless ? $"{DefaultBlockName}_titleless" : "")"
      hidden
      @if (additionalAttributes != null)
      {
@@ -26,23 +30,28 @@
              </text>
          }
      }>
-    @if (!titleless)
-    {
-        <div class="modalTitle @(blockName)__title">@Html.Raw(title)</div>
-    }
-    <div class="modalBody @(blockName)__body">
-        @if (!headerless)
-        {
-            <p class="modalHeader @(DefaultBlockName)__header">@Html.Raw(header)</p>
-        }
-
-        @if (bodyShape == null)
-        {
-            @Html.Raw(body)
-        }
-        else
-        {
-            @Display(bodyShape)
-        }
-    </div>
+     @if (!titleless)
+     {
+         <div class="modalTitle @(blockName)__title">@Html.Raw(title)</div>
+     }
+     <div class="modalBody @(blockName)__body">
+         @if (!headerless)
+         {
+             <p class="modalHeader @(DefaultBlockName)__header">@Html.Raw(header)</p>
+         }
+     
+         @if (showCloseButton == true)
+         {
+             <div class="modalCloseButton @(DefaultBlockName)__closeButton">@T("Close")</div>
+         }
+     
+         @if (bodyShape == null)
+         {
+             @Html.Raw(body)
+         }
+         else
+         {
+             @Display(bodyShape)
+         }
+     </div>
 </div>
