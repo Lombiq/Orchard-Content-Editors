@@ -151,24 +151,31 @@
         // Return null if the element query is invalid.
         if (!this || this.length === 0) return null;
 
+        var pluginInstanceName = "plugin_" + pluginName;
+
+        // If options is not defined, then we'll just return the existing plugin instances.
+        if (!options) {
+            return $.map(this.data(), function (value, key) {
+                return key.startsWith(pluginInstanceName) ? value : null;
+            });            
+        }
+
         // If options is available and instance name is defined, we're using that too
         // to generate the name of this plugin instance, so multiple instances can be
         // attached to the same DOM element using unique instance names.
-        var pluginInstanceName = "plugin_" + pluginName;
-        if (options && options.instanceName) {
+        if (options.instanceName) {
             pluginInstanceName += "." + options.instanceName;
         }
 
-        // "map" makes it possible to return the already existing or currently initialized plugin instances.
+        // "map" makes it possible to return the already existing or currently initialized plugin instance.
         return this.map(function () {
-            // If "options" is defined, but the plugin is not instantiated on this element ...
-            if (options && !$.data(this, pluginInstanceName)) {
-                // ... then create a plugin instance ...
+            // If the plugin is not instantiated on this element ...
+            if (!$.data(this, pluginInstanceName)) {
+                // ... then we create the plugin instance ...
                 $.data(this, pluginInstanceName, new Plugin($(this), options));
             }
 
-            // ... and then return the plugin instance, which might be null
-            // if the plugin is not instantiated on this element and "options" is undefined.
+            // ... and then return it.
             return $.data(this, pluginInstanceName);
         });
     };
