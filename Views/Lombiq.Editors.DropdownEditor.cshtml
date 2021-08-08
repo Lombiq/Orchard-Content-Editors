@@ -50,7 +50,7 @@
     {
         viewModel.SelectList.Insert(0, new SelectListItem
         {
-            Text = "",
+            Text = viewModel.EmptyValueText,
             Value = viewModel.DefaultEmptyValue,
             Selected = !viewModel.SelectList.Any(selectListItem => selectListItem.Selected)
         });
