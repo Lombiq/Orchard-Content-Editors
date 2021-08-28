@@ -13,5 +13,10 @@
     {
         public Orchard.Taxonomies.ViewModels.TaxonomyFieldViewModel TaxonomyFieldViewModel { get; set; }
         public TaxonomyEditorFlavor Flavor { get; set; } = TaxonomyEditorFlavor.Default;
+
+        public TaxonomyEditorViewModel()
+        {
+            DefaultEmptyValue = "0";
+        }
     }
 }
