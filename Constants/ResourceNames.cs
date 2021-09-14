@@ -31,6 +31,8 @@
         public const string Lombiq_FlattenObject = Prefix + "FlattenObject";
         public const string Lombiq_SelectizeEditor = Prefix + "SelectizeEditor";
         public const string Lombiq_DataTablesSelectizeInterop = Prefix + "DataTablesSelectizeInterop";
+        public const string Lombiq_DataTables_ConnectedElementVisibility_Interop =
+            Prefix + "DataTablesConnectedElementVisibilityInterop";
 
         public const string Selectize = nameof(Selectize);
 

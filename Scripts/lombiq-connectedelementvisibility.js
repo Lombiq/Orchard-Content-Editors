@@ -10,6 +10,7 @@
     "use strict";
 
     var pluginName = "lombiq_ConnectedElementVisibility";
+    var pluginMarkerClass = "lombiq-ConnectedElementVisibility";
 
     var defaults = {
         instanceName: null,
@@ -29,7 +30,6 @@
         this._defaults = defaults;
         this._name = pluginName;
 
-        var pluginMarkerClass = "lombiq-ConnectedElementVisibility";
         $(element).addClass(pluginMarkerClass);
         this.settings.pluginMarkerSelector = "." + pluginMarkerClass;
 
@@ -147,36 +147,54 @@
         }
     });
 
-    $.fn[pluginName] = function (options) {
+    $.fn[pluginName] = function (settings) {
         // Return null if the element query is invalid.
         if (!this || this.length === 0) return null;
 
         var pluginInstanceName = "plugin_" + pluginName;
 
-        // If options is not defined, then we'll just return the existing plugin instances.
-        if (!options) {
-            return $.map(this.data(), function (value, key) {
-                return key.startsWith(pluginInstanceName) ? value : null;
-            });            
-        }
-
-        // If options is available and instance name is defined, we're using that too
-        // to generate the name of this plugin instance, so multiple instances can be
-        // attached to the same DOM element using unique instance names.
-        if (options.instanceName) {
-            pluginInstanceName += "." + options.instanceName;
-        }
-
-        // "map" makes it possible to return the already existing or currently initialized plugin instance.
+        // "map" makes it possible to return the already existing or currently initialized plugin instances.
         return this.map(function () {
-            // If the plugin is not instantiated on this element ...
-            if (!$.data(this, pluginInstanceName)) {
-                // ... then we create the plugin instance ...
-                $.data(this, pluginInstanceName, new Plugin($(this), options));
+            // If settings is available and instance name is defined, we're using that too
+            // to generate the name of this plugin instance, so multiple instances can be
+            // attached to the same DOM element using unique instance names.
+            if (settings && settings.instanceName) {
+                pluginInstanceName += "." + settings.instanceName;
             }
 
-            // ... and then return it.
-            return $.data(this, pluginInstanceName);
+            // If there's no plugin instance on the element:
+            if (!$.data(this, "plugin_" + pluginInstanceName)) {
+                var dataAttributeName = "data-connectedelementvisibilitysettings";
+
+                // If settings is defined, then we'll save it in a data attribute of the element
+                // to make delayed reinitialization possible later.
+                if (settings) {
+                    $(this).attr(dataAttributeName, JSON.stringify(settings));
+
+                    if (settings.instanceName) {
+                        dataAttributeName += "-" + settings.instanceName;
+                    }
+                }
+                // If settings is undefined...
+                else {
+                    // ... then try to grab settings from a previous initialization.
+                    var settingsData = $(this).attr(dataAttributeName);
+
+                    if (settingsData) {
+                        // Revert the changes to the element made by the plugin.
+                        $(this).removeClass(pluginMarkerClass);
+
+                        // Use the settings data to construct the settings.
+                        settings = JSON.parse(settingsData);
+                    }
+                }
+
+                // ... then create a plugin instance ...
+                $.data(this, "plugin_" + pluginInstanceName, new Plugin($(this), settings));
+            }
+
+            // Return the plugin instance (if it exists), undefined otherwise.
+            return $.data(this, "plugin_" + pluginInstanceName);
         });
     };
 })(jQuery, window, document);

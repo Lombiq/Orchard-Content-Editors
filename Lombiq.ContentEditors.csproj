@@ -157,6 +157,7 @@
     <Content Include="Content\LC-switch\lc_switch.min.js" />
     <Content Include="Content\URI.js\URI.js" />
     <Content Include="Content\URI.js\URI.min.js" />
+    <Content Include="Scripts\lombiq-datatables-connectedelementvisibility-interop.js" />
     <Content Include="Scripts\lombiq-modal.js" />
     <Content Include="Scripts\lombiq-datatablesselectizeinterop.js" />
     <Content Include="Scripts\lombiq-selectizeeditor.js" />
