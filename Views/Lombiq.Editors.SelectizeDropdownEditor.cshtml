@@ -60,7 +60,7 @@
         @Html.Label(viewModel.Label, labelAttributes)
     }
 
-    @Html.TextBox(viewModel.TechnicalName, "", attributes)
+    @Html.TextBox(viewModel.Name, "", attributes)
 
     <div hidden id="@(hiddenInputIdPrefix)_SpecialValues">
         @if (!string.IsNullOrEmpty(viewModel.NoneValueId))
