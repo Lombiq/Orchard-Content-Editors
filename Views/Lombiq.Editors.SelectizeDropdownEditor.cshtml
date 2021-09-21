@@ -12,6 +12,8 @@
 
     const string DefaultBlockName = "selectizeDropdownEditor";
     string BlockName = viewModel.BlockName ?? DefaultBlockName;
+    viewModel.Name = viewModel.Name ?? BlockName;
+    viewModel.TechnicalName = viewModel.TechnicalName ?? viewModel.Name;
     const string TextBoxElementName = DefaultBlockName + "__textbox";
     string TechnicalNameModifier = string.IsNullOrEmpty(viewModel.TechnicalName) ? "" : "_" + viewModel.TechnicalName.Replace('.', '_');
 
