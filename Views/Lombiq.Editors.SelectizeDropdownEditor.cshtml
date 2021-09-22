@@ -8,7 +8,7 @@
 
     var viewModel = Model.ViewModel as DropdownEditorViewModel;
 
-    if (!viewModel?.SelectList?.Any() ?? true) { return; }
+    if (!viewModel.ShowIfEmpty && (!viewModel?.SelectList?.Any() ?? true)) { return; }
 
     const string DefaultBlockName = "selectizeDropdownEditor";
     string BlockName = viewModel.BlockName ?? DefaultBlockName;
