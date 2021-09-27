@@ -1,0 +1,24 @@
+﻿@using Orchard.ContentManagement
+@using Orchard.Environment.Descriptor.Models
+@using Orchard.Localization
+
+<script type="text/javascript">
+    var mediaPickerEnabled = false;
+    var mediaLibraryEnabled = false;
+    var directionality = '@WorkContext.GetTextDirection((IContent)Model.ContentItem)';
+    var language = '@Model.Language';
+    var autofocus = "@(Model.AutoFocus == true ? ViewData.TemplateInfo.GetFullHtmlFieldId("randomProp") : null)";
+</script>
+
+@{
+    Script.Require("OrchardTinyMce");
+    Script.Require("jQueryColorBox");
+    Style.Require("jQueryColorBox");
+    Style.Require("OrchardTinyMce");
+}
+
+@Html.TextArea("randomProp", string.Empty, 25, 80,
+     new Dictionary<string, object> {
+        {"class", "html tinymce"},
+        {"style", "width:100%"}
+     })
