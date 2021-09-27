@@ -1,6 +1,11 @@
-﻿@using Orchard.ContentManagement
+﻿@using Lombiq.ContentEditors.ViewModels
+@using Orchard.ContentManagement
 @using Orchard.Environment.Descriptor.Models
 @using Orchard.Localization
+
+@{ 
+    var viewModel = Model.ViewModel as TextAreaEditorViewModel;
+}
 
 <script type="text/javascript">
     var mediaPickerEnabled = false;
