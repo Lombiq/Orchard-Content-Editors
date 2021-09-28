@@ -2,28 +2,47 @@
 @using Orchard.ContentManagement
 @using Orchard.Environment.Descriptor.Models
 @using Orchard.Localization
+@using Orchard.Utility.Extensions
 
-@{ 
+@{
     var viewModel = Model.ViewModel as TextAreaEditorViewModel;
+    var propertyName = Model.PropertyName != null ? (string)Model.PropertyName : "Text";
+
+    const string DefaultBlockName = "textAreaEditor";
+    string BlockName = viewModel.BlockName ?? DefaultBlockName;
+    string ClassNameForScripts = "js-" + viewModel.Name.HtmlClassify();
+
+    var labelAttributes = new Dictionary<string, object>
+    {
+        { "class", "editorLabel " + DefaultBlockName + "__label" }
+    };
 }
 
+
 <script type="text/javascript">
-    var mediaPickerEnabled = false;
-    var mediaLibraryEnabled = false;
     var directionality = '@WorkContext.GetTextDirection((IContent)Model.ContentItem)';
     var language = '@Model.Language';
-    var autofocus = "@(Model.AutoFocus == true ? ViewData.TemplateInfo.GetFullHtmlFieldId("randomProp") : null)";
+    var autofocus = "@(Model.AutoFocus == true ? ViewData.TemplateInfo.GetFullHtmlFieldId(propertyName) : null)";
 </script>
 
 @{
-    Script.Require("OrchardTinyMce");
+    Script.Require("LombiqTinyMce");
     Script.Require("jQueryColorBox");
     Style.Require("jQueryColorBox");
     Style.Require("OrchardTinyMce");
 }
 
-@Html.TextArea("randomProp", string.Empty, 25, 80,
-     new Dictionary<string, object> {
-        {"class", "html tinymce"},
-        {"style", "width:100%"}
-     })
+
+
+<div class="editor editorField form-group @DefaultBlockName @BlockName">
+    @if (!string.IsNullOrEmpty(viewModel.Label))
+    {
+        @Html.Label(viewModel.Name, viewModel.Label, labelAttributes)
+    }
+
+    @Html.TextArea(propertyName, (string)Model.Text, 25, 80,
+         new Dictionary<string, object> {
+            {"class", "html tinymce"},
+            {"style", "width:100%"}
+         })
+</div>

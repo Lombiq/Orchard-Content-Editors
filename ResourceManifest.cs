@@ -55,6 +55,8 @@ namespace Lombiq.ContentEditors
             manifest.DefineScript(Lombiq_FlattenObject).SetUrl("lombiq-flattenobject.js").SetDependencies(jQuery);
 
             manifest.DefineStyle(Lombiq_Editors_DateTimeEditor).SetDependencies(jQueryUI);
+
+            manifest.DefineScript("LombiqTinyMce").SetUrl("lombiq-tinymce.js").SetDependencies("TinyMce");
         }
     }
 }
