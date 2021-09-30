@@ -56,42 +56,40 @@
 
         // "map" makes it possible to return the already existing or currently initialized plugin instances.
         return this.map(function () {
-            // If there's no plugin instance on the element:
-            if (!$.data(this, "plugin_" + pluginName)) {
-                var dataAttributeName = "data-lombiqselectizeeditorsettings";
 
-                // If settings is defined, then we'll save it in a data attribute of the element
-                // to make delayed reinitialization possible later.
-                if (settings) {
-                    $(this).attr(dataAttributeName, JSON.stringify(settings));
-                }
-                // If settings is undefined...
-                else {
-                    // ... then try to grab settings from a previous initialization.
-                    var settingsData = $(this).attr(dataAttributeName);
+            var dataAttributeName = "data-lombiqselectizeeditorsettings";
 
-                    if (settingsData) {
-                        // Revert the changes made by Selectize to the element.
-                        $(this).removeClass("selectized");
-                        $(this).removeAttr("style");
-                        $(this).val("");
-                        $(this).removeAttr("tabindex");
-                        $(this).siblings(".selectize-control").remove();
-
-                        // Destroy the existing Selectize element.
-                        var exisingSelectize = $(this).selectize();
-                        if (typeof (exisingSelectize) !== "undefined" && exisingSelectize.length > 0) {
-                            exisingSelectize[0].selectize.destroy();
-                        }
-
-                        // Use the settings data to construct the settings.
-                        settings = JSON.parse(settingsData);
-                    }
-                }
-
-                // ... then create a plugin instance ...
-                $.data(this, "plugin_" + pluginName, new Plugin($(this), settings));
+            // If settings is defined, then we'll save it in a data attribute of the element
+            // to make delayed reinitialization possible later.
+            if (settings) {
+                $(this).attr(dataAttributeName, JSON.stringify(settings));
             }
+            // If settings is undefined...
+            else {
+                // ... then try to grab settings from a previous initialization.
+                var settingsData = $(this).attr(dataAttributeName);
+
+                if (settingsData) {
+                    // Revert the changes made by Selectize to the element.
+                    $(this).removeClass("selectized");
+                    $(this).removeAttr("style");
+                    $(this).val("");
+                    $(this).removeAttr("tabindex");
+                    $(this).siblings(".selectize-control").remove();
+
+                    // Destroy the existing Selectize element.
+                    var exisingSelectize = $(this).selectize();
+                    if (typeof (exisingSelectize) !== "undefined" && exisingSelectize.length > 0) {
+                        exisingSelectize[0].selectize.destroy();
+                    }
+
+                    // Use the settings data to construct the settings.
+                    settings = JSON.parse(settingsData);
+                }
+            }
+
+            // ... then create a plugin instance ...
+            $.data(this, "plugin_" + pluginName, new Plugin($(this), settings));
 
             // Return the plugin instance (if it exists), undefined otherwise.
             return $.data(this, "plugin_" + pluginName);
