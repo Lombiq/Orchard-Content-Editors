@@ -23,6 +23,7 @@
     var directionality = '@WorkContext.GetTextDirection((IContent)Model.ContentItem)';
     var language = '@Model.Language';
     var autofocus = "@(Model.AutoFocus == true ? ViewData.TemplateInfo.GetFullHtmlFieldId(propertyName) : null)";
+    var selector = "@viewModel.TinyMceId";
 </script>
 
 @{
@@ -43,6 +44,7 @@
     @Html.TextArea(propertyName, (string)Model.Text, 25, 80,
          new Dictionary<string, object> {
             {"class", "html tinymce"},
-            {"style", "width:100%"}
+            {"style", "width:100%"},
+            {"Id", "Text_" + viewModel.TinyMceId}
          })
 </div>
