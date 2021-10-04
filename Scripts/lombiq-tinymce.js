@@ -1,4 +1,6 @@
-﻿
+﻿//JQuery dialog auto focus should be diasbled to be able to use TinyMce modals
+$.ui.dialog.prototype._focusTabbable = function () { };
+
 tinyMCE.init({
     selector: "textarea.tinymce",
     theme: "modern",
@@ -92,7 +94,6 @@ tinyMCE.init({
         }
     }
 });
-
 
 
 
