@@ -8,7 +8,7 @@ tinyMCE.init({
     plugins: [
         "advlist autolink lists link image charmap print preview hr anchor pagebreak",
         "searchreplace wordcount visualblocks visualchars fullscreen",
-        "insertdatetime media nonbreaking table contextmenu directionality",
+        "insertdatetime nonbreaking table contextmenu directionality",
         "emoticons template paste textcolor colorpicker textpattern",
         "fullscreen autoresize"
     ],

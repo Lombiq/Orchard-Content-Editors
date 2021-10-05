@@ -26,7 +26,7 @@ namespace Orchard.ContentManagement.Drivers
             this ContentPartDriver<TContent> driver,
             string shapeName,
             IShapeFactory shapeFactory,
-            Func<EditorViewModel> viewModelFactory) where TContent : ContentPart, new() =>
+            Func<TextAreaEditorViewModel> viewModelFactory) where TContent : ContentPart, new() =>
                 driver.ContentShape(shapeName, () =>
                     (shapeFactory as dynamic).Lombiq_Editors_TextareaEditor(ViewModel: viewModelFactory()));
 
