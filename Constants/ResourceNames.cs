@@ -33,6 +33,7 @@
         public const string Lombiq_DataTablesSelectizeInterop = Prefix + "DataTablesSelectizeInterop";
         public const string Lombiq_DataTables_ConnectedElementVisibility_Interop =
             Prefix + "DataTablesConnectedElementVisibilityInterop";
+        public const string Lombiq_TinyMce = "LombiqTinyMce";
 
         public const string Selectize = nameof(Selectize);
 

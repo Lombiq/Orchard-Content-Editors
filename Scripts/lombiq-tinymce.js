@@ -1,5 +1,7 @@
-﻿//JQuery dialog auto focus should be diasbled to be able to use TinyMce modals
-$.ui.dialog.prototype._focusTabbable = function () { };
+﻿//  JQuery dialog auto focus should be disabled to be able to use TinyMce modals.
+if (typeof ($.ui) !== "undefined") {
+    $.ui.dialog.prototype._focusTabbable = function () { };
+}
 
 tinyMCE.init({
     selector: "textarea.tinymce",
@@ -12,17 +14,12 @@ tinyMCE.init({
         "emoticons template paste textcolor colorpicker textpattern",
         "fullscreen autoresize"
     ],
-    toolbar: "undo redo cut copy paste | bold italic | bullist numlist outdent indent formatselect | alignleft aligncenter alignright alignjustify ltr rtl | link unlink charmap",
+    toolbar: "undo redo cut copy paste | bold italic | bullist numlist outdent indent formatselect | alignleft aligncenter alignright alignjustify ltr rtl | link unlink charmap | forecolor",
     convert_urls: false,
     valid_elements: "*[*]",
     // Shouldn't be needed due to the valid_elements setting, but TinyMCE would strip script.src without it.
     extended_valid_elements: "script[type|defer|src|language]",
-    //menubar: false,
-    //statusbar: false,
     skin: "orchardlightgray",
-    language: language,
-    auto_focus: autofocus,
-    directionality: directionality,
     setup: function (editor) {
         $(document).bind("localization.ui.directionalitychanged", function (event, directionality) {
             editor.getBody().dir = directionality;
@@ -94,7 +91,3 @@ tinyMCE.init({
         }
     }
 });
-
-
-
-

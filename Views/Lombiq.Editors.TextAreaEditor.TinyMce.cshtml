@@ -1,39 +1,47 @@
 ﻿@using Lombiq.ContentEditors.ViewModels
+@using Lombiq.ContentEditors.Constants
 @using Orchard.ContentManagement
-@using Orchard.Environment.Descriptor.Models
 @using Orchard.Localization
-@using Orchard.Utility.Extensions
 
 @{
     var viewModel = Model.ViewModel as TextAreaEditorViewModel;
-    var propertyName = Model.PropertyName != null ? (string)Model.PropertyName : "Text";
 
-    const string DefaultBlockName = "textAreaEditor";
+    const string DefaultBlockName = "tinyMceEditor";
     string BlockName = viewModel.BlockName ?? DefaultBlockName;
-    string ClassNameForScripts = "js-" + viewModel.Name.HtmlClassify();
+
+    var textAreaAttributes = viewModel.BuildAttributes(new Dictionary<string, object>
+    {
+        {"class", "html tinymce"},
+        {"style", "width:100%"},
+        {"Id", viewModel.Name}
+    });
 
     var labelAttributes = new Dictionary<string, object>
     {
         { "class", "editorLabel " + DefaultBlockName + "__label" }
     };
-}
 
+    if (viewModel.Required)
+    {
+        textAreaAttributes["required"] = true;
+        textAreaAttributes["class"] = textAreaAttributes["class"] + " required";
+        labelAttributes["class"] = labelAttributes["class"] + " required";
+    }
 
-<script type="text/javascript">
-    var directionality = '@WorkContext.GetTextDirection((IContent)Model.ContentItem)';
-    var language = '@Model.Language';
-    var autofocus = "@(Model.AutoFocus == true ? ViewData.TemplateInfo.GetFullHtmlFieldId(propertyName) : null)";
-    var selector = "@viewModel.TinyMceId";
-</script>
+    if (!string.IsNullOrEmpty(viewModel.Placeholder))
+    {
+        textAreaAttributes["placeholder"] = viewModel.Placeholder;
+    }
 
-@{
-    Script.Require("LombiqTinyMce");
+    Script.Require(ResourceNames.Lombiq_TinyMce);
     Script.Require("jQueryColorBox");
     Style.Require("jQueryColorBox");
     Style.Require("OrchardTinyMce");
 }
 
-
+<script type="text/javascript">
+    var selector = "@viewModel.Name";
+</script>
 
 <div class="editor editorField form-group @DefaultBlockName @BlockName">
     @if (!string.IsNullOrEmpty(viewModel.Label))
@@ -41,10 +49,5 @@
         @Html.Label(viewModel.Name, viewModel.Label, labelAttributes)
     }
 
-    @Html.TextArea(propertyName, (string)Model.Text, 25, 80,
-         new Dictionary<string, object> {
-            {"class", "html tinymce"},
-            {"style", "width:100%"},
-            {"Id", viewModel.TinyMceId}
-         })
+    @Html.TextArea(viewModel.Name, (string)Model.Text, 25, 80, textAreaAttributes)
 </div>
