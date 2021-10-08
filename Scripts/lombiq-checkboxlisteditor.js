@@ -32,7 +32,8 @@
         this._defaults = defaults;
         this._name = pluginName;
 
-        this.settings.isSearchEnabled = this.settings.searchFilterElementClass.length > 0 && this.settings.searchFilterContainerElementClass.length > 0;
+        this.settings.isSearchEnabled = this.settings.searchFilterElementClass.length > 0
+            && this.settings.searchFilterContainerElementClass.length > 0;
 
         this.init();
     }
