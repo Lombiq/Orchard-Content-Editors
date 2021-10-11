@@ -1,7 +1,15 @@
-﻿@using Lombiq.ContentEditors.ViewModels
+﻿@using Lombiq.ContentEditors.Constants
+@using Lombiq.ContentEditors.ViewModels
 
 @{
     var viewModel = Model.ViewModel as DropdownEditorViewModel;
+
+    var hasParent = !string.IsNullOrEmpty(viewModel.ParentElementSelector);
+
+    if (hasParent)
+    {
+        Script.Require(ResourceNames.Lombiq_ConnectedValueSelector);
+    }
 
     const string DefaultBlockName = "dropdownEditor";
     string BlockName = viewModel.BlockName ?? DefaultBlockName;
@@ -33,12 +41,12 @@
         dropdownAttributes["placeholder"] = viewModel.Placeholder;
     }
 
-    if (viewModel.Value is object && !viewModel.SelectList.Any(item => item.Selected))
+    if (viewModel.Value != null && !viewModel.SelectList.Any(item => item.Selected))
     {
         var valueString = viewModel.Value as string;
         var selectedItem = viewModel.SelectList.FirstOrDefault(item => item.Value == valueString);
 
-        if (selectedItem is object)
+        if (selectedItem != null)
         {
             selectedItem.Selected = true;
         }
@@ -66,3 +74,17 @@
         @Html.DropDownList(viewModel.Name, viewModel.SelectList, dropdownAttributes)
     </div>
 </div>
+
+@if (hasParent)
+{
+    <script>
+        jQuery(function ($) {
+            $("select[name='@(viewModel.Name)']").lombiq_ConnectedValueSelector({
+                parentElementSelector: "@viewModel.ParentElementSelector",
+                valueHierarchy: @Html.Raw(Json.Encode(viewModel.ParentElementValueHierarchy)),
+                hasDefaultEmptyValue: @viewModel.HasDefaultEmptyValue.ToString().ToLower(),
+                defaultEmptyValue: "@viewModel.DefaultEmptyValue"
+            });
+        });
+    </script>
+}
