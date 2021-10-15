@@ -148,6 +148,7 @@
     <Compile Include="ViewModels\FieldViewModel.cs" />
     <Compile Include="ViewModels\EditorViewModel.cs" />
     <Compile Include="ViewModels\DropdownEditorViewModel.cs" />
+    <Compile Include="ViewModels\TextAreaEditorViewModel.cs" />
     <Content Include="Content\AreYouSure\jquery.are-you-sure.js" />
     <Content Include="Content\AreYouSure\Mods.txt" />
     <Content Include="Content\Images\spinner.gif" />
@@ -173,6 +174,7 @@
     <Content Include="Scripts\lombiq-jquery-enabledisable.js" />
     <Content Include="Scripts\lombiq-flattenobject.js" />
     <Content Include="Scripts\lombiq-replaceelementattribute.js" />
+    <Content Include="Scripts\lombiq-tinymce.js" />
     <Content Include="Scripts\lombiq-unsafeaction.js" />
     <Content Include="Scripts\lombiq-loadingindicator.js" />
     <Content Include="Scripts\lombiq-editors-datetimeeditor.js" />
@@ -215,6 +217,8 @@
     <Content Include="Views\Lombiq.Tooltip.cshtml" />
     <Content Include="Views\Lombiq.Editors.TaxonomyEditor.Selectize.cshtml" />
     <Content Include="Views\AsyncEditor.Actions.GroupListItem.cshtml" />
+    <Content Include="Views\Lombiq.Editors.TextAreaEditor.TinyMce.cshtml" />
+    <Content Include="Views\Lombiq.Editors.TextAreaEditor.Default.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Orchard\Orchard.Framework.csproj">
