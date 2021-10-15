@@ -1,9 +1,13 @@
 ﻿@using Lombiq.ContentEditors.ViewModels
 @using Lombiq.ContentEditors.Constants
-@using Orchard.ContentManagement
-@using Orchard.Localization
 
 @{
+
+    Script.Require(ResourceNames.Lombiq_TinyMce);
+    Script.Require("jQueryColorBox");
+    Style.Require("jQueryColorBox");
+    Style.Require("OrchardTinyMce");
+
     var viewModel = Model.ViewModel as TextAreaEditorViewModel;
 
     const string DefaultBlockName = "tinyMceEditor";
@@ -13,7 +17,6 @@
     {
         {"class", "html tinymce"},
         {"style", "width:100%"},
-        {"Id", viewModel.Name}
     });
 
     var labelAttributes = new Dictionary<string, object>
@@ -32,11 +35,6 @@
     {
         textAreaAttributes["placeholder"] = viewModel.Placeholder;
     }
-
-    Script.Require(ResourceNames.Lombiq_TinyMce);
-    Script.Require("jQueryColorBox");
-    Style.Require("jQueryColorBox");
-    Style.Require("OrchardTinyMce");
 }
 
 <script type="text/javascript">
