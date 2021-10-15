@@ -58,25 +58,25 @@
                     }
 
                     $.each(childElements, function () {
-                        var currentElement = $(this);
-                        var currentElementTag = $(currentElement).prop("tagName").toLowerCase();
+                        var $currentElement = $(this);
+                        var currentElementTag = $currentElement.prop("tagName").toLowerCase();
                         var hierarchy = currentElementTag !== "input" && currentElementTag !== "option";
 
                         // If the current element is not an input or option, then it defines a hierarchy of elements,
                         // in which case we need to find the element among its children that supplies the value.
-                        var valueElement = hierarchy ? $(currentElement).find("input,option") : $(currentElement);
+                        var $valueElement = hierarchy ? $currentElement.find("input,option") : $currentElement;
 
-                        var value = valueElement.val();
+                        var value = $valueElement.val();
 
                         if ($.inArray(value, currentValues) > -1) {
-                            $(currentElement).show();
-                            currentElement.prop("disabled", false);
+                            $currentElement.show();
+                            $valueElement.removeAttr("disabled"); // removeProp doesn't work for some reason.
                         }
                         // Don't hide the default empty value.
                         else if (!plugin.settings.hasDefaultEmptyValue || plugin.settings.defaultEmptyValue !== value) {
-                            valueElement.prop("selected", false).prop("checked", false);
-                            valueElement.prop("disabled", true);
-                            $(currentElement).hide();
+                            $valueElement.prop("selected", false).prop("checked", false);
+                            $valueElement.prop("disabled", true);
+                            $currentElement.hide();
                         }
                     });
 
@@ -88,7 +88,7 @@
                 // Initialize with selectable children filtered.
                 parentElementChanged();
 
-                $(parentElement).change(parentElementChanged);
+                $(parentElement).on("change", parentElementChanged);
             }
         }
     });
