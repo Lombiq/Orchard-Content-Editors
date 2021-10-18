@@ -12,6 +12,7 @@
     var headerless = string.IsNullOrEmpty(header);
     var showCloseButton = Model.ShowCloseButton as bool? ?? false;
     var additionalAttributes = Model.AdditionalAttributes as IDictionary<string, object>;
+    var additionalClasses = Model.AdditionalClasses as string ?? "";
 
     const string DefaultBlockName = "modal";
     var blockName = Model.BlockName as string ?? DefaultBlockName;
@@ -19,7 +20,7 @@
 }
 
 <div id="@id"
-     class="@blockName js-@blockName @DefaultBlockName @(titleless ? $"{DefaultBlockName}_titleless" : "")"
+     class="@blockName js-@blockName @DefaultBlockName @(titleless ? $"{DefaultBlockName}_titleless" : "") @additionalClasses"
      hidden
      @if (additionalAttributes != null)
      {
