@@ -3,7 +3,7 @@
 @using Orchard.Utility.Extensions
 
 @{
-    var viewModel = Model.ViewModel as TextAreaEditorViewModel;
+    var viewModel = Model.ViewModel as EditorViewModel;
 
     const string DefaultBlockName = "textAreaEditor";
     string BlockName = viewModel.BlockName ?? DefaultBlockName;
