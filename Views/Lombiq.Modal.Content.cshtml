@@ -4,15 +4,15 @@
     Script.Require(ResourceNames.jQueryUI);
     Script.Require(ResourceNames.Lombiq_Modal);
 
-    var title = Model.Title as string ?? "";
-    var header = Model.Header as string ?? "";
-    var body = Model.Body as string ?? "";
+    var title = Model.Title as string ?? string.Empty;
+    var header = Model.Header as string ?? string.Empty;
+    var body = Model.Body as string ?? string.Empty;
     var bodyShape = Model.BodyShape;
     var titleless = string.IsNullOrEmpty(title);
     var headerless = string.IsNullOrEmpty(header);
     var showCloseButton = Model.ShowCloseButton as bool? ?? false;
     var additionalAttributes = Model.AdditionalAttributes as IDictionary<string, object>;
-    var additionalClasses = Model.AdditionalClasses as string ?? "";
+    var additionalClasses = Model.AdditionalClasses as string ?? string.Empty;
 
     const string DefaultBlockName = "modal";
     var blockName = Model.BlockName as string ?? DefaultBlockName;
@@ -20,7 +20,7 @@
 }
 
 <div id="@id"
-     class="@blockName js-@blockName @DefaultBlockName @(titleless ? $"{DefaultBlockName}_titleless" : "") @additionalClasses"
+     class="@blockName js-@blockName @DefaultBlockName @(titleless ? $"{DefaultBlockName}_titleless" : string.Empty) @additionalClasses"
      hidden
      @if (additionalAttributes != null)
      {
