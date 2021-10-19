@@ -3,6 +3,29 @@
 @{
     var viewModel = Model.ViewModel as TextAreaEditorViewModel;
 
+    if (viewModel == null)
+    {
+        viewModel = new TextAreaEditorViewModel();
+        var editorViewModel = Model.ViewModel as EditorViewModel;
+
+        viewModel.AdditionalAttributes = editorViewModel.AdditionalAttributes;
+        viewModel.AdditionalClasses = editorViewModel.AdditionalClasses;
+        viewModel.BlockName = editorViewModel.BlockName;
+        viewModel.ContentItem = editorViewModel.ContentItem;
+        viewModel.Description = editorViewModel.Description;
+        viewModel.Disabled = editorViewModel.Disabled;
+        viewModel.Hint = editorViewModel.Hint;
+        viewModel.Label = editorViewModel.Label;
+        viewModel.Name = editorViewModel.Name;
+        viewModel.Placeholder = editorViewModel.Placeholder;
+        viewModel.Required = editorViewModel.Required;
+        viewModel.ShowIfEmpty = editorViewModel.ShowIfEmpty;
+        viewModel.TechnicalName = editorViewModel.TechnicalName;
+        viewModel.Tooltip = editorViewModel.Tooltip;
+        viewModel.Value = editorViewModel.Value;
+        viewModel.Flavor = TextAreaEditorFlavors.Default;
+    }
+
     switch (viewModel.Flavor)
     {
         case TextAreaEditorFlavors.Default:
