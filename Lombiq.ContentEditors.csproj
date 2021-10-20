@@ -219,6 +219,7 @@
     <Content Include="Views\AsyncEditor.Actions.GroupListItem.cshtml" />
     <Content Include="Views\Lombiq.Editors.TextAreaEditor.TinyMce.cshtml" />
     <Content Include="Views\Lombiq.Editors.TextAreaEditor.Default.cshtml" />
+    <Content Include="Views\Lombiq.CollapsibleSection.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Orchard\Orchard.Framework.csproj">

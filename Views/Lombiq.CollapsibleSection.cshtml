@@ -1,0 +1,63 @@
+@{
+    Script.Require(Lombiq.ContentEditors.Constants.ResourceNames.jQuery);
+    Script.Require("Bootstrap");
+
+    var title = Model.Title as string ?? string.Empty;
+    var body = Model.Body as string ?? string.Empty;
+    var dataTargetId = Model.DataTargetId;
+    var bodyShape = Model.BodyShape;
+    var additionalAttributes = Model.AdditionalAttributes as IDictionary<string, object>;
+    var additionalClasses = Model.AdditionalClasses as string ?? string.Empty;
+
+    if (string.IsNullOrEmpty(dataTargetId))
+    {
+        return;
+    }
+
+    const string CollapsibleSectionBlockName = "collapsibleSection";
+    const string CollapsibleSectionHeaderElementName = CollapsibleSectionBlockName + "__header";
+    const string CollapsibleSectionTitleElementName = CollapsibleSectionBlockName + "__title";
+    const string CollapsibleSectionContentElementName = CollapsibleSectionBlockName + "__content";
+    const string CollapsibleSectionActionContainerBlockName = CollapsibleSectionBlockName + "ActionContainer";
+}
+
+
+<div class="@CollapsibleSectionBlockName 
+     @additionalClasses"
+     @if (additionalAttributes != null)
+     {
+         foreach (var attribute in additionalAttributes)
+         {
+             <text>
+                @attribute.Key="@attribute.Value"
+             </text>
+         }
+     }>
+    <div data-target="#@dataTargetId"
+         data-toggle="collapse"
+         class="@CollapsibleSectionHeaderElementName @CollapsibleSectionActionContainerBlockName"
+         aria-expanded="true">
+
+        <h4 class="@CollapsibleSectionTitleElementName">
+            @if (!string.IsNullOrEmpty(title))
+            {
+                @Html.Raw(title)
+            }
+        </h4>
+        <span class="@(CollapsibleSectionBlockName)__toggleIcon @(CollapsibleSectionActionContainerBlockName)__toggleIcon"></span>
+    </div>
+
+    <div id="@dataTargetId"
+         aria-expanded="true"
+         class="@CollapsibleSectionContentElementName multi-collapse collapse in">
+
+        @if (bodyShape == null)
+        {
+            @Html.Raw(body)
+        }
+        else
+        {
+            @Display(bodyShape)
+        }
+    </div>
+</div>
