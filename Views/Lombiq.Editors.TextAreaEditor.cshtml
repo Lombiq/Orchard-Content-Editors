@@ -1,17 +1,24 @@
 ﻿@using Lombiq.ContentEditors.ViewModels
 
 @{
-    var viewModel = Model.ViewModel as TextAreaEditorViewModel;
+    var viewModel = Model.ViewModel as EditorViewModel;
 
-    switch (viewModel.Flavor)
+    if (viewModel is TextAreaEditorViewModel textAreaEditorViewModel)
     {
-        case TextAreaEditorFlavors.Default:
-            @Display.Lombiq_Editors_TextAreaEditor_Default(ViewModel: viewModel)
-            break;
-        case TextAreaEditorFlavors.TinyMce:
-            @Display.Lombiq_Editors_TextAreaEditor_TinyMce(ViewModel: viewModel)
-            break;
-        default:
-            break;
+        switch (textAreaEditorViewModel.Flavor)
+        {
+            case TextAreaEditorFlavors.Default:
+                @Display.Lombiq_Editors_TextAreaEditor_Default(ViewModel: viewModel)
+                break;
+            case TextAreaEditorFlavors.TinyMce:
+                @Display.Lombiq_Editors_TextAreaEditor_TinyMce(ViewModel: viewModel)
+                break;
+            default:
+                break;
+        }
+    }
+    else
+    {
+        @Display.Lombiq_Editors_TextAreaEditor_Default(ViewModel: viewModel)
     }
 }
