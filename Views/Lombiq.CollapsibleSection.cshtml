@@ -1,15 +1,12 @@
+@using Lombiq.ContentEditors.ViewModels
+
 @{
     Script.Require(Lombiq.ContentEditors.Constants.ResourceNames.jQuery);
     Script.Require("Bootstrap");
 
-    var title = Model.Title as string ?? string.Empty;
-    var body = Model.Body as string ?? string.Empty;
-    var dataTargetId = Model.DataTargetId;
-    var bodyShape = Model.BodyShape;
-    var additionalAttributes = Model.AdditionalAttributes as IDictionary<string, object>;
-    var additionalClasses = Model.AdditionalClasses as string ?? string.Empty;
+    var viewModel = Model.ViewModel as CollapsibleSectionViewModel;
 
-    if (string.IsNullOrEmpty(dataTargetId))
+    if (viewModel == null)
     {
         return;
     }
@@ -21,43 +18,33 @@
     const string CollapsibleSectionActionContainerBlockName = CollapsibleSectionBlockName + "ActionContainer";
 }
 
-
-<div class="@CollapsibleSectionBlockName 
-     @additionalClasses"
-     @if (additionalAttributes != null)
-     {
-         foreach (var attribute in additionalAttributes)
-         {
-             <text>
-                @attribute.Key="@attribute.Value"
-             </text>
-         }
-     }>
-    <div data-target="#@dataTargetId"
+<div class="@CollapsibleSectionBlockName @viewModel.AdditionalClasses"
+     @foreach (var attribute in viewModel.AdditionalAttributes) { <text> @attribute.Key="@attribute.Value" </text> }>
+    <div data-target="#@viewModel.DataTargetId"
          data-toggle="collapse"
          class="@CollapsibleSectionHeaderElementName @CollapsibleSectionActionContainerBlockName"
          aria-expanded="true">
 
         <h4 class="@CollapsibleSectionTitleElementName">
-            @if (!string.IsNullOrEmpty(title))
+            @if (!string.IsNullOrEmpty(viewModel.Label))
             {
-                @Html.Raw(title)
+                @Html.Raw(viewModel.Label)
             }
         </h4>
         <span class="@(CollapsibleSectionBlockName)__toggleIcon @(CollapsibleSectionActionContainerBlockName)__toggleIcon"></span>
     </div>
 
-    <div id="@dataTargetId"
+    <div id="@viewModel.DataTargetId"
          aria-expanded="true"
          class="@CollapsibleSectionContentElementName multi-collapse collapse in">
 
-        @if (bodyShape == null)
+        @if (viewModel.BodyShape == null)
         {
-            @Html.Raw(body)
+            @Html.Raw(viewModel.Body)
         }
         else
         {
-            @Display(bodyShape)
+            @Display(viewModel.BodyShape)
         }
     </div>
 </div>
