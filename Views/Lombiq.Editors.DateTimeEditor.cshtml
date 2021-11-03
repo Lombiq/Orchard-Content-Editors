@@ -121,7 +121,7 @@
         @Html.Label(viewModel.Name, viewModel.Label, labelAttributes)
     }
 
-    @Display.Lombiq_Tooltip(Text: viewModel.Tooltip)
+    @Display.Lombiq_Tooltip(Text: viewModel.Tooltip, AllowHtml: Model.AllowHtml)
 
     @if (!string.IsNullOrEmpty(viewModel.Hint))
     {
@@ -132,6 +132,7 @@
         @Html.Raw(datePickerElement.ToString(TagRenderMode.SelfClosing))
         @Html.Hidden(viewModel.Name)
     </div>
+    <div>@viewModel.Description</div>
 </div>
 
 <script type="text/javascript">
