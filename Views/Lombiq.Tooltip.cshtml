@@ -6,6 +6,7 @@
 @{
     var text = Model.Text as string;
     var allowHtml = (Model.AllowHtml ?? false) ? "allowHtml" : "denyHtml";
+
     if (string.IsNullOrWhiteSpace(text))
     {
         return;
@@ -19,18 +20,31 @@
 
 <span class="@BlockName @allowHtml @additionalClasses" title="@text"></span>
 
+@if (this.WasNotDisplayed("Lombiq.Tooltip"))
+{
 <script type="text/javascript">
         ; (function ($) {
             $(function () {
-                $(".@(BlockName + '.' + allowHtml)").tooltip({
+                $('.@(BlockName + ".allowHtml")').tooltip({
                     content: function () {
                         return $(this).prop("title");
                     },
                     classes: {
                         "ui-tooltip": "highlight"
                     },
-                    html: @Json.Encode(Model.AllowHtml ?? false)
+                    html: true
+                });
+
+                $('.@(BlockName + ".denyHtml")').tooltip({
+                    content: function () {
+                        return $(this).prop("title");
+                    },
+                    classes: {
+                        "ui-tooltip": "highlight"
+                    },
+                    html: false
                 });
             });
         })(jQuery);
 </script>
+}
