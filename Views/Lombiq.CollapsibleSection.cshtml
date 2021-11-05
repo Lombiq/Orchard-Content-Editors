@@ -1,0 +1,50 @@
+@using Lombiq.ContentEditors.ViewModels
+
+@{
+    Script.Require(Lombiq.ContentEditors.Constants.ResourceNames.jQuery);
+    Script.Require("Bootstrap");
+
+    var viewModel = Model.ViewModel as CollapsibleSectionViewModel;
+
+    if (viewModel == null)
+    {
+        return;
+    }
+
+    const string CollapsibleSectionBlockName = "collapsibleSection";
+    const string CollapsibleSectionHeaderElementName = CollapsibleSectionBlockName + "__header";
+    const string CollapsibleSectionTitleElementName = CollapsibleSectionBlockName + "__title";
+    const string CollapsibleSectionContentElementName = CollapsibleSectionBlockName + "__content";
+    const string CollapsibleSectionActionContainerBlockName = CollapsibleSectionBlockName + "ActionContainer";
+}
+
+<div class="@CollapsibleSectionBlockName @viewModel.AdditionalClasses"
+     @foreach (var attribute in viewModel.AdditionalAttributes) { <text> @attribute.Key="@attribute.Value" </text> }>
+    <div data-target="#@viewModel.DataTargetId"
+         data-toggle="collapse"
+         class="@CollapsibleSectionHeaderElementName @CollapsibleSectionActionContainerBlockName"
+         aria-expanded="true">
+
+        <h4 class="@CollapsibleSectionTitleElementName">
+            @if (!string.IsNullOrEmpty(viewModel.Label))
+            {
+                @Html.Raw(viewModel.Label)
+            }
+        </h4>
+        <span class="@(CollapsibleSectionBlockName)__toggleIcon @(CollapsibleSectionActionContainerBlockName)__toggleIcon"></span>
+    </div>
+
+    <div id="@viewModel.DataTargetId"
+         aria-expanded="true"
+         class="@CollapsibleSectionContentElementName multi-collapse collapse in">
+
+        @if (viewModel.BodyShape == null)
+        {
+            @Html.Raw(viewModel.Body)
+        }
+        else
+        {
+            @Display(viewModel.BodyShape)
+        }
+    </div>
+</div>

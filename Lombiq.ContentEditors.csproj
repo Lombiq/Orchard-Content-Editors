@@ -138,6 +138,7 @@
     <Compile Include="ViewModels\BoolEditorViewModel.cs" />
     <Compile Include="ViewModels\CheckboxEditorViewModel.cs" />
     <Compile Include="ViewModels\CheckboxListEditorViewModel.cs" />
+    <Compile Include="ViewModels\CollapsibleSectionViewModel.cs" />
     <Compile Include="ViewModels\DateTimeEditorViewModel.cs" />
     <Compile Include="ViewModels\IElementValueFilterRelationshipSelector.cs" />
     <Compile Include="ViewModels\IParentElementValueDependency.cs" />
@@ -219,6 +220,7 @@
     <Content Include="Views\AsyncEditor.Actions.GroupListItem.cshtml" />
     <Content Include="Views\Lombiq.Editors.TextAreaEditor.TinyMce.cshtml" />
     <Content Include="Views\Lombiq.Editors.TextAreaEditor.Default.cshtml" />
+    <Content Include="Views\Lombiq.CollapsibleSection.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Orchard\Orchard.Framework.csproj">

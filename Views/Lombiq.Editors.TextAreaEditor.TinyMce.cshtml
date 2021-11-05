@@ -7,7 +7,7 @@
     Style.Require("jQueryColorBox");
     Style.Require("OrchardTinyMce");
 
-    var viewModel = Model.ViewModel as TextAreaEditorViewModel;
+    var viewModel = Model.ViewModel as EditorViewModel;
 
     const string DefaultBlockName = "tinyMceEditor";
     string BlockName = viewModel.BlockName ?? DefaultBlockName;
