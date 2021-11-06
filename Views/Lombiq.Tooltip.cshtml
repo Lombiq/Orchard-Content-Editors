@@ -5,7 +5,7 @@
 
 @{
     var text = Model.Text as string;
-    var allowHtml = (Model.AllowHtml ?? false) ? "allowHtml" : "denyHtml";
+    var allowOrDenyHtml = (Model.AllowHtml ?? false) ? "allowHtml" : "denyHtml";
 
     if (string.IsNullOrWhiteSpace(text))
     {
@@ -18,11 +18,11 @@
     var additionalClasses = Model.AdditionalClasses as string ?? "";
 }
 
-<span class="@BlockName @allowHtml @additionalClasses" title="@text"></span>
+<span class="@BlockName @allowOrDenyHtml @additionalClasses" title="@text"></span>
 
 @if (this.WasNotDisplayed("Lombiq.Tooltip"))
 {
-<script type="text/javascript">
+    <script type="text/javascript">
         ; (function ($) {
             $(function () {
                 $('.@(BlockName + ".allowHtml")').tooltip({
@@ -46,5 +46,5 @@
                 });
             });
         })(jQuery);
-</script>
+    </script>
 }
