@@ -5,7 +5,6 @@
 
 @{
     var text = Model.Text as string;
-    var allowOrDenyHtml = (Model.AllowHtml ?? false) ? "allowHtml" : "denyHtml";
 
     if (string.IsNullOrWhiteSpace(text))
     {
@@ -14,37 +13,26 @@
 
     Style.Require(ResourceNames.jQueryUI);
 
-    const string BlockName = "lombiqTooltip";
+    const string DefaultBlockName = "lombiqTooltip";
+    var BlockName = Model.BlockName ?? "defaultTooltip";
+
     var additionalClasses = Model.AdditionalClasses as string ?? "";
 }
 
-<span class="@BlockName @allowOrDenyHtml @additionalClasses" title="@text"></span>
+<span class="@DefaultBlockName @BlockName @additionalClasses" title="@text"></span>
 
-@if (this.WasNotDisplayed("Lombiq.Tooltip"))
-{
-    <script type="text/javascript">
-        ; (function ($) {
-            $(function () {
-                $('.@(BlockName + ".allowHtml")').tooltip({
-                    content: function () {
-                        return $(this).prop("title");
-                    },
-                    classes: {
-                        "ui-tooltip": "highlight"
-                    },
-                    html: true
-                });
-
-                $('.@(BlockName + ".denyHtml")').tooltip({
-                    content: function () {
-                        return $(this).prop("title");
-                    },
-                    classes: {
-                        "ui-tooltip": "highlight"
-                    },
-                    html: false
-                });
+<script type="text/javascript">
+    ; (function ($) {
+        $(function () {
+            $(".@BlockName").tooltip({
+                content: function () {
+                    return $(this).prop("title");
+                },
+                classes: {
+                    "ui-tooltip": "highlight"
+                },
+                html: @Json.Encode(Model.AllowHtml ?? false)
             });
-        })(jQuery);
-    </script>
-}
+        });
+    })(jQuery);
+</script>
