@@ -42,10 +42,5 @@
         /// Indicates whether html is allowed in tooltip text.
         /// </summary>
         public bool AllowTooltipHtml { get; set; }
-
-        /// <summary>
-        /// Text to be displayed under the HTML field.
-        /// </summary>
-        public string TextUnderField { get; set; }
     }
 }
