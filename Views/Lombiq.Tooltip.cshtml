@@ -11,6 +11,7 @@
         return;
     }
 
+    Script.Require(ResourceNames.jQueryUI);
     Style.Require(ResourceNames.jQueryUI);
 
     const string BlockName = "lombiqTooltip";
@@ -21,18 +22,16 @@
 
 @if (this.WasNotDisplayed("Lombiq.Tooltip"))
 {
-    <script type="text/javascript">
-        ; (function ($) {
-            $(function () {
-                $(".@BlockName").tooltip({
-                    content: function () {
-                        return $(this).prop("title");
-                    },
-                    classes: {
-                        "ui-tooltip": "highlight"
-                    }
-                });
+    <script>
+        jQuery(function ($) {
+            $.widget.bridge("jQueryTooltip", $.ui.tooltip);
+
+            $(document).jQueryTooltip({
+                selector: ".@BlockName",
+                content: function () {
+                    return $(this).attr("title");
+                }
             });
-        })(jQuery);
+        });
     </script>
 }
