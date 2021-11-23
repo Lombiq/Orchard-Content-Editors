@@ -11,6 +11,7 @@
         return;
     }
 
+    Script.Require(ResourceNames.jQueryUI);
     Style.Require(ResourceNames.jQueryUI);
 
     const string DefaultBlockName = "lombiqTooltip";
@@ -21,18 +22,17 @@
 
 <span class="@DefaultBlockName @BlockName @additionalClasses" title="@text"></span>
 
-<script type="text/javascript">
-    ; (function ($) {
-        $(function () {
-            $(".@BlockName").tooltip({
-                content: function () {
-                    return $(this).prop("title");
-                },
-                classes: {
-                    "ui-tooltip": "highlight"
-                },
-                html: @Json.Encode(Model.AllowHtml ?? false)
-            });
+<script>
+    jQuery(function ($) {
+        $.widget.bridge("jQueryTooltip", $.ui.tooltip);
+
+        $(document).jQueryTooltip({
+            selector: ".@BlockName",
+            content: function () {
+                return $(this).attr("title");
+            },
+            html: @Json.Encode(Model.AllowHtml ?? false)
         });
-    })(jQuery);
+    });
 </script>
+
