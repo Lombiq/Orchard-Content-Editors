@@ -107,21 +107,22 @@
             $.ajax({
                 url: plugin.settings.editUrl,
                 data: { contentItemId: contentItemId },
-                type: "GET"
-            }).success(function (data) {
-                if (data.Success) {
-                    $editorPlaceholder.html($.parseHTML(data.EditorShape, true)).show();
-                    plugin.concurrentEditors++;
+                type: "GET",
+                success: function (data) {
+                    if (data.Success) {
+                        $editorPlaceholder.html($.parseHTML(data.EditorShape, true)).show();
+                        plugin.concurrentEditors++;
 
-                    $("html, body").animate({
-                        scrollTop: $editorPlaceholder.offset().top
-                    }, 500);
-                    
-                    plugin.settings.editorLoadedCallback.call(plugin, data, $editorPlaceholder);
-                }
+                        $("html, body").animate({
+                            scrollTop: $editorPlaceholder.offset().top
+                        }, 500);
 
-                if (data.ResultMessage) {
-                    alert(data.ResultMessage);
+                        plugin.settings.editorLoadedCallback.call(plugin, data, $editorPlaceholder);
+                    }
+
+                    if (data.ResultMessage) {
+                        alert(data.ResultMessage);
+                    }
                 }
             });
         },
@@ -135,14 +136,15 @@
                     contentItemId: contentItemId,
                     __requestVerificationToken: plugin.settings.requestToken,
                 },
-                type: "POST"
-            }).success(function (data) {
-                if (data.Success) {
-                    plugin.settings.deleteCallback.call(plugin, data);
-                }
+                type: "POST",
+                success: function (data) {
+                    if (data.Success) {
+                        plugin.settings.deleteCallback.call(plugin, data);
+                    }
 
-                if (data.ResultMessage) {
-                    alert(data.ResultMessage);
+                    if (data.ResultMessage) {
+                        alert(data.ResultMessage);
+                    }
                 }
             });
         },
