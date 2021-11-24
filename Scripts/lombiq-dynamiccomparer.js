@@ -3,7 +3,7 @@
         dynamicComparer: function (value, matchValue, noMatchValue) {
             let match;
 
-            if (typeof value === "undefined") {
+            if (typeof value === "undefined" || value === null || value === "") {
                 match = null;
             }
             else if (typeof value === "boolean") {
