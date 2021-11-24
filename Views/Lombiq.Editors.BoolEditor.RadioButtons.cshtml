@@ -4,6 +4,7 @@
 
 @{
     var viewModel = Model.ViewModel as BoolEditorViewModel;
+    var inputName = Html.NameForModel().ToString() + "." + viewModel.Name;
     var value = viewModel.Value as bool?;
     var trueChecked = false;
     var falseChecked = false;
@@ -88,6 +89,23 @@
                     radioButtonsClass: ".js-@RadioButtonsElementName"
                 }
             });
+
+            if (@Json.Encode(!viewModel.Required)) {
+                $('input[name="@inputName"]').click(function () {
+                    var $radio = $(this);
+
+                    // if this was previously checked
+                    if ($radio.data('waschecked') == true) {
+                        $radio.prop('checked', false);
+                        $radio.data('waschecked', false);
+                    }
+                    else
+                        $radio.data('waschecked', true);
+
+                    // remove was checked from other radios
+                    $radio.siblings('input[name="@inputName"]').data('waschecked', false);
+                });
+            }
         });
     })(jQuery);
 </script>
