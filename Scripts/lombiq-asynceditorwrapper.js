@@ -28,7 +28,7 @@
         deleteCallback: function (data) { },
         cancelCallback: function ($editor) { }
     };
-    
+
     function Plugin(element, options) {
         this.element = element;
         this.settings = $.extend(true, {}, defaults, options);
@@ -103,26 +103,25 @@
             if (currentIdInUrl != contentItemId) {
                 plugin.setContentItemIdInUrl(contentItemId);
             }
-            
+
             $.ajax({
                 url: plugin.settings.editUrl,
                 data: { contentItemId: contentItemId },
-                type: "GET",
-                success: function (data) {
-                    if (data.Success) {
-                        $editorPlaceholder.html($.parseHTML(data.EditorShape, true)).show();
-                        plugin.concurrentEditors++;
+                type: "GET"
+            }).success(function (data) {
+                if (data.Success) {
+                    $editorPlaceholder.html($.parseHTML(data.EditorShape, true)).show();
+                    plugin.concurrentEditors++;
 
-                        $("html, body").animate({
-                            scrollTop: $editorPlaceholder.offset().top
-                        }, 500);
+                    $("html, body").animate({
+                        scrollTop: $editorPlaceholder.offset().top
+                    }, 500);
 
-                        plugin.settings.editorLoadedCallback.call(plugin, data, $editorPlaceholder);
-                    }
+                    plugin.settings.editorLoadedCallback.call(plugin, data, $editorPlaceholder);
+                }
 
-                    if (data.ResultMessage) {
-                        alert(data.ResultMessage);
-                    }
+                if (data.ResultMessage) {
+                    alert(data.ResultMessage);
                 }
             });
         },
@@ -136,15 +135,14 @@
                     contentItemId: contentItemId,
                     __requestVerificationToken: plugin.settings.requestToken,
                 },
-                type: "POST",
-                success: function (data) {
-                    if (data.Success) {
-                        plugin.settings.deleteCallback.call(plugin, data);
-                    }
+                type: "POST"
+            }).success(function (data) {
+                if (data.Success) {
+                    plugin.settings.deleteCallback.call(plugin, data);
+                }
 
-                    if (data.ResultMessage) {
-                        alert(data.ResultMessage);
-                    }
+                if (data.ResultMessage) {
+                    alert(data.ResultMessage);
                 }
             });
         },
@@ -172,7 +170,7 @@
             history.pushState(null, "", uri.pathname() + uri.search());
         }
     });
-    
+
     $.fn[pluginName] = function (options) {
         // Return null if the element query is invalid.
         if (!this || this.length == 0) return null;
