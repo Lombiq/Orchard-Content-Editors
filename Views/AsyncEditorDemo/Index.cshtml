@@ -1,0 +1,29 @@
+@using Lombiq.ContentEditors.Constants
+
+<script asp-name="@ResourceNames.AsyncEditor" at="Foot"></script>
+
+<shape type="AsyncEditor_Editor"></shape>
+
+<div id="demoAsyncEditorApp">
+    <async-editor ref="editor" v-bind:api-url="'@Href("~/" + Routes.AsyncEditorApi)'">
+
+    </async-editor>
+</div>
+
+<script at="Foot" depends-on="@ResourceNames.AsyncEditor">
+    document.addEventListener("DOMContentLoaded", function(){
+        window.demoAsyncEditorApp = new Vue({
+            el: '#demoAsyncEditorApp',
+            data: {
+            },
+            mounted() {
+                this.$refs.editor.initEditor();
+            },
+            methods: {
+            },
+            components: {
+                "async-editor": window.asyncEditor.editor
+            }
+        });
+    });
+</script>

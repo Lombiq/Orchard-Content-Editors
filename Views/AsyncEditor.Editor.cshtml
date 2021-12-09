@@ -1,0 +1,12 @@
+<script type="text/x-template" id="async-editor-template">
+    <div class="asyncEditor">
+        <div class="asyncEditor__header"></div>
+        <div class="asyncEditor__messages">
+            <div class="asyncEditor__loading" v-if="isLoading">@T["The editor is loading."]</div>
+        </div>
+        <div class="asyncEditor__main">
+            <div class="asyncEditor__content" v-html="editorHtml"></div>
+        </div>
+        <div class="asyncEditor__footer"></div>
+    </div>
+</script>
