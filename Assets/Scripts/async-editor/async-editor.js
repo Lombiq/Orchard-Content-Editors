@@ -20,7 +20,7 @@ window.asyncEditor.editor = {
             console.log('loading');
             self.editorGroup = editorGroup;
             self.isLoading = true;
-            return fetch(this.apiUrl)
+            return fetch(this.apiUrl + '/4psmvmkabnq2x0jv0tjefbgac5/' + editorGroup)
                 .then((response) => response.json())
                 .then((data) => {
                     self.editorHtml = data.editorHtml;

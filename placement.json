@@ -1,0 +1,12 @@
+{
+  "TextField_Edit": [
+    {
+      "differentiator": "AsyncEditorDemo-Field1",
+      "place": "Content:1@Group1"
+    },
+    {
+      "differentiator": "AsyncEditorDemo-Field2",
+      "place": "Content:1@Group2"
+    }
+  ]
+}

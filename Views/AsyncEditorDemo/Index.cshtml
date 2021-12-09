@@ -5,9 +5,8 @@
 <shape type="AsyncEditor_Editor"></shape>
 
 <div id="demoAsyncEditorApp">
-    <async-editor ref="editor" v-bind:api-url="'@Href("~/" + Routes.AsyncEditorApi)'">
-
-    </async-editor>
+    <async-editor ref="editor"
+                  v-bind:api-url="'@Href("~/" + Routes.AsyncEditorApi)'"></async-editor>
 </div>
 
 <script at="Foot" depends-on="@ResourceNames.AsyncEditor">
