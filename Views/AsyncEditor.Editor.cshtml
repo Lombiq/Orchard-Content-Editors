@@ -5,12 +5,15 @@
             <div class="asyncEditor__loading" v-if="isLoading">@T["The editor is loading."]</div>
         </div>
         <div class="asyncEditor__main">
-            <div class="asyncEditor__content" v-html="editorHtml"></div>
+            <form ref="editorForm" class="asyncEditor__form">
+                @Html.AntiForgeryToken()
+                <div class="asyncEditor__form" v-html="editorHtml"></div>
+            </form>
         </div>
         <div class="asyncEditor__footer">
             <div class="asyncEditor__groupLinks">
-                <div class="asyncEditor__groupLink" @@click="loadEditorGroup('Group1')">Group 1</div>
-                <div class="asyncEditor__groupLink" @@click="loadEditorGroup('Group2')">Group 2</div>
+                <div class="asyncEditor__groupLink" @@click="saveAndLoadEditor('Group1')">Group 1</div>
+                <div class="asyncEditor__groupLink" @@click="saveAndLoadEditor('Group2')">Group 2</div>
             </div>
         </div>
     </div>

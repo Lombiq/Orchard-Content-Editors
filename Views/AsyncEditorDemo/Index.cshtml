@@ -4,25 +4,16 @@
 
 <shape type="AsyncEditor_Editor"></shape>
 
-<div id="demoAsyncEditorApp">
-    <async-editor ref="editor"
-                  v-bind:api-url="'@Href("~/" + Routes.AsyncEditorApi)'"></async-editor>
-</div>
+<div id="demoAsyncEditorApp"></div>
 
 <script at="Foot" depends-on="@ResourceNames.AsyncEditor">
     document.addEventListener("DOMContentLoaded", function(){
-        window.demoAsyncEditorApp = new Vue({
-            el: '#demoAsyncEditorApp',
-            data: {
-            },
-            mounted() {
-                this.$refs.editor.initEditor();
-            },
-            methods: {
-            },
-            components: {
-                "async-editor": window.asyncEditor.editor
-            }
+        initAsyncEditor('demoAsyncEditorApp', {
+            element: '#demoAsyncEditorApp',
+            apiUrl: '@Href("~/" + Routes.AsyncEditorApi)',
+            providerId: '',
+            contentId: '4psmvmkabnq2x0jv0tjefbgac5',
+            editorGroup: 'Group1',
         });
     });
 </script>

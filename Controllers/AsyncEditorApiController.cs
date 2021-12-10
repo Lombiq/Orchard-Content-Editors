@@ -12,8 +12,8 @@ using System.Threading.Tasks;
 
 namespace Lombiq.ContentEditors.Controllers
 {
-    [Route(Routes.AsyncEditorApi)]
-    public class AsyncEditorApiController : ControllerBase
+    [Route(Routes.AsyncEditorApi + "/{id}/{editorGroup?}")]
+    public class AsyncEditorApiController : Controller
     {
         private readonly IContentItemDisplayManager _contentItemDisplayManager;
         private readonly IDisplayHelper _displayHelper;
@@ -35,7 +35,7 @@ namespace Lombiq.ContentEditors.Controllers
             _shapeFactory = shapeFactory;
         }
 
-        [HttpGet("{id}/{editorGroup?}")]
+        [HttpGet]
         public async Task<ActionResult<AsyncEditorGroupDto>> GetEditorGroup(string id, string editorGroup)
         {
             var item = await _contentManager.GetAsync(id);
@@ -43,7 +43,7 @@ namespace Lombiq.ContentEditors.Controllers
                 item,
                 _updateModelAccessor.ModelUpdater,
                 false,
-                editorGroup ?? "Group1");
+                editorGroup);
             var shape = await _shapeFactory.CreateAsync("AsyncEditor_Content", new { EditorShape = editorShape });
             var editorContent = await _displayHelper.ShapeExecuteAsync(shape);
             await using var stringWriter = new StringWriter();
@@ -51,9 +51,25 @@ namespace Lombiq.ContentEditors.Controllers
 
             return Ok(new AsyncEditorGroupDto
             {
-                EditorGroup = "Test",
+                EditorGroup = editorGroup,
                 EditorHtml = stringWriter.ToString(),
             });
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> SaveEditorGroup(string id, string editorGroup)
+        {
+            var item = await _contentManager.GetAsync(id);
+            await _contentItemDisplayManager.UpdateEditorAsync(item, _updateModelAccessor.ModelUpdater, false, editorGroup);
+
+            if (ModelState.IsValid)
+            {
+                await _contentManager.UpdateAsync(item);
+            }
+
+            return ModelState.IsValid
+                ? Ok()
+                : BadRequest(ModelState);
         }
     }
 }

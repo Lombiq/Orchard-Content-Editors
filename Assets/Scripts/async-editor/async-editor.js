@@ -1,35 +1,125 @@
-window.asyncEditor = {};
+window.asyncEditor = { editors: [] };
+
+const apiClient = {
+    apiUrl: '',
+    providerId: '',
+    loadEditor(contentId, editorGroup, callback) {
+        return fetch(this.apiUrl + '/' + contentId + '/' + editorGroup)
+            .then((response) => response.json())
+            .then((data) => {
+                callback(true, data);
+            })
+            .catch((error) => {
+                callback(false, error);
+            });
+    },
+    submitEditor(contentId, editorGroup, formData, callback) {
+        for (var pair of formData.entries()) {
+            console.log(pair[0]+ ', ' + pair[1]);
+        }
+        return fetch(this.apiUrl + '/' + contentId + '/' + editorGroup, {
+            method: 'post',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+            },
+            body: new URLSearchParams(formData) })
+            .then((response) => response.json())
+            .then((data) => {
+                callback(true, data);
+            })
+            .catch((error) => {
+                callback(false, error);
+            });
+    }
+}
 
 window.asyncEditor.editor = {
     template: '#async-editor-template',
-    props: ['apiUrl', 'initialEditorGroup'],
     data() {
         return {
+            api: apiClient,
+            providerId: '',
+            contentId: '',
+            editorGroup: '',
             editorHtml: '',
             errorText: '',
-            editorGroup: '',
             isLoading: false,
         };
     },
+    computed: {
+        formData() {
+            return new FormData(self.$refs.editorForm);
+        }
+    },
     methods: {
-        initEditor() {
-            return this.loadEditorGroup(this.editorGroup);
-        },
-        loadEditorGroup(editorGroup) {
+        initEditor(apiUrl, providerId, contentId, editorGroup) {
             const self = this;
-            console.log('loading');
+
+            self.api.apiUrl = apiUrl;
+            self.api.providerId = providerId;
+            self.contentId = contentId;
             self.editorGroup = editorGroup;
+
+            self.loadEditor();
+        },
+        loadEditor(editorGroup, callback) {
+            const self = this;
+
+            self.editorGroup = editorGroup ?? self.editorGroup;
             self.isLoading = true;
-            return fetch(this.apiUrl + '/4psmvmkabnq2x0jv0tjefbgac5/' + editorGroup)
-                .then((response) => response.json())
-                .then((data) => {
+
+            self.api.loadEditor(self.contentId, self.editorGroup, (success, data) => {
+                self.isLoading = false;
+                if (success) {
                     self.editorHtml = data.editorHtml;
-                    self.isLoading = false;
-                })
-                .catch((error) => {
-                    self.errorText = error;
-                    self.isLoading = false;
-                });
+                    self.editorGroup = data.editorGroup;
+                }
+                else {
+                    self.errorText = data;
+                }
+            });
+        },
+        saveAndLoadEditor(editorGroup) {
+            const self = this;
+
+            if (editorGroup !== self.editorGroup) {
+                self.submitEditor(() => self.loadEditor(editorGroup));
+            }
+            else {
+                self.loadEditor(editorGroup);
+            }
+        },
+        submitEditor(callback) {
+            const self = this;
+
+            console.log(self.editorGroup);
+            self.api.submitEditor(self.contentId, self.editorGroup, self.formData, (success, data) => {
+                callback();
+            });
         },
     },
 };
+
+function initAsyncEditor(appId, parameters) {
+    if (!parameters) return;
+
+    window.asyncEditor.editors[appId] = new Vue({
+        el: parameters.element,
+        data: {
+            appId: appId,
+        },
+        methods: {
+        },
+        mounted() {
+            this.$refs.editor.initEditor(
+                parameters.apiUrl,
+                parameters.providerId,
+                parameters.contentId,
+                parameters.editorGroup);
+        },
+        components: {
+            "async-editor": window.asyncEditor.editor
+        },
+        template: '<async-editor ref="editor"></async-editor>',
+    });
+}
