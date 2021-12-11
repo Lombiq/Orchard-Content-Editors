@@ -1,4 +1,5 @@
 @using Lombiq.ContentEditors.Constants
+@using Lombiq.ContentEditors.Services
 
 <script asp-name="@ResourceNames.AsyncEditor" at="Foot"></script>
 
@@ -10,9 +11,10 @@
     document.addEventListener("DOMContentLoaded", function(){
         initAsyncEditor('demoAsyncEditorApp', {
             element: '#demoAsyncEditorApp',
-            apiUrl: '@Href("~/" + Routes.AsyncEditorApi)',
-            providerId: '',
+            apiUrl: '@Href("~/" + Routes.ContentItemAsyncEditorApi)',
+            providerName: '@nameof(DemoAsyncEditorProvider)',
             contentId: '4psmvmkabnq2x0jv0tjefbgac5',
+            contentType: 'AsyncEditorDemo',
             editorGroup: 'Group1',
         });
     });

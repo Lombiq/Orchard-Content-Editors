@@ -46,11 +46,6 @@ window.asyncEditor.editor = {
             isLoading: false,
         };
     },
-    computed: {
-        formData() {
-            return new FormData(self.$refs.editorForm);
-        }
-    },
     methods: {
         initEditor(apiUrl, providerId, contentId, editorGroup) {
             const self = this;
@@ -93,7 +88,7 @@ window.asyncEditor.editor = {
             const self = this;
 
             console.log(self.editorGroup);
-            self.api.submitEditor(self.contentId, self.editorGroup, self.formData, (success, data) => {
+            self.api.submitEditor(self.contentId, self.editorGroup, new FormData(self.$refs.editorForm), (success, data) => {
                 callback();
             });
         },
