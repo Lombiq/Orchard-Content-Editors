@@ -20,9 +20,6 @@ class AsyncEditorApiClient {
     }
 
     submitEditor(contentId, editorGroup, nextEditorGroup, formData, callback) {
-        for (var pair of formData.entries()) {
-            console.log(pair[0]+ ', ' + pair[1]);
-        }
         return fetch(this.createUrl(contentId, editorGroup, nextEditorGroup), {
             method: 'post',
             headers: {
@@ -54,10 +51,13 @@ class AsyncEditorApiClient {
     }
 }
 
+const router = new VueRouter();
+
 window.asyncEditor.editor = {
     template: '#async-editor-template',
     data() {
         return {
+            asyncEditorId: '',
             api: null,
             errorText: '',
             contentId: '',
@@ -67,6 +67,12 @@ window.asyncEditor.editor = {
             defaultErrorText: '',
         };
     },
+    watch: {
+        '$route.query': function(newVal, oldVal) {
+            this.processQuery();
+        }
+    },
+    router,
     methods: {
         initEditor(parameters) {
             const self = this;
@@ -75,8 +81,9 @@ window.asyncEditor.editor = {
             self.contentId = parameters.contentId;
             self.editorGroup = parameters.editorGroup;
             self.defaultErrorText = parameters.defaultErrorText ?? 'Something went wrong.';
+            self.asyncEditorId = parameters.asyncEditorId;
 
-            self.loadEditor();
+            if (!self.processQuery()) self.loadEditor();
         },
         loadEditor(editorGroup) {
             const self = this;
@@ -102,16 +109,54 @@ window.asyncEditor.editor = {
             const self = this;
 
             if (success) {
-                console.log('API response: ');
-                console.log(data);
+                const shouldUpdateQuery = self.contentId !== data.contentId || self.editorGroup !== data.editorGroup;
+
+                self.errorText = '';
                 self.contentId = data.contentId;
                 self.editorHtml = data.editorHtml;
                 self.editorGroup = data.editorGroup;
                 self.editorGroups = data.editorGroups;
+
+                if (shouldUpdateQuery) self.updateQuery();
             }
             else {
                 self.errorText = self.defaultErrorText;
             }
+        },
+        updateQuery() {
+            const self = this;
+
+            const query = { ...self.$route.query };
+            query[self.asyncEditorId + '.contentId'] = self.contentId;
+            query[self.asyncEditorId + '.editorGroup'] = self.editorGroup;
+            router.push({ path: '/', query: query});
+        },
+        processQuery() {
+            const self = this;
+
+            let shouldLoadEditor = false;
+
+            const contentIdKey = self.asyncEditorId + '.contentId';
+            if (self.$route.query.hasOwnProperty(contentIdKey) &&
+                self.$route.query[contentIdKey] !== self.contentId)
+            {
+                self.contentId = self.$route.query[contentIdKey];
+                shouldLoadEditor = true;
+            }
+
+            const editorGroupKey = self.asyncEditorId + '.editorGroup';
+            if (self.$route.query.hasOwnProperty(editorGroupKey) &&
+                self.$route.query[editorGroupKey] !== self.contentId)
+            {
+                self.editorGroup = self.$route.query[editorGroupKey];
+                shouldLoadEditor = true;
+            }
+
+            if (shouldLoadEditor) {
+                self.loadEditor();
+            }
+
+            return shouldLoadEditor;
         },
         isCurrentGroup(editorGroup) {
             return editorGroup === this.editorGroup;
