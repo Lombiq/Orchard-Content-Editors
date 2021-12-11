@@ -1,0 +1,19 @@
+@using System.IO
+
+@model Lombiq.ContentEditors.Dtos.AsyncEditorGroupDto
+
+@{
+    Layout = "";
+
+    if (!ViewData.ModelState.IsValid)
+    {
+        var validationSummary = Html.ValidationSummary();
+
+        await using var stringWriter = new StringWriter();
+        validationSummary.WriteTo(stringWriter, HtmlEncoder);
+
+        Model.ValidationSummaryHtml = stringWriter.ToString();
+    }
+}
+
+@Json.Serialize(Model)

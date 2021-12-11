@@ -51,27 +51,27 @@ namespace Lombiq.ContentEditors.Services
                 _updateModelAccessor.ModelUpdater,
                 context.Content.IsNew(),
                 context.EditorGroup);
-            var shape = await _shapeFactory.CreateAsync("AsyncEditor_Content", new { EditorShape = editorShape });
-            var editorContent = await _displayHelper.ShapeExecuteAsync(shape);
-            await using var stringWriter = new StringWriter();
-            editorContent.WriteTo(stringWriter, HtmlEncoder.Default);
 
-            return stringWriter.ToString();
+            AddEditorShapeAlternates(context, editorShape);
+
+            return await WrapAndRenderShapeAsync(editorShape);
         }
 
-        public virtual async Task<ModelStateDictionary> UpdateEditorAsync(AsyncEditorContext<ContentItem> context)
+        public virtual async Task<AsyncEditorUpdateResult> UpdateEditorAsync(AsyncEditorContext<ContentItem> context)
         {
             await ThrowIfGroupIsInvalidAsync(context);
 
-            await _contentItemDisplayManager.UpdateEditorAsync(
+            var editorShape = await _contentItemDisplayManager.UpdateEditorAsync(
                 context.Content,
                 _updateModelAccessor.ModelUpdater,
                 context.Content.IsNew(),
                 context.EditorGroup);
 
+            AddEditorShapeAlternates(context, editorShape);
+
             if (!_updateModelAccessor.ModelUpdater.ModelState.IsValid)
             {
-                return _updateModelAccessor.ModelUpdater.ModelState;
+                return CreateUpdateResult(editorShape, _updateModelAccessor.ModelUpdater.ModelState);
             }
 
             context.Content.SetFilledEditorGroup(context.AsyncEditorId, context.EditorGroup);
@@ -84,7 +84,17 @@ namespace Lombiq.ContentEditors.Services
                 await _contentManager.PublishAsync(context.Content);
             }
 
-            return _updateModelAccessor.ModelUpdater.ModelState;
+            return CreateUpdateResult(editorShape, _updateModelAccessor.ModelUpdater.ModelState);
+        }
+
+        protected virtual async Task<string> WrapAndRenderShapeAsync(IShape editorShape)
+        {
+            var shape = await _shapeFactory.CreateAsync("AsyncEditor_Editor", new { EditorShape = editorShape });
+            var editorContent = await _displayHelper.ShapeExecuteAsync(shape);
+            await using var stringWriter = new StringWriter();
+            editorContent.WriteTo(stringWriter, HtmlEncoder.Default);
+
+            return stringWriter.ToString();
         }
 
         protected async Task ThrowIfGroupIsInvalidAsync(AsyncEditorContext<ContentItem> context)
@@ -106,6 +116,21 @@ namespace Lombiq.ContentEditors.Services
                 DisplayText = displayText,
                 IsAccessible = isAccessible,
                 IsFilled = context.Content.HasFilledEditorGroup(context.AsyncEditorId, name),
+            };
+
+        protected virtual void AddEditorShapeAlternates(AsyncEditorContext<ContentItem> context, IShape editorShape)
+        {
+            editorShape.Metadata.Alternates.Add($"AsyncEditor_Content");
+            editorShape.Metadata.Alternates.Add($"AsyncEditor_Content__{context.AsyncEditorId}");
+            editorShape.Metadata.Alternates.Add($"AsyncEditor_Content__{context.EditorGroup}");
+            editorShape.Metadata.Alternates.Add($"AsyncEditor_Content__{context.AsyncEditorId}__{context.EditorGroup}");
+        }
+
+        private AsyncEditorUpdateResult CreateUpdateResult(IShape editorShape, ModelStateDictionary modelState) =>
+            new()
+            {
+                ModelState = modelState,
+                RenderedEditorShapeFactory = () => new ValueTask<string>(WrapAndRenderShapeAsync(editorShape)),
             };
     }
 }

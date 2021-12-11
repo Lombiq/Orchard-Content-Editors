@@ -1,0 +1,40 @@
+<style>
+    .cursor-pointer {
+        cursor: pointer;
+    }
+</style>
+<script type="text/x-template" id="async-editor-template">
+    <div class="asyncEditor w-100 d-flex flex-column">
+        <div class="asyncEditor__header">
+            <div class="asyncEditor__progressWrapper progress mb-3">
+                <div class="asyncEditor__progress progress-bar" role="progressbar" :style="'width: ' + progress + '%'" :aria-valuenow="progress" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+            <div class="asyncEditor__messages">
+                <div class="asyncEditor__error p-3 rounded bg-danger text-light mb-3" v-if="errorText">{{ errorText }}</div>
+                <div class="asyncEditor__validationSummary p-3 rounded bg-danger text-light mb-3" v-if="validationSummaryHtml" v-html="validationSummaryHtml"></div>
+            </div>
+        </div>
+        <div class="asyncEditor__main mb-3">
+            <form ref="editorForm" class="asyncEditor__form">
+                @Html.AntiForgeryToken()
+                <div class="asyncEditor__form" v-html="editorHtml"></div>
+            </form>
+        </div>
+        <div class="asyncEditor__footer d-flex flex-row justify-content-between bg-light mt-3">
+            <div class="asyncEditor__groupLinks d-flex flex-row">
+                <div v-for="group in editorGroups"
+                     :key="group.name"
+                     class="asyncEditor__groupLink p-3"
+                     :class="{ 'asyncEditor__groupLink_disabled text-muted': !group.isAccessible, 'asyncEditor__groupLink_active': isCurrentGroup(group.name), 'cursor-pointer': group.isAccessible }"
+                     @@click="group.isAccessible && !isCurrentGroup(group.name) ? submitEditor(group.name) : null">
+                        <i class="fas fa-check-circle" v-if="group.isFilled"></i> {{ group.displayText }}
+                     </div>
+            </div>
+            <div class="asyncEditor__actions d-flex flex-row">
+                <div class="asyncEditor__saveAction p-3 cursor-pointer" v-if="!isLastGroup()" @@click="submitEditor()">@T["Save"]</div>
+                <div class="asyncEditor__saveAndNextAction p-3 cursor-pointer" v-if="!isLastGroup()" @@click="submitEditor(getNextEditor())">@T["Save and Next"]</div>
+                <div class="asyncEditor__submitAction p-3 cursor-pointer" v-if="isLastGroup()" @@click="submitEditor(getNextEditor())">@T["Submit"]</div>
+            </div>
+        </div>
+    </div>
+</script>

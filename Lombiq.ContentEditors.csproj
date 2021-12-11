@@ -32,10 +32,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="Views\AsyncEditor.Content.cshtml">
+    <EmbeddedResource Update="Views\AsyncEditor.Editor.cshtml">
       <CopyToPublishDirectory>Never</CopyToPublishDirectory>
     </EmbeddedResource>
     <EmbeddedResource Update="placement.json">
+      <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\AsyncEditor.Content.cshtml">
+      <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Views\Result.cshtml">
       <CopyToPublishDirectory>Never</CopyToPublishDirectory>
     </EmbeddedResource>
   </ItemGroup>

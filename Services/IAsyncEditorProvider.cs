@@ -13,6 +13,6 @@ namespace Lombiq.ContentEditors.Services
         Task<IEnumerable<AsyncEditorGroup>> GetOrderedEditorGroupsAsync(AsyncEditorContext<T> context);
         Task<bool> CanRenderEditorGroupAsync(AsyncEditorContext<T> context);
         Task<string> RenderEditorGroupAsync(AsyncEditorContext<T> context);
-        Task<ModelStateDictionary> UpdateEditorAsync(AsyncEditorContext<T> context);
+        Task<AsyncEditorUpdateResult> UpdateEditorAsync(AsyncEditorContext<T> context);
     }
 }

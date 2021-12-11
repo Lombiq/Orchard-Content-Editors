@@ -53,10 +53,10 @@ namespace Lombiq.ContentEditors.Controllers
             var context = PopulateContext(dto, item);
             if (!await provider.CanRenderEditorGroupAsync(context)) return NotFound();
 
-            var modelState = await provider.UpdateEditorAsync(context);
-            if (!modelState.IsValid)
+            var result = await provider.UpdateEditorAsync(context);
+            if (!result.ModelState.IsValid)
             {
-                return await AsyncEditorResultAsync(context, provider);
+                return await AsyncEditorResultAsync(context, provider, renderedEditor: await result.RenderedEditorShapeFactory());
             }
 
             if (string.IsNullOrEmpty(dto.NextEditorGroup) || dto.NextEditorGroup == dto.EditorGroup)
@@ -85,15 +85,18 @@ namespace Lombiq.ContentEditors.Controllers
                 AsyncEditorId = dto.AsyncEditorId,
             };
 
-        private async Task<OkObjectResult> AsyncEditorResultAsync(
+        private async Task<ViewResult> AsyncEditorResultAsync(
             AsyncEditorContext<ContentItem> context,
             IAsyncEditorProvider<ContentItem> provider,
-            string editorGroup = null)
+            string editorGroup = null,
+            string renderedEditor = null)
         {
-            var renderedEditor = await provider.RenderEditorGroupAsync(context);
+            renderedEditor ??= await provider.RenderEditorGroupAsync(context);
             var editorGroups = await provider.GetOrderedEditorGroupsAsync(context);
 
-            return Ok(new AsyncEditorGroupDto
+            // Return ViewResult instead of simple Ok because the ModelState is not accessible in ad-hoc shapes hence
+            // the validation summary wouldn't be rendered otherwise. Adding the validation summary HTML in the view.
+            return View("Result", new AsyncEditorGroupDto
             {
                 ContentId = !context.Content.IsNew() ? context.Content.ContentItemId : null,
                 EditorGroup = editorGroup ?? context.EditorGroup,

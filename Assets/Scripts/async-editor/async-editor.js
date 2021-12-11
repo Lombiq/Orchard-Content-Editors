@@ -20,6 +20,9 @@ class AsyncEditorApiClient {
     }
 
     submitEditor(contentId, editorGroup, nextEditorGroup, formData, callback) {
+        for (var pair of formData.entries()) {
+            console.log(pair[0]+ ', ' + pair[1]);
+        }
         return fetch(this.createUrl(contentId, editorGroup, nextEditorGroup), {
             method: 'post',
             headers: {
@@ -62,6 +65,7 @@ window.asyncEditor.editor = {
             errorText: '',
             contentId: '',
             editorHtml: '',
+            validationSummaryHtml: '',
             editorGroup: '',
             editorGroups: [],
             defaultErrorText: '',
@@ -118,6 +122,7 @@ window.asyncEditor.editor = {
                 const shouldUpdateQuery = self.contentId !== data.contentId || self.editorGroup !== data.editorGroup;
 
                 self.errorText = '';
+                self.validationSummaryHtml = data.validationSummaryHtml;
                 self.contentId = data.contentId;
                 self.editorHtml = data.editorHtml;
                 self.editorGroup = data.editorGroup;
