@@ -1,3 +1,4 @@
+using Lombiq.ContentEditors.Extensions;
 using Lombiq.ContentEditors.Models;
 using OrchardCore.ContentManagement;
 using System.Collections.Generic;
@@ -16,18 +17,9 @@ namespace Lombiq.ContentEditors.Services
         public override Task<IEnumerable<AsyncEditorGroup>> GetOrderedEditorGroupsAsync(AsyncEditorContext<ContentItem> context) =>
             Task.FromResult(new[]
             {
-                new AsyncEditorGroup
-                {
-                    Name = "Group1", DisplayText = T["Group 1"], IsAccessible = true,
-                },
-                new AsyncEditorGroup
-                {
-                    Name = "Group2", DisplayText = T["Group 2"], IsAccessible = true,
-                },
-                new AsyncEditorGroup
-                {
-                    Name = "Group3", DisplayText = T["Group 3"], IsAccessible = false, IsPublishGroup = true,
-                },
+                CreateEditorGroup(context, "Group1", T["Group 1"]),
+                CreateEditorGroup(context, "Group2", T["Group 2"]),
+                CreateEditorGroup(context, "Group3", T["Group 3"], context.Content.HasFilledEditorGroup(context.AsyncEditorId, "Group2")),
             }.AsEnumerable());
     }
 }

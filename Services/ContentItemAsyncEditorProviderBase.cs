@@ -1,3 +1,4 @@
+using Lombiq.ContentEditors.Extensions;
 using Lombiq.ContentEditors.Models;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Localization;
@@ -73,6 +74,8 @@ namespace Lombiq.ContentEditors.Services
                 return _updateModelAccessor.ModelUpdater.ModelState;
             }
 
+            context.Content.SetFilledEditorGroup(context.AsyncEditorId, context.EditorGroup);
+
             await _contentManager.CreateOrUpdateAsync(context.Content);
 
             if ((await GetOrderedEditorGroupsAsync(context)).First(group => group.Name == context.EditorGroup)
@@ -91,5 +94,18 @@ namespace Lombiq.ContentEditors.Services
                 throw new ArgumentException("The requested editor group is invalid.");
             }
         }
+
+        protected virtual AsyncEditorGroup CreateEditorGroup(
+            AsyncEditorContext<ContentItem> context,
+            string name,
+            string displayText,
+            bool isAccessible = true) =>
+            new()
+            {
+                Name = name,
+                DisplayText = displayText,
+                IsAccessible = isAccessible,
+                IsFilled = context.Content.HasFilledEditorGroup(context.AsyncEditorId, name),
+            };
     }
 }

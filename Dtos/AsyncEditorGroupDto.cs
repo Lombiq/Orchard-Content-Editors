@@ -8,6 +8,7 @@ namespace Lombiq.ContentEditors.Dtos
         public string ContentId { get; set; }
         public string EditorGroup { get; set; }
         public string EditorHtml { get; set; }
+        public bool IsFilled { get; set; }
         public IEnumerable<AsyncEditorGroup> EditorGroups { get; set; }
     }
 }

@@ -67,6 +67,12 @@ window.asyncEditor.editor = {
             defaultErrorText: '',
         };
     },
+    computed: {
+        progress(self) {
+            if (self.editorGroups.length < 1) return 0;
+            return self.editorGroups.filter(group => group.isFilled).length / self.editorGroups.length * 100;
+        },
+    },
     watch: {
         '$route.query': function(newVal, oldVal) {
             this.processQuery();
