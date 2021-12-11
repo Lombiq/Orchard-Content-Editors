@@ -26,7 +26,7 @@ namespace Lombiq.ContentEditors.Services
 
         public virtual string Name => typeof(TProvider).Name;
 
-        public ContentItemAsyncEditorProviderBase(IContentItemAsyncEditorProviderServices<TProvider> providerServices)
+        protected ContentItemAsyncEditorProviderBase(IContentItemAsyncEditorProviderServices<TProvider> providerServices)
         {
             _contentManager = providerServices.ContentManager.Value;
             _contentItemDisplayManager = providerServices.ContentItemDisplayManager.Value;
@@ -68,9 +68,17 @@ namespace Lombiq.ContentEditors.Services
                 context.Content.IsNew(),
                 context.EditorGroup);
 
-            if (_updateModelAccessor.ModelUpdater.ModelState.IsValid)
+            if (!_updateModelAccessor.ModelUpdater.ModelState.IsValid)
             {
-                await _contentManager.UpdateAsync(context.Content);
+                return _updateModelAccessor.ModelUpdater.ModelState;
+            }
+
+            await _contentManager.CreateOrUpdateAsync(context.Content);
+
+            if ((await GetOrderedEditorGroupsAsync(context)).First(group => group.Name == context.EditorGroup)
+                .IsPublishGroup)
+            {
+                await _contentManager.PublishAsync(context.Content);
             }
 
             return _updateModelAccessor.ModelUpdater.ModelState;

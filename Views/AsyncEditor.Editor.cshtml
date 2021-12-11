@@ -2,7 +2,7 @@
     <div class="asyncEditor">
         <div class="asyncEditor__header"></div>
         <div class="asyncEditor__messages">
-            <div class="asyncEditor__loading" v-if="isLoading">@T["The editor is loading."]</div>
+            <div class="asyncEditor__error" v-if="errorText">{{ errorText }}</div>
         </div>
         <div class="asyncEditor__main">
             <form ref="editorForm" class="asyncEditor__form">
@@ -12,8 +12,18 @@
         </div>
         <div class="asyncEditor__footer">
             <div class="asyncEditor__groupLinks">
-                <div class="asyncEditor__groupLink" @@click="saveAndLoadEditor('Group1')">Group 1</div>
-                <div class="asyncEditor__groupLink" @@click="saveAndLoadEditor('Group2')">Group 2</div>
+                <div v-for="group in editorGroups"
+                     :key="group.name"
+                     class="asyncEditor__groupLink"
+                     :class="{ 'asyncEditor__groupLink_disabled': !group.isAccessible, 'asyncEditor__groupLink_active': isCurrentGroup(group.name) }"
+                     @@click="group.isAccessible && !isCurrentGroup(group.name) ? submitEditor(group.name) : null">
+                        {{ group.displayText }}
+                     </div>
+            </div>
+            <div class="asyncEditor__actions">
+                <div class="asyncEditor__saveAction" v-if="!isLastGroup()" @@click="submitEditor()">@T["Save"]</div>
+                <div class="asyncEditor__saveAndNextAction" v-if="!isLastGroup()" @@click="submitEditor(getNextEditor())">@T["Save and Next"]</div>
+                <div class="asyncEditor__submitAction" v-if="isLastGroup()">@T["Submit"]</div>
             </div>
         </div>
     </div>

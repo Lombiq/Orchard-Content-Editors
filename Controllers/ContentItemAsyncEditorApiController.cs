@@ -26,12 +26,12 @@ namespace Lombiq.ContentEditors.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<AsyncEditorGroupDto>> Get([FromQuery] RenderContentItemAsyncEditorDto dto)
+        public async Task<ActionResult<AsyncEditorGroupDto>> Get([FromQuery] RenderAsyncEditorDto dto)
         {
             var provider = GetProvider(dto.ProviderName);
             if (provider == null) return NotFound();
 
-            var item = await GetOrCreateAsync(dto.ContentType, dto.ContentItemId);
+            var item = await _contentManager.GetOrCreateAsync(dto.ContentId, dto.ContentType, VersionOptions.Latest);
             if (item == null) return NotFound();
 
             var context = PopulateContext(dto, item);
@@ -42,12 +42,12 @@ namespace Lombiq.ContentEditors.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Post([FromQuery] SubmitContentItemAsyncEditorDto dto)
+        public async Task<ActionResult> Post([FromQuery] SubmitAsyncEditorDto dto)
         {
             var provider = GetProvider(dto.ProviderName);
             if (provider == null) return NotFound();
 
-            var item = await GetOrCreateAsync(dto.ContentType, dto.ContentItemId);
+            var item = await _contentManager.GetOrCreateAsync(dto.ContentId, dto.ContentType, VersionOptions.Latest);
             if (item == null) return NotFound();
 
             var context = PopulateContext(dto, item);
@@ -74,20 +74,8 @@ namespace Lombiq.ContentEditors.Controllers
         private IAsyncEditorProvider<ContentItem> GetProvider(string name) =>
             _providers.FirstOrDefault(provider => provider.Name == name);
 
-        private Task<ContentItem> GetOrCreateAsync(string contentType, string contentItemId)
-        {
-            if (string.IsNullOrEmpty(contentType))
-            {
-                return _contentManager.GetAsync(contentItemId);
-            }
-
-            return string.IsNullOrEmpty(contentItemId)
-                ? _contentManager.NewAsync(contentType)
-                : _contentManager.GetAsync(contentItemId);
-        }
-
         private static AsyncEditorContext<ContentItem> PopulateContext(
-            RenderContentItemAsyncEditorDto dto,
+            RenderAsyncEditorDto dto,
             ContentItem contentItem,
             string editorGroup = null) =>
             new()
@@ -107,6 +95,7 @@ namespace Lombiq.ContentEditors.Controllers
 
             return Ok(new AsyncEditorGroupDto
             {
+                ContentId = !context.Content.IsNew() ? context.Content.ContentItemId : null,
                 EditorGroup = editorGroup ?? context.EditorGroup,
                 EditorGroups = editorGroups,
                 EditorHtml = renderedEditor,

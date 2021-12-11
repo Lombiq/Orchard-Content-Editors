@@ -26,11 +26,7 @@ namespace Lombiq.ContentEditors.Services
                 },
                 new AsyncEditorGroup
                 {
-                    Name = "Group3", DisplayText = T["Group 3"], IsAccessible = false,
-                },
-                new AsyncEditorGroup
-                {
-                    Name = "Group4", DisplayText = T["Group 4"], IsAccessible = false,
+                    Name = "Group3", DisplayText = T["Group 3"], IsAccessible = false, IsPublishGroup = true,
                 },
             }.AsEnumerable());
     }

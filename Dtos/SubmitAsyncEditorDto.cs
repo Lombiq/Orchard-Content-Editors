@@ -1,6 +1,6 @@
 namespace Lombiq.ContentEditors.Dtos
 {
-    public class SubmitContentItemAsyncEditorDto : RenderContentItemAsyncEditorDto
+    public class SubmitAsyncEditorDto : RenderAsyncEditorDto
     {
         public string NextEditorGroup { get; set; }
     }

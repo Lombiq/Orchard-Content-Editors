@@ -1,10 +1,15 @@
 window.asyncEditor = { editors: [] };
 
-const apiClient = {
-    apiUrl: '',
-    providerId: '',
+class AsyncEditorApiClient {
+    constructor(parameters) {
+        this.apiUrl = parameters.apiUrl;
+        this.asyncEditorId = parameters.asyncEditorId;
+        this.providerName = parameters.providerName;
+        this.contentType = parameters.contentType;
+    }
+
     loadEditor(contentId, editorGroup, callback) {
-        return fetch(this.apiUrl + '/' + contentId + '/' + editorGroup)
+        return fetch(this.createUrl(contentId, editorGroup))
             .then((response) => response.json())
             .then((data) => {
                 callback(true, data);
@@ -12,12 +17,13 @@ const apiClient = {
             .catch((error) => {
                 callback(false, error);
             });
-    },
-    submitEditor(contentId, editorGroup, formData, callback) {
+    }
+
+    submitEditor(contentId, editorGroup, nextEditorGroup, formData, callback) {
         for (var pair of formData.entries()) {
             console.log(pair[0]+ ', ' + pair[1]);
         }
-        return fetch(this.apiUrl + '/' + contentId + '/' + editorGroup, {
+        return fetch(this.createUrl(contentId, editorGroup, nextEditorGroup), {
             method: 'post',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
@@ -31,86 +37,104 @@ const apiClient = {
                 callback(false, error);
             });
     }
+
+    createUrl(contentId, editorGroup, nextEditorGroup) {
+        const url = new URL(this.apiUrl, document.baseURI);
+        const query = {
+            asyncEditorId: this.asyncEditorId,
+            providerName: this.providerName,
+            contentType: this.contentType,
+        };
+        if (contentId) query.contentId = contentId;
+        if (editorGroup) query.editorGroup = editorGroup;
+        if (nextEditorGroup) query.nextEditorGroup = nextEditorGroup;
+        url.search = new URLSearchParams(query).toString();
+
+        return url;
+    }
 }
 
 window.asyncEditor.editor = {
     template: '#async-editor-template',
     data() {
         return {
-            api: apiClient,
-            providerId: '',
-            contentId: '',
-            editorGroup: '',
-            editorHtml: '',
+            api: null,
             errorText: '',
-            isLoading: false,
+            contentId: '',
+            editorHtml: '',
+            editorGroup: '',
+            editorGroups: [],
+            defaultErrorText: '',
         };
     },
     methods: {
-        initEditor(apiUrl, providerId, contentId, editorGroup) {
+        initEditor(parameters) {
             const self = this;
 
-            self.api.apiUrl = apiUrl;
-            self.api.providerId = providerId;
-            self.contentId = contentId;
-            self.editorGroup = editorGroup;
+            self.api = new AsyncEditorApiClient(parameters)
+            self.contentId = parameters.contentId;
+            self.editorGroup = parameters.editorGroup;
+            self.defaultErrorText = parameters.defaultErrorText ?? 'Something went wrong.';
 
             self.loadEditor();
         },
-        loadEditor(editorGroup, callback) {
+        loadEditor(editorGroup) {
             const self = this;
 
             self.editorGroup = editorGroup ?? self.editorGroup;
-            self.isLoading = true;
 
-            self.api.loadEditor(self.contentId, self.editorGroup, (success, data) => {
-                self.isLoading = false;
-                if (success) {
-                    self.editorHtml = data.editorHtml;
-                    self.editorGroup = data.editorGroup;
-                }
-                else {
-                    self.errorText = data;
-                }
-            });
+            self.api.loadEditor(
+                self.contentId,
+                self.editorGroup,
+                (success, data) => { self.processApiData(success, data); });
         },
-        saveAndLoadEditor(editorGroup) {
+        submitEditor(nextEditorGroup) {
             const self = this;
 
-            if (editorGroup !== self.editorGroup) {
-                self.submitEditor(() => self.loadEditor(editorGroup));
+            self.api.submitEditor(
+                self.contentId,
+                self.editorGroup,
+                nextEditorGroup,
+                new FormData(self.$refs.editorForm),
+                (success, data) => { self.processApiData(success, data); });
+        },
+        processApiData(success, data) {
+            const self = this;
+
+            if (success) {
+                console.log('API response: ');
+                console.log(data);
+                self.contentId = data.contentId;
+                self.editorHtml = data.editorHtml;
+                self.editorGroup = data.editorGroup;
+                self.editorGroups = data.editorGroups;
             }
             else {
-                self.loadEditor(editorGroup);
+                self.errorText = self.defaultErrorText;
             }
         },
-        submitEditor(callback) {
-            const self = this;
-
-            console.log(self.editorGroup);
-            self.api.submitEditor(self.contentId, self.editorGroup, new FormData(self.$refs.editorForm), (success, data) => {
-                callback();
-            });
+        isCurrentGroup(editorGroup) {
+            return editorGroup === this.editorGroup;
         },
+        isLastGroup(editorGroup) {
+            return this.editorGroups.at(-1)?.name === (editorGroup ?? this.editorGroup)
+        },
+        getNextEditor(editorGroup) {
+            const editorGroups = this.editorGroups.map(group => group.name);
+            const index = editorGroups.indexOf(editorGroup ?? this.editorGroup);
+            return editorGroups[index + 1];
+        }
     },
 };
 
-function initAsyncEditor(appId, parameters) {
+function initAsyncEditor(asyncEditorId, parameters) {
     if (!parameters) return;
 
-    window.asyncEditor.editors[appId] = new Vue({
+    window.asyncEditor.editors[asyncEditorId] = new Vue({
         el: parameters.element,
-        data: {
-            appId: appId,
-        },
-        methods: {
-        },
         mounted() {
-            this.$refs.editor.initEditor(
-                parameters.apiUrl,
-                parameters.providerId,
-                parameters.contentId,
-                parameters.editorGroup);
+            parameters.asyncEditorId = asyncEditorId;
+            this.$refs.editor.initEditor(parameters);
         },
         components: {
             "async-editor": window.asyncEditor.editor

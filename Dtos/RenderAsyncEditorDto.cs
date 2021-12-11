@@ -1,11 +1,11 @@
 namespace Lombiq.ContentEditors.Dtos
 {
-    public class RenderContentItemAsyncEditorDto
+    public class RenderAsyncEditorDto
     {
         public string AsyncEditorId { get; set; }
         public string ProviderName { get; set; }
         public string ContentType { get; set; }
-        public string ContentItemId { get; set; }
+        public string ContentId { get; set; }
         public string EditorGroup { get; set; }
     }
 }
