@@ -8,6 +8,7 @@ namespace Lombiq.ContentEditors.ViewModels
     {
         public string AsyncEditorLoaderId { get; set; }
 
+        // Initial content item ID can be given as a parameter or can be empty if the item is new.
         public int? ContentItemId { get; set; }
 
         public string ContentType { get; set; }
