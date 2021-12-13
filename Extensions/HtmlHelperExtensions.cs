@@ -2,6 +2,7 @@
 using Orchard.ContentManagement;
 using Orchard.Utility.Extensions;
 using System.Web.Mvc.Html;
+using static Lombiq.ContentEditors.Constants.AsyncEditorConstants;
 
 namespace System.Web.Mvc
 {
@@ -11,7 +12,7 @@ namespace System.Web.Mvc
             AsyncEditorPluginId(html, contentItem.ContentType);
 
         public static string AsyncEditorPluginId(this HtmlHelper html, string contentType) =>
-            "asyncEditorPluginFor" + contentType;
+            AsyndEditorPluginIdPrefix + contentType;
 
         public static string ClassifiedName(this HtmlHelper html, string name) =>
             ClassifiedName(html, name, html.NameForModel().ToHtmlString());

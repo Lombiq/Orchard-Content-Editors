@@ -113,6 +113,20 @@
                         $editorPlaceholder.html($.parseHTML(data.EditorShape, true)).show();
                         plugin.concurrentEditors++;
 
+                        var asyncEditorLoaderOptions = JSON.parse($("#" + data.AsyncEditorLoaderId + "options").val());
+                        $("#" + data.AsyncEditorLoaderId).lombiq_AsyncEditor({
+                            asyncEditorApiUrl: asyncEditorLoaderOptions.EditUrl,
+                            contentType: asyncEditorLoaderOptions.ContentType,
+                            initialContentItemId: asyncEditorLoaderOptions.ContentItemId,
+                            defaultEditorGroupName: asyncEditorLoaderOptions.EditorGroup,
+                            asyncEditorLoaderElementClass: asyncEditorLoaderOptions.AsyncEditorLoaderElementClass,
+                            processingIndicatorElementClass: asyncEditorLoaderOptions.ProcessingIndicatorElementClass,
+                            editorPlaceholderElementClass: asyncEditorLoaderOptions.EditorPlaceholderElementClass,
+                            loadEditorActionElementClass: asyncEditorLoaderOptions.LoadEditorActionElementClass,
+                            postEditorActionElementClass: asyncEditorLoaderOptions.PostEditorActionElementClass,
+                            dirtyFormLeaveConfirmationText: asyncEditorLoaderOptions.DirtyFormLeaveConfirmationText,
+                        });
+
                         $("html, body").animate({
                             scrollTop: $editorPlaceholder.offset().top
                         }, 500);
