@@ -7,12 +7,15 @@
 
     Script.Require(ResourceNames.Lombiq_AsyncEditor).AtHead();
 
+    viewModel.ContentItemId = viewModel.ContentItemId ?? 0;
+
     viewModel.EditUrl = string.IsNullOrEmpty(viewModel.EditorGroup)
         ? Url.Action("Edit", "AsyncEditor", new { Area = "Lombiq.ContentEditors" })
         : viewModel.EditorGroup;
 
     viewModel.ProcessingIndicatorElementClass = viewModel.UseStaticLoadingIndicator
-        ? ".js-" + ElementNames.AsyncEditorLoader.ProcessingIndicatorElementName : string.Empty;
+        ? string.Empty
+        : ".js-" + ElementNames.AsyncEditorLoader.ProcessingIndicatorElementName;
 
     viewModel.AsyncEditorLoaderId = Html.AsyncEditorPluginId(viewModel.ContentType);
 }
@@ -20,3 +23,22 @@
 @Display.Lombiq_AsyncEditorLoader_Container(AsyncEditorLoaderId: viewModel.AsyncEditorLoaderId)
 
 @Html.Hidden(viewModel.AsyncEditorLoaderId + "options", WorkContext.Resolve<IJsonConverter>().Serialize(viewModel))
+
+<script type="text/javascript">
+    ; (function ($) {
+        $(function () {
+            $("#@viewModel.AsyncEditorLoaderId").lombiq_AsyncEditor({
+                asyncEditorApiUrl: "@viewModel.EditUrl",
+                contentType: "@viewModel.ContentType",
+                initialContentItemId: "@viewModel.ContentItemId",
+                defaultEditorGroupName: "@viewModel.EditorGroup",
+                asyncEditorLoaderElementClass: "@viewModel.AsyncEditorLoaderElementClass",
+                processingIndicatorElementClass: "@viewModel.ProcessingIndicatorElementClass",
+                editorPlaceholderElementClass: "@viewModel.EditorPlaceholderElementClass",
+                loadEditorActionElementClass: "@viewModel.LoadEditorActionElementClass",
+                postEditorActionElementClass: "@viewModel.PostEditorActionElementClass",
+                dirtyFormLeaveConfirmationText: "@viewModel.DirtyFormLeaveConfirmationText",
+            });
+        });
+    })(jQuery);
+</script>
