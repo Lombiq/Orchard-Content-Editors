@@ -9,9 +9,9 @@
 
     viewModel.ContentItemId = viewModel.ContentItemId ?? 0;
 
-    viewModel.EditUrl = string.IsNullOrEmpty(viewModel.EditorGroup)
+    viewModel.EditUrl = string.IsNullOrEmpty(viewModel.EditUrl)
         ? Url.Action("Edit", "AsyncEditor", new { Area = "Lombiq.ContentEditors" })
-        : viewModel.EditorGroup;
+        : viewModel.EditUrl;
 
     viewModel.ProcessingIndicatorElementClass = viewModel.UseStaticLoadingIndicator
         ? string.Empty
