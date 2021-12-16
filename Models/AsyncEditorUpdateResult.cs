@@ -8,5 +8,6 @@ namespace Lombiq.ContentEditors.Models
     {
         public ModelStateDictionary ModelState { get; set; }
         public Func<ValueTask<string>> RenderedEditorShapeFactory { get; set; }
+        public string Message { get; set; }
     }
 }

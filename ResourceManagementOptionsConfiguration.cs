@@ -1,3 +1,4 @@
+using Lombiq.ContentEditors.Constants;
 using Microsoft.Extensions.Options;
 using OrchardCore.ResourceManagement;
 using static Lombiq.ContentEditors.Constants.FeatureIds;
@@ -20,7 +21,7 @@ namespace Lombiq.ContentEditors
                 .SetVersion("3.5.3");
 
             _manifest
-                .DefineScript(AsyncEditor)
+                .DefineScript(ResourceNames.AsyncEditor)
                 .SetDependencies(VueRouter)
                 .SetUrl($"~/{Area}/js/async-editor/async-editor.js")
                 .SetVersion("1.0.0");

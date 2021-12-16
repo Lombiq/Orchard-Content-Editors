@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Localization;
 using OrchardCore.ContentManagement;
 using OrchardCore.ContentManagement.Display;
@@ -16,6 +18,8 @@ namespace Lombiq.ContentEditors.Services
         public Lazy<IShapeFactory> ShapeFactory { get; }
         public Lazy<IUpdateModelAccessor> UpdateModelAccessor { get; }
         public Lazy<IStringLocalizer<T>> StringLocalizer { get; }
+        public Lazy<IAuthorizationService> AuthorizationService { get; }
+        public Lazy<IHttpContextAccessor> HttpContextAccessor { get; }
 
         public ContentItemAsyncEditorProviderServices(
             Lazy<IContentManager> contentManager,
@@ -23,7 +27,9 @@ namespace Lombiq.ContentEditors.Services
             Lazy<IDisplayHelper> displayHelper,
             Lazy<IShapeFactory> shapeFactory,
             Lazy<IUpdateModelAccessor> updateModelAccessor,
-            Lazy<IStringLocalizer<T>> stringLocalizer)
+            Lazy<IStringLocalizer<T>> stringLocalizer,
+            Lazy<IAuthorizationService> authorizationService,
+            Lazy<IHttpContextAccessor> httpContextAccessor)
         {
             ContentManager = contentManager;
             ContentItemDisplayManager = contentItemDisplayManager;
@@ -31,6 +37,8 @@ namespace Lombiq.ContentEditors.Services
             ShapeFactory = shapeFactory;
             UpdateModelAccessor = updateModelAccessor;
             StringLocalizer = stringLocalizer;
+            AuthorizationService = authorizationService;
+            HttpContextAccessor = httpContextAccessor;
         }
     }
 }

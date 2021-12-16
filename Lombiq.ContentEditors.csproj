@@ -16,9 +16,11 @@
 
   <ItemGroup>
     <PackageReference Include="OrchardCore.Module.Targets" Version="1.0.0" />
+    <PackageReference Include="OrchardCore.ContentFields" Version="1.0.0" />
     <PackageReference Include="OrchardCore.ContentManagement" Version="1.0.0" />
     <PackageReference Include="OrchardCore.ContentTypes.Abstractions" Version="1.0.0" />
     <PackageReference Include="OrchardCore.DisplayManagement" Version="1.0.0" />
+    <PackageReference Include="OrchardCore.Media" Version="1.0.0" />
     <PackageReference Include="OrchardCore.ResourceManagement" Version="1.0.0" />
   </ItemGroup>
 
@@ -32,16 +34,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="Views\AsyncEditor.Editor.cshtml">
-      <CopyToPublishDirectory>Never</CopyToPublishDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Update="placement.json">
-      <CopyToPublishDirectory>Never</CopyToPublishDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Views\AsyncEditor.Content.cshtml">
-      <CopyToPublishDirectory>Never</CopyToPublishDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Views\Views\Result.cshtml">
+    <EmbeddedResource Update="Views\ContentItemAsyncEditor.cshtml">
       <CopyToPublishDirectory>Never</CopyToPublishDirectory>
     </EmbeddedResource>
   </ItemGroup>

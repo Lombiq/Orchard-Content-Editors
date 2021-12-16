@@ -4,13 +4,14 @@ using Lombiq.ContentEditors.Models;
 using Lombiq.ContentEditors.Services;
 using Microsoft.AspNetCore.Mvc;
 using OrchardCore.ContentManagement;
+using OrchardCore.Modules;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace Lombiq.ContentEditors.Controllers
 {
-
+    [Feature(FeatureIds.AsyncEditor)]
     [Route(Routes.ContentItemAsyncEditorApi)]
     public class ContentItemAsyncEditorApiController : Controller
     {
@@ -26,7 +27,7 @@ namespace Lombiq.ContentEditors.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<AsyncEditorGroupDto>> Get([FromQuery] RenderAsyncEditorDto dto)
+        public async Task<ActionResult<RenderedAsyncEditorGroupDto>> Get([FromQuery] RenderAsyncEditorDto dto)
         {
             var provider = GetProvider(dto.ProviderName);
             if (provider == null) return NotFound();
@@ -54,21 +55,22 @@ namespace Lombiq.ContentEditors.Controllers
             if (!await provider.CanRenderEditorGroupAsync(context)) return NotFound();
 
             var result = await provider.UpdateEditorAsync(context);
-            if (!result.ModelState.IsValid)
+            if (!result.ModelState.IsValid ||
+                string.IsNullOrEmpty(dto.NextEditorGroup) ||
+                dto.NextEditorGroup == dto.EditorGroup)
             {
-                return await AsyncEditorResultAsync(context, provider, renderedEditor: await result.RenderedEditorShapeFactory());
-            }
-
-            if (string.IsNullOrEmpty(dto.NextEditorGroup) || dto.NextEditorGroup == dto.EditorGroup)
-            {
-                return await AsyncEditorResultAsync(context, provider);
+                return await AsyncEditorResultAsync(
+                    context,
+                    provider,
+                    renderedEditor: await result.RenderedEditorShapeFactory(),
+                    message: result.Message);
             }
 
             var nextEditorContext = PopulateContext(dto, item, dto.NextEditorGroup);
             return await AsyncEditorResultAsync(
                 !await provider.CanRenderEditorGroupAsync(nextEditorContext) ? context : nextEditorContext,
-                provider);
-
+                provider,
+                message: result.Message);
         }
 
         private IAsyncEditorProvider<ContentItem> GetProvider(string name) =>
@@ -89,19 +91,28 @@ namespace Lombiq.ContentEditors.Controllers
             AsyncEditorContext<ContentItem> context,
             IAsyncEditorProvider<ContentItem> provider,
             string editorGroup = null,
-            string renderedEditor = null)
+            string renderedEditor = null,
+            string message = null)
         {
-            renderedEditor ??= await provider.RenderEditorGroupAsync(context);
-            var editorGroups = await provider.GetOrderedEditorGroupsAsync(context);
+            renderedEditor ??= await provider.RenderEditorAsync(context);
+            var editorGroups = await provider.DescribeEditorGroupsAsync();
 
             // Return ViewResult instead of simple Ok because the ModelState is not accessible in ad-hoc shapes hence
             // the validation summary wouldn't be rendered otherwise. Adding the validation summary HTML in the view.
-            return View("Result", new AsyncEditorGroupDto
+            return View("Result", new RenderedAsyncEditorGroupDto
             {
                 ContentId = !context.Content.IsNew() ? context.Content.ContentItemId : null,
                 EditorGroup = editorGroup ?? context.EditorGroup,
-                EditorGroups = editorGroups,
+                EditorGroups = await Task.WhenAll(editorGroups.Select(async group => new AsyncEditorGroupDto
+                {
+                    Name = group.Name,
+                    DisplayText = group.DisplayText,
+                    IsPublishGroup = group.IsPublishGroup,
+                    IsAccessible = await group.IsAccessibleAsync(context),
+                    IsFilled = await group.IsFilledAsync(context),
+                })),
                 EditorHtml = renderedEditor,
+                Message = message,
             });
         }
     }

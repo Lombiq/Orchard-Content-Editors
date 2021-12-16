@@ -6,11 +6,12 @@
 <script type="text/x-template" id="async-editor-template">
     <div class="asyncEditor w-100 d-flex flex-column">
         <div class="asyncEditor__header">
-            <div class="asyncEditor__progressWrapper progress mb-3">
+            <div class="asyncEditor__progressWrapper progress mb-3" v-if="showProgressBar">
                 <div class="asyncEditor__progress progress-bar" role="progressbar" :style="'width: ' + progress + '%'" :aria-valuenow="progress" aria-valuemin="0" aria-valuemax="100"></div>
             </div>
             <div class="asyncEditor__messages">
                 <div class="asyncEditor__error p-3 rounded bg-danger text-light mb-3" v-if="errorText">{{ errorText }}</div>
+                <div class="asyncEditor__message p-3 rounded bg-success text-light mb-3" v-if="message">{{ message }}</div>
                 <div class="asyncEditor__validationSummary p-3 rounded bg-danger text-light mb-3" v-if="validationSummaryHtml" v-html="validationSummaryHtml"></div>
             </div>
         </div>

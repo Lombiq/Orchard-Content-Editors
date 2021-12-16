@@ -62,6 +62,7 @@ window.asyncEditor.editor = {
         return {
             asyncEditorId: '',
             api: null,
+            message: '',
             errorText: '',
             contentId: '',
             editorHtml: '',
@@ -69,6 +70,7 @@ window.asyncEditor.editor = {
             editorGroup: '',
             editorGroups: [],
             defaultErrorText: '',
+            scriptsHtml: ''
         };
     },
     computed: {
@@ -76,6 +78,9 @@ window.asyncEditor.editor = {
             if (self.editorGroups.length < 1) return 0;
             return self.editorGroups.filter(group => group.isFilled).length / self.editorGroups.length * 100;
         },
+        showProgressBar(self) {
+            return self.editorGroups.length > 1;
+        }
     },
     watch: {
         '$route.query': function(newVal, oldVal) {
@@ -83,6 +88,15 @@ window.asyncEditor.editor = {
         }
     },
     router,
+    updated() {
+        const self = this;
+        if (self.scriptsHtml) {
+            self.scriptsHtml.match(/(?<=<script>).*?(?=<\/script>)/gms).forEach(function (match) {
+                window.eval(match);
+            });
+            self.scriptsHtml = '';
+        }
+    },
     methods: {
         initEditor(parameters) {
             const self = this;
@@ -127,6 +141,8 @@ window.asyncEditor.editor = {
                 self.editorHtml = data.editorHtml;
                 self.editorGroup = data.editorGroup;
                 self.editorGroups = data.editorGroups;
+                self.scriptsHtml = data.scriptsHtml;
+                self.message = data.message;
 
                 if (shouldUpdateQuery) self.updateQuery();
             }

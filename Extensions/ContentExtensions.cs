@@ -20,7 +20,7 @@ namespace Lombiq.ContentEditors.Extensions
                 .FilledEditorGroups
                 .GetMaybe(asyncEditorId) ?? Enumerable.Empty<string>();
 
-        public static bool HasFilledEditorGroup(this IContent content, string asyncEditorId, string editorGroup) =>
+        public static bool IsEditorGroupFilled(this IContent content, string asyncEditorId, string editorGroup) =>
             content.GetFilledEditorGroups(asyncEditorId).Contains(editorGroup);
 
         public static AsyncEditorPart GetOrWeldAsyncEditorPart(this IContent content)

@@ -1,9 +1,12 @@
 using Lombiq.ContentEditors.Extensions;
 using Lombiq.ContentEditors.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Localization;
 using OrchardCore.ContentManagement;
 using OrchardCore.ContentManagement.Display;
+using OrchardCore.Contents;
 using OrchardCore.DisplayManagement;
 using OrchardCore.DisplayManagement.ModelBinding;
 using System;
@@ -24,6 +27,8 @@ namespace Lombiq.ContentEditors.Services
         protected readonly IShapeFactory _shapeFactory;
         protected readonly IUpdateModelAccessor _updateModelAccessor;
         protected readonly IStringLocalizer<TProvider> T;
+        protected readonly IAuthorizationService _authorizationService;
+        protected readonly IHttpContextAccessor _hca;
 
         public virtual string Name => typeof(TProvider).Name;
 
@@ -35,14 +40,26 @@ namespace Lombiq.ContentEditors.Services
             _shapeFactory = providerServices.ShapeFactory.Value;
             _updateModelAccessor = providerServices.UpdateModelAccessor.Value;
             T = providerServices.StringLocalizer.Value;
+            _authorizationService = providerServices.AuthorizationService.Value;
+            _hca = providerServices.HttpContextAccessor.Value;
         }
 
-        public abstract Task<IEnumerable<AsyncEditorGroup>> GetOrderedEditorGroupsAsync(AsyncEditorContext<ContentItem> context);
+        public abstract Task<IEnumerable<AsyncEditorGroupDescriptor<ContentItem>>> DescribeEditorGroupsAsync();
 
-        public virtual async Task<bool> CanRenderEditorGroupAsync(AsyncEditorContext<ContentItem> context) =>
-            (await GetOrderedEditorGroupsAsync(context)).Any(group => group.IsAccessible && group.Name == context.EditorGroup);
+        protected virtual bool CanHandleContentType(string contentType) => true;
 
-        public virtual async Task<string> RenderEditorGroupAsync(AsyncEditorContext<ContentItem> context)
+        protected virtual async Task<bool> CanRenderEditorGroupAsync(AsyncEditorContext<ContentItem> context)
+        {
+            if (!CanHandleContentType(context.Content.ContentType)) return false;
+
+            if (!await AuthorizeEditorGroupAsync(context)) return false;
+
+            var descriptors = (await DescribeEditorGroupsAsync()).Select(descriptor => descriptor.Name).ToList();
+            var previousIndex = descriptors.IndexOf(context.EditorGroup) - 1;
+            return previousIndex < 0 || context.Content.IsEditorGroupFilled(context.AsyncEditorId, descriptors[previousIndex]);
+        }
+
+        public virtual async Task<string> RenderEditorAsync(AsyncEditorContext<ContentItem> context)
         {
             await ThrowIfGroupIsInvalidAsync(context);
 
@@ -78,14 +95,21 @@ namespace Lombiq.ContentEditors.Services
 
             await _contentManager.CreateOrUpdateAsync(context.Content);
 
-            if ((await GetOrderedEditorGroupsAsync(context)).First(group => group.Name == context.EditorGroup)
-                .IsPublishGroup)
+            if (!(await DescribeEditorGroupsAsync()).First(group => @group.Name == context.EditorGroup).IsPublishGroup)
             {
-                await _contentManager.PublishAsync(context.Content);
+                return CreateUpdateResult(editorShape, _updateModelAccessor.ModelUpdater.ModelState);
             }
 
-            return CreateUpdateResult(editorShape, _updateModelAccessor.ModelUpdater.ModelState);
+            await _contentManager.PublishAsync(context.Content);
+
+            return CreateUpdateResult(
+                editorShape,
+                _updateModelAccessor.ModelUpdater.ModelState,
+                T["Editor has been successfully submitted."]);
         }
+
+        protected virtual Task<bool> AuthorizeEditorGroupAsync(AsyncEditorContext<ContentItem> context) =>
+            _authorizationService.AuthorizeAsync(_hca.HttpContext.User, CommonPermissions.EditContent, context.Content);
 
         protected virtual async Task<string> WrapAndRenderShapeAsync(IShape editorShape)
         {
@@ -105,17 +129,24 @@ namespace Lombiq.ContentEditors.Services
             }
         }
 
-        protected virtual AsyncEditorGroup CreateEditorGroup(
-            AsyncEditorContext<ContentItem> context,
+        protected Task<bool> IsEditorGroupFilledAsync(AsyncEditorContext<ContentItem> context) =>
+            Task.FromResult(context.Content.IsEditorGroupFilled(context.AsyncEditorId, context.EditorGroup));
+
+        protected virtual AsyncEditorGroupDescriptor<ContentItem> DescribeEditorGroup(
             string name,
             string displayText,
-            bool isAccessible = true) =>
+            bool isPublishGroup = false,
+            Func<AsyncEditorContext<ContentItem>, ValueTask<bool>> isAccessibleFactory = null,
+            Func<AsyncEditorContext<ContentItem>, ValueTask<bool>> isFilledFactory = null) =>
             new()
             {
                 Name = name,
                 DisplayText = displayText,
-                IsAccessible = isAccessible,
-                IsFilled = context.Content.HasFilledEditorGroup(context.AsyncEditorId, name),
+                IsPublishGroup = isPublishGroup,
+                IsAccessibleAsync = isAccessibleFactory ??
+                    (async asyncEditorContext => await CanRenderEditorGroupAsync(asyncEditorContext)),
+                IsFilledAsync = isFilledFactory ??
+                    (async asyncEditorContext => await IsEditorGroupFilledAsync(asyncEditorContext)),
             };
 
         protected virtual void AddEditorShapeAlternates(AsyncEditorContext<ContentItem> context, IShape editorShape)
@@ -126,11 +157,12 @@ namespace Lombiq.ContentEditors.Services
             editorShape.Metadata.Alternates.Add($"AsyncEditor_Content__{context.AsyncEditorId}__{context.EditorGroup}");
         }
 
-        private AsyncEditorUpdateResult CreateUpdateResult(IShape editorShape, ModelStateDictionary modelState) =>
+        private AsyncEditorUpdateResult CreateUpdateResult(IShape editorShape, ModelStateDictionary modelState, string message = null) =>
             new()
             {
                 ModelState = modelState,
                 RenderedEditorShapeFactory = () => new ValueTask<string>(WrapAndRenderShapeAsync(editorShape)),
+                Message = message,
             };
     }
 }

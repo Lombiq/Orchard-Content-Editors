@@ -9,12 +9,23 @@ using OrchardCore.Modules.Manifest;
 )]
 
 [assembly: Feature(
-    Id = FeatureIds.ContentEditors,
-    Name = "Lombiq Content Editors",
-    Description = "Managing advanced content editing processes based on editor groups.",
+    Id = FeatureIds.AsyncEditor,
+    Name = "Lombiq Async Editor",
+    Description = "Managing advanced content editing processes based on editor groups and asynchronous operations.",
     Category = "Content",
     Dependencies = new[]
     {
         "OrchardCore.ContentFields",
+    }
+)]
+
+[assembly: Feature(
+    Id = FeatureIds.Demo,
+    Name = "Lombiq Content Editors Demo",
+    Description = "Demonstration for Lombiq Content Editors features (e.g., Lombiq Async Editor). Suitable for UI testing as well.",
+    Category = "Content",
+    Dependencies = new[]
+    {
+        FeatureIds.AsyncEditor,
     }
 )]

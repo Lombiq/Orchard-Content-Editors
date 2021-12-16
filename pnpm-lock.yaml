@@ -1,7 +1,7 @@
 lockfileVersion: 5.3
 
 specifiers:
-  vue-router: ^3.5.3
+  vue-router: 3.5.3
 
 dependencies:
   vue-router: 3.5.3

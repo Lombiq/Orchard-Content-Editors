@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Localization;
 using OrchardCore.ContentManagement;
 using OrchardCore.ContentManagement.Display;
@@ -16,5 +18,7 @@ namespace Lombiq.ContentEditors.Services
         Lazy<IShapeFactory> ShapeFactory { get; }
         Lazy<IUpdateModelAccessor> UpdateModelAccessor { get; }
         Lazy<IStringLocalizer<T>> StringLocalizer { get; }
+        Lazy<IAuthorizationService> AuthorizationService { get; }
+        Lazy<IHttpContextAccessor> HttpContextAccessor { get; }
     }
 }

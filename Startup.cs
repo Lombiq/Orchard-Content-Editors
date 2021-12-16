@@ -14,18 +14,18 @@ using YesSql.Indexes;
 
 namespace Lombiq.ContentEditors
 {
-    [Feature(FeatureIds.ContentEditors)]
+    [Feature(FeatureIds.AsyncEditor)]
     public class Startup : StartupBase
     {
         public override void ConfigureServices(IServiceCollection services)
         {
             services.AddLazyInjectionSupport();
             services.AddTransient<IConfigureOptions<ResourceManagementOptions>, ResourceManagementOptionsConfiguration>();
-            services.AddScoped<IAsyncEditorProvider<ContentItem>, DemoAsyncEditorProvider>();
             services.AddScoped(typeof(IContentItemAsyncEditorProviderServices<>), typeof(ContentItemAsyncEditorProviderServices<>));
             services.AddContentPart<AsyncEditorPart>();
             services.AddScoped<IDataMigration, AsyncEditorMigrations>();
             services.AddSingleton<IIndexProvider, AsyncEditorPartIndexProvider>();
+            services.AddScoped<IAsyncEditorProvider<ContentItem>, DefaultContentItemAsyncEditorProvider>();
         }
     }
 }
