@@ -28,7 +28,7 @@
         deleteCallback: function (data) { },
         cancelCallback: function ($editor) { }
     };
-    
+
     function Plugin(element, options) {
         this.element = element;
         this.settings = $.extend(true, {}, defaults, options);
@@ -103,7 +103,7 @@
             if (currentIdInUrl != contentItemId) {
                 plugin.setContentItemIdInUrl(contentItemId);
             }
-            
+
             $.ajax({
                 url: plugin.settings.editUrl,
                 data: { contentItemId: contentItemId },
@@ -113,10 +113,24 @@
                     $editorPlaceholder.html($.parseHTML(data.EditorShape, true)).show();
                     plugin.concurrentEditors++;
 
+                        var asyncEditorLoaderOptions = JSON.parse($("#" + data.AsyncEditorLoaderId + "options").val());
+                        $("#" + data.AsyncEditorLoaderId).lombiq_AsyncEditor({
+                            asyncEditorApiUrl: asyncEditorLoaderOptions.EditUrl,
+                            contentType: asyncEditorLoaderOptions.ContentType,
+                            initialContentItemId: asyncEditorLoaderOptions.ContentItemId,
+                            defaultEditorGroupName: asyncEditorLoaderOptions.EditorGroup,
+                            asyncEditorLoaderElementClass: asyncEditorLoaderOptions.AsyncEditorLoaderElementClass,
+                            processingIndicatorElementClass: asyncEditorLoaderOptions.ProcessingIndicatorElementClass,
+                            editorPlaceholderElementClass: asyncEditorLoaderOptions.EditorPlaceholderElementClass,
+                            loadEditorActionElementClass: asyncEditorLoaderOptions.LoadEditorActionElementClass,
+                            postEditorActionElementClass: asyncEditorLoaderOptions.PostEditorActionElementClass,
+                            dirtyFormLeaveConfirmationText: asyncEditorLoaderOptions.DirtyFormLeaveConfirmationText,
+                        });
+
                     $("html, body").animate({
                         scrollTop: $editorPlaceholder.offset().top
                     }, 500);
-                    
+
                     plugin.settings.editorLoadedCallback.call(plugin, data, $editorPlaceholder);
                 }
 
@@ -170,7 +184,7 @@
             history.pushState(null, "", uri.pathname() + uri.search());
         }
     });
-    
+
     $.fn[pluginName] = function (options) {
         // Return null if the element query is invalid.
         if (!this || this.length == 0) return null;
