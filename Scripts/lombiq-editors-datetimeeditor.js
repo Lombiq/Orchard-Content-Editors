@@ -142,10 +142,10 @@
             }
 
             if (date !== null) {
-                plugin.inputElement.val(moment(date).format(plugin.settings.storeFormat));
+                setTimeout(function () { plugin.inputElement.val(moment(date).format(plugin.settings.storeFormat)) }, 500);
             }
             else {
-                plugin.inputElement.val("");
+                setTimeout(function () { plugin.inputElement.val("") }, 500);
             }
         },
 

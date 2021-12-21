@@ -57,6 +57,7 @@
         // "map" makes it possible to return the already existing or currently initialized plugin instances.
         return this.map(function () {
 
+            $(this).off("change");
             var dataAttributeName = "data-lombiqselectizeeditorsettings";
 
             // If settings is defined, then we'll save it in a data attribute of the element
