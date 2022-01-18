@@ -12,6 +12,7 @@
     var pluginName = "lombiq_SelectizeEditor";
 
     var defaults = {
+        keepChangeEvent: false,
         singleChoice: false,
         maxItems: null,
         selectizeOptions: new Array(),
@@ -57,13 +58,16 @@
         // "map" makes it possible to return the already existing or currently initialized plugin instances.
         return this.map(function () {
 
-            $(this).off("change");
             var dataAttributeName = "data-lombiqselectizeeditorsettings";
 
             // If settings is defined, then we'll save it in a data attribute of the element
             // to make delayed reinitialization possible later.
             if (settings) {
                 $(this).attr(dataAttributeName, JSON.stringify(settings));
+
+                if (typeof settings.keepChangeEvent === "undefined" || !settings.keepChangeEvent) {
+                    $(this).off("change");
+                }
             }
             // If settings is undefined...
             else {
@@ -86,6 +90,8 @@
 
                     // Use the settings data to construct the settings.
                     settings = JSON.parse(settingsData);
+
+                    $(this).off("change");
                 }
             }
 
