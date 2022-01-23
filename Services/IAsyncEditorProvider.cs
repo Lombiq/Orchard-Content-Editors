@@ -13,7 +13,7 @@ namespace Lombiq.ContentEditors.Services
         where T : class
     {
         /// <summary>
-        /// Technical name of the async editor.
+        /// Gets the technical name of the async editor.
         /// </summary>
         string Name { get; }
 

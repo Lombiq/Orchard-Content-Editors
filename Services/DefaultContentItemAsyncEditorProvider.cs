@@ -19,7 +19,7 @@ namespace Lombiq.ContentEditors.Services
         public override Task<IEnumerable<AsyncEditorGroupDescriptor<ContentItem>>> DescribeEditorGroupsAsync() =>
             Task.FromResult(new[]
             {
-                DescribeEditorGroup(null, T["Content"], true),
+                DescribeEditorGroup(name: null, T["Content"], isPublishGroup: true),
             }.AsEnumerable());
     }
 }

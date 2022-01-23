@@ -22,7 +22,7 @@ namespace Lombiq.ContentEditors.Demo.Services
             Task.FromResult(new[]
             {
                 DescribeEditorGroup(PersonalDetails, T["Personal Details"]),
-                DescribeEditorGroup(AdditionalNotes, T["Additional Notes"], true),
+                DescribeEditorGroup(AdditionalNotes, T["Additional Notes"], isPublishGroup: true),
             }.AsEnumerable());
     }
 }

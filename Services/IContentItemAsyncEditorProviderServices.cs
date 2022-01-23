@@ -17,6 +17,10 @@ namespace Lombiq.ContentEditors.Services
         "StyleCop.CSharp.DocumentationRules",
         "SA1600:Elements should be documented",
         Justification = "There is nothing to add past what's already on the individual services' documentations.")]
+    [SuppressMessage(
+        "StyleCop.CSharp.DocumentationRules",
+        "SA1618:The documentation for type parameter 'T' is missing",
+        Justification = "There is nothing to add past what's already on the individual services' documentations.")]
     public interface IContentItemAsyncEditorProviderServices<T>
         where T : IAsyncEditorProvider<ContentItem>
     {
