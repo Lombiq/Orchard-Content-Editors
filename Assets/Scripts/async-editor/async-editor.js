@@ -50,21 +50,24 @@ class AsyncEditorApiClient {
 
 const router = new VueRouter();
 
+// eslint-disable-next-line object-shorthand
 window.asyncEditor.editor = {
     template: '#async-editor-template',
-    data: () => ({
-        asyncEditorId: '',
-        api: null,
-        message: '',
-        errorText: '',
-        contentId: '',
-        editorHtml: '',
-        validationSummaryHtml: '',
-        editorGroup: '',
-        editorGroups: [],
-        defaultErrorText: '',
-        scriptsHtml: '',
-    }),
+    data() {
+        return {
+            asyncEditorId: '',
+            api: null,
+            message: '',
+            errorText: '',
+            contentId: '',
+            editorHtml: '',
+            validationSummaryHtml: '',
+            editorGroup: '',
+            editorGroups: [],
+            defaultErrorText: '',
+            scriptsHtml: '',
+        };
+    },
     computed: {
         progress(self) {
             if (self.editorGroups.length < 1) return 0;
@@ -75,12 +78,12 @@ window.asyncEditor.editor = {
         },
     },
     watch: {
-        '$route.query': () => {
+        '$route.query'() {
             this.processQuery();
         },
     },
-    router: router,
-    updated: () => {
+    router,
+    updated() {
         const self = this;
         if (self.scriptsHtml) {
             self.scriptsHtml.match(/(?<=<script>).*?(?=<\/script>)/gms).forEach((match) => {
@@ -90,7 +93,7 @@ window.asyncEditor.editor = {
         }
     },
     methods: {
-        initEditor: (parameters) => {
+        initEditor(parameters) {
             const self = this;
 
             self.api = new AsyncEditorApiClient(parameters);
@@ -101,7 +104,7 @@ window.asyncEditor.editor = {
 
             if (!self.processQuery()) self.loadEditor();
         },
-        loadEditor: (editorGroup) => {
+        loadEditor(editorGroup) {
             const self = this;
 
             self.editorGroup = editorGroup ?? self.editorGroup;
@@ -111,7 +114,7 @@ window.asyncEditor.editor = {
                 self.editorGroup,
                 (success, data) => { self.processApiData(success, data); });
         },
-        submitEditor: (nextEditorGroup) => {
+        submitEditor(nextEditorGroup) {
             const self = this;
 
             self.api.submitEditor(
@@ -121,7 +124,7 @@ window.asyncEditor.editor = {
                 new FormData(self.$refs.editorForm),
                 (success, data) => { self.processApiData(success, data); });
         },
-        processApiData: (success, data) => {
+        processApiData(success, data) {
             const self = this;
 
             if (success) {
@@ -142,7 +145,7 @@ window.asyncEditor.editor = {
                 self.errorText = self.defaultErrorText;
             }
         },
-        updateQuery: () => {
+        updateQuery() {
             const self = this;
 
             const query = { ...self.$route.query };
@@ -150,7 +153,7 @@ window.asyncEditor.editor = {
             query[self.asyncEditorId + '.editorGroup'] = self.editorGroup;
             router.push({ path: '/', query: query });
         },
-        processQuery: () => {
+        processQuery() {
             const self = this;
 
             let shouldLoadEditor = false;
@@ -175,9 +178,15 @@ window.asyncEditor.editor = {
 
             return shouldLoadEditor;
         },
-        isCurrentGroup: (editorGroup) => editorGroup === this.editorGroup,
-        isLastGroup: (editorGroup) => this.editorGroups.at(-1)?.name === (editorGroup ?? this.editorGroup),
-        getNextEditor: (editorGroup) => {
+        isCurrentGroup(editorGroup) {
+            return editorGroup === this.editorGroup;
+        },
+        isLastGroup(editorGroup) {
+            const self = this;
+
+            return self.editorGroups.at(-1)?.name === (editorGroup ?? self.editorGroup);
+        },
+        getNextEditor(editorGroup) {
             const editorGroups = this.editorGroups.map((group) => group.name);
             const index = editorGroups.indexOf(editorGroup ?? this.editorGroup);
             return editorGroups[index + 1];

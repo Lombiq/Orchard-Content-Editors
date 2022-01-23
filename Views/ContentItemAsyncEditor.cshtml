@@ -50,7 +50,7 @@
 <div id="@elementId"></div>
 
 <script at="Foot" depends-on="@ResourceNames.AsyncEditor">
-    document.addEventListener("DOMContentLoaded", function(){
+    document.addEventListener("DOMContentLoaded", function() {
         window.initAsyncEditor('@asyncEditorId', {
             element: '#@elementId',
             apiUrl: '@Href("~/" + Routes.ContentItemAsyncEditorApi)',
