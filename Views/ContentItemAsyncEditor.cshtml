@@ -51,7 +51,7 @@
 
 <script at="Foot" depends-on="@ResourceNames.AsyncEditor">
     document.addEventListener("DOMContentLoaded", function(){
-        initAsyncEditor('@asyncEditorId', {
+        window.initAsyncEditor('@asyncEditorId', {
             element: '#@elementId',
             apiUrl: '@Href("~/" + Routes.ContentItemAsyncEditorApi)',
             providerName: '@providerName',

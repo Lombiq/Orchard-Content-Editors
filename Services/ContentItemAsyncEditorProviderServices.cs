@@ -21,6 +21,8 @@ namespace Lombiq.ContentEditors.Services
         public Lazy<IAuthorizationService> AuthorizationService { get; }
         public Lazy<IHttpContextAccessor> HttpContextAccessor { get; }
 
+        // This is a bundle of other services, it is expected to have too many parameters.
+#pragma warning disable S107 // Methods should not have too many parameters
         public ContentItemAsyncEditorProviderServices(
             Lazy<IContentManager> contentManager,
             Lazy<IContentItemDisplayManager> contentItemDisplayManager,
@@ -30,6 +32,7 @@ namespace Lombiq.ContentEditors.Services
             Lazy<IStringLocalizer<T>> stringLocalizer,
             Lazy<IAuthorizationService> authorizationService,
             Lazy<IHttpContextAccessor> httpContextAccessor)
+#pragma warning restore S107 // Methods should not have too many parameters
         {
             ContentManager = contentManager;
             ContentItemDisplayManager = contentItemDisplayManager;
