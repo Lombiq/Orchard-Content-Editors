@@ -1,12 +1,16 @@
 {
   "TextField_Edit": [
     {
-      "differentiator": "AsyncEditorDemo-Field1",
-      "place": "Content:1@Group1"
+      "differentiator": "DemoCustomer-FirstName",
+      "place": "Content:1@PersonalDetails"
     },
     {
-      "differentiator": "AsyncEditorDemo-Field2",
-      "place": "Content:1@Group2"
+      "differentiator": "DemoCustomer-LastName",
+      "place": "Content:2@PersonalDetails"
+    },
+    {
+      "differentiator": "DemoCustomer-AdditionalNotes",
+      "place": "Content:2@AdditionalNotes"
     }
   ]
 }

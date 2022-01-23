@@ -32,13 +32,6 @@ namespace Lombiq.ContentEditors.Demo.Migrations
                     {
                         Required = true,
                     }))
-                .WithField(nameof(DemoCustomer.DateOfBirth), field => field
-                    .OfType(nameof(DateField))
-                    .WithDisplayName("Date of Birth")
-                    .WithSettings(new DateFieldSettings
-                    {
-                        Required = true,
-                    }))
                 .WithField(nameof(DemoCustomer.AdditionalNotes), field => field
                     .OfType(nameof(TextField))
                     .WithDisplayName("Additional Notes")
