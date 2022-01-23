@@ -11,12 +11,8 @@ class AsyncEditorApiClient {
     loadEditor(contentId, editorGroup, callback) {
         return fetch(this.createUrl(contentId, editorGroup))
             .then((response) => response.json())
-            .then((data) => {
-                callback(true, data);
-            })
-            .catch((error) => {
-                callback(false, error);
-            });
+            .then((data) => callback(true, data))
+            .catch((error) => callback(false, error));
     }
 
     submitEditor(contentId, editorGroup, nextEditorGroup, formData, callback) {
@@ -29,13 +25,9 @@ class AsyncEditorApiClient {
                 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
             },
             body: new URLSearchParams(formData) })
-            .then((response) => response.json())
-            .then((data) => {
-                callback(true, data);
-            })
-            .catch((error) => {
-                callback(false, error);
-            });
+                .then((response) => response.json())
+                .then((data) => callback(true, data))
+                .catch((error) => callback(false, error));
     }
 
     createUrl(contentId, editorGroup, nextEditorGroup) {
@@ -92,7 +84,7 @@ window.asyncEditor.editor = {
         const self = this;
         if (self.scriptsHtml) {
             self.scriptsHtml.match(/(?<=<script>).*?(?=<\/script>)/gms).forEach(function (match) {
-                window.eval(match);
+                DomParser.parseFromString(match, contentType).getElementsByTagName('script');
             });
             self.scriptsHtml = '';
         }
