@@ -2063,7 +2063,7 @@
 			if (self.isDisabled) return;
 	
 			self.ignoreFocus = true;
-			self.$control_input[0].trigger("focus");
+			self.$control_input[0].focus();
 			window.setTimeout(function() {
 				self.ignoreFocus = false;
 				self.onFocus();
@@ -2076,7 +2076,7 @@
 		 * @param {Element} dest
 		 */
 		blur: function(dest) {
-			this.$control_input[0].trigger("blur");
+			this.$control_input[0].blur();
 			this.onBlur(null, dest);
 		},
 	
@@ -2873,7 +2873,7 @@
 	
 			if (self.settings.mode === 'single' && self.items.length) {
 				self.hideInput();
-				self.$control_input.trigger("blur"); // close keyboard on iOS
+				self.$control_input.blur(); // close keyboard on iOS
 			}
 	
 			self.isOpen = false;
