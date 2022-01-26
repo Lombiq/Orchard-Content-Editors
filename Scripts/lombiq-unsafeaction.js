@@ -105,7 +105,7 @@
             $form.css({ "position": "absolute", "left": "-9999em" });
             $("body").append($form);
 
-            $form.submit();
+            $form.trigger("submit");
         }
     });
 

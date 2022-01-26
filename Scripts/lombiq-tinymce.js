@@ -21,7 +21,7 @@ tinyMCE.init({
     extended_valid_elements: "script[type|defer|src|language]",
     skin: "orchardlightgray",
     setup: function (editor) {
-        $(document).bind("localization.ui.directionalitychanged", function (event, directionality) {
+        $(document).on("localization.ui.directionalitychanged", function (event, directionality) {
             editor.getBody().dir = directionality;
         });
 
@@ -62,7 +62,7 @@ tinyMCE.init({
                 $placeholder.height($container.height());
             }
 
-            $(window).scroll(function (event) {
+            $(window).on("scroll", function (event) {
                 var $statusbarPosition = $contentArea.find("div.mce-statusbar").offset();
                 if ($(window).scrollTop() >= $containerPosition.top && !isAdded) {
                     $container.addClass("sticky-top");

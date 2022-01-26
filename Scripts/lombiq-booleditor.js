@@ -80,6 +80,7 @@
             // If "options" is defined, but the plugin is not instantiated on this element ...
             if (options && !$.data(this, "plugin_" + pluginName)) {
                 // ... then create a plugin instance ...
+                // The "plugin_" (with underscore) will produce "plugin-".
                 $.data(this, "plugin_" + pluginName, new Plugin($(this), options));
             }
 

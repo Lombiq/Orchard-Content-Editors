@@ -90,7 +90,7 @@
                 selectizeSelectedOptions: JSON.parse(@Html.Raw(Json.Encode(jsonConverter.Serialize(selectedSelectListItems.Select(option => new { option.Text, option.Value })))))
             });
 
-            $("#@selectizeInputId").change(function () {
+            $("#@selectizeInputId").on("change", function () {
                 @* Setting each checked state to false. *@
                 $.each($("#@(hiddenInputIdPrefix)_IsCheckedStates input"), function (index, element) {
                     $(element).val("False");

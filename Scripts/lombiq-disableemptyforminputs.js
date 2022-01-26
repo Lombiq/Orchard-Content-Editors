@@ -10,7 +10,7 @@
 
             if (element.prop("tagName") !== "FORM") return;
 
-            element.submit(function () {
+            element.on("submit", function () {
                 element.find(":input").filter(function () {
                     return !this.value && !$(this).is("[dontdisableifempty]");
                 }).attr("disabled", "disabled");

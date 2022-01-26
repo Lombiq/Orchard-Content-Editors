@@ -119,7 +119,7 @@
 	
 	
 	// handlers
-	$(document).ready(function() {
+	$(function() {
 		
 		// on click
 		$(document).delegate('.lcs_switch:not(.lcs_disabled)', 'click tap', function(e) {

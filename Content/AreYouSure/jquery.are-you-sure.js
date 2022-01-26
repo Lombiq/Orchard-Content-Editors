@@ -64,13 +64,13 @@
         };
 
         var storeOrigValue = function ($field) {
-            $field.data('ays-orig', getValue($field));
+            $field.data('aysOrig', getValue($field));
         };
 
         var checkForm = function (evt) {
 
             var isFieldDirty = function ($field) {
-                var origValue = $field.data('ays-orig');
+                var origValue = $field.data('aysOrig');
                 if (undefined === origValue) {
                     return false;
                 }
@@ -91,7 +91,7 @@
 
             if (settings.addRemoveFieldsMarksDirty) {
                 // Check if field count has changed
-                var origCount = $form.data("ays-orig-field-count");
+                var origCount = $form.data("aysOrigFieldCount");
                 if (origCount !== $fields.length) {
                     setDirtyStatus($form, true);
                     return;
@@ -114,9 +114,9 @@
         var initForm = function ($form) {
             var fields = $form.find(settings.fieldSelector);
             $(fields).each(function () { storeOrigValue($(this)); });
-            $(fields).unbind(settings.fieldEvents, checkForm);
-            $(fields).bind(settings.fieldEvents, checkForm);
-            $form.data("ays-orig-field-count", $(fields).length);
+            $(fields).off(settings.fieldEvents, checkForm);
+            $(fields).on(settings.fieldEvents, checkForm);
+            $form.data("aysOrigFieldCount", $(fields).length);
             setDirtyStatus($form, false);
         };
 
@@ -139,9 +139,9 @@
             var fields = $form.find(settings.fieldSelector);
             $(fields).each(function () {
                 var $field = $(this);
-                if (!$field.data('ays-orig')) {
+                if (!$field.data('aysOrig')) {
                     storeOrigValue($field);
-                    $field.bind(settings.fieldEvents, checkForm);
+                    $field.on(settings.fieldEvents, checkForm);
                 }
             });
             // Check for changes while we're here
@@ -154,7 +154,7 @@
 
         if (!settings.silent && !window.aysUnloadSet) {
             window.aysUnloadSet = true;
-            $(window).bind('beforeunload', function () {
+            $(window).on('beforeunload', function () {
                 var activeElement = $(document.activeElement);
                 if (activeElement.length > 0 && activeElement.prop("tagName") === "A" &&
                     (activeElement.attr("target") === "_blank" || activeElement.attr("href").startsWith("mailto:"))) {
@@ -183,14 +183,14 @@
             }
             var $form = $(this);
 
-            $form.submit(function () {
+            $form.on("submit", function () {
                 $form.removeClass(settings.dirtyClass);
             });
-            $form.bind('reset', function () { setDirtyStatus($form, false); });
+            $form.on('reset', function () { setDirtyStatus($form, false); });
             // Add a custom events
-            $form.bind('rescan.areYouSure', rescan);
-            $form.bind('reinitialize.areYouSure', reinitialize);
-            $form.bind('checkform.areYouSure', checkForm);
+            $form.on('rescan.areYouSure', rescan);
+            $form.on('reinitialize.areYouSure', reinitialize);
+            $form.on('checkform.areYouSure', checkForm);
             initForm($form);
         });
     };
