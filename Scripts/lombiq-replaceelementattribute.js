@@ -5,7 +5,7 @@
                 var $element = $(this);
                 var attributeValue = $element.attr(attribute);
                 if (jQuery.expr.match.bool.test(attribute)) {
-                    $element.prop(attr, false);
+                    $element.prop(attribute, false);
                 } else {
                     $element.removeAttr(attribute);
                 }
