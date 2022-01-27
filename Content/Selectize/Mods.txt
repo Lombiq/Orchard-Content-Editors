@@ -1,0 +1,1 @@
+﻿- Updated to use jQuery 3.6.

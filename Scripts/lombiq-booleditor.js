@@ -54,7 +54,7 @@
                     });
                     break;
                 case "Toggle":
-                    $(plugin.settings.toggleSettings.booleanFieldClass).lc_switch(plugin.settings.toggleSettings.textTrue, plugin.settings.toggleSettings.textFalse);
+                    lc_switch($(plugin.settings.toggleSettings.booleanFieldClass), { on_txt: plugin.settings.toggleSettings.textTrue, off_txt: plugin.settings.toggleSettings.textFalse });
                     break;
                 case "Checkbox":
                     $(plugin.settings.checkboxSettings.onChangedSelectorId + " " + plugin.settings.checkboxSettings.checkboxButtonClass).on("click", function (event) {
@@ -80,7 +80,6 @@
             // If "options" is defined, but the plugin is not instantiated on this element ...
             if (options && !$.data(this, "plugin_" + pluginName)) {
                 // ... then create a plugin instance ...
-                // The "plugin_" (with underscore) will produce "plugin-".
                 $.data(this, "plugin_" + pluginName, new Plugin($(this), options));
             }
 
