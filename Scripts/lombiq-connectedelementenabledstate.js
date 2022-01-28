@@ -33,7 +33,7 @@
         init: function () {
             var plugin = this;
 
-            $(plugin.element).change(function (event, value) {
+            $(plugin.element).on("change", function (event, value) {
                 plugin.refresh(value);
             });
 

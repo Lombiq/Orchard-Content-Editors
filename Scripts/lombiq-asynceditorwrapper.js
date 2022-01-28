@@ -108,7 +108,7 @@
                 url: plugin.settings.editUrl,
                 data: { contentItemId: contentItemId },
                 type: "GET"
-            }).success(function (data) {
+            }).done(function (data) {
                 if (data.Success) {
                     $editorPlaceholder.html($.parseHTML(data.EditorShape, true)).show();
                     plugin.concurrentEditors++;
@@ -150,7 +150,7 @@
                     __requestVerificationToken: plugin.settings.requestToken,
                 },
                 type: "POST"
-            }).success(function (data) {
+            }).done(function (data) {
                 if (data.Success) {
                     plugin.settings.deleteCallback.call(plugin, data);
                 }

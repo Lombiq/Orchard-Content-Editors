@@ -8,6 +8,6 @@
 
 $(document).on("touchstart", function (event) {
     if ($(":focus").is("input") && $(event.target).closest(".editorField").length == 0) {
-        $(":focus").blur();
+        $(":focus").trigger("blur");
     }
 });

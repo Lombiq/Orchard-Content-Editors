@@ -1008,10 +1008,10 @@
 	
 		var $test = $('<test>').css({
 			position: 'absolute',
-			top: -99999,
-			left: -99999,
+			top: '-99999',
+			left: '-99999',
 			width: 'auto',
-			padding: 0,
+			padding: '0',
 			whiteSpace: 'pre'
 		}).text(str).appendTo('body');
 	
@@ -1369,7 +1369,7 @@
 	
 			$input.attr('tabindex', -1).hide().after(self.$wrapper);
 	
-			if ($.isArray(settings.items)) {
+			if (Array.isArray(settings.items)) {
 				self.setValue(settings.items);
 				delete settings.items;
 			}
@@ -1439,7 +1439,8 @@
 		 * Maps fired events to callbacks provided
 		 * in the settings used when creating the control.
 		 */
-		setupCallbacks: function() {
+		setupCallbacks: function ()
+		{
 			var key, fn, callbacks = {
 				'initialize'      : 'onInitialize',
 				'change'          : 'onChange',
@@ -1553,7 +1554,7 @@
 					var pastedText = self.$control_input.val();
 					if(!pastedText.match(self.settings.splitOn)){ return }
 	
-					var splitInput = $.trim(pastedText).split(self.settings.splitOn);
+					var splitInput = pastedText.trim().split(self.settings.splitOn);
 					for (var i = 0, n = splitInput.length; i < n; i++) {
 						self.createItem(splitInput[i]);
 					}
@@ -1701,7 +1702,7 @@
 			if (!fn) return;
 			if (self.loadedSearches.hasOwnProperty(value)) return;
 			self.loadedSearches[value] = true;
-			self.load(function(callback) {
+			self.on('load', function(callback) {
 				fn.apply(self, [value, callback]);
 			});
 		},
@@ -2042,7 +2043,7 @@
 			var self = this;
 	
 			self.setTextboxValue('');
-			self.$control_input.css({opacity: 0, position: 'absolute', left: self.rtl ? 10000 : -10000});
+			self.$control_input.css({opacity: 0, position: 'absolute', left: self.rtl ? '10000' : '-10000'});
 			self.isInputHidden = true;
 		},
 	
@@ -2050,7 +2051,7 @@
 		 * Restores input visibility.
 		 */
 		showInput: function() {
-			this.$control_input.css({opacity: 1, position: 'relative', left: 0});
+			this.$control_input.css({opacity: 1, position: 'relative', left: '0'});
 			this.isInputHidden = false;
 		},
 	
@@ -2177,7 +2178,7 @@
 			}
 	
 			var self              = this;
-			var query             = $.trim(self.$control_input.val());
+			var query             = String.prototype.trim.call(self.$control_input.val() == null ? "" : self.$control_input.val() )
 			var results           = self.search(query);
 			var $dropdown_content = self.$dropdown_content;
 			var active_before     = self.$activeOption && hash_key(self.$activeOption.attr('data-value'));
@@ -2196,7 +2197,7 @@
 				option      = self.options[results.items[i].id];
 				option_html = self.render('option', option);
 				optgroup    = option[self.settings.optgroupField] || '';
-				optgroups   = $.isArray(optgroup) ? optgroup : [optgroup];
+				optgroups   = Array.isArray(optgroup) ? optgroup : [optgroup];
 	
 				for (j = 0, k = optgroups && optgroups.length; j < k; j++) {
 					optgroup = optgroups[j];
@@ -2307,7 +2308,7 @@
 		addOption: function(data) {
 			var i, n, value, self = this;
 	
-			if ($.isArray(data)) {
+			if (Array.isArray(data)) {
 				for (i = 0, n = data.length; i < n; i++) {
 					self.addOption(data[i]);
 				}
@@ -2554,7 +2555,7 @@
 		 * @param {boolean} silent
 		 */
 		addItems: function(values, silent) {
-			var items = $.isArray(values) ? values : [values];
+			var items = Array.isArray(values) ? values : [values];
 			for (var i = 0, n = items.length; i < n; i++) {
 				this.isPending = (i < n - 1);
 				this.addItem(items[i], silent);
@@ -2677,7 +2678,7 @@
 		createItem: function(input, triggerDropdown) {
 			var self  = this;
 			var caret = self.caretPos;
-			input = input || $.trim(self.$control_input.val() || '');
+			input = input || String.prototype.trim.call(self.$control_input.val() == null ? "" : self.$control_input.val());
 	
 			var callback = arguments[arguments.length - 1];
 			if (typeof callback !== 'function') callback = function() {};
@@ -2893,9 +2894,9 @@
 			offset.top += $control.outerHeight(true);
 	
 			this.$dropdown.css({
-				width : $control.outerWidth(),
-				top   : offset.top,
-				left  : offset.left
+				width : String($control.outerWidth()),
+				top   : String(offset.top),
+				left  : String(offset.left)
 			});
 		},
 	
@@ -3369,7 +3370,7 @@
 			var data_raw = $input.attr(attr_data);
 	
 			if (!data_raw) {
-				var value = $.trim($input.val() || '');
+				var value = String.prototype.trim.call($input.val() == null ? "" : $input.val());
 				if (!settings.allowEmptyOption && !value.length) return;
 				values = value.split(settings.delimiter);
 				for (i = 0, n = values.length; i < n; i++) {
@@ -3421,7 +3422,7 @@
 						var arr = optionsMap[value][field_optgroup];
 						if (!arr) {
 							optionsMap[value][field_optgroup] = group;
-						} else if (!$.isArray(arr)) {
+						} else if (!Array.isArray(arr)) {
 							optionsMap[value][field_optgroup] = [arr, group];
 						} else {
 							arr.push(group);
@@ -3671,10 +3672,10 @@
 			if (options.equalizeWidth) {
 				width_parent = self.$dropdown_content.innerWidth() - getScrollbarWidth();
 				width = Math.round(width_parent / n);
-				$optgroups.css({width: width});
+				$optgroups.css({width: width + 'px'});
 				if (n > 1) {
 					width_last = width_parent - width * (n - 1);
-					$optgroups.eq(n - 1).css({width: width_last});
+					$optgroups.eq(n - 1).css({width: width_last + 'px'});
 				}
 			}
 		};

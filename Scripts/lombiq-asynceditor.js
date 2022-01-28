@@ -333,7 +333,7 @@
                 .first();
 
             if (plugin.currentForm) {
-                plugin.currentForm.submit(function (e) {
+                plugin.currentForm.on("submit", function (e) {
                     e.preventDefault();
                 });
 

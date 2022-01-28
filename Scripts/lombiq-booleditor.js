@@ -54,7 +54,7 @@
                     });
                     break;
                 case "Toggle":
-                    $(plugin.settings.toggleSettings.booleanFieldClass).lc_switch(plugin.settings.toggleSettings.textTrue, plugin.settings.toggleSettings.textFalse);
+                    lc_switch($(plugin.settings.toggleSettings.booleanFieldClass), { on_txt: plugin.settings.toggleSettings.textTrue, off_txt: plugin.settings.toggleSettings.textFalse });
                     break;
                 case "Checkbox":
                     $(plugin.settings.checkboxSettings.onChangedSelectorId + " " + plugin.settings.checkboxSettings.checkboxButtonClass).on("click", function (event) {

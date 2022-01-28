@@ -157,9 +157,9 @@
     <Content Include="Content\AreYouSure\Mods.txt" />
     <Content Include="Content\Images\spinner.gif" />
     <Content Include="Content\LC-switch\demo.html" />
-    <Content Include="Content\LC-switch\lc_switch.css" />
     <Content Include="Content\LC-switch\lc_switch.js" />
     <Content Include="Content\LC-switch\lc_switch.min.js" />
+    <Content Include="Content\Selectize\Mods.txt" />
     <Content Include="Content\URI.js\URI.js" />
     <Content Include="Content\URI.js\URI.min.js" />
     <Content Include="Scripts\lombiq-datatables-connectedelementvisibility-interop.js" />
@@ -198,6 +198,8 @@
     <Content Include="compilerconfig.json.defaults">
       <DependentUpon>compilerconfig.json</DependentUpon>
     </Content>
+    <Content Include="Content\LC-switch\LICENSE" />
+    <Content Include="Content\LC-switch\README.md" />
     <None Include="Styles\lombiq-loadingindicator.scss" />
     <Content Include="Styles\lombiq-loadingindicator.css">
       <DependentUpon>lombiq-loadingindicator.scss</DependentUpon>
@@ -335,10 +337,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Lombiq.Editors.TaxonomyEditor.Checkbox.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Content\LC-switch\LICENSE" />
-    <Content Include="Content\LC-switch\README.md" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Lombiq.LoadingIndicator.cshtml" />

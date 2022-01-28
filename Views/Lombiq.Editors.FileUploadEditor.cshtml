@@ -63,7 +63,7 @@
                     $(this).hide();
                 });
 
-                $(".@FileUploadControlElementName").change(function () {
+                $(".@FileUploadControlElementName").on("change", function () {
                     if ($(this).val() && $(this).val().length > 0) {
                         $(this).siblings(".@FileUploadCancelElementName").show();
                     }

@@ -70,7 +70,7 @@
 
                         if ($.inArray(value, currentValues) > -1) {
                             $currentElement.show();
-                            $valueElement.removeAttr("disabled"); // removeProp doesn't work for some reason.
+                            $valueElement.prop("disabled", false);
                         }
                         // Don't hide the default empty value.
                         else if (!plugin.settings.hasDefaultEmptyValue || plugin.settings.defaultEmptyValue !== value) {

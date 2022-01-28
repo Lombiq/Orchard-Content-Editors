@@ -40,7 +40,7 @@
         init: function () {
             var plugin = this;
 
-            $(plugin.element).change(function (event, value) {
+            $(plugin.element).on("change", function (event, value) {
                 plugin.refresh(value);
             });
 
@@ -121,7 +121,7 @@
                     if (plugin.settings.clearTargetInputsOnHide) {
                         inverseTarget.find("input, textarea").val("");
                         inverseTarget.find("select").prop("selectedIndex", 0);
-                        inverseTarget.find("[type = radio]").removeAttr("checked").trigger("change", false);
+                        inverseTarget.find("[type = radio]").prop("checked", false).trigger("change", false);
                     }
                 }
             }
@@ -137,7 +137,7 @@
                 if (plugin.settings.clearTargetInputsOnHide) {
                     target.find("input, textarea").val("");
                     target.find("select").prop("selectedIndex", 0);
-                    target.find("[type = radio]").removeAttr("checked").trigger("change", false);
+                    target.find("[type = radio]").prop("checked", false).trigger("change", false);
                 }
             }
 

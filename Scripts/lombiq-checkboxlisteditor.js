@@ -43,14 +43,14 @@
             var plugin = this;
 
             // Make jQuery :contains Case-Insensitive.
-            $.expr[":"].contains = $.expr.createPseudo(function (arg) {
+            $.expr.pseudos.contains = $.expr.createPseudo(function (arg) {
                 return function (elem) {
                     return $(elem).text().toUpperCase().indexOf(arg.toUpperCase()) >= 0;
                 };
             });
 
             if (plugin.settings.isSearchEnabled) {
-                $(plugin.settings.searchFilterElementClass).change(function () {
+                $(plugin.settings.searchFilterElementClass).on("change", function () {
                     var filter = $(this).val();
                     var controlGroup = $(this).parents(plugin.settings.searchFilterContainerElementClass).next(plugin.settings.controlGroupElementClass);
 
@@ -80,7 +80,7 @@
                     $itemsToHide.hide();
 
                 }).on("keyup search", function () {
-                    $(this).change();
+                    $(this).trigger("change");
                     reevaluateSelectAllState($(this).parents(plugin.settings.searchFilterContainerElementClass).next(plugin.settings.controlGroupElementClass));
                 });
             }
@@ -106,7 +106,7 @@
             };
 
             var selectAll = $(plugin.settings.selectAllElementClass);
-            selectAll.change(function () {
+            selectAll.on("change", function () {
                 var checked = this.checked;
                 $(this).parent().siblings(plugin.settings.checkboxContainerSelector).children(plugin.settings.checkboxInputElementClass + ":visible").each(function () {
                     this.checked = checked;
@@ -120,7 +120,7 @@
             var $controlGroup = element.find(plugin.settings.controlGroupElementClass);
 
             if (plugin.settings.isSearchEnabled) {
-                element.find(plugin.settings.searchFilterElementClass).val([]).keyup();
+                element.find(plugin.settings.searchFilterElementClass).val([]).trigger("keyup");
             }
 
             $controlGroup.find(plugin.settings.checkboxInputElementClass).filter(":checked").prop("checked", false);

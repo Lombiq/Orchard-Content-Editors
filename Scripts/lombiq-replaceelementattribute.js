@@ -4,7 +4,11 @@
             $(selector).find("[" + attribute + "]").each(function () {
                 var $element = $(this);
                 var attributeValue = $element.attr(attribute);
-                $element.removeAttr(attribute);
+                if (jQuery.expr.match.bool.test(attribute)) {
+                    $element.prop(attribute, false);
+                } else {
+                    $element.removeAttr(attribute);
+                }
                 $element.attr(newAttribute, attributeValue);
             });
         }
