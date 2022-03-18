@@ -167,7 +167,7 @@ window.asyncEditor.editor = {
 
             const editorGroupKey = self.asyncEditorId + '.editorGroup';
             if (!!Object.getOwnPropertyDescriptor(self.$route.query, editorGroupKey) &&
-                self.$route.query[editorGroupKey] !== self.contentId) {
+                self.$route.query[editorGroupKey] !== self.editorGroup) {
                 self.editorGroup = self.$route.query[editorGroupKey];
                 shouldLoadEditor = true;
             }
