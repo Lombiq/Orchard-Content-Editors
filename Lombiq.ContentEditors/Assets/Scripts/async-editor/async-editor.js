@@ -86,9 +86,13 @@ window.asyncEditor.editor = {
     updated() {
         const self = this;
         if (self.scriptsHtml) {
-            self.scriptsHtml.match(/(?<=<script>).*?(?=<\/script>)/gms).forEach((match) => {
-                window.eval(match);
-            });
+            const scripts = new DOMParser()
+                .parseFromString(self.scriptsHtml, 'text/html')
+                .getElementsByTagName('script');
+            for (let i = 0; i < scripts.length; i++) {
+                window.eval(scripts[i].text);
+            }
+
             self.scriptsHtml = '';
         }
     },
