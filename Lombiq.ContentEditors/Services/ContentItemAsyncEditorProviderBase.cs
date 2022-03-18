@@ -48,14 +48,14 @@ namespace Lombiq.ContentEditors.Services
 
         protected virtual bool CanHandleContentType(string contentType) => true;
 
-        protected virtual async Task<bool> CanRenderEditorGroupAsync(AsyncEditorContext<ContentItem> context)
+        protected virtual async Task<bool> CanRenderEditorGroupAsync(AsyncEditorContext<ContentItem> context, string editorGroup)
         {
             if (!CanHandleContentType(context.Content.ContentType)) return false;
 
             if (!await AuthorizeEditorGroupAsync(context)) return false;
 
             var descriptors = (await DescribeEditorGroupsAsync()).Select(descriptor => descriptor.Name).ToList();
-            var previousIndex = descriptors.IndexOf(context.EditorGroup) - 1;
+            var previousIndex = descriptors.IndexOf(editorGroup ?? context.EditorGroup) - 1;
             return previousIndex < 0 || context.Content.IsEditorGroupFilled(context.AsyncEditorId, descriptors[previousIndex]);
         }
 
@@ -123,14 +123,14 @@ namespace Lombiq.ContentEditors.Services
 
         protected async Task ThrowIfGroupIsInvalidAsync(AsyncEditorContext<ContentItem> context)
         {
-            if (!await CanRenderEditorGroupAsync(context))
+            if (!await CanRenderEditorGroupAsync(context, context.EditorGroup))
             {
                 throw new ArgumentException("The requested editor group is invalid.");
             }
         }
 
-        protected Task<bool> IsEditorGroupFilledAsync(AsyncEditorContext<ContentItem> context) =>
-            Task.FromResult(context.Content.IsEditorGroupFilled(context.AsyncEditorId, context.EditorGroup));
+        protected Task<bool> IsEditorGroupFilledAsync(AsyncEditorContext<ContentItem> context, string editorGroup) =>
+            Task.FromResult(context.Content.IsEditorGroupFilled(context.AsyncEditorId, editorGroup));
 
         protected virtual AsyncEditorGroupDescriptor<ContentItem> DescribeEditorGroup(
             string name,
@@ -144,9 +144,9 @@ namespace Lombiq.ContentEditors.Services
                 DisplayText = displayText,
                 IsPublishGroup = isPublishGroup,
                 IsAccessibleAsync = isAccessibleFactory ??
-                    (async asyncEditorContext => await CanRenderEditorGroupAsync(asyncEditorContext)),
+                    (async (context) => await CanRenderEditorGroupAsync(context, name)),
                 IsFilledAsync = isFilledFactory ??
-                    (async asyncEditorContext => await IsEditorGroupFilledAsync(asyncEditorContext)),
+                    (async (context) => await IsEditorGroupFilledAsync(context, name)),
             };
 
         protected virtual void AddEditorShapeAlternates(AsyncEditorContext<ContentItem> context, IShape editorShape)
