@@ -120,13 +120,23 @@ window.asyncEditor.editor = {
         },
         submitEditor(nextEditorGroup) {
             const self = this;
+            const validationEvent = new CustomEvent('validationEvent', {
+                bubbles: true,
+                cancelable: true,
+                detail: { isValid: true }
+            });
 
-            self.api.submitEditor(
-                self.contentId,
-                self.editorGroup,
-                nextEditorGroup,
-                new FormData(self.$refs.editorForm),
-                (success, data) => { self.processApiData(success, data); });
+            var form = document.querySelector('form.asyncEditor__form');
+            form.dispatchEvent(validationEvent);
+
+            if (validationEvent.detail.isValid) {
+                self.api.submitEditor(
+                    self.contentId,
+                    self.editorGroup,
+                    nextEditorGroup,
+                    new FormData(self.$refs.editorForm),
+                    (success, data) => { self.processApiData(success, data); });
+            }
         },
         processApiData(success, data) {
             const self = this;
