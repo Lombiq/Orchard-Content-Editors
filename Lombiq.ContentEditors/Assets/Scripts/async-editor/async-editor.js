@@ -120,16 +120,17 @@ window.asyncEditor.editor = {
         },
         submitEditor(nextEditorGroup) {
             const self = this;
-            const validationEvent = new CustomEvent('validationEvent', {
+            const submittingEditorEvent = new CustomEvent('asyncEditorSubmittingEditor', {
                 bubbles: true,
                 cancelable: true,
-                detail: { isValid: true }
+                detail: { asyncEditor: window.asyncEditor }
             });
 
             var form = document.querySelector('form.asyncEditor__form');
-            form.dispatchEvent(validationEvent);
+            form.dispatchEvent(submittingEditorEvent);
 
-            if (validationEvent.detail.isValid) {
+            var cancelled = !form.dispatchEvent(submittingEditorEvent);
+            if (!cancelled) {
                 self.api.submitEditor(
                     self.contentId,
                     self.editorGroup,
