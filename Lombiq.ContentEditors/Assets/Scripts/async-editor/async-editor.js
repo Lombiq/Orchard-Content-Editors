@@ -126,8 +126,8 @@ window.asyncEditor.editor = {
                 detail: { asyncEditor: window.asyncEditor }
             });
 
-            var cancelled = !document.dispatchEvent(submittingEditorEvent);
-            if (!cancelled) {
+            var success = document.dispatchEvent(submittingEditorEvent);
+            if (success) {
                 self.api.submitEditor(
                     self.contentId,
                     self.editorGroup,
