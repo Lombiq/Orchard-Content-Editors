@@ -120,13 +120,21 @@ window.asyncEditor.editor = {
         },
         submitEditor(nextEditorGroup) {
             const self = this;
+            const submittingEditorEvent = new CustomEvent('asyncEditorSubmittingEditor', {
+                bubbles: true,
+                cancelable: true,
+                detail: { asyncEditor: window.asyncEditor }
+            });
 
-            self.api.submitEditor(
-                self.contentId,
-                self.editorGroup,
-                nextEditorGroup,
-                new FormData(self.$refs.editorForm),
-                (success, data) => { self.processApiData(success, data); });
+            var success = document.dispatchEvent(submittingEditorEvent);
+            if (success) {
+                self.api.submitEditor(
+                    self.contentId,
+                    self.editorGroup,
+                    nextEditorGroup,
+                    new FormData(self.$refs.editorForm),
+                    (success, data) => { self.processApiData(success, data); });
+            }
         },
         processApiData(success, data) {
             const self = this;
