@@ -126,10 +126,7 @@ window.asyncEditor.editor = {
                 detail: { asyncEditor: window.asyncEditor }
             });
 
-            var form = document.querySelector('form.asyncEditor__form');
-            form.dispatchEvent(submittingEditorEvent);
-
-            var cancelled = !form.dispatchEvent(submittingEditorEvent);
+            var cancelled = !document.dispatchEvent(submittingEditorEvent);
             if (!cancelled) {
                 self.api.submitEditor(
                     self.contentId,
