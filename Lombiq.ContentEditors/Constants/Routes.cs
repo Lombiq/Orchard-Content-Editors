@@ -1,8 +1,7 @@
-namespace Lombiq.ContentEditors.Constants
+namespace Lombiq.ContentEditors.Constants;
+
+public static class Routes
 {
-    public static class Routes
-    {
-        public const string ContentItemAsyncEditorApi = "api/ContentItemAsyncEditor";
-        public const string ContentItemAsyncEditor = "Admin/ContentItemAsyncEditor";
-    }
+    public const string ContentItemAsyncEditorApi = "api/ContentItemAsyncEditor";
+    public const string ContentItemAsyncEditor = "Admin/ContentItemAsyncEditor";
 }

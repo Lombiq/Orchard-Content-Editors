@@ -7,51 +7,50 @@ using OrchardCore.ContentManagement.Display.Models;
 using OrchardCore.DisplayManagement.ModelBinding;
 using OrchardCore.DisplayManagement.Views;
 
-namespace Lombiq.ContentEditors.Samples.Drivers
+namespace Lombiq.ContentEditors.Samples.Drivers;
+
+public class SupportTicketPartDisplayDriver : ContentPartDisplayDriver<SupportTicketPart>
 {
-    public class SupportTicketPartDisplayDriver : ContentPartDisplayDriver<SupportTicketPart>
-    {
-        public override IDisplayResult Edit(SupportTicketPart part, BuildPartEditorContext context) =>
-            Combine(
-                Initialize<EditSupportTicketReporterViewModel>(GetEditorShapeType(EditorGroups.SupportTicket.Reporter), viewModel =>
-                {
-                    viewModel.Name = part.Name;
-                    viewModel.Email = part.Email;
-                }).OnGroup(EditorGroups.SupportTicket.Reporter).Location("Content"),
-                Initialize<EditSupportTicketDetailsViewModel>(GetEditorShapeType(EditorGroups.SupportTicket.Details), viewModel =>
-                {
-                    viewModel.Url = part.Url;
-                    viewModel.Description = part.Description;
-                }).OnGroup(EditorGroups.SupportTicket.Details).Location("Content"));
-
-        public override async Task<IDisplayResult> UpdateAsync(SupportTicketPart part, IUpdateModel updater, UpdatePartEditorContext context)
-        {
-            switch (context.GroupId)
+    public override IDisplayResult Edit(SupportTicketPart part, BuildPartEditorContext context) =>
+        Combine(
+            Initialize<EditSupportTicketReporterViewModel>(GetEditorShapeType(EditorGroups.SupportTicket.Reporter), viewModel =>
             {
-                case EditorGroups.SupportTicket.Reporter:
-                    var reporterViewModel = new EditSupportTicketReporterViewModel();
-                    await updater.TryUpdateModelAsync(reporterViewModel, Prefix);
+                viewModel.Name = part.Name;
+                viewModel.Email = part.Email;
+            }).OnGroup(EditorGroups.SupportTicket.Reporter).Location("Content"),
+            Initialize<EditSupportTicketDetailsViewModel>(GetEditorShapeType(EditorGroups.SupportTicket.Details), viewModel =>
+            {
+                viewModel.Url = part.Url;
+                viewModel.Description = part.Description;
+            }).OnGroup(EditorGroups.SupportTicket.Details).Location("Content"));
 
-                    part.Name = reporterViewModel.Name;
-                    part.Email = reporterViewModel.Email;
+    public override async Task<IDisplayResult> UpdateAsync(SupportTicketPart part, IUpdateModel updater, UpdatePartEditorContext context)
+    {
+        switch (context.GroupId)
+        {
+            case EditorGroups.SupportTicket.Reporter:
+                var reporterViewModel = new EditSupportTicketReporterViewModel();
+                await updater.TryUpdateModelAsync(reporterViewModel, Prefix);
 
-                    break;
-                case EditorGroups.SupportTicket.Details:
-                    var detailsViewModel = new EditSupportTicketDetailsViewModel();
-                    await updater.TryUpdateModelAsync(detailsViewModel, Prefix);
+                part.Name = reporterViewModel.Name;
+                part.Email = reporterViewModel.Email;
 
-                    part.Url = detailsViewModel.Url;
-                    part.Description = detailsViewModel.Description;
+                break;
+            case EditorGroups.SupportTicket.Details:
+                var detailsViewModel = new EditSupportTicketDetailsViewModel();
+                await updater.TryUpdateModelAsync(detailsViewModel, Prefix);
 
-                    break;
-                default:
-                    await EditAsync(part, context);
-                    break;
-            }
+                part.Url = detailsViewModel.Url;
+                part.Description = detailsViewModel.Description;
 
-            return await EditAsync(part, context);
+                break;
+            default:
+                await EditAsync(part, context);
+                break;
         }
 
-        private static string GetEditorShapeType(string group) => $"{nameof(SupportTicketPart)}_{group}_Edit";
+        return await EditAsync(part, context);
     }
+
+    private static string GetEditorShapeType(string group) => $"{nameof(SupportTicketPart)}_{group}_Edit";
 }

@@ -1,7 +1,6 @@
-namespace Lombiq.ContentEditors.Samples.Constants
+namespace Lombiq.ContentEditors.Samples.Constants;
+
+public static class Routes
 {
-    public static class Routes
-    {
-        public const string FrontEndContentItemAsyncEditor = nameof(FrontEndContentItemAsyncEditor);
-    }
+    public const string FrontEndContentItemAsyncEditor = nameof(FrontEndContentItemAsyncEditor);
 }

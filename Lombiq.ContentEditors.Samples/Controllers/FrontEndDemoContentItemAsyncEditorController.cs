@@ -4,19 +4,18 @@ using Lombiq.ContentEditors.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using OrchardCore.Modules;
 
-namespace Lombiq.ContentEditors.Samples.Controllers
+namespace Lombiq.ContentEditors.Samples.Controllers;
+
+[Feature(FeatureIds.Samples)]
+[Route(Routes.FrontEndContentItemAsyncEditor)]
+public class FrontEndDemoContentItemAsyncEditorController : Controller
 {
-    [Feature(FeatureIds.Samples)]
-    [Route(Routes.FrontEndContentItemAsyncEditor)]
-    public class FrontEndDemoContentItemAsyncEditorController : Controller
-    {
-        [HttpGet("{contentItemId?}")]
-        public ActionResult Index(string contentItemId) =>
-            View(new ContentItemAsyncEditorViewModel
-            {
-                ProviderName = nameof(SupportTicketAsyncEditorProvider),
-                ContentType = ContentTypes.SupportTicket,
-                ContentItemId = contentItemId,
-            });
-    }
+    [HttpGet("{contentItemId?}")]
+    public ActionResult Index(string contentItemId) =>
+        View(new ContentItemAsyncEditorViewModel
+        {
+            ProviderName = nameof(SupportTicketAsyncEditorProvider),
+            ContentType = ContentTypes.SupportTicket,
+            ContentItemId = contentItemId,
+        });
 }

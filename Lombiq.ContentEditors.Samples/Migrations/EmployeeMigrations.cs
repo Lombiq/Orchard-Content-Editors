@@ -7,32 +7,31 @@ using OrchardCore.ContentManagement.Metadata.Settings;
 using OrchardCore.Data.Migration;
 using static Lombiq.ContentEditors.Samples.Constants.ContentTypes;
 
-namespace Lombiq.ContentEditors.Samples.Migrations
+namespace Lombiq.ContentEditors.Samples.Migrations;
+
+public class EmployeeMigrations : DataMigration
 {
-    public class EmployeeMigrations : DataMigration
+    private readonly IContentDefinitionManager _contentDefinitionManager;
+
+    public EmployeeMigrations(IContentDefinitionManager contentDefinitionManager) => _contentDefinitionManager = contentDefinitionManager;
+
+    public int Create()
     {
-        private readonly IContentDefinitionManager _contentDefinitionManager;
+        _contentDefinitionManager.AlterPartDefinition(nameof(EmployeePart), part => part
+            .WithField(nameof(EmployeePart.Name), ConfigureField<TextField>(name: "Name"))
+            .WithField(nameof(EmployeePart.Position), ConfigureField<TextField>(name: "Position"))
+            .WithField(nameof(EmployeePart.Office), ConfigureField<TextField>(name: "Office Location"))
+            .WithField(nameof(EmployeePart.Age), ConfigureField<NumericField>(name: "Age"))
+            .WithField(nameof(EmployeePart.StartDate), ConfigureField<DateField>(name: "Start Date"))
+            .WithField(nameof(EmployeePart.Salary), ConfigureField<NumericField>(name: "Salary")));
 
-        public EmployeeMigrations(IContentDefinitionManager contentDefinitionManager) => _contentDefinitionManager = contentDefinitionManager;
+        _contentDefinitionManager.AlterTypeDefinition(Employee, type => type
+            .Listable()
+            .WithPart(nameof(EmployeePart)));
 
-        public int Create()
-        {
-            _contentDefinitionManager.AlterPartDefinition(nameof(EmployeePart), part => part
-                .WithField(nameof(EmployeePart.Name), ConfigureField<TextField>(name: "Name"))
-                .WithField(nameof(EmployeePart.Position), ConfigureField<TextField>(name: "Position"))
-                .WithField(nameof(EmployeePart.Office), ConfigureField<TextField>(name: "Office Location"))
-                .WithField(nameof(EmployeePart.Age), ConfigureField<NumericField>(name: "Age"))
-                .WithField(nameof(EmployeePart.StartDate), ConfigureField<DateField>(name: "Start Date"))
-                .WithField(nameof(EmployeePart.Salary), ConfigureField<NumericField>(name: "Salary")));
-
-            _contentDefinitionManager.AlterTypeDefinition(Employee, type => type
-                .Listable()
-                .WithPart(nameof(EmployeePart)));
-
-            return 1;
-        }
-
-        private static Action<ContentPartFieldDefinitionBuilder> ConfigureField<T>(string name) =>
-            field => field.OfType(typeof(T).Name).WithDisplayName(name);
+        return 1;
     }
+
+    private static Action<ContentPartFieldDefinitionBuilder> ConfigureField<T>(string name) =>
+        field => field.OfType(typeof(T).Name).WithDisplayName(name);
 }

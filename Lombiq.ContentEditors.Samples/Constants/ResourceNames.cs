@@ -1,7 +1,6 @@
-﻿namespace Lombiq.ContentEditors.Samples.Constants
+﻿namespace Lombiq.ContentEditors.Samples.Constants;
+
+public static class ResourceNames
 {
-    public static class ResourceNames
-    {
-        public const string SampleAsyncEditorGroupScript = nameof(SampleAsyncEditorGroupScript);
-    }
+    public const string SampleAsyncEditorGroupScript = nameof(SampleAsyncEditorGroupScript);
 }

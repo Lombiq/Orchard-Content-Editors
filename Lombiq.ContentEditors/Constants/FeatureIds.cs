@@ -1,8 +1,7 @@
-namespace Lombiq.ContentEditors.Constants
+namespace Lombiq.ContentEditors.Constants;
+
+public static class FeatureIds
 {
-    public static class FeatureIds
-    {
-        public const string Area = "Lombiq.ContentEditors";
-        public const string AsyncEditor = Area + "." + nameof(AsyncEditor);
-    }
+    public const string Area = "Lombiq.ContentEditors";
+    public const string AsyncEditor = Area + "." + nameof(AsyncEditor);
 }

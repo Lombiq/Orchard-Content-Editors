@@ -1,8 +1,7 @@
-namespace Lombiq.ContentEditors.Samples.Constants
+namespace Lombiq.ContentEditors.Samples.Constants;
+
+public static class ContentTypes
 {
-    public static class ContentTypes
-    {
-        public const string Employee = nameof(Employee);
-        public const string SupportTicket = nameof(SupportTicket);
-    }
+    public const string Employee = nameof(Employee);
+    public const string SupportTicket = nameof(SupportTicket);
 }

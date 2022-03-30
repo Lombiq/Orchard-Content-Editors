@@ -7,22 +7,21 @@ using Lombiq.ContentEditors.Services;
 using OrchardCore.ContentManagement;
 using static Lombiq.ContentEditors.Samples.Constants.EditorGroups.SupportTicket;
 
-namespace Lombiq.ContentEditors.Samples.Services
+namespace Lombiq.ContentEditors.Samples.Services;
+
+public class SupportTicketAsyncEditorProvider : ContentItemAsyncEditorProviderBase<SupportTicketAsyncEditorProvider>
 {
-    public class SupportTicketAsyncEditorProvider : ContentItemAsyncEditorProviderBase<SupportTicketAsyncEditorProvider>
+    public SupportTicketAsyncEditorProvider(IContentItemAsyncEditorProviderServices<SupportTicketAsyncEditorProvider> providerServices)
+        : base(providerServices)
     {
-        public SupportTicketAsyncEditorProvider(IContentItemAsyncEditorProviderServices<SupportTicketAsyncEditorProvider> providerServices)
-            : base(providerServices)
-        {
-        }
-
-        protected override bool CanHandleContentType(string contentType) => contentType == ContentTypes.SupportTicket;
-
-        public override Task<IEnumerable<AsyncEditorGroupDescriptor<ContentItem>>> DescribeEditorGroupsAsync() =>
-            Task.FromResult(new[]
-            {
-                DescribeEditorGroup(Reporter, T["Reporter"]),
-                DescribeEditorGroup(Details, T["Details"], isPublishGroup: true),
-            }.AsEnumerable());
     }
+
+    protected override bool CanHandleContentType(string contentType) => contentType == ContentTypes.SupportTicket;
+
+    public override Task<IEnumerable<AsyncEditorGroupDescriptor<ContentItem>>> DescribeEditorGroupsAsync() =>
+        Task.FromResult(new[]
+        {
+            DescribeEditorGroup(Reporter, T["Reporter"]),
+            DescribeEditorGroup(Details, T["Details"], isPublishGroup: true),
+        }.AsEnumerable());
 }

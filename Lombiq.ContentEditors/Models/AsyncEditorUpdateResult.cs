@@ -2,12 +2,11 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
 using System.Threading.Tasks;
 
-namespace Lombiq.ContentEditors.Models
+namespace Lombiq.ContentEditors.Models;
+
+public class AsyncEditorUpdateResult
 {
-    public class AsyncEditorUpdateResult
-    {
-        public ModelStateDictionary ModelState { get; set; }
-        public Func<ValueTask<string>> RenderedEditorShapeFactory { get; set; }
-        public string Message { get; set; }
-    }
+    public ModelStateDictionary ModelState { get; set; }
+    public Func<ValueTask<string>> RenderedEditorShapeFactory { get; set; }
+    public string Message { get; set; }
 }
