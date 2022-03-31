@@ -2,7 +2,7 @@
 /* global VueRouter */
 /* global DomParser */
 
-window.asyncEditor = { editors: [] };
+if (!window.asyncEditor) window.asyncEditor = { editors: [] }
 
 class AsyncEditorApiClient {
     constructor(parameters) {
@@ -50,6 +50,7 @@ class AsyncEditorApiClient {
 
 const router = new VueRouter();
 
+// Making the Vue object more readable.
 // eslint-disable-next-line object-shorthand
 window.asyncEditor.editor = {
     template: '#async-editor-template',
@@ -171,14 +172,14 @@ window.asyncEditor.editor = {
             let shouldLoadEditor = false;
 
             const contentIdKey = self.asyncEditorId + '.contentId';
-            if (!!Object.getOwnPropertyDescriptor(self.$route.query, contentIdKey) &&
+            if (self.$route.query.hasOwnProperty(contentIdKey) &&
                 self.$route.query[contentIdKey] !== self.contentId) {
                 self.contentId = self.$route.query[contentIdKey];
                 shouldLoadEditor = true;
             }
 
             const editorGroupKey = self.asyncEditorId + '.editorGroup';
-            if (!!Object.getOwnPropertyDescriptor(self.$route.query, editorGroupKey) &&
+            if (self.$route.query.hasOwnProperty(editorGroupKey) &&
                 self.$route.query[editorGroupKey] !== self.editorGroup) {
                 self.editorGroup = self.$route.query[editorGroupKey];
                 shouldLoadEditor = true;
@@ -207,10 +208,11 @@ window.asyncEditor.editor = {
 };
 
 window.initAsyncEditor = (asyncEditorId, parameters) => {
-    if (!parameters) return;
+    if (!parameters) return window.asyncEditor.editors[asyncEditorId];
 
     window.asyncEditor.editors[asyncEditorId] = new Vue({
         el: parameters.element,
+        data: { id: asyncEditorId },
         mounted: function () {
             parameters.asyncEditorId = asyncEditorId;
             this.$refs.editor.initEditor(parameters);

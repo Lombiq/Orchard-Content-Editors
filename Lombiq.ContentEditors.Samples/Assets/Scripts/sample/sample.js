@@ -1,3 +1,3 @@
-$(document).on("click", ".click-me", function () {
+$(document).on('click', '.click-me', () => {
     alert('Thank you for clicking me.');
-})
+});

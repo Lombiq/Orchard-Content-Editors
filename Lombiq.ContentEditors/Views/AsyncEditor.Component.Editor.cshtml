@@ -1,8 +1,9 @@
 <style>
-    .cursor-pointer {
+    [role="button"] {
         cursor: pointer;
     }
 </style>
+
 <script type="text/x-template" id="async-editor-template">
     <div class="asyncEditor w-100 d-flex flex-column">
         <div class="asyncEditor__header">
@@ -26,15 +27,16 @@
                 <div v-for="group in editorGroups"
                      :key="group.name"
                      class="asyncEditor__groupLink p-3"
-                     :class="{ 'asyncEditor__groupLink_disabled text-muted': !group.isAccessible, 'asyncEditor__groupLink_active': isCurrentGroup(group.name), 'cursor-pointer': group.isAccessible }"
+                     :class="{ 'asyncEditor__groupLink_disabled text-muted': !group.isAccessible, 'asyncEditor__groupLink_active': isCurrentGroup(group.name) }"
+                     role="button"
                      @@click="group.isAccessible && !isCurrentGroup(group.name) ? submitEditor(group.name) : null">
                         <i class="fas fa-check-circle" v-if="group.isFilled"></i> {{ group.displayText }}
                      </div>
             </div>
             <div class="asyncEditor__actions d-flex flex-row">
-                <div class="asyncEditor__saveAction p-3 cursor-pointer" v-if="!isLastGroup()" @@click="submitEditor()">@T["Save"]</div>
-                <div class="asyncEditor__saveAndNextAction p-3 cursor-pointer" v-if="!isLastGroup()" @@click="submitEditor(getNextEditor())">@T["Save and Next"]</div>
-                <div class="asyncEditor__submitAction p-3 cursor-pointer" v-if="isLastGroup()" @@click="submitEditor(getNextEditor())">@T["Submit"]</div>
+                <div class="asyncEditor__saveAction p-3" v-if="!isLastGroup()" @@click="submitEditor()" role="button">@T["Save"]</div>
+                <div class="asyncEditor__saveAndNextAction p-3" v-if="!isLastGroup()" @@click="submitEditor(getNextEditor())" role="button">@T["Save and Next"]</div>
+                <div class="asyncEditor__submitAction p-3" v-if="isLastGroup()" @@click="submitEditor(getNextEditor())" role="button">@T["Submit"]</div>
             </div>
         </div>
     </div>

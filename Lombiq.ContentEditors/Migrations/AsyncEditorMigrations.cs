@@ -10,7 +10,7 @@ public class AsyncEditorMigrations : DataMigration
     public int Create()
     {
         SchemaBuilder.CreateMapIndexTable<AsyncEditorPartIndex>(table => table
-            .Column<string>(nameof(AsyncEditorPartIndex.ContentItemId), c => c.WithCommonUniqueIdLength())
+            .Column<string>(nameof(AsyncEditorPartIndex.ContentItemId), column => column.WithCommonUniqueIdLength())
             .Column<string>(nameof(AsyncEditorPartIndex.AsyncEditorId))
             .Column<string>(nameof(AsyncEditorPartIndex.FilledEditorGroup))
         );
