@@ -1,0 +1,17 @@
+@using Lombiq.ContentEditors.Samples.Constants
+@model EditSupportTicketDetailsViewModel
+
+<script asp-name="@ResourceNames.SampleAsyncEditorGroupScript" at="Foot"></script>
+
+<div>
+    <label asp-for="Url">@T["URL"]</label>
+    <input asp-for="Url" />
+    <span asp-validation-for="Url"></span>
+</div>
+<div>
+    <label asp-for="Description">@T["Description"]</label>
+    <textarea asp-for="Description"></textarea>
+    <span asp-validation-for="Description"></span>
+</div>
+
+<div class="click-me">@T["Click me"]</div>

@@ -1,0 +1,38 @@
+@using System.IO
+@using Microsoft.AspNetCore.Html
+
+@model Lombiq.ContentEditors.Dtos.RenderedAsyncEditorGroupDto
+
+@inject IResourceManager ResourceManager
+
+@{
+    Layout = "";
+
+    if (!ViewData.ModelState.IsValid)
+    {
+        var validationSummary = Html.ValidationSummary();
+
+        await using var validationSummaryWriter = new StringWriter();
+        validationSummary.WriteTo(validationSummaryWriter, HtmlEncoder);
+
+        Model.ValidationSummaryHtml = validationSummaryWriter.ToString();
+    }
+
+    var resourceHtmlBuilder = new HtmlContentBuilder();
+
+    foreach (var script in ResourceManager.GetRegisteredHeadScripts())
+    {
+        resourceHtmlBuilder.AppendHtml(script);
+    }
+
+    foreach (var script in ResourceManager.GetRegisteredFootScripts())
+    {
+        resourceHtmlBuilder.AppendHtml(script);
+    }
+
+    var resourceWriter = new StringWriter();
+    resourceHtmlBuilder.WriteTo(resourceWriter, HtmlEncoder);
+    Model.ScriptsHtml = resourceWriter.ToString();
+}
+
+@Json.Serialize(Model)

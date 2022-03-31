@@ -1,0 +1,32 @@
+{
+  "TextField_Edit": [
+    {
+      "differentiator": "EmployeePart-Name",
+      "place": "Content:1@PersonalDetails"
+    },
+    {
+      "differentiator": "EmployeePart-Position",
+      "place": "Content:2@PersonalDetails"
+    },
+    {
+      "differentiator": "EmployeePart-Age",
+      "place": "Content:3@PersonalDetails"
+    },
+    {
+      "differentiator": "EmployeePart-Position",
+      "place": "Content:1@EmploymentDetails"
+    },
+    {
+      "differentiator": "EmployeePart-Office",
+      "place": "Content:2@EmploymentDetails"
+    },
+    {
+      "differentiator": "EmployeePart-StartDate",
+      "place": "Content:3@EmploymentDetails"
+    },
+    {
+      "differentiator": "EmployeePart-Salary",
+      "place": "Content:4@EmploymentDetails"
+    }
+  ]
+}

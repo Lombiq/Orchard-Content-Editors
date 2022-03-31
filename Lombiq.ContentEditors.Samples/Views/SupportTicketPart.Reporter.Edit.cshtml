@@ -1,0 +1,16 @@
+@model EditSupportTicketReporterViewModel
+a
+<div>
+    <label asp-for="Name">@T["Name"]</label>
+    <input asp-for="Name" />
+    <span asp-validation-for="Name"></span>
+</div>
+<div>
+    <label asp-for="Email">@T["Email"]</label>
+    <input asp-for="Email" />
+    <span asp-validation-for="Email"></span>
+</div>
+
+<script at="Foot">
+    console.log("I'm running in an async editor!");
+</script>

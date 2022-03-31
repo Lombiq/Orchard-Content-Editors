@@ -1,0 +1,62 @@
+@using Lombiq.ContentEditors.Constants
+@using Lombiq.ContentEditors.Services
+@using OrchardCore.ContentManagement.Display
+@using OrchardCore.ContentManagement.Metadata
+@using OrchardCore.DisplayManagement.ModelBinding
+@using OrchardCore.Mvc.Utilities
+
+@inject IContentManager ContentManager
+@inject IContentDefinitionManager ContentDefinitionManager
+@inject IContentItemDisplayManager ContentItemDisplayManager
+@inject IUpdateModelAccessor UpdateModelAccessor
+@inject IEnumerable<IAsyncEditorProvider<ContentItem>> Providers
+
+@{
+    var contentType = Model.ContentType as string;
+    var providerName = Model.ProviderName as string;
+    var asyncEditorProvider = Providers.FirstOrDefault(provider => provider.Name == providerName);
+    if (string.IsNullOrEmpty(contentType) || asyncEditorProvider == null)
+    {
+        return;
+    }
+
+    var asyncEditorId = Model.AsyncEditorId as string ?? contentType.HtmlClassify();
+    var elementId = Model.ElementId as string ?? asyncEditorId.HtmlClassify();
+    var editorGroups = await asyncEditorProvider.GetAllEditorGroupsAsync();
+    if (editorGroups?.Any() != true)
+    {
+        editorGroups = new[] { string.Empty };
+    }
+    var editorGroup = Model.EditorGroup as string ?? editorGroups.First();
+
+    @* Render dummy editors to add the required scripts and styles to the page. *@
+    foreach (var group in editorGroups)
+    {
+        var contentItem = await ContentManager.NewAsync(contentType);
+        var editor = await ContentItemDisplayManager.BuildEditorAsync(
+            contentItem,
+            UpdateModelAccessor.ModelUpdater,
+            true,
+            group,
+            Guid.NewGuid().ToString("n"));
+        _ = await DisplayAsync(editor);
+    }
+}
+
+<script asp-name="@ResourceNames.AsyncEditor" at="Foot"></script>
+
+<shape type="AsyncEditor_Component_Editor"></shape>
+
+<div id="@elementId"></div>
+
+<script at="Foot" depends-on="@ResourceNames.AsyncEditor">
+    document.addEventListener("DOMContentLoaded", function() {
+        window.initAsyncEditor('@asyncEditorId', {
+            element: '#@elementId',
+            apiUrl: '@Href("~/" + Routes.ContentItemAsyncEditorApi)',
+            providerName: '@providerName',
+            contentType: '@contentType',
+            editorGroup: '@editorGroup',
+        });
+    });
+</script>
