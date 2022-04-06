@@ -78,7 +78,7 @@
                 plugin.setValue(plugin.pickerElement.val(), plugin.settings.displayFormat);
             });
 
-            plugin.setValue(plugin.pickerElement.val(), plugin.settings.displayFormat);
+            setTimeout(function () { plugin.setValue(plugin.pickerElement.val(), plugin.settings.displayFormat) }, 500);
         },
 
         showErrorAndRestore: function (message) {
@@ -142,10 +142,10 @@
             }
 
             if (date !== null) {
-                setTimeout(function () { plugin.inputElement.val(moment(date).format(plugin.settings.storeFormat)) }, 500);
+                plugin.inputElement.val(moment(date).format(plugin.settings.storeFormat));
             }
             else {
-                setTimeout(function () { plugin.inputElement.val("") }, 500);
+                plugin.inputElement.val("");
             }
         },
 
