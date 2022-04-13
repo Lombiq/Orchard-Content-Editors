@@ -152,6 +152,8 @@ window.asyncEditor.editor = {
                 self.scriptsHtml = data.scriptsHtml;
                 self.message = data.message;
 
+                window.asyncEditor.editors[self.asyncEditorId].contentId = data.contentId;
+
                 if (shouldUpdateQuery) self.updateQuery();
             }
             else {
