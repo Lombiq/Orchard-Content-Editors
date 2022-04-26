@@ -1,10 +1,10 @@
-using System;
 using Lombiq.ContentEditors.Samples.Models;
 using OrchardCore.ContentFields.Fields;
 using OrchardCore.ContentManagement.Metadata;
 using OrchardCore.ContentManagement.Metadata.Builders;
 using OrchardCore.ContentManagement.Metadata.Settings;
 using OrchardCore.Data.Migration;
+using System;
 using static Lombiq.ContentEditors.Samples.Constants.ContentTypes;
 
 namespace Lombiq.ContentEditors.Samples.Migrations;

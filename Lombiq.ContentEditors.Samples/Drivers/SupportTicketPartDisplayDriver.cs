@@ -1,4 +1,3 @@
-﻿using System.Threading.Tasks;
 using Lombiq.ContentEditors.Samples.Constants;
 using Lombiq.ContentEditors.Samples.Models;
 using Lombiq.ContentEditors.Samples.ViewModels;
@@ -6,6 +5,7 @@ using OrchardCore.ContentManagement.Display.ContentDisplay;
 using OrchardCore.ContentManagement.Display.Models;
 using OrchardCore.DisplayManagement.ModelBinding;
 using OrchardCore.DisplayManagement.Views;
+using System.Threading.Tasks;
 
 namespace Lombiq.ContentEditors.Samples.Drivers;
 
