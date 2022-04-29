@@ -1,7 +1,7 @@
-using System.Threading.Tasks;
 using Lombiq.Tests.UI.Extensions;
 using Lombiq.Tests.UI.Services;
 using OpenQA.Selenium;
+using System.Threading.Tasks;
 
 namespace Lombiq.ContentEditors.Tests.UI.Extensions;
 
