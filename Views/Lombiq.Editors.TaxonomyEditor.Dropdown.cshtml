@@ -54,7 +54,12 @@
     {
         @Html.Label(viewModel.Label, labelAttributes)
     }
-
+    
+    @if (!string.IsNullOrEmpty(viewModel.Hint))
+    {
+        <div class="editorHint @(DefaultBlockName)__editorHint">@viewModel.Hint</div>
+    }
+    
     <div class="@(DefaultBlockName)__selectContainer">
         @Html.DropDownList(viewModel.Name, viewModel.SelectList, dropdownAttributes)
     </div>
