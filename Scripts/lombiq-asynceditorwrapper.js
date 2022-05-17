@@ -92,8 +92,8 @@
 
         loadEditor: function (contentItemId, $editorPlaceholder) {
             var plugin = this;
-
-            if (!plugin.allowMultipleEditors && plugin.concurrentEditors > 0) {
+            
+            if (!plugin.settings.allowMultipleEditors && plugin.concurrentEditors > 0) {
                 alert(plugin.settings.multipleEditorsNotAllowedMessage);
 
                 return;
