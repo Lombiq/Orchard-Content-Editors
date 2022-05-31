@@ -47,19 +47,19 @@
             var $editorPlaceholder = plugin.element.find(plugin.settings.editorPlaceholderElementClass);
 
             if (plugin.settings.addNewItemActionElementClass) {
-                $(document).find(plugin.settings.addNewItemActionElementClass).on("click", function () {
+                $(document).on("click", plugin.settings.addNewItemActionElementClass, function () {
                     plugin.loadEditor($(this).attr("data-contentItemId"), $editorPlaceholder);
                 });
             }
 
             if (plugin.settings.editItemActionElementClass) {
-                plugin.element.find(plugin.settings.editItemActionElementClass).on("click", function () {
+                $(document).on("click", plugin.settings.editItemActionElementClass, function () {
                     plugin.loadEditor($(this).attr("data-contentItemId"), $editorPlaceholder);
                 });
             }
 
             if (plugin.settings.deleteItemActionElementClass) {
-                plugin.element.find(plugin.settings.deleteItemActionElementClass).on("click", function () {
+                $(document).on("click", plugin.settings.deleteItemActionElementClass, function () {
                     var contentItemId = $(this).attr("data-contentItemId");
                     if (plugin.settings.deleteItemConfirmationText) {
                         if (confirm(plugin.settings.deleteItemConfirmationText)) {
