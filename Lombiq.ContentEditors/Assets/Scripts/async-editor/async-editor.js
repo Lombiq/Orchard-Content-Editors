@@ -138,6 +138,7 @@ window.asyncEditor.editor = {
             }
         },
         processApiData(success, data) {
+
             const self = this;
 
             if (success) {
@@ -196,14 +197,26 @@ window.asyncEditor.editor = {
         isCurrentGroup(editorGroup) {
             return editorGroup === this.editorGroup;
         },
+        isFirstGroup(editorGroup) {
+            const self = this;
+
+            return self.editorGroups.at(0)?.name === (editorGroup ?? self.editorGroup);
+        },
         isLastGroup(editorGroup) {
             const self = this;
 
             return self.editorGroups.at(-1)?.name === (editorGroup ?? self.editorGroup);
         },
+        getPreviousEditor(editorGroup) {
+            const editorGroups = this.editorGroups.map((group) => group.name);
+            const index = editorGroups.indexOf(editorGroup ?? this.editorGroup);
+
+            return editorGroups[index - 1];
+        },
         getNextEditor(editorGroup) {
             const editorGroups = this.editorGroups.map((group) => group.name);
             const index = editorGroups.indexOf(editorGroup ?? this.editorGroup);
+
             return editorGroups[index + 1];
         },
     },
