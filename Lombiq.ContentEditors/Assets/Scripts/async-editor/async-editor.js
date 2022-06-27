@@ -137,8 +137,12 @@ window.asyncEditor.editor = {
                     (success, data) => { self.processApiData(success, data); });
             }
         },
+        // Look to change this to a more general method.
+        finishLicenseRequest() {
+            const self = this;
+            window.location.href = `/license-request/${self.contentId}/finished`;
+        },
         processApiData(success, data) {
-
             const self = this;
 
             if (success) {
@@ -167,6 +171,8 @@ window.asyncEditor.editor = {
             const query = { ...self.$route.query };
             query[self.asyncEditorId + '.contentId'] = self.contentId;
             query[self.asyncEditorId + '.editorGroup'] = self.editorGroup;
+
+            // push only conditionally? TBA
             router.push({ path: '/', query: query });
         },
         processQuery() {
@@ -218,7 +224,7 @@ window.asyncEditor.editor = {
             const index = editorGroups.indexOf(editorGroup ?? this.editorGroup);
 
             return editorGroups[index + 1];
-        },
+        }
     },
 };
 
