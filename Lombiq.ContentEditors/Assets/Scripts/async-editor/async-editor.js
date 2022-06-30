@@ -29,6 +29,14 @@ class AsyncEditorApiClient {
         })
             .then((response) => response.json())
             .then((data) => callback(true, data))
+            .then(() => {
+                const submittedEditorEvent = new CustomEvent('asyncEditorSubmittedEditor', {
+                    bubbles: true,
+                    cancelable: true,
+                    detail: { asyncEditor: window.asyncEditor }
+                });
+                document.dispatchEvent(submittedEditorEvent);
+            })
             .catch((error) => callback(false, error));
     }
 
@@ -136,11 +144,6 @@ window.asyncEditor.editor = {
                     new FormData(self.$refs.editorForm),
                     (success, data) => { self.processApiData(success, data); });
             }
-        },
-        // Look to change this to a more general method.
-        finishLicenseRequest() {
-            const self = this;
-            window.location.href = `/license-request/${self.contentId}/finished`;
         },
         processApiData(success, data) {
             const self = this;
