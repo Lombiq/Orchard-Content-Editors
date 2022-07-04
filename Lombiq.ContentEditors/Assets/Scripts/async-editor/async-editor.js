@@ -175,7 +175,6 @@ window.asyncEditor.editor = {
             query[self.asyncEditorId + '.contentId'] = self.contentId;
             query[self.asyncEditorId + '.editorGroup'] = self.editorGroup;
 
-            // push only conditionally? TBA
             router.push({ path: '/', query: query });
         },
         processQuery() {
