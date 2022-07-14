@@ -1881,7 +1881,7 @@
 			var $input = this.$control_input;
 			var changed = $input.val() !== value;
 			if (changed) {
-				$input.val(value).triggerHandler('update');
+				$input.triggerHandler('update');
 				this.lastValue = value;
 			}
 		},

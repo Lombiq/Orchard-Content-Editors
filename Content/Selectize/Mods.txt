@@ -1,1 +1,2 @@
 ﻿- Updated to use jQuery 3.6.
+- Updated the way of triggering the update handler in setTextboxValue
