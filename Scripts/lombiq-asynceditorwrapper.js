@@ -59,7 +59,7 @@
             }
 
             if (plugin.settings.deleteItemActionElementClass) {
-                $(document).on("click", plugin.settings.deleteItemActionElementClass, function () {
+                $(plugin.element).on("click", plugin.settings.deleteItemActionElementClass, function () {
                     var contentItemId = $(this).attr("data-contentItemId");
                     if (plugin.settings.deleteItemConfirmationText) {
                         if (confirm(plugin.settings.deleteItemConfirmationText)) {
