@@ -170,7 +170,6 @@
     <Content Include="Scripts\lombiq-asynceditorwrapper.js" />
     <Content Include="Content\Selectize\selectize.bootstrap3.css" />
     <Content Include="Content\Selectize\selectize.js" />
-    <Content Include="Content\Selectize\selectize.min.js" />
     <Content Include="Scripts\lombiq-connectedelementenabledstate.js" />
     <Content Include="Scripts\lombiq-connectedelementvisibility.js" />
     <Content Include="Scripts\lombiq-disableemptyforminputs.js" />

@@ -13,9 +13,7 @@ namespace Lombiq.ContentEditors
 
             manifest.DefineScript(iOS_StickyInputFocusOverride).SetUrl("lombiq-ios-stickyinputfocusoverride.js").SetDependencies(jQuery);
 
-            manifest.DefineScript(Selectize)
-                .SetUrl("../Content/Selectize/selectize.min.js", "../Content/Selectize/selectize.js")
-                .SetDependencies(jQuery, iOS_StickyInputFocusOverride);
+            manifest.DefineScript(Selectize).SetUrl("../Content/Selectize/selectize.js").SetDependencies(jQuery, iOS_StickyInputFocusOverride);
             manifest.DefineStyle(Selectize).SetUrl("../Content/Selectize/selectize.bootstrap3.css");
             manifest.DefineScript(Lombiq_SelectizeEditor).SetUrl("lombiq-selectizeeditor.js").SetDependencies(Selectize);
             manifest.DefineScript(Lombiq_DataTablesSelectizeInterop)

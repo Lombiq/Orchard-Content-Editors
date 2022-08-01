@@ -1883,6 +1883,11 @@
 			if (changed) {
 				$input.triggerHandler('update');
 				this.lastValue = value;
+				$input.val(value);
+
+				if (value === '') {
+					$input.val(' ');
+                }
 			}
 		},
 	
@@ -2890,8 +2895,16 @@
 		 */
 		positionDropdown: function() {
 			var $control = this.$control;
+			var controlOuterHeight = $control.outerHeight(true);
 			var offset = this.settings.dropdownParent === 'body' ? $control.offset() : $control.position();
-			offset.top += $control.outerHeight(true);
+
+			if (controlOuterHeight === 0) {
+				offset.top += $control.height() * -1;
+			}
+			else {
+				offset.top += controlOuterHeight;
+            }
+
 	
 			this.$dropdown.css({
 				width : String($control.outerWidth()),
