@@ -48,13 +48,13 @@
             var $editorPlaceholder = plugin.element.find(plugin.settings.editorPlaceholderElementClass);
 
             if (plugin.settings.addNewItemActionElementClass) {
-                $(document).on("click", plugin.settings.addNewItemActionElementClass, function () {
+                $(document).off("click", plugin.settings.addNewItemActionElementClass).on("click", plugin.settings.addNewItemActionElementClass, function () {
                     plugin.loadEditor($(this).attr("data-contentItemId"), $editorPlaceholder);
                 });
             }
 
             if (plugin.settings.editItemActionElementClass) {
-                $(document).on("click", plugin.settings.editItemActionElementClass, function () {
+                $(document).off("click", plugin.settings.editItemActionElementClass).on("click", plugin.settings.editItemActionElementClass, function () {
                     plugin.loadEditor($(this).attr("data-contentItemId"), $editorPlaceholder);
                 });
             }
@@ -80,7 +80,7 @@
             }
 
             if (plugin.settings.cancelButtonElementClass) {
-                $editorPlaceholder.on("click", plugin.settings.cancelButtonElementClass, function () {
+                $editorPlaceholder.off("click").on("click", plugin.settings.cancelButtonElementClass, function () {
                     $editorPlaceholder.html("").hide();
 
                     plugin.concurrentEditors--;
@@ -118,9 +118,9 @@
             }).done(function (data) {
                 if (data.Success) {
                     $editorPlaceholder.html($.parseHTML(data.EditorShape, true)).show();
-                    plugin.concurrentEditors++;
 
-                    var asyncEditorLoaderOptions = JSON.parse($("#" + data.AsyncEditorLoaderId + "options").val());
+                    var asyncEditorLoaderOptions = JSON.parse($("#" + data.AsyncEditorLoaderId + "options").val() ?? "{}");
+                    plugin.concurrentEditors++;
                     $("#" + data.AsyncEditorLoaderId).lombiq_AsyncEditor({
                         asyncEditorApiUrl: asyncEditorLoaderOptions.EditUrl,
                         contentType: asyncEditorLoaderOptions.ContentType,
