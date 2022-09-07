@@ -48,15 +48,19 @@
             var $editorPlaceholder = plugin.element.find(plugin.settings.editorPlaceholderElementClass);
 
             if (plugin.settings.addNewItemActionElementClass) {
-                $(document).off("click", plugin.settings.addNewItemActionElementClass).on("click", plugin.settings.addNewItemActionElementClass, function () {
-                    plugin.loadEditor($(this).attr("data-contentItemId"), $editorPlaceholder);
-                });
+                $(document)
+                    .off("click", plugin.settings.addNewItemActionElementClass)
+                    .on("click", plugin.settings.addNewItemActionElementClass, function () {
+                        plugin.loadEditor($(this).attr("data-contentItemId"), $editorPlaceholder);
+                    });
             }
 
             if (plugin.settings.editItemActionElementClass) {
-                $(document).off("click", plugin.settings.editItemActionElementClass).on("click", plugin.settings.editItemActionElementClass, function () {
-                    plugin.loadEditor($(this).attr("data-contentItemId"), $editorPlaceholder);
-                });
+                $(document)
+                    .off("click", plugin.settings.editItemActionElementClass)
+                    .on("click", plugin.settings.editItemActionElementClass, function () {
+                        plugin.loadEditor($(this).attr("data-contentItemId"), $editorPlaceholder);
+                    });
             }
 
             if (plugin.settings.deleteItemActionElementClass) {
