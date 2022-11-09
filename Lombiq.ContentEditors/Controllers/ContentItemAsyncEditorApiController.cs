@@ -27,15 +27,15 @@ public class ContentItemAsyncEditorApiController : Controller
     }
 
     [HttpGet]
-    public async Task<ActionResult<RenderedAsyncEditorGroupDto>> Get([FromQuery] RenderAsyncEditorDto dto)
+    public async Task<ActionResult<RenderedAsyncEditorGroupDto>> Get([FromQuery] RenderAsyncEditorDto request)
     {
-        var provider = GetProvider(dto.ProviderName);
+        var provider = GetProvider(request.ProviderName);
         if (provider == null) return NotFound();
 
-        var item = await _contentManager.GetOrCreateAsync(dto.ContentId, dto.ContentType, VersionOptions.Latest);
+        var item = await _contentManager.GetOrCreateAsync(request.ContentId, request.ContentType, VersionOptions.Latest);
         if (item == null) return NotFound();
 
-        var context = PopulateContext(dto, item);
+        var context = PopulateContext(request, item);
         if (!await provider.CanRenderEditorGroupAsync(context)) return NotFound();
 
         return await AsyncEditorResultAsync(context, provider);
@@ -43,21 +43,21 @@ public class ContentItemAsyncEditorApiController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<ActionResult> Post([FromQuery] SubmitAsyncEditorDto dto)
+    public async Task<ActionResult> Post([FromQuery] SubmitAsyncEditorDto request)
     {
-        var provider = GetProvider(dto.ProviderName);
+        var provider = GetProvider(request.ProviderName);
         if (provider == null) return NotFound();
 
-        var item = await _contentManager.GetOrCreateAsync(dto.ContentId, dto.ContentType, VersionOptions.Latest);
+        var item = await _contentManager.GetOrCreateAsync(request.ContentId, request.ContentType, VersionOptions.Latest);
         if (item == null) return NotFound();
 
-        var context = PopulateContext(dto, item);
+        var context = PopulateContext(request, item);
         if (!await provider.CanRenderEditorGroupAsync(context)) return NotFound();
 
         var result = await provider.UpdateEditorAsync(context);
         if (!result.ModelState.IsValid ||
-            string.IsNullOrEmpty(dto.NextEditorGroup) ||
-            dto.NextEditorGroup == dto.EditorGroup)
+            string.IsNullOrEmpty(request.NextEditorGroup) ||
+            request.NextEditorGroup == request.EditorGroup)
         {
             return await AsyncEditorResultAsync(
                 context,
@@ -66,7 +66,7 @@ public class ContentItemAsyncEditorApiController : Controller
                 message: result.Message);
         }
 
-        var nextEditorContext = PopulateContext(dto, item, dto.NextEditorGroup);
+        var nextEditorContext = PopulateContext(request, item, request.NextEditorGroup);
         return await AsyncEditorResultAsync(
             !await provider.CanRenderEditorGroupAsync(nextEditorContext) ? context : nextEditorContext,
             provider,
@@ -77,14 +77,14 @@ public class ContentItemAsyncEditorApiController : Controller
         _providers.FirstOrDefault(provider => provider.Name == name);
 
     private static AsyncEditorContext<ContentItem> PopulateContext(
-        RenderAsyncEditorDto dto,
+        RenderAsyncEditorDto request,
         ContentItem contentItem,
         string editorGroup = null) =>
         new()
         {
             Content = contentItem,
-            EditorGroup = editorGroup ?? dto.EditorGroup,
-            AsyncEditorId = dto.AsyncEditorId,
+            EditorGroup = editorGroup ?? request.EditorGroup,
+            AsyncEditorId = request.AsyncEditorId,
         };
 
     private async Task<ViewResult> AsyncEditorResultAsync(
