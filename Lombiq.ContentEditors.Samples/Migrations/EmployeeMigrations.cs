@@ -17,17 +17,17 @@ public class EmployeeMigrations : DataMigration
 
     public int Create()
     {
-        _contentDefinitionManager.AlterPartDefinition(nameof(EmployeePart), part => part
-            .WithField(nameof(EmployeePart.Name), ConfigureField<TextField>(name: "Name"))
-            .WithField(nameof(EmployeePart.Position), ConfigureField<TextField>(name: "Position"))
-            .WithField(nameof(EmployeePart.Office), ConfigureField<TextField>(name: "Office Location"))
-            .WithField(nameof(EmployeePart.Age), ConfigureField<NumericField>(name: "Age"))
-            .WithField(nameof(EmployeePart.StartDate), ConfigureField<DateField>(name: "Start Date"))
-            .WithField(nameof(EmployeePart.Salary), ConfigureField<NumericField>(name: "Salary")));
+        _contentDefinitionManager.AlterPartDefinition(nameof(AsyncEditorEmployeePart), part => part
+            .WithField(nameof(AsyncEditorEmployeePart.Name), ConfigureField<TextField>(name: "Name"))
+            .WithField(nameof(AsyncEditorEmployeePart.Position), ConfigureField<TextField>(name: "Position"))
+            .WithField(nameof(AsyncEditorEmployeePart.Office), ConfigureField<TextField>(name: "Office Location"))
+            .WithField(nameof(AsyncEditorEmployeePart.Age), ConfigureField<NumericField>(name: "Age"))
+            .WithField(nameof(AsyncEditorEmployeePart.StartDate), ConfigureField<DateField>(name: "Start Date"))
+            .WithField(nameof(AsyncEditorEmployeePart.Salary), ConfigureField<NumericField>(name: "Salary")));
 
         _contentDefinitionManager.AlterTypeDefinition(Employee, type => type
             .Listable()
-            .WithPart(nameof(EmployeePart)));
+            .WithPart(nameof(AsyncEditorEmployeePart)));
 
         return 1;
     }
