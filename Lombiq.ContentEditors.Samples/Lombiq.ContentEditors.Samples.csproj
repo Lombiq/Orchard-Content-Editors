@@ -1,31 +1,48 @@
 <Project Sdk="Microsoft.NET.Sdk.Razor">
 
-    <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
-        <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
-        <DefaultItemExcludes>$(DefaultItemExcludes);.git*;node_modules\**;Tests\**</DefaultItemExcludes>
-    </PropertyGroup>
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+    <DefaultItemExcludes>$(DefaultItemExcludes);.git*;node_modules\**;Tests\**</DefaultItemExcludes>
+  </PropertyGroup>
 
-    <Import Condition="'$(NuGetBuild)' != 'true'" Project="..\..\..\Utilities\Lombiq.Npm.Targets\Lombiq.Npm.Targets.props" />
-    <Import Condition="'$(NuGetBuild)' != 'true'" Project="..\..\..\Utilities\Lombiq.Npm.Targets\Lombiq.Npm.Targets.targets" />
-    <Import Condition="'$(NuGetBuild)' != 'true'" Project="..\..\..\Utilities\Lombiq.Gulp.Extensions\Lombiq.Gulp.Extensions.targets" />
+  <PropertyGroup>
+    <Title>Lombiq Content Editors for Orchard Core - Samples</Title>
+    <Authors>Lombiq Technologies</Authors>
+    <Copyright>Copyright © 2022, Lombiq Technologies Ltd.</Copyright>
+    <Description>Lombiq Content Editors for Orchard Core - Samples: Sample content that demonstrates the features of Lombiq Content Editors for Orchard Core.</Description>
+    <PackageIcon>NuGetIcon.png</PackageIcon>
+    <PackageTags>OrchardCore;Lombiq;AspNetCore</PackageTags>
+    <RepositoryUrl>https://github.com/Lombiq/Orchard-Content-Editors</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/Lombiq/Orchard-Content-Editors</PackageProjectUrl>
+    <PackageLicenseFile>License.md</PackageLicenseFile>
+  </PropertyGroup>
 
-    <ItemGroup>
-        <None Remove="node_modules\**" />
-        <None Remove="Tests\**" />
-    </ItemGroup>
+  <ItemGroup>
+    <None Include="License.md" Pack="true" PackagePath="" />
+    <None Include="NuGetIcon.png" Pack="true" PackagePath="" />
+  </ItemGroup>
 
-    <ItemGroup>
-        <FrameworkReference Include="Microsoft.AspNetCore.App" />
-    </ItemGroup>
+  <Import Condition="'$(NuGetBuild)' != 'true'" Project="..\..\..\Utilities\Lombiq.Npm.Targets\Lombiq.Npm.Targets.props"/>
+  <Import Condition="'$(NuGetBuild)' != 'true'" Project="..\..\..\Utilities\Lombiq.Npm.Targets\Lombiq.Npm.Targets.targets"/>
+  <Import Condition="'$(NuGetBuild)' != 'true'" Project="..\..\..\Utilities\Lombiq.Gulp.Extensions\Lombiq.Gulp.Extensions.targets"/>
 
-    <ItemGroup>
-        <PackageReference Include="OrchardCore.Module.Targets" Version="1.4.0" />
-        <PackageReference Include="OrchardCore.Contents" Version="1.4.0" />
-    </ItemGroup>
+  <ItemGroup>
+    <None Remove="node_modules\**"/>
+    <None Remove="Tests\**"/>
+  </ItemGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\Lombiq.ContentEditors\Lombiq.ContentEditors.csproj" />
-    </ItemGroup>
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="OrchardCore.Module.Targets" Version="1.4.0"/>
+    <PackageReference Include="OrchardCore.Contents" Version="1.4.0"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Lombiq.ContentEditors\Lombiq.ContentEditors.csproj"/>
+  </ItemGroup>
 
 </Project>

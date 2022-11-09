@@ -4,3 +4,4 @@ bin/
 # Temporarily adding wwwroot to the version control.
 # wwwroot/
 node_modules/
+.idea

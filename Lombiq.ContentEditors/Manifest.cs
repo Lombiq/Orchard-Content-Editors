@@ -4,7 +4,7 @@ using OrchardCore.Modules.Manifest;
 [assembly: Module(
     Name = "Lombiq Content Editors",
     Author = "Lombiq Technologies",
-    Version = "1.0",
+    Version = "0.0.1",
     Website = "https://github.com/Lombiq/Orchard-Content-Editors"
 )]
 
