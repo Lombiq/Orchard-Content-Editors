@@ -43,7 +43,7 @@ public class ContentItemAsyncEditorApiController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<ActionResult> Post([FromQuery] SubmitAsyncEditorDto request)
+    public async Task<ActionResult> Post([FromQuery] SubmitAsyncEditorRequest request)
     {
         var provider = GetProvider(request.ProviderName);
         if (provider == null) return NotFound();
