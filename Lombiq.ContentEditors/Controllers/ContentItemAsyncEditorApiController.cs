@@ -27,7 +27,7 @@ public class ContentItemAsyncEditorApiController : Controller
     }
 
     [HttpGet]
-    public async Task<ActionResult<RenderedAsyncEditorGroupDto>> Get([FromQuery] RenderAsyncEditorDto request)
+    public async Task<ActionResult<RenderedAsyncEditorGroupRequest>> Get([FromQuery] RenderAsyncEditorRequest request)
     {
         var provider = GetProvider(request.ProviderName);
         if (provider == null) return NotFound();
@@ -77,7 +77,7 @@ public class ContentItemAsyncEditorApiController : Controller
         _providers.FirstOrDefault(provider => provider.Name == name);
 
     private static AsyncEditorContext<ContentItem> PopulateContext(
-        RenderAsyncEditorDto request,
+        RenderAsyncEditorRequest request,
         ContentItem contentItem,
         string editorGroup = null) =>
         new()
@@ -99,11 +99,11 @@ public class ContentItemAsyncEditorApiController : Controller
 
         // Return ViewResult instead of simple Ok because the ModelState is not accessible in ad-hoc shapes hence
         // the validation summary wouldn't be rendered otherwise. Adding the validation summary HTML in the view.
-        return View("Result", new RenderedAsyncEditorGroupDto
+        return View("Result", new RenderedAsyncEditorGroupRequest
         {
             ContentId = !context.Content.IsNew() ? context.Content.ContentItemId : null,
             EditorGroup = editorGroup ?? context.EditorGroup,
-            EditorGroups = await Task.WhenAll(editorGroups.Select(async group => new AsyncEditorGroupDto
+            EditorGroups = await Task.WhenAll(editorGroups.Select(async group => new AsyncEditorGroupRequest
             {
                 Name = group.Name,
                 DisplayText = group.DisplayText,
