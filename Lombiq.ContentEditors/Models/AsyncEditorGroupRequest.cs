@@ -1,4 +1,4 @@
-namespace Lombiq.ContentEditors.Dtos;
+namespace Lombiq.ContentEditors.Models;
 
 public class AsyncEditorGroupRequest
 {

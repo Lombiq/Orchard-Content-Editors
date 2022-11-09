@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Lombiq.ContentEditors.Dtos;
+namespace Lombiq.ContentEditors.Models;
 
 public class RenderedAsyncEditorGroupRequest
 {

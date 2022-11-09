@@ -1,5 +1,4 @@
 using Lombiq.ContentEditors.Constants;
-using Lombiq.ContentEditors.Dtos;
 using Lombiq.ContentEditors.Models;
 using Lombiq.ContentEditors.Services;
 using Microsoft.AspNetCore.Mvc;
