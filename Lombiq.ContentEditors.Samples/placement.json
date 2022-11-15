@@ -1,31 +1,31 @@
 {
   "TextField_Edit": [
     {
-      "differentiator": "EmployeePart-Name",
+      "differentiator": "AsyncEditorEmployeePart-Name",
       "place": "Content:1@PersonalDetails"
     },
     {
-      "differentiator": "EmployeePart-Position",
+      "differentiator": "AsyncEditorEmployeePart-Position",
       "place": "Content:2@PersonalDetails"
     },
     {
-      "differentiator": "EmployeePart-Age",
+      "differentiator": "AsyncEditorEmployeePart-Age",
       "place": "Content:3@PersonalDetails"
     },
     {
-      "differentiator": "EmployeePart-Position",
+      "differentiator": "AsyncEditorEmployeePart-Position",
       "place": "Content:1@EmploymentDetails"
     },
     {
-      "differentiator": "EmployeePart-Office",
+      "differentiator": "AsyncEditorEmployeePart-Office",
       "place": "Content:2@EmploymentDetails"
     },
     {
-      "differentiator": "EmployeePart-StartDate",
+      "differentiator": "AsyncEditorEmployeePart-StartDate",
       "place": "Content:3@EmploymentDetails"
     },
     {
-      "differentiator": "EmployeePart-Salary",
+      "differentiator": "AsyncEditorEmployeePart-Salary",
       "place": "Content:4@EmploymentDetails"
     }
   ]
