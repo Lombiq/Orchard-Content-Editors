@@ -19,7 +19,7 @@ public class Startup : StartupBase
     public override void ConfigureServices(IServiceCollection services)
     {
         services
-            .AddContentPart<EmployeePart>()
+            .AddContentPart<AsyncEditorEmployeePart>()
             .WithMigration<EmployeeMigrations>()
             .WithAsyncEditor<EmployeeAsyncEditorProvider>();
 
