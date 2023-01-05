@@ -17,6 +17,11 @@
 
                 return true; // To ensure that the form still submits.
             });
+
+            // Un-disable form fields when page loads, in case they click back after submission.
+            element.find(":input").filter(function () {
+                return !this.value && !$(this).is("[dontdisableifempty]");
+            }).prop("disabled", false);
         });
     };
 }(jQuery));
