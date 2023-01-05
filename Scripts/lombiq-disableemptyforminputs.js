@@ -11,16 +11,16 @@
             if (element.prop("tagName") !== "FORM") return;
 
             element.on("submit", function () {
-                element.find(":input").filter(function () {
-                    return !this.value && !$(this).is("[dontdisableifempty]");
+                element.find(":input:not([dontdisableifempty])").filter(function () {
+                    return !this.value;
                 }).attr("disabled", "disabled");
 
                 return true; // To ensure that the form still submits.
             });
 
             // Un-disable form fields when page loads, in case they click back after submission.
-            element.find(":input").filter(function () {
-                return !this.value && !$(this).is("[dontdisableifempty]");
+            element.find(":input:not([dontdisableifempty])").filter(function () {
+                return !this.value;
             }).prop("disabled", false);
         });
     };
