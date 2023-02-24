@@ -80,8 +80,10 @@
                     $itemsToHide.hide();
 
                 }).on("keyup search", function () {
-                    $(this).trigger("change");
-                    reevaluateSelectAllState($(this).parents(plugin.settings.searchFilterContainerElementClass).next(plugin.settings.controlGroupElementClass));
+                    setTimeout(() => {
+                        $(this).trigger("change");
+                        reevaluateSelectAllState($(this).parents(plugin.settings.searchFilterContainerElementClass).next(plugin.settings.controlGroupElementClass));
+                    }, 0);
                 });
             }
 
