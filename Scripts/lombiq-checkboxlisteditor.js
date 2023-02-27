@@ -80,6 +80,7 @@
                     $itemsToHide.hide();
 
                 }).on("keyup search", function () {
+                    // Workaround for a race condition: https://stackoverflow.com/a/779785/2883185.
                     setTimeout(() => {
                         $(this).trigger("change");
                         reevaluateSelectAllState($(this).parents(plugin.settings.searchFilterContainerElementClass).next(plugin.settings.controlGroupElementClass));
