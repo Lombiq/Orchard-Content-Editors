@@ -7,10 +7,6 @@ specifiers:
   eslint-plugin-node: ^11.1.0
   eslint-plugin-only-warn: ^1.0.3
   eslint-plugin-promise: ^6.1.0
-  vue-router: 3.5.3
-
-dependencies:
-  vue-router: 3.5.3
 
 devDependencies:
   eslint: 8.35.0
@@ -1230,10 +1226,6 @@ packages:
     dependencies:
       punycode: 2.3.0
     dev: true
-
-  /vue-router/3.5.3:
-    resolution: {integrity: sha512-FUlILrW3DGitS2h+Xaw8aRNvGTwtuaxrRkNSHWTizOfLUie7wuYwezeZ50iflRn8YPV5kxmU2LQuu3nM/b3Zsg==}
-    dev: false
 
   /which-boxed-primitive/1.0.2:
     resolution: {integrity: sha512-bwZdv0AKLpplFY2KZRX6TvyuN7ojjr7lwkg6ml0roIy9YeuSr7JS372qlNW18UQYzgYK9ziGcerWqZOmEn9VNg==}

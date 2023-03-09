@@ -1,6 +1,7 @@
 obj/
 bin/
 *.user
-# Temporarily adding wwwroot to the version control.
-# wwwroot/
+.vs/
+wwwroot/
 node_modules/
+.*.js
