@@ -98,6 +98,7 @@ window.asyncEditor.editor = {
                 .parseFromString(self.scriptsHtml, 'text/html')
                 .getElementsByTagName('script');
             for (let i = 0; i < scripts.length; i++) {
+                // eslint-disable-next-line no-eval
                 window.eval(scripts[i].text);
             }
 
@@ -225,7 +226,7 @@ window.asyncEditor.editor = {
             const index = editorGroups.indexOf(editorGroup ?? this.editorGroup);
 
             return editorGroups[index + 1];
-        }
+        },
     },
 };
 
