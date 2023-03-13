@@ -6,3 +6,4 @@ wwwroot/
 node_modules/
 .eslintrc.js
 .stylelintrc.js
+pnpm-lock.yaml
