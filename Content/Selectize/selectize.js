@@ -1,4 +1,4 @@
-/**
+﻿/**
  * sifter.js
  * Copyright (c) 2013–2020 Brian Reavis & contributors
  * Copyright (c) 2022 Selectize Team & contributors
@@ -634,8 +634,11 @@
 //}));
 
 /**
- * selectize.js (v0.12.4)
- * Copyright (c) 2013–2015 Brian Reavis & contributors
+* Selectize (v0.15.2)
+ * https://selectize.dev
+ *
+ * Copyright (c) 2013-2015 Brian Reavis & contributors
+ * Copyright (c) 2020-2022 Selectize Team & contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at:
@@ -647,21 +650,29 @@
  * governing permissions and limitations under the License.
  *
  * @author Brian Reavis <brian@thirdroute.com>
+ * @author Ris Adams <selectize@risadams.com>											 
  */
 
 /*jshint curly:false */
 /*jshint browser:true */
 
-(function(root, factory) {
-	if (typeof define === 'function' && define.amd) {
-		define('selectize', ['jquery','sifter','microplugin'], factory);
-	} else if (typeof exports === 'object') {
-		module.exports = factory(require('jquery'), require('sifter'), require('microplugin'));
-	} else {
-		root.Selectize = factory(root.jQuery, root.Sifter, root.MicroPlugin);
-	}
-}(this, function($, Sifter, MicroPlugin) {
-	'use strict';
+(function (root, factory) {
+  if (typeof define === 'function' && define.amd) {
+    define(['jquery'], factory);
+  } else if (typeof module === 'object' && typeof module.exports === 'object') {
+    module.exports = factory(require('jquery'));
+  } else {
+    root.Selectize = factory(root.jQuery);
+  }
+}(this, function ($) {
+  'use strict';
+/**
+ * highlight v3 | MIT license | Johann Burkard <jb@eaio.com>
+ * Highlights arbitrary terms in a node.
+ *
+ * - Modified by Marshal <beatgates@gmail.com> 2011-6-24 (added regex)
+ * - Modified by Brian Reavis <brian@thirdroute.com> 2012-8-27 (cleanup)
+ */
 
 	var highlight = function($element, pattern) {
 		if (typeof pattern === 'string' && !pattern.length) return;
@@ -669,6 +680,8 @@
 	
 		var highlight = function(node) {
 			var skip = 0;
+    // Wrap matching part of text node with highlighting <span>, e.g.
+    // Soccer  ->  <span class="highlight">Soc</span>cer  for regex = /soc/i
 			if (node.nodeType === 3) {
 				var pos = node.data.search(regex);
 				if (pos >= 0 && node.data.length > 0) {
@@ -681,8 +694,10 @@
 					spannode.appendChild(middleclone);
 					middlebit.parentNode.replaceChild(spannode, middlebit);
 					skip = 1;
-				}
-			} else if (node.nodeType === 1 && node.childNodes && !/(script|style)/i.test(node.tagName)) {
+    }
+    // Recurse element node, looking for child text nodes to highlight, unless element
+    // is childless, <script>, <style>, or already highlighted: <span class="highlight">
+    else if (node.nodeType === 1 && node.childNodes && !/(script|style)/i.test(node.tagName) && (node.className !== 'highlight' || node.tagName !== 'SPAN')) {
 				for (var i = 0; i < node.childNodes.length; ++i) {
 					i += highlight(node.childNodes[i]);
 				}
@@ -708,7 +723,15 @@
 		}).end();
 	};
 	
-	
+/**
+ * MicroEvent - to make any js object an event emitter
+ *
+ * - pure javascript - server compatible, browser compatible
+ * - don't rely on the browser doms
+ * - super simple - you get it immediately, no mystery, no magic involved
+ *
+ * @author Jerome Etienne (https://github.com/jeromeetienne)
+ */
 	var MicroEvent = function() {};
 	MicroEvent.prototype = {
 		on: function(event, fct){
@@ -726,10 +749,10 @@
 			this._events[event].splice(this._events[event].indexOf(fct), 1);
 		},
 		trigger: function(event /* , args... */){
-			this._events = this._events || {};
-			if (event in this._events === false) return;
-			for (var i = 0; i < this._events[event].length; i++){
-				this._events[event][i].apply(this, Array.prototype.slice.call(arguments, 1));
+			const events = this._events = this._events || {};
+			if (event in events === false) return;
+			for (var i = 0; i < events[event].length; i++) {
+			  events[event][i].apply(this, Array.prototype.slice.call(arguments, 1));
 			}
 		}
 	};
@@ -748,8 +771,15 @@
 		}
 	};
 	
-	var IS_MAC        = /Mac/.test(navigator.userAgent);
-	
+function uaDetect(platform, re) {
+  if (navigator.userAgentData) {
+    return platform === navigator.userAgentData.platform;
+  }
+
+  return re.test(navigator.userAgent);
+}
+
+	var IS_MAC        = uaDetect("macOS", /Mac/);
 	var KEY_A         = 65;
 	var KEY_COMMA     = 188;
 	var KEY_RETURN    = 13;
@@ -771,9 +801,15 @@
 	var TAG_INPUT     = 2;
 	
 	// for now, android support in general is too spotty to support validity
-	var SUPPORTS_VALIDITY_API = !/android/i.test(window.navigator.userAgent) && !!document.createElement('input').validity;
-	
-	
+var SUPPORTS_VALIDITY_API = !uaDetect("Android", /android/i) && !!document.createElement('input').validity;
+ 
+
+/**
+ * Determines if the provided value has been defined.
+ *
+ * @param {mixed} object
+ * @returns {boolean}
+ */
 	var isset = function(object) {
 		return typeof object !== 'undefined';
 	};
@@ -957,8 +993,12 @@
 	 * @param {object} input
 	 * @returns {object}
 	 */
-	var getSelection = function(input) {
-		var result = {};
+var getInputSelection = function (input) {
+  var result = {};
+  if (input === undefined) {
+    console.warn('WARN getInputSelection cannot locate input control');
+    return result;
+  }
 		if ('selectionStart' in input) {
 			result.start = input.selectionStart;
 			result.length = input.selectionEnd - result.start;
@@ -1005,16 +1045,25 @@
 			return 0;
 		}
 	
-		var $test = $('<test>').css({
-			position: 'absolute',
-			top: '-99999',
-			left: '-99999',
-			width: 'auto',
-			padding: '0',
-			whiteSpace: 'pre'
-		}).text(str).appendTo('body');
-	
-		transferStyles($parent, $test, [
+  if (!Selectize.$testInput) {
+    Selectize.$testInput = $('<span />').css({
+      position: 'absolute',
+      width: 'auto',
+      padding: 0,
+      whiteSpace: 'pre'
+    });
+
+    $('<div />').css({
+      position: 'absolute',
+      width: 0,
+      height: 0,
+      overflow: 'hidden'
+    }).append(Selectize.$testInput).appendTo('body');
+  }
+
+  Selectize.$testInput.text(str);
+
+  transferStyles($parent, Selectize.$testInput, [
 			'letterSpacing',
 			'fontSize',
 			'fontFamily',
@@ -1022,11 +1071,8 @@
 			'textTransform'
 		]);
 	
-		var width = $test.width();
-		$test.remove();
-	
-		return width;
-	};
+  return Selectize.$testInput.width();
+};
 	
 	/**
 	 * Sets up an input to grow horizontally as the user
@@ -1040,6 +1086,7 @@
 	var autoGrow = function($input) {
 		var currentWidth = null;
 	
+		var update = function(e, options) {
 		var update = function(e, options) {
 			var value, keyCode, printable, placeholder, width;
 			var shift, character, selection;
