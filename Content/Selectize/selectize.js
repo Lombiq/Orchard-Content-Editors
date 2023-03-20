@@ -1,6 +1,7 @@
 /**
  * sifter.js
- * Copyright (c) 2013 Brian Reavis & contributors
+ * Copyright (c) 2013–2020 Brian Reavis & contributors
+ * Copyright (c) 2022 Selectize Team & contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at:
@@ -10,19 +11,18 @@
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- *
- * @author Brian Reavis <brian@thirdroute.com>
+ * @author Brian Reavis <brian@thirdroute.com> * @author Ris Adams <selectize@risadams.com>
  */
 
-(function(root, factory) {
-	if (typeof define === 'function' && define.amd) {
-		define('sifter', factory);
-	} else if (typeof exports === 'object') {
-		module.exports = factory();
-	} else {
-		root.Sifter = factory();
-	}
-}(this, function() {
+//(function(root, factory) {
+//	if (typeof define === 'function' && define.amd) {
+//		define('sifter', factory);
+//	} else if (typeof exports === 'object') {
+//		module.exports = factory();
+//	} else {
+//		root.Sifter = factory();
+//	}
+//}(this, function() {
 
 	/**
 	 * Textually searches arrays and hashes of objects
@@ -45,7 +45,7 @@
 	 * @param {string} query
 	 * @returns {array}
 	 */
-	Sifter.prototype.tokenize = function(query) {
+	Sifter.prototype.tokenize = function (query, respect_word_boundaries) {
 		query = trim(String(query || '').toLowerCase());
 		if (!query || !query.length) return [];
 
@@ -62,6 +62,7 @@
 					}
 				}
 			}
+    if (respect_word_boundaries) regex = "\\b" + regex	
 			tokens.push({
 				string : words[i],
 				regex  : new RegExp(regex, 'i')
@@ -318,7 +319,7 @@
 		return {
 			options : options,
 			query   : String(query || '').toLowerCase(),
-			tokens  : this.tokenize(query),
+			tokens: this.tokenize(query, options.respect_word_boundaries),
 			total   : 0,
 			items   : []
 		};
@@ -496,11 +497,9 @@
 	return Sifter;
 }));
 
-
-
 /**
  * microplugin.js
- * Copyright (c) 2013 Brian Reavis & contributors
+ * Copyright (c) 2013 Brian Reavis & contributors * Copyright (c) 2022 Selectize Team & contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at:
@@ -511,18 +510,18 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  *
- * @author Brian Reavis <brian@thirdroute.com>
+ * @author Brian Reavis <brian@thirdroute.com>  * @author Ris Adams <selectize@risadams.com>
  */
 
-(function(root, factory) {
-	if (typeof define === 'function' && define.amd) {
-		define('microplugin', factory);
-	} else if (typeof exports === 'object') {
-		module.exports = factory();
-	} else {
-		root.MicroPlugin = factory();
-	}
-}(this, function() {
+//(function(root, factory) {
+//	if (typeof define === 'function' && define.amd) {
+//		define('microplugin', factory);
+//	} else if (typeof exports === 'object') {
+//		module.exports = factory();
+//	} else {
+//		root.MicroPlugin = factory();
+//	}
+//}(this, function() {
 	var MicroPlugin = {};
 
 	MicroPlugin.mixin = function(Interface) {
@@ -631,8 +630,8 @@
 		}
 	};
 
-	return MicroPlugin;
-}));
+//	return MicroPlugin;
+//}));
 
 /**
  * selectize.js (v0.12.4)
