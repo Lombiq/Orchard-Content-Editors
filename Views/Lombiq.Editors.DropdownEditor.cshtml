@@ -19,16 +19,28 @@
         { "class", "form-control dropdown " + DefaultBlockName + "__dropdown" }
     });
 
-    var labelAttributes = new Dictionary<string, object>
+    @* Label init *@
+    var labelAttributes = new Dictionary<string, object>();
+    var hasLabel = !string.IsNullOrEmpty(viewModel.Label);
+    if (hasLabel)
     {
-        { "class", "editorLabel " + DefaultBlockName + "__label" }
-    };
+        labelAttributes["class"] = $"editorLabel {DefaultBlockName}__label";
+
+        if (!string.IsNullOrEmpty(viewModel.Tooltip))
+        {
+            labelAttributes["class"] += " hasTooltip";
+        }
+    }
 
     if (viewModel.Required)
     {
         dropdownAttributes["required"] = true;
-        dropdownAttributes["class"] = dropdownAttributes["class"] + " required";
-        labelAttributes["class"] = labelAttributes["class"] + " required";
+        dropdownAttributes["class"] += " required";
+
+        if (hasLabel)
+        {
+            labelAttributes["class"] += " required";   
+        }
     }
 
     if (viewModel.Disabled)
@@ -66,10 +78,13 @@
 }
 
 <div class="editor editorField form-group @DefaultBlockName @BlockName">
-    @if (!string.IsNullOrEmpty(viewModel.Label))
+    @if (hasLabel)
     {
         @Html.Label(viewModel.Label, labelAttributes)
     }
+    
+    @Display.Lombiq_Tooltip(Text: viewModel.Tooltip)
+
     <div class="@(DefaultBlockName)__selectContainer">
         @Html.DropDownList(viewModel.Name, viewModel.SelectList, dropdownAttributes)
     </div>
