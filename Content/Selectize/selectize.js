@@ -14,16 +14,6 @@
  * @author Brian Reavis <brian@thirdroute.com> * @author Ris Adams <selectize@risadams.com>
  */
 
-//(function(root, factory) {
-//	if (typeof define === 'function' && define.amd) {
-//		define('sifter', factory);
-//	} else if (typeof exports === 'object') {
-//		module.exports = factory();
-//	} else {
-//		root.Sifter = factory();
-//	}
-//}(this, function() {
-
 	/**
 	 * Textually searches arrays and hashes of objects
 	 * by property (or multiple properties). Designed
@@ -513,15 +503,6 @@
  * @author Brian Reavis <brian@thirdroute.com>  * @author Ris Adams <selectize@risadams.com>
  */
 
-//(function(root, factory) {
-//	if (typeof define === 'function' && define.amd) {
-//		define('microplugin', factory);
-//	} else if (typeof exports === 'object') {
-//		module.exports = factory();
-//	} else {
-//		root.MicroPlugin = factory();
-//	}
-//}(this, function() {
 	var MicroPlugin = {};
 
 	MicroPlugin.mixin = function(Interface) {
@@ -630,9 +611,6 @@
 		}
 	};
 
-//	return MicroPlugin;
-//}));
-
 /**
 * Selectize (v0.15.2)
  * https://selectize.dev
@@ -657,15 +635,15 @@
 /*jshint browser:true */
 
 (function (root, factory) {
-  if (typeof define === 'function' && define.amd) {
-    define(['jquery'], factory);
-  } else if (typeof module === 'object' && typeof module.exports === 'object') {
-    module.exports = factory(require('jquery'));
-  } else {
-    root.Selectize = factory(root.jQuery);
-  }
+		if (typeof define === 'function' && define.amd) {
+			define(['jquery'], factory);
+		} else if (typeof module === 'object' && typeof module.exports === 'object') {
+			module.exports = factory(require('jquery'));
+		} else {
+			root.Selectize = factory(root.jQuery);
+		}
 }(this, function ($) {
-  'use strict';
+		'use strict';
 /**
  * highlight v3 | MIT license | Johann Burkard <jb@eaio.com>
  * Highlights arbitrary terms in a node.
