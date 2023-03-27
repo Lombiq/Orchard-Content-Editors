@@ -1100,15 +1100,14 @@ var getInputSelection = function (input) {
 			if (e.type && e.type.toLowerCase() === 'keydown') {
 				keyCode = e.keyCode;
 				printable = (
-        (keyCode >= 48 && keyCode <= 57) || // 0-9
-        (keyCode >= 65 && keyCode <= 90) || // a-z
-        (keyCode >= 96 && keyCode <= 111) || // numpad 0-9, numeric operators
-        (keyCode >= 186 && keyCode <= 222) || // semicolon, equal, comma, dash, etc.
-        keyCode === 32 // space
-																					
+					(keyCode >= 96 && keyCode <= 111) || // numpad 0-9, numeric operators
+					(keyCode >= 65 && keyCode <= 90) || // a-z
+					(keyCode >= 48 && keyCode <= 57) || // 0-9        
+					(keyCode >= 186 && keyCode <= 222) || // semicolon, equal, comma, dash, etc.
+					keyCode === 32 // space																					
 							   
 				if (keyCode === KEY_DELETE || keyCode === KEY_BACKSPACE) {
-        selection = getInputSelection($input[0]);
+					selection = getInputSelection($input[0]);
 					if (selection.length) {
 						value = value.substring(0, selection.start) + value.substring(selection.start + selection.length);
 					} else if (keyCode === KEY_BACKSPACE && selection.start) {
