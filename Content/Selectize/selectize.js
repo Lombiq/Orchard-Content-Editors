@@ -1104,7 +1104,8 @@ var getInputSelection = function (input) {
 					(keyCode >= 65 && keyCode <= 90) || // a-z
 					(keyCode >= 48 && keyCode <= 57) || // 0-9        
 					(keyCode >= 186 && keyCode <= 222) || // semicolon, equal, comma, dash, etc.
-					keyCode === 32 // space																					
+					keyCode === 32 // space
+				);
 							   
 				if (keyCode === KEY_DELETE || keyCode === KEY_BACKSPACE) {
 					selection = getInputSelection($input[0]);
