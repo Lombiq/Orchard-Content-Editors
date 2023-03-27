@@ -672,14 +672,14 @@
 					spannode.appendChild(middleclone);
 					middlebit.parentNode.replaceChild(spannode, middlebit);
 					skip = 1;
-    }
+				}
     // Recurse element node, looking for child text nodes to highlight, unless element
     // is childless, <script>, <style>, or already highlighted: <span class="highlight">
-    else if (node.nodeType === 1 && node.childNodes && !/(script|style)/i.test(node.tagName) && (node.className !== 'highlight' || node.tagName !== 'SPAN')) {
-				for (var i = 0; i < node.childNodes.length; ++i) {
-					i += highlight(node.childNodes[i]);
+				else if (node.nodeType === 1 && node.childNodes && !/(script|style)/i.test(node.tagName) && (node.className !== 'highlight' || node.tagName !== 'SPAN')) {
+							for (var i = 0; i < node.childNodes.length; ++i) {
+							i += highlight(node.childNodes[i]);
+						}
 				}
-			}
 			return skip;
 		};
 	
@@ -730,7 +730,7 @@
 			const events = this._events = this._events || {};
 			if (event in events === false) return;
 			for (var i = 0; i < events[event].length; i++) {
-			  events[event][i].apply(this, Array.prototype.slice.call(arguments, 1));
+					events[event][i].apply(this, Array.prototype.slice.call(arguments, 1));
 			}
 		}
 	};
@@ -779,7 +779,7 @@ function uaDetect(platform, re) {
 	var TAG_INPUT     = 2;
 	
 	// for now, android support in general is too spotty to support validity
-var SUPPORTS_VALIDITY_API = !uaDetect("Android", /android/i) && !!document.createElement('input').validity;
+	var SUPPORTS_VALIDITY_API = !uaDetect("Android", /android/i) && !!document.createElement('input').validity;
  
 
 /**
@@ -971,12 +971,12 @@ var SUPPORTS_VALIDITY_API = !uaDetect("Android", /android/i) && !!document.creat
 	 * @param {object} input
 	 * @returns {object}
 	 */
-var getInputSelection = function (input) {
-  var result = {};
-  if (input === undefined) {
-    console.warn('WARN getInputSelection cannot locate input control');
-    return result;
-  }
+	var getInputSelection = function (input) {
+		var result = {};
+		if (input === undefined) {
+		console.warn('WARN getInputSelection cannot locate input control');
+		return result;
+	}
 		if ('selectionStart' in input) {
 			result.start = input.selectionStart;
 			result.length = input.selectionEnd - result.start;
@@ -1110,7 +1110,7 @@ var getInputSelection = function (input) {
 					placeholderWidth = 0;
 			
 						   
-    width = Math.max(measureString(value, $input), placeholderWidth) + 4;
+			width = Math.max(measureString(value, $input), placeholderWidth) + 4;
 			if (width !== currentWidth) {
 				currentWidth = width;
 				$input.width(width);
@@ -1250,18 +1250,7 @@ var isJSON = function (data) {
 	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	
 	MicroEvent.mixin(Selectize);
-
-//	if(typeof MicroPlugin !== "undefined"){
-		MicroPlugin.mixin(Selectize);
-//	}else{
-//		logError("Dependency MicroPlugin is missing",
-//			{explanation:
-//				"Make sure you either: (1) are using the \"standalone\" "+
-//				"version of Selectize, or (2) require MicroPlugin before you "+
-//				"load Selectize."}
-//		);
-//	}
-	
+	MicroPlugin.mixin(Selectize);
 	
 	// methods
 	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1295,12 +1284,12 @@ var isJSON = function (data) {
 			inputMode         = self.settings.mode;
 			classes           = $input.attr('class') || '';
 	
-		$wrapper          = $('<div>').addClass(settings.wrapperClass).addClass(classes + ' selectize-control').addClass(inputMode);
-		$control          = $('<div>').addClass(settings.inputClass + ' selectize-input items').appendTo($wrapper);
-		$control_input    = $('<input type="select-one" autocomplete="new-password" autofill="no" />').appendTo($control).attr('tabindex', $input.is(':disabled') ? '-1' : self.tabIndex);
-		$dropdown_parent  = $(settings.dropdownParent || $wrapper);
-		$dropdown         = $('<div>').addClass(settings.dropdownClass).addClass(inputMode + ' selectize-dropdown').hide().appendTo($dropdown_parent);
-		$dropdown_content = $('<div>').addClass(settings.dropdownContentClass + ' selectize-dropdown-content').attr('tabindex', '-1').appendTo($dropdown);
+			$wrapper          = $('<div>').addClass(settings.wrapperClass).addClass(classes + ' selectize-control').addClass(inputMode);
+			$control          = $('<div>').addClass(settings.inputClass + ' selectize-input items').appendTo($wrapper);
+			$control_input    = $('<input type="select-one" autocomplete="new-password" autofill="no" />').appendTo($control).attr('tabindex', $input.is(':disabled') ? '-1' : self.tabIndex);
+			$dropdown_parent  = $(settings.dropdownParent || $wrapper);
+			$dropdown         = $('<div>').addClass(settings.dropdownClass).addClass(inputMode + ' selectize-dropdown').hide().appendTo($dropdown_parent);
+			$dropdown_content = $('<div>').addClass(settings.dropdownContentClass + ' selectize-dropdown-content').attr('tabindex', '-1').appendTo($dropdown);
 	
 			if(inputId = $input.attr('id')) {
 				$control_input.attr('id', inputId + '-selectized');
@@ -1361,9 +1350,9 @@ var isJSON = function (data) {
 	
 			$dropdown.on('mouseenter mousedown mouseup click', '[data-disabled]>[data-selectable]', function(e) { e.stopImmediatePropagation(); });
 			$dropdown.on('mouseenter', '[data-selectable]', function() { return self.onOptionHover.apply(self, arguments); });
-		$dropdown.on('mouseup click', '[data-selectable]', function() { return self.onOptionSelect.apply(self, arguments); });
-		watchChildEvent($control, 'mouseup', '*:not(input)', function() { return self.onItemSelect.apply(self, arguments); });
-		autoGrow($control_input);
+			$dropdown.on('mouseup click', '[data-selectable]', function() { return self.onOptionSelect.apply(self, arguments); });
+			watchChildEvent($control, 'mouseup', '*:not(input)', function() { return self.onItemSelect.apply(self, arguments); });
+			autoGrow($control_input);
 	
 			$control.on({
 				mousedown : function() { return self.onMouseDown.apply(self, arguments); },
@@ -1371,17 +1360,16 @@ var isJSON = function (data) {
 			});
 	
 			$control_input.on({
-			mousedown : function(e) {
+				mousedown : function(e) {
 				if (self.$control_input.val() !== '' || self.settings.openOnFocus) {
 					e.stopPropagation();
 				}
 			},
 				keydown   : function() { return self.onKeyDown.apply(self, arguments); },
-//				keyup     : function() { return self.onKeyUp.apply(self, arguments); },
 				keypress  : function() { return self.onKeyPress.apply(self, arguments); },
-			input     : function() { return self.onInput.apply(self, arguments); },
+				input     : function() { return self.onInput.apply(self, arguments); },
 				resize    : function() { self.positionDropdown.apply(self, []); },
-			// blur      : function() { return self.onBlur.apply(self, arguments); },
+				// blur      : function() { return self.onBlur.apply(self, arguments); },
 				focus     : function() { self.ignoreBlur = false; return self.onFocus.apply(self, arguments); },
 				paste     : function() { return self.onPaste.apply(self, arguments); }
 			});
@@ -1405,8 +1393,8 @@ var isJSON = function (data) {
 						return false;
 					}
 					// blur on click outside
-				// do not blur if the dropdown is clicked											 
-				if (!self.$dropdown.has(e.target).length && e.target !== self.$control[0]) {
+					// do not blur if the dropdown is clicked											 
+					if (!self.$dropdown.has(e.target).length && e.target !== self.$control[0]) {
 						self.blur(e.target);
 					}
 				}
@@ -1418,12 +1406,12 @@ var isJSON = function (data) {
 				}
 			});
 			$window.on('mousemove' + eventNS, function() {
-      self.ignoreHover = self.settings.ignoreHover;
+				self.ignoreHover = self.settings.ignoreHover;
 			});
 	
 			// store original children and tab index so that they can be
 			// restored when the destroy() method is called.
-		// Detach children outside of DOM to prevent slowdown on large selects
+			// Detach children outside of DOM to prevent slowdown on large selects
     var inputPlaceholder = $('<div></div>');
 		var inputChildren = $input.children().detach();
 
@@ -1492,17 +1480,17 @@ var isJSON = function (data) {
 					return '<div class="optgroup-header">' + escape(data[field_optgroup]) + '</div>';
 				},
 				'option': function(data, escape) {
-        var classes = data.classes ? ' ' + data.classes : '';
-        classes += data[field_value] === '' ? ' selectize-dropdown-emptyoptionlabel' : '';
+			var classes = data.classes ? ' ' + data.classes : '';
+				classes += data[field_value] === '' ? ' selectize-dropdown-emptyoptionlabel' : '';
 
-        var styles = data.styles ? ' style="' + data.styles +  '"': '';
-				return '<div' + styles + ' class="option' + classes + '">' + escape(data[field_label]) + '</div>';
+			var styles = data.styles ? ' style="' + data.styles +  '"': '';
+					return '<div' + styles + ' class="option' + classes + '">' + escape(data[field_label]) + '</div>';
 																	   
 				'item': function(data, escape) {
 					return '<div class="item">' + escape(data[field_label]) + '</div>';
 				},
 				'option_create': function(data, escape) {
-				return '<div class="create">Add <strong>' + escape(data.input) + '</strong>&#x2026;</div>';
+					return '<div class="create">Add <strong>' + escape(data.input) + '</strong>&#x2026;</div>';
 				}
 			};
 	
@@ -1533,8 +1521,8 @@ var isJSON = function (data) {
 				'load'            : 'onLoad',
 				'focus'           : 'onFocus',
 				'blur'            : 'onBlur',
-			'dropdown_item_activate'        : 'onDropdownItemActivate',
-			'dropdown_item_deactivate'      : 'onDropdownItemDeactivate'						
+				'dropdown_item_activate'        : 'onDropdownItemActivate',
+				'dropdown_item_deactivate'      : 'onDropdownItemDeactivate'						
 		};
 	
 			for (key in callbacks) {
@@ -1555,11 +1543,11 @@ var isJSON = function (data) {
 		onClick: function(e) {
 			var self = this;
 	
-    // if the dropdown is closing due to a mousedown, we don't want to
-    // refocus the element.
-    if (self.isDropdownClosing) {
-      return;
-    }
+			// if the dropdown is closing due to a mousedown, we don't want to
+			// refocus the element.
+			if (self.isDropdownClosing) {
+				return;
+			}
 
 			// necessary for mobile webkit devices (manual focus triggering
 			// is ignored unless invoked within a click event)
@@ -1762,7 +1750,7 @@ var isJSON = function (data) {
 							e.preventDefault();
 						}
 					}
-				if (self.settings.create && self.createItem() && self.settings.showAddOptionOnCreate) {
+					if (self.settings.create && self.createItem() && self.settings.showAddOptionOnCreate) {
 						e.preventDefault();
 					}
 					return;
@@ -1779,15 +1767,14 @@ var isJSON = function (data) {
 		},
 	
 		/**
-	 * Triggered on <input> input.
+		 * Triggered on <input> input.
 		 *
 		 * @param {object} e
 		 * @returns {boolean}
 		 */
-	onInput: function(e) {
-			var self = this;
-	
-//			if (self.isLocked) return e && e.preventDefault();
+		onInput: function(e) {
+			var self = this;	
+
 			var value = self.$control_input.val() || '';
 			if (self.lastValue !== value) {
 				self.lastValue = value;
@@ -1860,11 +1847,6 @@ var isJSON = function (data) {
 	
 			if (self.ignoreFocus) {
 				return;
-//			} else if (!self.ignoreBlur && document.activeElement === self.$dropdown_content[0]) {
-//				// necessary to prevent IE closing the dropdown when the scrollbar is clicked
-//				self.ignoreBlur = true;
-//				self.onFocus(e);
-//				return;
 			}
 		// Bug fix do not blur dropdown here
 		// else if (!self.ignoreBlur && document.activeElement === self.$dropdown_content[0]) {
@@ -2011,10 +1993,6 @@ var isJSON = function (data) {
 			if (changed) {
 				$input.val(value).triggerHandler('update');
 				this.lastValue = value;
-//				$input.val(value);
-//
-//				if (value === '') {
-//					$input.val(' ');
                 }
 			}
 		},
@@ -2144,11 +2122,11 @@ var isJSON = function (data) {
 			var scroll_top, scroll_bottom;
 			var self = this;
 	
-		if (self.$activeOption) {
-			self.$activeOption.removeClass('active');
-			self.trigger('dropdown_item_deactivate', self.$activeOption.attr('data-value'));
-		}
-		self.$activeOption = null;
+			if (self.$activeOption) {
+				self.$activeOption.removeClass('active');
+				self.trigger('dropdown_item_deactivate', self.$activeOption.attr('data-value'));
+			}
+			self.$activeOption = null;
 	
 			$option = $($option);
 			if (!$option.length) return;
@@ -2267,10 +2245,10 @@ var isJSON = function (data) {
 				fields      : settings.searchField,
 				conjunction : settings.searchConjunction,
 				sort        : sort,
-			nesting     : settings.nesting,
-      filter      : settings.filter,
-      respect_word_boundaries : settings.respect_word_boundaries
-		};
+				nesting     : settings.nesting,
+				filter      : settings.filter,
+				respect_word_boundaries : settings.respect_word_boundaries
+			};
 	},
 	
 		/**
@@ -2361,7 +2339,7 @@ var isJSON = function (data) {
 	
 				for (j = 0, k = optgroups && optgroups.length; j < k; j++) {
 					optgroup = optgroups[j];
-				if (!self.optgroups.hasOwnProperty(optgroup) && typeof self.settings.optionGroupRegister === 'function') {
+					if (!self.optgroups.hasOwnProperty(optgroup) && typeof self.settings.optionGroupRegister === 'function') {
 					var regGroup;
 					if (regGroup = self.settings.optionGroupRegister.apply(self, [optgroup])) {
 						self.registerOptionGroup(regGroup);
@@ -2429,9 +2407,9 @@ var isJSON = function (data) {
 				}
 			}
 	
-    if (self.settings.dropdownSize.sizeType !== 'auto' && self.isOpen) {
-      self.setupDropdownHeight();
-    }
+			if (self.settings.dropdownSize.sizeType !== 'auto' && self.isOpen) {
+				self.setupDropdownHeight();
+			}
 
 			// add create option
 			has_create_option = self.canCreate(query);
@@ -2442,14 +2420,14 @@ var isJSON = function (data) {
 			}
 		}
 
-		// activate
-		self.hasOptions = results.items.length > 0 || ( has_create_option && self.settings.showAddOptionOnCreate ) || self.settings.setFirstOptionActive;
-		if (self.hasOptions) {
+			// activate
+			self.hasOptions = results.items.length > 0 || ( has_create_option && self.settings.showAddOptionOnCreate ) || self.settings.setFirstOptionActive;
+			if (self.hasOptions) {
 				if (results.items.length > 0) {
 					$active_before = active_before && self.getOption(active_before);
-        if (results.query !== "" && self.settings.setFirstOptionActive) {
-          $active = $dropdown_content.find('[data-selectable]:first')
-        } else if (results.query !== "" && $active_before && $active_before.length) {
+			if (results.query !== "" && self.settings.setFirstOptionActive) {
+				$active = $dropdown_content.find('[data-selectable]:first')
+			} else if (results.query !== "" && $active_before && $active_before.length) {
 						$active = $active_before;
 					} else if (self.settings.mode === 'single' && self.items.length) {
 						$active = self.getOption(self.items[0]);
@@ -3191,13 +3169,7 @@ var isJSON = function (data) {
 		 */
 		positionDropdown: function() {
 			var $control = this.$control;
-//			var controlOuterHeight = $control.outerHeight(true);
 			var offset = this.settings.dropdownParent === 'body' ? $control.offset() : $control.position();
-//			if (controlOuterHeight === 0) {
-//				offset.top += $control.height() * -1;			}
-//			else {
-//				offset.top += controlOuterHeight;}	
-// hosszú új szakasz jön: 
 		
 		offset.top += $control.outerHeight(true);
 		var w = $control[0].getBoundingClientRect().width;
@@ -3934,7 +3906,6 @@ var isJSON = function (data) {
 		validity: SUPPORTS_VALIDITY_API
 	};
 	
-//180 új sor jön: 
 Selectize.define("auto_position", function () {
   var self = this;
 
@@ -4454,12 +4425,7 @@ Selectize.define("clear_button", function (options) {
 				})();
 			};
 	
-//			if (this.settings.mode === 'single') {
-//				singleClose(this, options);
-//				return;
-//			} else {
 				multiClose(this, options);
-//			}
 	});
 	
 /**
@@ -4506,7 +4472,7 @@ Selectize.define("clear_button", function (options) {
 			};
 		})();
 	});
-// új 100 sor: 	
+
 Selectize.define('select_on_focus', function(options) {
 	var self = this;
 
