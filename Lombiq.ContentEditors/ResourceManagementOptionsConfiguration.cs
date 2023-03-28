@@ -23,7 +23,7 @@ public class ResourceManagementOptionsConfiguration : IConfigureOptions<Resource
         _manifest
             .DefineScript(ResourceNames.AsyncEditor)
             .SetDependencies(VueRouter)
-            .SetUrl($"~/{Area}/js/async-editor/async-editor.js")
+            .SetUrl($"~/{Area}/lombiq/async-editor.min.js", $"~/{Area}/lombiq/async-editor.js")
             .SetVersion("1.0.0");
     }
 

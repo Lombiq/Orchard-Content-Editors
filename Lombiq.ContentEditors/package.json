@@ -1,9 +1,9 @@
 {
   "private": true,
   "scripts": {
-    "build": "npm explore nodejs-extensions -- pnpm build:assets",
-    "compile": "npm explore nodejs-extensions -- pnpm compile:assets",
-    "clean": "npm explore nodejs-extensions -- pnpm clean:assets"
+    "build": "npm explore nodejs-extensions -- pnpm build",
+    "clean": "npm explore nodejs-extensions -- pnpm clean",
+    "watch": "npm explore nodejs-extensions -- pnpm watch"
   },
   "dependencies": {
     "vue-router": "3.5.3"
@@ -17,7 +17,7 @@
     ],
     "scripts": {
       "source": "Assets/Scripts",
-      "target": "wwwroot/js"
+      "target": "wwwroot/lombiq"
     }
   }
 }

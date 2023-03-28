@@ -1,5 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Razor">
 
+  <Import Condition="'$(NuGetBuild)' != 'true'" Project="..\..\..\Utilities\Lombiq.NodeJs.Extensions\Lombiq.NodeJs.Extensions\Lombiq.NodeJs.Extensions.props" />
+
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
@@ -19,8 +21,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="Assets\Scripts\async-editor.js">
+      <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+    </None>
     <None Include="License.md" Pack="true" PackagePath="" />
     <None Include="NuGetIcon.png" Pack="true" PackagePath="" />
+    <None Remove="Assets\Scripts\async-editor\async-editor.js" />
   </ItemGroup>
 
   <ItemGroup>
@@ -51,5 +57,7 @@
     <PackageReference Include="Lombiq.HelpfulLibraries.OrchardCore" Version="5.1.1" />
     <PackageReference Include="Lombiq.NodeJs.Extensions" Version="1.2.0" />
   </ItemGroup>
+
+  <Import Condition="'$(NuGetBuild)' != 'true'" Project="..\..\..\Utilities\Lombiq.NodeJs.Extensions\Lombiq.NodeJs.Extensions\Lombiq.NodeJs.Extensions.targets" />
 
 </Project>
