@@ -1,10 +1,23 @@
 {
   "private": true,
   "scripts": {
-    "dotnet-prebuild": "gulp",
-    "dotnet-postclean": "gulp clean"
+    "build": "npm explore nodejs-extensions -- pnpm build:assets",
+    "compile": "npm explore nodejs-extensions -- pnpm compile:assets",
+    "clean": "npm explore nodejs-extensions -- pnpm clean:assets"
   },
   "dependencies": {
     "vue-router": "3.5.3"
+  },
+  "nodejsExtensions": {
+    "assetsToCopy": [
+      {
+        "sources": [ "node_modules/vue-router/dist" ],
+        "target": "wwwroot/vendors/vue-router"
+      }
+    ],
+    "scripts": {
+      "source": "Assets/Scripts",
+      "target": "wwwroot/js"
+    }
   }
 }

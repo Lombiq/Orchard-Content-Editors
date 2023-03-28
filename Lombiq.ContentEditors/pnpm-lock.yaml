@@ -1,4 +1,4 @@
-lockfileVersion: 5.3
+lockfileVersion: 5.4
 
 specifiers:
   vue-router: 3.5.3
@@ -10,4 +10,6 @@ packages:
 
   /vue-router/3.5.3:
     resolution: {integrity: sha512-FUlILrW3DGitS2h+Xaw8aRNvGTwtuaxrRkNSHWTizOfLUie7wuYwezeZ50iflRn8YPV5kxmU2LQuu3nM/b3Zsg==}
+    peerDependencies:
+      vue: ^2
     dev: false
