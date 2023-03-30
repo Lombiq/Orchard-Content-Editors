@@ -1,3 +1,4 @@
-﻿- Updated to use jQuery 3.6.
+﻿- Updated selectize to v0.15.2
+- Updated to use jQuery 3.6.
 - Updated the way of triggering the update handler in setTextboxValue
 - Updated positionDropdown to display the dropdown properly if the selectize editor was in a disabled state on page load
