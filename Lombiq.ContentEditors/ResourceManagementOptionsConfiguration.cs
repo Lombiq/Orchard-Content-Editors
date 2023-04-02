@@ -23,7 +23,9 @@ public class ResourceManagementOptionsConfiguration : IConfigureOptions<Resource
         _manifest
             .DefineScript(ResourceNames.AsyncEditor)
             .SetDependencies(VueRouter)
-            .SetUrl($"~/{Area}/js/async-editor/async-editor.js")
+            .SetUrl(
+                $"~/{Area}/js/async-editor/async-editor.min.js",
+                $"~/{Area}/js/async-editor/async-editor.js")
             .SetVersion("1.0.0");
     }
 

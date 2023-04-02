@@ -1,20 +1,23 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lombiq.ContentEditors", "Lombiq.ContentEditors\Lombiq.ContentEditors.csproj", "{E5811732-2DBB-4467-A98F-7257878BFA7D}"
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33205.214
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lombiq.ContentEditors", "Lombiq.ContentEditors\Lombiq.ContentEditors.csproj", "{E5811732-2DBB-4467-A98F-7257878BFA7D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lombiq.ContentEditors.Samples", "Lombiq.ContentEditors.Samples\Lombiq.ContentEditors.Samples.csproj", "{F106CEB9-8391-4E64-BA49-930EFB3BFC54}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lombiq.ContentEditors.Tests.UI", "Lombiq.ContentEditors\Tests\Lombiq.ContentEditors.Tests.UI\Lombiq.ContentEditors.Tests.UI.csproj", "{28DECF2B-DFD7-411C-A21C-086BAF4E06E2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lombiq.ContentEditors.Samples", "Lombiq.ContentEditors.Samples\Lombiq.ContentEditors.Samples.csproj", "{F106CEB9-8391-4E64-BA49-930EFB3BFC54}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C39430D6-A0D7-4A0A-9772-E12AFCA4B9FA}"
 	ProjectSection(SolutionItems) = preProject
-		Readme.md = Readme.md
-		.github\workflows\publish-nuget.yml = .github\workflows\publish-nuget.yml
-		.github\workflows\create-jira-issues-for-community-activities.yml = .github\workflows\create-jira-issues-for-community-activities.yml
-		.github\workflows\verify-submodule-pull-request.yml = .github\workflows\verify-submodule-pull-request.yml
-		License.md = License.md
 		.gitignore = .gitignore
+		.github\workflows\create-jira-issues-for-community-activities.yml = .github\workflows\create-jira-issues-for-community-activities.yml
+		License.md = License.md
+		.github\workflows\publish-nuget.yml = .github\workflows\publish-nuget.yml
+		Readme.md = Readme.md
+		.github\workflows\verify-submodule-pull-request.yml = .github\workflows\verify-submodule-pull-request.yml
 	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lombiq.ContentEditors.Tests.UI", "Lombiq.ContentEditors.Tests.UI\Lombiq.ContentEditors.Tests.UI.csproj", "{04E3BC71-490A-44CF-820E-D40C7FA2C78F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -30,9 +33,15 @@ Global
 		{F106CEB9-8391-4E64-BA49-930EFB3BFC54}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F106CEB9-8391-4E64-BA49-930EFB3BFC54}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F106CEB9-8391-4E64-BA49-930EFB3BFC54}.Release|Any CPU.Build.0 = Release|Any CPU
-		{28DECF2B-DFD7-411C-A21C-086BAF4E06E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{28DECF2B-DFD7-411C-A21C-086BAF4E06E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{28DECF2B-DFD7-411C-A21C-086BAF4E06E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{28DECF2B-DFD7-411C-A21C-086BAF4E06E2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{04E3BC71-490A-44CF-820E-D40C7FA2C78F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{04E3BC71-490A-44CF-820E-D40C7FA2C78F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{04E3BC71-490A-44CF-820E-D40C7FA2C78F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{04E3BC71-490A-44CF-820E-D40C7FA2C78F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2EC75216-B448-4DCA-9D0F-A6DF3216CE80}
 	EndGlobalSection
 EndGlobal

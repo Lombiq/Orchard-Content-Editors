@@ -1,8 +1,7 @@
 /* global Vue */
 /* global VueRouter */
-/* global DomParser */
 
-if (!window.asyncEditor) window.asyncEditor = { editors: [] }
+if (!window.asyncEditor) window.asyncEditor = { editors: [] };
 
 class AsyncEditorApiClient {
     constructor(parameters) {
@@ -33,7 +32,7 @@ class AsyncEditorApiClient {
                 const submittedEditorEvent = new CustomEvent('asyncEditorSubmittedEditor', {
                     bubbles: true,
                     cancelable: true,
-                    detail: { asyncEditor: window.asyncEditor }
+                    detail: { asyncEditor: window.asyncEditor },
                 });
                 document.dispatchEvent(submittedEditorEvent);
             })
@@ -99,7 +98,9 @@ window.asyncEditor.editor = {
                 .parseFromString(self.scriptsHtml, 'text/html')
                 .getElementsByTagName('script');
             for (let i = 0; i < scripts.length; i++) {
-                window.eval(scripts[i].text);
+                const script = document.createElement('script');
+                script.text = scripts[i].text;
+                document.head.appendChild(script).parentNode.removeChild(script);
             }
 
             self.scriptsHtml = '';
@@ -132,11 +133,11 @@ window.asyncEditor.editor = {
             const submittingEditorEvent = new CustomEvent('asyncEditorSubmittingEditor', {
                 bubbles: true,
                 cancelable: true,
-                detail: { asyncEditor: window.asyncEditor }
+                detail: { asyncEditor: window.asyncEditor },
             });
 
-            var success = document.dispatchEvent(submittingEditorEvent);
-            if (success) {
+            const successful = document.dispatchEvent(submittingEditorEvent);
+            if (successful) {
                 self.api.submitEditor(
                     self.contentId,
                     self.editorGroup,
@@ -183,14 +184,14 @@ window.asyncEditor.editor = {
             let shouldLoadEditor = false;
 
             const contentIdKey = self.asyncEditorId + '.contentId';
-            if (self.$route.query.hasOwnProperty(contentIdKey) &&
+            if (Object.prototype.hasOwnProperty.call(self.$route.query, contentIdKey) &&
                 self.$route.query[contentIdKey] !== self.contentId) {
                 self.contentId = self.$route.query[contentIdKey];
                 shouldLoadEditor = true;
             }
 
             const editorGroupKey = self.asyncEditorId + '.editorGroup';
-            if (self.$route.query.hasOwnProperty(editorGroupKey) &&
+            if (Object.prototype.hasOwnProperty.call(self.$route.query, editorGroupKey) &&
                 self.$route.query[editorGroupKey] !== self.editorGroup) {
                 self.editorGroup = self.$route.query[editorGroupKey];
                 shouldLoadEditor = true;
@@ -226,12 +227,12 @@ window.asyncEditor.editor = {
             const index = editorGroups.indexOf(editorGroup ?? this.editorGroup);
 
             return editorGroups[index + 1];
-        }
+        },
     },
 };
 
 window.initAsyncEditor = (asyncEditorId, parameters) => {
-    if (!parameters) return window.asyncEditor.editors[asyncEditorId];
+    if (!parameters) return;
 
     window.asyncEditor.editors[asyncEditorId] = new Vue({
         el: parameters.element,
