@@ -29,7 +29,7 @@
             "AsyncEditor",
             new { Area = "Lombiq.ContentEditors", ContentItemId = contentItemId, Group = group, ContentType = contentType }),
         FormMethod.Post,
-        new { @class = string.Join(" ", FormElementName, "js-" + FormElementName) }))
+        new { @class = string.Join(" ", FormElementName, "js-" + FormElementName) + " no-multisubmit" }))
     {
         @Display.AsyncEditor_Title(ContentItem: contentItem)
 
@@ -44,3 +44,20 @@
         </div>
     }
 </div>
+
+<script>
+    jQuery(function ($) {
+        //Prevent multi submissions on forms
+        $("body").on("submit", "form.no-multisubmit", function (e) {
+            var submittingClass = "submitting";
+            form = $(this);
+
+            if (form.hasClass(submittingClass)) {
+                e.preventDefault();
+                return;
+            }
+
+            form.addClass(submittingClass);
+        });
+    });
+</script>
