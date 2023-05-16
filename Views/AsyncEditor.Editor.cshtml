@@ -47,9 +47,9 @@
 
 <script>
     jQuery(function ($) {
-        //Prevent multi submissions on forms
+        // Prevent multi submissions on forms.
         $("body").on("submit", "form.no-multisubmit", function (e) {
-            var submittingClass = "submitting";
+            const submittingClass = "submitting";
             form = $(this);
 
             if (form.hasClass(submittingClass)) {
@@ -58,6 +58,7 @@
             }
 
             form.addClass(submittingClass);
+            $.lombiq_LoadingIndicator.show();
         });
     });
 </script>
