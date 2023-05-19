@@ -54,6 +54,8 @@ namespace Lombiq.ContentEditors
             manifest.DefineStyle(Lombiq_Editors_DateTimeEditor).SetDependencies(jQueryUI);
 
             manifest.DefineScript(Lombiq_TinyMce).SetUrl("lombiq-tinymce.js").SetDependencies("TinyMce");
+
+            manifest.DefineScript(Lombiq_Prevent_Multisubmit).SetUrl("lombiq-prevent-multisubmit.js").SetDependencies(jQuery);
         }
     }
 }
