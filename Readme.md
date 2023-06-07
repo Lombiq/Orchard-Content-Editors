@@ -59,7 +59,7 @@ Finally, make sure each of your shapes are placed in the proper editor group. Yo
     }
     ```
 
-Once the Content Item asnyc editor provider is implemented you can access it on the Admin UI using this route: `Admin/ContentItemAsyncEditor/{providerName}/{contentType}/{contentItemId?}` e.g., `Admin/ContentItemAsyncEditor/EmployeeAsyncEditorProvider/Employee`.
+Once the Content Item async editor provider is implemented you can access it on the Admin UI using this route: `Admin/ContentItemAsyncEditor/{providerName}/{contentType}/{contentItemId?}` e.g., `Admin/ContentItemAsyncEditor/EmployeeAsyncEditorProvider/Employee`.
 
 #### Displaying async editors on the front-end
 
