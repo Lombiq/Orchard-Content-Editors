@@ -3,12 +3,14 @@ using Lombiq.ContentEditors.Samples.Constants;
 using Lombiq.ContentEditors.Samples.Drivers;
 using Lombiq.ContentEditors.Samples.Migrations;
 using Lombiq.ContentEditors.Samples.Models;
+using Lombiq.ContentEditors.Samples.Navigation;
 using Lombiq.ContentEditors.Samples.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using OrchardCore.ContentManagement;
 using OrchardCore.ContentManagement.Display.ContentDisplay;
 using OrchardCore.Modules;
+using OrchardCore.Navigation;
 using OrchardCore.ResourceManagement;
 
 namespace Lombiq.ContentEditors.Samples;
@@ -30,5 +32,7 @@ public class Startup : StartupBase
             .WithAsyncEditor<SupportTicketAsyncEditorProvider>();
 
         services.AddTransient<IConfigureOptions<ResourceManagementOptions>, ResourceManagementOptionsConfiguration>();
+
+        services.AddScoped<INavigationProvider, ContentEditorsSamplesNavigationProvider>();
     }
 }
