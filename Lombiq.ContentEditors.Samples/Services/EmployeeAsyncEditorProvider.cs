@@ -9,7 +9,7 @@ using static Lombiq.ContentEditors.Samples.Constants.EditorGroups.Employee;
 
 namespace Lombiq.ContentEditors.Samples.Services;
 
-// If you want to create an async editor to your content type then you need to create a class that inherits from
+// If you want to create an async editor for your content type then you need to create a class that inherits from
 // ContentItemAsyncEditorProviderBase<TProvider> where TProvider is the type of your class.
 public class EmployeeAsyncEditorProvider : ContentItemAsyncEditorProviderBase<EmployeeAsyncEditorProvider>
 {
