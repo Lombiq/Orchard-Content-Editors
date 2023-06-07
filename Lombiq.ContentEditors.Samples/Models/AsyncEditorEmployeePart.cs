@@ -14,5 +14,6 @@ public class AsyncEditorEmployeePart : ContentPart
     public NumericField Salary { get; set; } = new();
 }
 
-// NEXT STATION: placement.json -- Here observe how each content fields are placed in the supported editor groups.
+// NEXT STATION: placement.json -- Here observe how each content field is placed in the supported editor groups, then
+// come back.
 // END OF TRAINING SECTION: Content item async editors.
