@@ -10,7 +10,8 @@ public class SupportTicketMigrations : DataMigration
 {
     private readonly IContentDefinitionManager _contentDefinitionManager;
 
-    public SupportTicketMigrations(IContentDefinitionManager contentDefinitionManager) => _contentDefinitionManager = contentDefinitionManager;
+    public SupportTicketMigrations(IContentDefinitionManager contentDefinitionManager) =>
+        _contentDefinitionManager = contentDefinitionManager;
 
     public int Create()
     {
