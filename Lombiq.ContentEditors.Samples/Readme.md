@@ -12,8 +12,8 @@ Do you want to quickly try out this project and see it in action? Check it out i
 
 You can start with any of these sections, they demonstrate different approaches that best fit different use-cases.
 
-- [`EmployeeAsyncEditorProvider`](../Lombiq.ContentEditors.Samples/Services/EmployeeAsyncEditorProvider.cs) - Example async editor provider for Employee content items.
-- [FrontEndDemoContentItemAsyncEditorController](../Lombiq.ContentEditors.Samples/Controllers/FrontEndDemoContentItemAsyncEditorController.cs) - Example async editor displayed on the front-end instead of the Admin UI.
+- [Content Item async editor provider](../Lombiq.ContentEditors.Samples/Services/EmployeeAsyncEditorProvider.cs) - Example async editor provider for Employee content items.
+- [Front-end async editor](../Lombiq.ContentEditors.Samples/Controllers/FrontEndDemoContentItemAsyncEditorController.cs) - Example async editor displayed on the front-end instead of the Admin UI.
 
 ## Contributing and support
 

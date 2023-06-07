@@ -41,6 +41,24 @@ The `CanHandleContentType` method is used to determine if the provider can handl
 
 The `DescribeEditorGroupsAsync` method is used to describe the available editor groups. The above example describes two groups: `PersonalDetails` and `EmploymentDetails`. A group can be marked as the publish group meaning the user can publish the content item only on that editor page. The `DescribeEditorGroup` has two other parameters: `isAccessibleFactory` and `isFilledFactory`. These can be used to determine if the editor group is accessible (e.g., the user has permission to edit that group) and if the group is filled with data (e.g., the fill state is tracked somehow).
 
+Finally, make sure each of your shapes are placed in the proper editor group. You can use file _placement.json_ file for this. Example:
+
+    ```json
+    {
+        "TextField_Edit": [
+            {
+                "differentiator": "AsyncEditorEmployeePart-Name",
+                "place": "Content:1@PersonalDetails"
+            },
+            {
+                "differentiator": "AsyncEditorEmployeePart-Position",
+                "place": "Content:2@PersonalDetails"
+            },
+            ...
+        ]
+    }
+    ```
+
 Once the Content Item asnyc editor provider is implemented you can access it on the Admin UI using this route: `Admin/ContentItemAsyncEditor/{providerName}/{contentType}/{contentItemId?}` e.g., `Admin/ContentItemAsyncEditor/EmployeeAsyncEditorProvider/Employee`.
 
 #### Displaying async editors on the front-end
