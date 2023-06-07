@@ -5,3 +5,5 @@
 Extension methods that test various features in Lombiq Content Editors for Orchard Core, with the help of [Lombiq UI Testing Toolbox for Orchard Core](https://github.com/Lombiq/UI-Testing-Toolbox).
 
 Call these from a UI test project that also references _Lombiq.ContentEditors.Samples_ to verify the module's basic features; as seen in [Open-Source Orchard Core Extensions](https://github.com/Lombiq/Open-Source-Orchard-Core-Extensions).
+
+For general details about and usage instructions of the module, see the [root Readme](../Readme.md).
