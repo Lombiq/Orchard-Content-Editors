@@ -16,7 +16,7 @@
     <PackageIcon>NuGetIcon.png</PackageIcon>
     <PackageTags>OrchardCore;Lombiq;AspNetCore</PackageTags>
     <RepositoryUrl>https://github.com/Lombiq/Orchard-Content-Editors</RepositoryUrl>
-    <PackageProjectUrl>https://github.com/Lombiq/Orchard-Content-Editors</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/Lombiq/Orchard-Content-Editors/tree/dev/Lombiq.ContentEditors.Samples</PackageProjectUrl>
     <PackageLicenseFile>License.md</PackageLicenseFile>
   </PropertyGroup>
 
