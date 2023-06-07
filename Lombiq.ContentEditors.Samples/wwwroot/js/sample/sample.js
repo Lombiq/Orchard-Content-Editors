@@ -1,6 +1,0 @@
-"use strict";
-
-$(document).on('click', '.click-me', () => {
-  alert('Thank you for clicking me.');
-});
-//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJuYW1lcyI6WyIkIiwiZG9jdW1lbnQiLCJvbiIsImFsZXJ0Il0sInNvdXJjZXMiOlsiLi4vLi4vLi4vQXNzZXRzL1NjcmlwdHMvc2FtcGxlL3NhbXBsZS5qcyJdLCJzb3VyY2VzQ29udGVudCI6WyIkKGRvY3VtZW50KS5vbignY2xpY2snLCAnLmNsaWNrLW1lJywgKCkgPT4ge1xyXG4gICAgYWxlcnQoJ1RoYW5rIHlvdSBmb3IgY2xpY2tpbmcgbWUuJyk7XHJcbn0pO1xyXG4iXSwibWFwcGluZ3MiOiI7O0FBQUFBLENBQUMsQ0FBQ0MsUUFBUSxDQUFDLENBQUNDLEVBQUUsQ0FBQyxPQUFPLEVBQUUsV0FBVyxFQUFFLE1BQU07RUFDdkNDLEtBQUssQ0FBQyw0QkFBNEIsQ0FBQztBQUN2QyxDQUFDLENBQUMifQ==

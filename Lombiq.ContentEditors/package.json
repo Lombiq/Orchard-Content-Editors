@@ -1,23 +1,22 @@
 {
   "private": true,
+  "dependencies": {
+    "vue-router": "3.5.3"
+  },
   "scripts": {
     "build": "npm explore nodejs-extensions -- pnpm build",
     "clean": "npm explore nodejs-extensions -- pnpm clean",
     "watch": "npm explore nodejs-extensions -- pnpm watch"
   },
-  "dependencies": {
-    "vue-router": "3.5.3"
-  },
   "nodejsExtensions": {
     "assetsToCopy": [
       {
-        "sources": [ "node_modules/vue-router/dist" ],
+        "sources": [
+          "node_modules/vue-router/dist"
+        ],
+        "pattern": "*",
         "target": "wwwroot/vendors/vue-router"
       }
-    ],
-    "scripts": {
-      "source": "Assets/Scripts",
-      "target": "wwwroot/lombiq"
-    }
+    ]
   }
 }

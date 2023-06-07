@@ -136,14 +136,14 @@ window.asyncEditor.editor = {
                 detail: { asyncEditor: window.asyncEditor },
             });
 
-            const success = document.dispatchEvent(submittingEditorEvent);
-            if (success) {
+            const successful = document.dispatchEvent(submittingEditorEvent);
+            if (successful) {
                 self.api.submitEditor(
                     self.contentId,
                     self.editorGroup,
                     nextEditorGroup,
                     new FormData(self.$refs.editorForm),
-                    (apiSuccess, data) => { self.processApiData(apiSuccess, data); });
+                    (success, data) => { self.processApiData(success, data); });
             }
         },
         processApiData(success, data) {
@@ -184,14 +184,14 @@ window.asyncEditor.editor = {
             let shouldLoadEditor = false;
 
             const contentIdKey = self.asyncEditorId + '.contentId';
-            if (contentIdKey in self.$route.query &&
+            if (Object.prototype.hasOwnProperty.call(self.$route.query, contentIdKey) &&
                 self.$route.query[contentIdKey] !== self.contentId) {
                 self.contentId = self.$route.query[contentIdKey];
                 shouldLoadEditor = true;
             }
 
             const editorGroupKey = self.asyncEditorId + '.editorGroup';
-            if (editorGroupKey in self.$route.query &&
+            if (Object.prototype.hasOwnProperty.call(self.$route.query, editorGroupKey) &&
                 self.$route.query[editorGroupKey] !== self.editorGroup) {
                 self.editorGroup = self.$route.query[editorGroupKey];
                 shouldLoadEditor = true;
@@ -232,9 +232,7 @@ window.asyncEditor.editor = {
 };
 
 window.initAsyncEditor = (asyncEditorId, parameters) => {
-    if (!parameters) {
-        return window.asyncEditor.editors[asyncEditorId];
-    }
+    if (!parameters) return;
 
     window.asyncEditor.editors[asyncEditorId] = new Vue({
         el: parameters.element,
@@ -248,6 +246,4 @@ window.initAsyncEditor = (asyncEditorId, parameters) => {
         },
         template: '<async-editor ref="editor"></async-editor>',
     });
-
-    return undefined;
 };
