@@ -1,4 +1,7 @@
+using Lombiq.ContentEditors.Controllers;
+using Lombiq.ContentEditors.Samples.Constants;
 using Lombiq.ContentEditors.Samples.Controllers;
+using Lombiq.ContentEditors.Samples.Services;
 using Lombiq.HelpfulLibraries.OrchardCore.Navigation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Localization;
@@ -20,7 +23,15 @@ public class ContentEditorsSamplesNavigationProvider : MainMenuNavigationProvide
         var context = _hca.HttpContext;
         builder
             .Add(T["Content Editors Samples"], builder => builder
-                .Add(T["Async Editor"], itemBuilder => itemBuilder
-                    .Action<FrontEndDemoContentItemAsyncEditorController>(context, controller => controller.Index(null))));
+                .Add(T["Support Ticket (front-end)"], itemBuilder => itemBuilder
+                    .Action<FrontEndDemoContentItemAsyncEditorController>(context, controller => controller.Index(null)))
+                .Add(T["Employee (admin)"], itemBuilder => itemBuilder
+                    .Action<ContentItemAsyncEditorController>(
+                        _hca.HttpContext,
+                        controller => controller.Index(
+                            nameof(EmployeeAsyncEditorProvider),
+                            ContentTypes.Employee,
+                            null)))
+            );
     }
 }
