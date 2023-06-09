@@ -21,7 +21,8 @@ public class EmployeeAsyncEditorProvider : ContentItemAsyncEditorProviderBase<Em
     // This method determines if the editor provider can handle the content type or not.
     protected override bool CanHandleContentType(string contentType) => contentType == ContentTypes.Employee;
 
-    // Here you can describe what editors you want to show in your async editor.
+    // Here you can describe what editors you want to show in your async editor. These editor groups are Orchard Core
+    // editor groups containing the editor shapes.
     public override Task<IEnumerable<AsyncEditorGroupDescriptor<ContentItem>>> DescribeEditorGroupsAsync() =>
         Task.FromResult(new[]
         {
