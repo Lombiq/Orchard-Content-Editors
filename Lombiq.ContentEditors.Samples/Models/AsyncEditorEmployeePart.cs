@@ -3,7 +3,9 @@ using OrchardCore.ContentManagement;
 
 namespace Lombiq.ContentEditors.Samples.Models;
 
-// This is the part that holds the content fields you want to show in your async editor.
+// This is the part that holds the content fields of an employee that you want to show in your async editor. Note that
+// using content fields is not required or specific to async editors. You can use properties and editor shapes that
+// will be placed on the async editor page (ie. Orchard Core editor group).
 public class AsyncEditorEmployeePart : ContentPart
 {
     public TextField Name { get; set; } = new();
