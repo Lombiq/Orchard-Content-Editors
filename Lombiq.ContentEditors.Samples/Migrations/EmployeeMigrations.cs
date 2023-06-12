@@ -9,6 +9,7 @@ using static Lombiq.ContentEditors.Samples.Constants.ContentTypes;
 
 namespace Lombiq.ContentEditors.Samples.Migrations;
 
+// It's the migration class for the Employee content type. Nothing specific to async editors here.
 public class EmployeeMigrations : DataMigration
 {
     private readonly IContentDefinitionManager _contentDefinitionManager;
@@ -36,3 +37,5 @@ public class EmployeeMigrations : DataMigration
     private static Action<ContentPartFieldDefinitionBuilder> ConfigureField<T>(string name) =>
         field => field.OfType(typeof(T).Name).WithDisplayName(name);
 }
+
+// NEXT STATION: Navigation/ContentEditorsSamplesNavigationProvider.cs

@@ -18,4 +18,4 @@ public class AsyncEditorEmployeePart : ContentPart
 
 // NEXT STATION: placement.json -- Here observe how each content field is placed in the supported editor groups, then
 // come back.
-// END OF TRAINING SECTION: Content item async editors.
+// NEXT STATION: Migrations/EmployeeMigrations.cs

@@ -9,6 +9,9 @@ using OrchardCore.Navigation;
 
 namespace Lombiq.ContentEditors.Samples.Navigation;
 
+// It's a navigation provider for the Content Editors Samples module. It adds menu items to a navigation with an ID of
+// "MainMenu". If you are using the Lombiq Base Theme then this navigation is rendered in the header. If you are using
+// the OSOCE app then this theme is enabled by default.
 public class ContentEditorsSamplesNavigationProvider : MainMenuNavigationProviderBase
 {
     public ContentEditorsSamplesNavigationProvider(
@@ -23,8 +26,12 @@ public class ContentEditorsSamplesNavigationProvider : MainMenuNavigationProvide
         var context = _hca.HttpContext;
         builder
             .Add(T["Content Editors Samples"], builder => builder
+                // It adds a menu item with a link to the front-end async editor demo page.
+                // Alternatively you can open the page using this URL: /FrontEndContentItemAsyncEditor
                 .Add(T["Support Ticket (front-end)"], itemBuilder => itemBuilder
                     .Action<FrontEndDemoContentItemAsyncEditorController>(context, controller => controller.Index(null)))
+                // It adds a menu item with a link to the content item async editor demo page.
+                // Alternatively you can open the page using this URL: /Admin/ContentItemAsyncEditor/EmployeeAsyncEditorProvider/Employee
                 .Add(T["Employee (admin)"], itemBuilder => itemBuilder
                     .Action<ContentItemAsyncEditorController>(
                         _hca.HttpContext,
@@ -35,3 +42,6 @@ public class ContentEditorsSamplesNavigationProvider : MainMenuNavigationProvide
             );
     }
 }
+
+// END OF TRAINING SECTION: Content item async editor
+// END OF TRAINING SECTION: Front-end async editor

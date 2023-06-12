@@ -9,8 +9,11 @@ using System.Threading.Tasks;
 
 namespace Lombiq.ContentEditors.Samples.Drivers;
 
+// This is the driver for the SupportTicketPart. It'll generate and place editor shapes for the respective editor
+// groups.
 public class SupportTicketPartDisplayDriver : ContentPartDisplayDriver<SupportTicketPart>
 {
+    // The editor shapes are generated here. The shape is placed from here instead of using the placement.json file.
     public override IDisplayResult Edit(SupportTicketPart part, BuildPartEditorContext context) =>
         Combine(
             Initialize<EditSupportTicketReporterViewModel>(GetEditorShapeType(EditorGroups.SupportTicket.Reporter), viewModel =>
@@ -26,6 +29,8 @@ public class SupportTicketPartDisplayDriver : ContentPartDisplayDriver<SupportTi
 
     public override async Task<IDisplayResult> UpdateAsync(SupportTicketPart part, IUpdateModel updater, UpdatePartEditorContext context)
     {
+        // It's a good idea to check what editor group is being updated. This way you can have different update logic
+        // for different editor groups and you won't update properties that aren't on the current editor group.
         switch (context.GroupId)
         {
             case EditorGroups.SupportTicket.Reporter:
@@ -54,3 +59,5 @@ public class SupportTicketPartDisplayDriver : ContentPartDisplayDriver<SupportTi
 
     private static string GetEditorShapeType(string group) => $"{nameof(SupportTicketPart)}_{group}_Edit";
 }
+
+// NEXT STATION: ViewModels/EditSupportTicketDetailsViewModel.cs
