@@ -27,10 +27,13 @@ public class EmployeeAsyncEditorProvider : ContentItemAsyncEditorProviderBase<Em
         Task.FromResult(new[]
         {
             // The first group is simple, the editor group ID is PersonalDetails, the menu item title is Personal
-            // Details. The editor group is not a publish group, so you won't be able to publish the content item on
-            // this page.
+            // Details. A group can be marked as the publish group meaning the user can publish the content item only on
+            // that editor page. The DescribeEditorGroup has two other parameters: isAccessibleFactory and
+            // isFilledFactory. These can be used to determine if the editor group is accessible (e.g., the user has
+            // permission to edit that group) and if the group is filled with data (e.g., the fill state is tracked
+            // somehow).
             DescribeEditorGroup(PersonalDetails, T["Personal Details"]),
-            // The Employment Details page is a publish group.
+            // The Employment Details is the other group for the Employee async editor. This is the publish group.
             DescribeEditorGroup(EmploymentDetails, T["Employment Details"], isPublishGroup: true),
         }.AsEnumerable());
 }

@@ -10,9 +10,14 @@ Do you want to quickly try out this project and see it in action? Check it out i
 
 ## Documentation
 
+Apart from the main module ([Lombiq.ContentEditors](Lombiq.ContentEditors)) there are two other projects with their own NuGet packages:
+
+- [Lombiq.ContentEditors.Samples](Lombiq.ContentEditors.Samples)
+- [Lombiq.ContentEditors.Tests.UI](Lombiq.ContentEditors.Tests.UI)
+
 Check out the [`Lombiq.ContentEditors.Samples` project](Lombiq.ContentEditors.Samples) for various examples in the form of an Orchard Core module.
 
-Note: The `Lombiq.ContentEditors.sln` file exists to provide centralized building of the independent projects but otherwise you don't need to use it.
+Note: The _Lombiq.ContentEditors.sln_ file exists to provide centralized building of the independent projects but otherwise you don't need to use it.
 
 ### Features
 
