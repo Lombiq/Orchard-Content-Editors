@@ -1,6 +1,7 @@
 ﻿@using Orchard.ContentManagement
 @using Lombiq.ContentEditors.Models
 @using Orchard.Utility.Extensions
+@using Lombiq.ContentEditors.Constants
 
 @{
     var contentItem = Model.ContentItem as ContentItem;
@@ -19,8 +20,11 @@
 
     const string BlockName = "asyncEditor";
     const string FormElementName = BlockName + "__form";
+
+    Script.Require(ResourceNames.Lombiq_Prevent_Multisubmit).AtHead();
 }
 
+@Display.Lombiq_LoadingIndicator()
 
 <div class="@BlockName @if (!string.IsNullOrEmpty(group)) { <text> @(BlockName)_group_@(group.HtmlClassify()) </text> }">
     @using (Html.BeginFormAntiForgeryPost(
@@ -29,7 +33,7 @@
             "AsyncEditor",
             new { Area = "Lombiq.ContentEditors", ContentItemId = contentItemId, Group = group, ContentType = contentType }),
         FormMethod.Post,
-        new { @class = string.Join(" ", FormElementName, "js-" + FormElementName) }))
+        new { @class = string.Join(" ", FormElementName, "js-" + FormElementName) + " no-multisubmit" }))
     {
         @Display.AsyncEditor_Title(ContentItem: contentItem)
 
@@ -44,3 +48,9 @@
         </div>
     }
 </div>
+
+<script>
+    jQuery(function ($) {
+        $(".no-multisubmit").preventMultisubmit();
+    });
+</script>

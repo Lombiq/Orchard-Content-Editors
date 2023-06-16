@@ -40,5 +40,7 @@
         public const string Uri_Js = "URI.js";
 
         public const string AreYouSure = nameof(AreYouSure);
+
+        public const string Lombiq_Prevent_Multisubmit = Prefix + "PreventMultisubmit";
     }
 }
