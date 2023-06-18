@@ -7,10 +7,10 @@ using Lombiq.HelpfulLibraries.Common.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using OrchardCore.ContentManagement;
+using OrchardCore.Data;
 using OrchardCore.Data.Migration;
 using OrchardCore.Modules;
 using OrchardCore.ResourceManagement;
-using YesSql.Indexes;
 
 namespace Lombiq.ContentEditors;
 
@@ -24,7 +24,7 @@ public class Startup : StartupBase
         services.AddScoped(typeof(IContentItemAsyncEditorProviderServices<>), typeof(ContentItemAsyncEditorProviderServices<>));
         services.AddContentPart<AsyncEditorPart>();
         services.AddScoped<IDataMigration, AsyncEditorMigrations>();
-        services.AddSingleton<IIndexProvider, AsyncEditorPartIndexProvider>();
+        services.AddIndexProvider<AsyncEditorPartIndexProvider>();
         services.AddScoped<IAsyncEditorProvider<ContentItem>, DefaultContentItemAsyncEditorProvider>();
     }
 }
