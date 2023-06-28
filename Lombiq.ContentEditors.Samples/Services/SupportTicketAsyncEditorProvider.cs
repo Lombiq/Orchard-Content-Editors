@@ -9,6 +9,7 @@ using static Lombiq.ContentEditors.Samples.Constants.EditorGroups.SupportTicket;
 
 namespace Lombiq.ContentEditors.Samples.Services;
 
+// This is a similar class to EmployeeAsyncEditorProvider, see that for more documentation.
 public class SupportTicketAsyncEditorProvider : ContentItemAsyncEditorProviderBase<SupportTicketAsyncEditorProvider>
 {
     public SupportTicketAsyncEditorProvider(IContentItemAsyncEditorProviderServices<SupportTicketAsyncEditorProvider> providerServices)
@@ -25,3 +26,5 @@ public class SupportTicketAsyncEditorProvider : ContentItemAsyncEditorProviderBa
             DescribeEditorGroup(Details, T["Details"], isPublishGroup: true),
         }.AsEnumerable());
 }
+
+// NEXT STATION: Models/SupportTicketPart.cs

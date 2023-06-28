@@ -1,5 +1,7 @@
+@* This is the editor shape used on the Details editor group. *@
+
 @model EditSupportTicketReporterViewModel
-a
+
 <div>
     <label asp-for="Name">@T["Name"]</label>
     <input asp-for="Name" />
@@ -11,6 +13,9 @@ a
     <span asp-validation-for="Email"></span>
 </div>
 
+@* Again, a demo script but this time it's an inline script. It will be evaluated when the editor group is loaded. *@
 <script at="Foot">
     console.log("I'm running in an async editor!");
 </script>
+
+@* NEXT STATION: Navigation/ContentEditorsSamplesNavigationProvider.cs *@

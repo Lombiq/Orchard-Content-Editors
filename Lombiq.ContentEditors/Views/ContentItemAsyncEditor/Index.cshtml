@@ -1,5 +1,9 @@
 @model Lombiq.ContentEditors.ViewModels.ContentItemAsyncEditorViewModel
 
+<zone Name="Title">
+    <h1>@RenderTitleSegments(T["Edit {0}", Model.ContentType])</h1>
+</zone>
+
 <shape type="ContentItemAsyncEditor"
        prop-providerName="@Model.ProviderName"
        prop-contentType="@Model.ContentType"

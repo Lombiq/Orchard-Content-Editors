@@ -1,8 +1,14 @@
+.vs/
+.idea/
+.vscode/
 obj/
 bin/
-*.user
-.vs/
+artifacts/
 wwwroot/
 node_modules/
-.eslintrc.js
-.stylelintrc.js
+*.user
+.pnpm-debug.log
+
+# Mac
+.DS_Store
+
