@@ -9,7 +9,7 @@ using static Lombiq.ContentEditors.Samples.Constants.EditorGroups.SupportTicket;
 
 namespace Lombiq.ContentEditors.Samples.Services;
 
-// It's a similar class to EmployeeAsyncEditorProvider, see that for more documentation.
+// This is a similar class to EmployeeAsyncEditorProvider, see that for more documentation.
 public class SupportTicketAsyncEditorProvider : ContentItemAsyncEditorProviderBase<SupportTicketAsyncEditorProvider>
 {
     public SupportTicketAsyncEditorProvider(IContentItemAsyncEditorProviderServices<SupportTicketAsyncEditorProvider> providerServices)

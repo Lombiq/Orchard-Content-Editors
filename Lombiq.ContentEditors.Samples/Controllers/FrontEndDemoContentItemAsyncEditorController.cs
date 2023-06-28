@@ -21,7 +21,7 @@ public class FrontEndDemoContentItemAsyncEditorController : Controller
         _authorizationService = authorizationService;
 
     [HttpGet("{contentItemId?}")]
-    public async Task<ActionResult> Index(string contentItemId)
+    public async Task<IActionResult> Index(string contentItemId)
     {
         if (!await _authorizationService.AuthorizeAsync(User, Permissions.EditContent))
             return Unauthorized();
