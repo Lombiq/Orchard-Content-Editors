@@ -1,8 +1,11 @@
 ﻿using Lombiq.ContentEditors.Samples.Constants;
 using Lombiq.ContentEditors.Samples.Services;
 using Lombiq.ContentEditors.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using OrchardCore.Contents;
 using OrchardCore.Modules;
+using System.Threading.Tasks;
 
 namespace Lombiq.ContentEditors.Samples.Controllers;
 
@@ -12,15 +15,26 @@ namespace Lombiq.ContentEditors.Samples.Controllers;
 [Route(Routes.FrontEndContentItemAsyncEditor)]
 public class FrontEndDemoContentItemAsyncEditorController : Controller
 {
+    private readonly IAuthorizationService _authorizationService;
+
+    public FrontEndDemoContentItemAsyncEditorController(IAuthorizationService authorizationService) =>
+        _authorizationService = authorizationService;
+
     [HttpGet("{contentItemId?}")]
-    public ActionResult Index(string contentItemId) =>
+    public async Task<ActionResult> Index(string contentItemId)
+    {
+        if (!await _authorizationService.AuthorizeAsync(User, Permissions.EditContent))
+            return Unauthorized();
+
         // You can use the existing ContentItemAsyncEditorViewModel to pass the required data.
-        View(new ContentItemAsyncEditorViewModel
-        {
-            ProviderName = nameof(SupportTicketAsyncEditorProvider),
-            ContentType = ContentTypes.SupportTicket,
-            ContentItemId = contentItemId,
-        });
+        return View(
+            new ContentItemAsyncEditorViewModel
+            {
+                ProviderName = nameof(SupportTicketAsyncEditorProvider),
+                ContentType = ContentTypes.SupportTicket,
+                ContentItemId = contentItemId,
+            });
+    }
 }
 
 // NEXT STATION: Views/FrontEndDemoContentItemAsyncEditor/Index.cshtml
