@@ -1,4 +1,4 @@
-﻿using Lombiq.ContentEditors.Samples.Constants;
+using Lombiq.ContentEditors.Samples.Constants;
 using Lombiq.ContentEditors.Samples.Services;
 using Lombiq.ContentEditors.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -23,8 +23,7 @@ public class FrontEndDemoContentItemAsyncEditorController : Controller
     [HttpGet("{contentItemId?}")]
     public async Task<IActionResult> Index(string contentItemId)
     {
-        if (!await _authorizationService.AuthorizeAsync(User, Permissions.EditContent))
-            return Unauthorized();
+        if (!await _authorizationService.AuthorizeAsync(User, Permissions.EditContent)) return this.ChallengeOrForbid();
 
         // You can use the existing ContentItemAsyncEditorViewModel to pass the required data.
         return View(
