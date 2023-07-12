@@ -4,7 +4,7 @@
 
 ## About
 
-Module for managing advanced content editing processes based on editor groups and asynchronous operations.
+Module for managing advanced content editing processes based on editor groups and asynchronous operations. Watch a demo video of it from the Orchard Community Meeting [here](https://www.youtube.com/watch?v=WJ4dmbG9oVs).
 
 We at [Lombiq](https://lombiq.com/) also used this module for the new [Smithsonian Folkways Recordings website](https://folkways.si.edu/) when migrating it from Orchard 1 to Orchard Core ([see case study](https://lombiq.com/blog/smithsonian-folkways-recordings-now-upgraded-to-orchard-core)).
 
