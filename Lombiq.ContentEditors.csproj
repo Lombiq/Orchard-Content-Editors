@@ -226,6 +226,8 @@
     <Content Include="Views\Lombiq.Editors.TextAreaEditor.TinyMce.cshtml" />
     <Content Include="Views\Lombiq.Editors.TextAreaEditor.Default.cshtml" />
     <Content Include="Views\Lombiq.CollapsibleSection.cshtml" />
+    <Content Include="Views\AsyncEditor.ValidationSummaryModal.cshtml" />
+    <Content Include="Views\AsyncEditor.ValidationSummaryModalBody.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Orchard\Orchard.Framework.csproj">

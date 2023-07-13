@@ -1,0 +1,21 @@
+﻿@{
+    var model = Model.ModelState as ModelStateDictionary;
+
+    const string BlockName = "validationSummaryModal";
+    const string ErrorsElementName = BlockName + "__errors";
+    const string ErrorMessageElementName = BlockName + "__errorMessage";
+}
+
+<div class="@BlockName js-@BlockName">
+    <ol class="alert alert-danger @ErrorsElementName">
+        @foreach (var key in model.Keys)
+        {
+            foreach (var validationError in model[key].Errors)
+            {
+                <li class="@ErrorMessageElementName">
+                    @validationError.ErrorMessage
+                </li>
+            }
+        }
+    </ol>
+</div>
