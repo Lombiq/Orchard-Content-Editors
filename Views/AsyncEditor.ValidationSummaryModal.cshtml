@@ -1,0 +1,34 @@
+﻿@{
+    var modelState = Model.ModelState as ModelStateDictionary;
+    var validationMessage = Model.ValidationMessage as string;
+
+    if ((modelState == null || modelState.IsValid) && string.IsNullOrEmpty(validationMessage))
+    {
+        return;
+    }
+
+    const string BlockName = "validationSummaryModal";
+
+    var validationSummaryModalBodyShape = New.AsyncEditor_ValidationSummaryModalBody(ModelState: modelState);
+}
+
+@Display.Lombiq_Modals_Information(
+    Id: BlockName,
+    BlockName: BlockName,
+    Title: validationMessage ?? T("Validation Error").Text,
+    Body: @Display(validationSummaryModalBodyShape).ToString(),
+    ButtonText: T("OK").Text,
+    CloseOnEscape: true)
+
+<script type="text/javascript">
+    ; (function ($) {
+        $(function () {
+            @if (modelState != null && !modelState.IsValid)
+            {
+                <text>
+                    $("#@BlockName").dialog("open");
+                </text>
+            }
+        });
+    })(jQuery);
+</script>
