@@ -167,6 +167,18 @@
             else {
                 plugin.pickerElement.val("");
             }
+        },
+
+        updateMinValue: function (date) {
+            var plugin = this;
+
+            plugin.pickerElement.datepicker("option", "minDate", moment(date).toDate());
+        },
+
+        updateMaxValue: function (date) {
+            var plugin = this;
+
+            plugin.pickerElement.datepicker("option", "maxDate", moment(date).toDate());
         }
     });
 
