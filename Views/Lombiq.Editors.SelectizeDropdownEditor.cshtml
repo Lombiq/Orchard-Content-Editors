@@ -51,9 +51,14 @@
     viewModel.SortSelectListByText();
 
     var jsonConverter = WorkContext.Resolve<IJsonConverter>();
-    var availableSelectListItems = viewModel.SelectList.Select(option => new { option.Text, option.Value });
-    var selectedSelectListItems = viewModel.SelectList.Where(option => option.Selected).Select(option => new { option.Text, option.Value });
+    var availableSelectListItems = viewModel.SelectList.Select(option => new { option.Text, option.Value, option.Disabled });
+    var selectedSelectListItems = viewModel.SelectList.Where(option => option.Selected).Select(option => new { option.Text, option.Value, option.Disabled });
     var selectedValues = selectedSelectListItems.Select(option => option.Value);
+
+    if (viewModel.OrderSelectListByDisabled ?? false)
+    {
+        availableSelectListItems = availableSelectListItems.OrderBy(option => option.Disabled);
+    }
 }
 
 <div class="editor editorField form-group @DefaultBlockName @BlockName">
