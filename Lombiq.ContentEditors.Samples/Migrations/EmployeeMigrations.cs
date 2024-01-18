@@ -5,6 +5,7 @@ using OrchardCore.ContentManagement.Metadata.Builders;
 using OrchardCore.ContentManagement.Metadata.Settings;
 using OrchardCore.Data.Migration;
 using System;
+using System.Threading.Tasks;
 using static Lombiq.ContentEditors.Samples.Constants.ContentTypes;
 
 namespace Lombiq.ContentEditors.Samples.Migrations;
@@ -17,9 +18,9 @@ public class EmployeeMigrations : DataMigration
     public EmployeeMigrations(IContentDefinitionManager contentDefinitionManager) =>
         _contentDefinitionManager = contentDefinitionManager;
 
-    public int Create()
+    public async Task<int> CreateAsync()
     {
-        _contentDefinitionManager.AlterPartDefinition(nameof(AsyncEditorEmployeePart), part => part
+        await _contentDefinitionManager.AlterPartDefinitionAsync(nameof(AsyncEditorEmployeePart), part => part
             .WithField(nameof(AsyncEditorEmployeePart.Name), ConfigureField<TextField>("Name"))
             .WithField(nameof(AsyncEditorEmployeePart.Position), ConfigureField<TextField>("Position"))
             .WithField(nameof(AsyncEditorEmployeePart.Office), ConfigureField<TextField>("Office Location"))
@@ -27,7 +28,7 @@ public class EmployeeMigrations : DataMigration
             .WithField(nameof(AsyncEditorEmployeePart.StartDate), ConfigureField<DateField>("Start Date"))
             .WithField(nameof(AsyncEditorEmployeePart.Salary), ConfigureField<NumericField>("Salary")));
 
-        _contentDefinitionManager.AlterTypeDefinition(Employee, type => type
+        await _contentDefinitionManager.AlterTypeDefinitionAsync(Employee, type => type
             .Listable()
             .WithPart(nameof(AsyncEditorEmployeePart)));
 
