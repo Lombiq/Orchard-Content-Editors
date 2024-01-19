@@ -41,7 +41,8 @@
             for (var i = 0; i < plugin.settings.selectizeOptions.length; i++) {
                 $selectizeElement.addOption({
                     value: plugin.settings.selectizeOptions[i].Value,
-                    text: plugin.settings.selectizeOptions[i].Text
+                    text: plugin.settings.selectizeOptions[i].Text,
+                    disabled: plugin.settings.selectizeOptions[i].Disabled
                 });
             }
 

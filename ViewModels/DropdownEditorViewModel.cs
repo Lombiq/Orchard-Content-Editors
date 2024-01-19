@@ -18,6 +18,7 @@ namespace Lombiq.ContentEditors.ViewModels
         public Dictionary<string, string> Hints { get; set; }
         public Dictionary<string, string> Descriptions { get; set; }
         public bool? OrderByAscending { get; set; } = true;
+        public bool? OrderSelectListByDisabled { get; set; } = false;
 
         #region IParentElementValueDependency implementation
 
