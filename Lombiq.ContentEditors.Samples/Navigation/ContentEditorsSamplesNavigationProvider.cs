@@ -12,15 +12,10 @@ namespace Lombiq.ContentEditors.Samples.Navigation;
 // This is the navigation provider for the Content Editors Samples module. It adds menu items to a navigation with an ID
 // of "MainMenu". If you are using the Lombiq Base Theme then this navigation is rendered in the header. If you are
 // using the OSOCE app then this theme is enabled by default.
-public class ContentEditorsSamplesNavigationProvider : MainMenuNavigationProviderBase
+public class ContentEditorsSamplesNavigationProvider(
+    IHttpContextAccessor hca,
+    IStringLocalizer<ContentEditorsSamplesNavigationProvider> stringLocalizer) : MainMenuNavigationProviderBase(hca, stringLocalizer)
 {
-    public ContentEditorsSamplesNavigationProvider(
-        IHttpContextAccessor hca,
-        IStringLocalizer<ContentEditorsSamplesNavigationProvider> stringLocalizer)
-        : base(hca, stringLocalizer)
-    {
-    }
-
     protected override void Build(NavigationBuilder builder)
     {
         var context = _hca.HttpContext;

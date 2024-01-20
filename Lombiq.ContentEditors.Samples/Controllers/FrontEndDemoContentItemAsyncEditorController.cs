@@ -13,17 +13,12 @@ namespace Lombiq.ContentEditors.Samples.Controllers;
 // to this one.
 [Feature(FeatureIds.Samples)]
 [Route(Routes.FrontEndContentItemAsyncEditor)]
-public class FrontEndDemoContentItemAsyncEditorController : Controller
+public class FrontEndDemoContentItemAsyncEditorController(IAuthorizationService authorizationService) : Controller
 {
-    private readonly IAuthorizationService _authorizationService;
-
-    public FrontEndDemoContentItemAsyncEditorController(IAuthorizationService authorizationService) =>
-        _authorizationService = authorizationService;
-
     [HttpGet("{contentItemId?}")]
     public async Task<IActionResult> Index(string contentItemId)
     {
-        if (!await _authorizationService.AuthorizeAsync(User, Permissions.EditContent)) return this.ChallengeOrForbid();
+        if (!await authorizationService.AuthorizeAsync(User, Permissions.EditContent)) return this.ChallengeOrForbid();
 
         // You can use the existing ContentItemAsyncEditorViewModel to pass the required data.
         return View(

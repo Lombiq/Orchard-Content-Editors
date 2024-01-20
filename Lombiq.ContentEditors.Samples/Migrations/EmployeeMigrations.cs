@@ -11,16 +11,11 @@ using static Lombiq.ContentEditors.Samples.Constants.ContentTypes;
 namespace Lombiq.ContentEditors.Samples.Migrations;
 
 // This is the migration class for the Employee content type. Nothing specific to async editors here.
-public class EmployeeMigrations : DataMigration
+public class EmployeeMigrations(IContentDefinitionManager contentDefinitionManager) : DataMigration
 {
-    private readonly IContentDefinitionManager _contentDefinitionManager;
-
-    public EmployeeMigrations(IContentDefinitionManager contentDefinitionManager) =>
-        _contentDefinitionManager = contentDefinitionManager;
-
     public async Task<int> CreateAsync()
     {
-        await _contentDefinitionManager.AlterPartDefinitionAsync(nameof(AsyncEditorEmployeePart), part => part
+        await contentDefinitionManager.AlterPartDefinitionAsync(nameof(AsyncEditorEmployeePart), part => part
             .WithField(nameof(AsyncEditorEmployeePart.Name), ConfigureField<TextField>("Name"))
             .WithField(nameof(AsyncEditorEmployeePart.Position), ConfigureField<TextField>("Position"))
             .WithField(nameof(AsyncEditorEmployeePart.Office), ConfigureField<TextField>("Office Location"))
@@ -28,7 +23,7 @@ public class EmployeeMigrations : DataMigration
             .WithField(nameof(AsyncEditorEmployeePart.StartDate), ConfigureField<DateField>("Start Date"))
             .WithField(nameof(AsyncEditorEmployeePart.Salary), ConfigureField<NumericField>("Salary")));
 
-        await _contentDefinitionManager.AlterTypeDefinitionAsync(Employee, type => type
+        await contentDefinitionManager.AlterTypeDefinitionAsync(Employee, type => type
             .Listable()
             .WithPart(nameof(AsyncEditorEmployeePart)));
 

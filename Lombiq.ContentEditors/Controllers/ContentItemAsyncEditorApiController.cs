@@ -12,26 +12,17 @@ namespace Lombiq.ContentEditors.Controllers;
 
 [Feature(FeatureIds.AsyncEditor)]
 [Route(Routes.ContentItemAsyncEditorApi)]
-public class ContentItemAsyncEditorApiController : Controller
+public class ContentItemAsyncEditorApiController(
+    IEnumerable<IAsyncEditorProvider<ContentItem>> providers,
+    IContentManager contentManager) : Controller
 {
-    private readonly IEnumerable<IAsyncEditorProvider<ContentItem>> _providers;
-    private readonly IContentManager _contentManager;
-
-    public ContentItemAsyncEditorApiController(
-        IEnumerable<IAsyncEditorProvider<ContentItem>> providers,
-        IContentManager contentManager)
-    {
-        _providers = providers;
-        _contentManager = contentManager;
-    }
-
     [HttpGet]
     public async Task<ActionResult<RenderedAsyncEditorGroupRequest>> Get([FromQuery] RenderAsyncEditorRequest request)
     {
         var provider = GetProvider(request.ProviderName);
         if (provider == null) return NotFound();
 
-        var item = await _contentManager.GetOrCreateAsync(request.ContentId, request.ContentType, VersionOptions.Latest);
+        var item = await contentManager.GetOrCreateAsync(request.ContentId, request.ContentType, VersionOptions.Latest);
         if (item == null) return NotFound();
 
         var context = PopulateContext(request, item);
@@ -47,7 +38,7 @@ public class ContentItemAsyncEditorApiController : Controller
         var provider = GetProvider(request.ProviderName);
         if (provider == null) return NotFound();
 
-        var item = await _contentManager.GetOrCreateAsync(request.ContentId, request.ContentType, VersionOptions.Latest);
+        var item = await contentManager.GetOrCreateAsync(request.ContentId, request.ContentType, VersionOptions.Latest);
         if (item == null) return NotFound();
 
         var context = PopulateContext(request, item);
@@ -73,7 +64,7 @@ public class ContentItemAsyncEditorApiController : Controller
     }
 
     private IAsyncEditorProvider<ContentItem> GetProvider(string name) =>
-        _providers.FirstOrDefault(provider => provider.Name == name);
+        providers.FirstOrDefault(provider => provider.Name == name);
 
     private static AsyncEditorContext<ContentItem> PopulateContext(
         RenderAsyncEditorRequest request,
