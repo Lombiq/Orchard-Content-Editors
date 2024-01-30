@@ -11,9 +11,13 @@ namespace Lombiq.ContentEditors.Samples.Services;
 
 // If you want to create an async editor for your content type then you need to create a class that inherits from
 // ContentItemAsyncEditorProviderBase<TProvider> where TProvider is the type of your class.
-public class EmployeeAsyncEditorProvider(IContentItemAsyncEditorProviderServices<EmployeeAsyncEditorProvider> providerServices)
-    : ContentItemAsyncEditorProviderBase<EmployeeAsyncEditorProvider>(providerServices)
+public class EmployeeAsyncEditorProvider : ContentItemAsyncEditorProviderBase<EmployeeAsyncEditorProvider>
 {
+    public EmployeeAsyncEditorProvider(IContentItemAsyncEditorProviderServices<EmployeeAsyncEditorProvider> providerServices)
+        : base(providerServices)
+    {
+    }
+
     // This method determines if the editor provider can handle the content type or not.
     protected override bool CanHandleContentType(string contentType) => contentType == ContentTypes.Employee;
 

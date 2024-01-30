@@ -10,9 +10,13 @@ using static Lombiq.ContentEditors.Samples.Constants.EditorGroups.SupportTicket;
 namespace Lombiq.ContentEditors.Samples.Services;
 
 // This is a similar class to EmployeeAsyncEditorProvider, see that for more documentation.
-public class SupportTicketAsyncEditorProvider(IContentItemAsyncEditorProviderServices<SupportTicketAsyncEditorProvider> providerServices)
-    : ContentItemAsyncEditorProviderBase<SupportTicketAsyncEditorProvider>(providerServices)
+public class SupportTicketAsyncEditorProvider : ContentItemAsyncEditorProviderBase<SupportTicketAsyncEditorProvider>
 {
+    public SupportTicketAsyncEditorProvider(IContentItemAsyncEditorProviderServices<SupportTicketAsyncEditorProvider> providerServices)
+        : base(providerServices)
+    {
+    }
+
     protected override bool CanHandleContentType(string contentType) => contentType == ContentTypes.SupportTicket;
 
     public override Task<IEnumerable<AsyncEditorGroupDescriptor<ContentItem>>> DescribeEditorGroupsAsync() =>
