@@ -2,6 +2,7 @@ using Lombiq.ContentEditors.Samples.Models;
 using OrchardCore.ContentManagement.Metadata;
 using OrchardCore.ContentManagement.Metadata.Settings;
 using OrchardCore.Data.Migration;
+using System.Threading.Tasks;
 using static Lombiq.ContentEditors.Samples.Constants.ContentTypes;
 
 namespace Lombiq.ContentEditors.Samples.Migrations;
@@ -14,9 +15,9 @@ public class SupportTicketMigrations : DataMigration
     public SupportTicketMigrations(IContentDefinitionManager contentDefinitionManager) =>
         _contentDefinitionManager = contentDefinitionManager;
 
-    public int Create()
+    public async Task<int> CreateAsync()
     {
-        _contentDefinitionManager.AlterTypeDefinition(SupportTicket, type => type
+        await _contentDefinitionManager.AlterTypeDefinitionAsync(SupportTicket, type => type
             .Listable()
             .WithPart(nameof(SupportTicketPart)));
 

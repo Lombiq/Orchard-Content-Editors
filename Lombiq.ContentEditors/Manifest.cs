@@ -13,8 +13,8 @@ using OrchardCore.Modules.Manifest;
     Name = "Lombiq Async Editor",
     Description = "Managing advanced content editing processes based on editor groups and asynchronous operations.",
     Category = "Content",
-    Dependencies = new[]
-    {
+    Dependencies =
+    [
         "OrchardCore.ContentFields",
-    }
+    ]
 )]

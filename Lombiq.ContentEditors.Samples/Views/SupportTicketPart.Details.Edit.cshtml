@@ -8,12 +8,12 @@ when you click on the "Click me" button, something will happen. *@
 <script asp-name="@ResourceNames.SampleAsyncEditorGroupScript" at="Foot"></script>
 
 <div>
-    <label asp-for="Url">@T["URL"]</label>
+    <label class="form-label" asp-for="Url">@T["URL"]</label>
     <input asp-for="Url" />
     <span asp-validation-for="Url"></span>
 </div>
 <div>
-    <label asp-for="Description">@T["Description"]</label>
+    <label class="form-label" asp-for="Description">@T["Description"]</label>
     <textarea asp-for="Description"></textarea>
     <span asp-validation-for="Description"></span>
 </div>
