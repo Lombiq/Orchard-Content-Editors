@@ -11,35 +11,42 @@ class AsyncEditorApiClient {
         this.contentType = parameters.contentType;
     }
 
-    loadEditor(contentId, editorGroup, callback) {
-        return fetch(this.createUrl(contentId, editorGroup))
-            .then((response) => response.json())
-            .then((data) => callback(true, data))
-            .catch((error) => callback(false, error));
-    }
-
-    async submitEditor(contentId, editorGroup, nextEditorGroup, formData, callback) {
+    async fetchEditor(callback, contentId, editorGroup, nextEditorGroup, requestOptions, raiseEvent) {
         try {
-            const response = await fetch(this.createUrl(contentId, editorGroup, nextEditorGroup), {
-                method: 'post',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-                },
-                body: new URLSearchParams(formData),
-            });
+            const response = await fetch(this.createUrl(contentId, editorGroup, nextEditorGroup), requestOptions);
+            const data = await response.json();
+            const success = data.type !== 'Error';
 
-            callback(true, await response.json());
+            callback(success, data);
+            if (!success) return;
 
-            const submittedEditorEvent = new CustomEvent('asyncEditorSubmittedEditor', {
-                bubbles: true,
-                cancelable: true,
-                detail: { asyncEditor: window.asyncEditor },
-            });
-            document.dispatchEvent(submittedEditorEvent);
+            if (raiseEvent) {
+                const submittedEditorEvent = new CustomEvent('asyncEditorSubmittedEditor', {
+                    bubbles: true,
+                    cancelable: true,
+                    detail: { asyncEditor: window.asyncEditor },
+                });
+                document.dispatchEvent(submittedEditorEvent);
+            }
         }
         catch (error) {
             callback(false, error);
         }
+    }
+
+    loadEditor(contentId, editorGroup, callback) {
+        return this.fetchEditor(callback, contentId, editorGroup);
+    }
+
+    submitEditor(contentId, editorGroup, nextEditorGroup, formData, callback) {
+        const requestOptions = {
+            method: 'post',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+            },
+            body: new URLSearchParams(formData),
+        };
+        return this.fetchEditor(callback, contentId, editorGroup, nextEditorGroup, requestOptions, true);
     }
 
     createUrl(contentId, editorGroup, nextEditorGroup) {
