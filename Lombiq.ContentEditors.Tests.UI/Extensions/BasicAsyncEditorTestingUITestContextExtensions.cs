@@ -14,7 +14,7 @@ public static class BasicAsyncEditorTestingUITestContextExtensions
 
     public static async Task<UITestContext> TestDemoContentItemAsyncEditorAsync(this UITestContext context)
     {
-        await context.GoToRelativeUrlAsync("/Admin/ContentItemAsyncEditor/EmployeeAsyncEditorProvider/Employee");
+        await context.GoToAdminRelativeUrlAsync("/ContentItemAsyncEditor/EmployeeAsyncEditorProvider/Employee");
 
         context.Exists(By.XPath("//label[. = 'Name']"));
         context.Exists(By.XPath("//*[contains(@class, 'asyncEditor__groupLink') and contains(., 'Personal Details')]"));

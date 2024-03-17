@@ -95,7 +95,7 @@ public abstract class ContentItemAsyncEditorProviderBase<TProvider> : IAsyncEdit
 
         await _contentManager.CreateOrUpdateAsync(context.Content);
 
-        if (!(await DescribeEditorGroupsAsync()).First(group => @group.Name == context.EditorGroup).IsPublishGroup)
+        if (!(await DescribeEditorGroupsAsync()).First(group => group.Name == context.EditorGroup).IsPublishGroup)
         {
             return CreateUpdateResult(editorShape, _updateModelAccessor.ModelUpdater.ModelState);
         }
