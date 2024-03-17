@@ -144,9 +144,9 @@ public abstract class ContentItemAsyncEditorProviderBase<TProvider> : IAsyncEdit
             DisplayText = displayText,
             IsPublishGroup = isPublishGroup,
             IsAccessibleAsync = isAccessibleFactory ??
-                (async (context) => await CanRenderEditorGroupAsync(context, name)),
+                (async context => await CanRenderEditorGroupAsync(context, name)),
             IsFilledAsync = isFilledFactory ??
-                (async (context) => await IsEditorGroupFilledAsync(context, name)),
+                (async context => await IsEditorGroupFilledAsync(context, name)),
         };
 
     protected virtual void AddEditorShapeAlternates(AsyncEditorContext<ContentItem> context, IShape editorShape)
