@@ -18,25 +18,28 @@ class AsyncEditorApiClient {
             .catch((error) => callback(false, error));
     }
 
-    submitEditor(contentId, editorGroup, nextEditorGroup, formData, callback) {
-        return fetch(this.createUrl(contentId, editorGroup, nextEditorGroup), {
-            method: 'post',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-            },
-            body: new URLSearchParams(formData),
-        })
-            .then((response) => response.json())
-            .then((data) => callback(true, data))
-            .then(() => {
-                const submittedEditorEvent = new CustomEvent('asyncEditorSubmittedEditor', {
-                    bubbles: true,
-                    cancelable: true,
-                    detail: { asyncEditor: window.asyncEditor },
-                });
-                document.dispatchEvent(submittedEditorEvent);
-            })
-            .catch((error) => callback(false, error));
+    async submitEditor(contentId, editorGroup, nextEditorGroup, formData, callback) {
+        try {
+            const response = await fetch(this.createUrl(contentId, editorGroup, nextEditorGroup), {
+                method: 'post',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+                },
+                body: new URLSearchParams(formData),
+            });
+
+            callback(true, await response.json());
+
+            const submittedEditorEvent = new CustomEvent('asyncEditorSubmittedEditor', {
+                bubbles: true,
+                cancelable: true,
+                detail: { asyncEditor: window.asyncEditor },
+            });
+            document.dispatchEvent(submittedEditorEvent);
+        }
+        catch (error) {
+            callback(false, error);
+        }
     }
 
     createUrl(contentId, editorGroup, nextEditorGroup) {
@@ -67,6 +70,7 @@ window.asyncEditor.editor = {
             api: null,
             message: '',
             errorText: '',
+            errorJson: '',
             contentId: '',
             editorHtml: '',
             validationSummaryHtml: '',
@@ -166,6 +170,7 @@ window.asyncEditor.editor = {
                 if (shouldUpdateQuery) self.updateQuery();
             }
             else {
+                self.errorJson = JSON.stringify({ error: data, string: data.toString() });
                 self.errorText = self.defaultErrorText;
             }
         },
