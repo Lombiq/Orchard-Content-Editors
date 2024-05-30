@@ -3,7 +3,6 @@ using Lombiq.ContentEditors.Samples.Services;
 using Lombiq.ContentEditors.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using OrchardCore.Contents;
 using OrchardCore.Modules;
 using System.Threading.Tasks;
 using static OrchardCore.Contents.CommonPermissions;
