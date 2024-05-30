@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using OrchardCore.Contents;
 using OrchardCore.Modules;
 using System.Threading.Tasks;
+using static OrchardCore.Contents.CommonPermissions;
 
 namespace Lombiq.ContentEditors.Samples.Controllers;
 
@@ -23,7 +24,7 @@ public class FrontEndDemoContentItemAsyncEditorController : Controller
     [HttpGet("{contentItemId?}")]
     public async Task<IActionResult> Index(string contentItemId)
     {
-        if (!await _authorizationService.AuthorizeAsync(User, Permissions.EditContent)) return this.ChallengeOrForbid();
+        if (!await _authorizationService.AuthorizeAsync(User, EditContent)) return this.ChallengeOrForbid();
 
         // You can use the existing ContentItemAsyncEditorViewModel to pass the required data.
         return View(
