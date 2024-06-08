@@ -28,6 +28,8 @@ public class ContentItemAsyncEditorApiController : Controller
     [HttpGet]
     public async Task<ActionResult<RenderedAsyncEditorGroupRequest>> Get([FromQuery] RenderAsyncEditorRequest request)
     {
+        if (!ModelState.IsValid) return BadRequest(ModelState);
+
         var provider = GetProvider(request.ProviderName);
         if (provider == null) return NotFound();
 
