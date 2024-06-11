@@ -23,6 +23,8 @@ public class FrontEndDemoContentItemAsyncEditorController : Controller
     [HttpGet("{contentItemId?}")]
     public async Task<IActionResult> Index(string contentItemId)
     {
+        if (!ModelState.IsValid) return BadRequest(ModelState);
+
         if (!await _authorizationService.AuthorizeAsync(User, Permissions.EditContent)) return this.ChallengeOrForbid();
 
         // You can use the existing ContentItemAsyncEditorViewModel to pass the required data.
