@@ -9,11 +9,11 @@ public static class EditorGroups
         public const string PersonalDetails = nameof(PersonalDetails);
         public const string EmploymentDetails = nameof(EmploymentDetails);
 
-        public static readonly IEnumerable<string> EditorGroups = new[]
-        {
+        public static readonly IEnumerable<string> EditorGroups =
+        [
             PersonalDetails,
             EmploymentDetails,
-        };
+        ];
     }
 
     public static class SupportTicket
@@ -22,11 +22,11 @@ public static class EditorGroups
         public const string Details = nameof(Details);
         public const string Summary = nameof(Summary);
 
-        public static readonly IEnumerable<string> EditorGroups = new[]
-        {
+        public static readonly IEnumerable<string> EditorGroups =
+        [
             Reporter,
             Details,
             Summary,
-        };
+        ];
     }
 }

@@ -12,11 +12,15 @@ namespace Lombiq.ContentEditors.Controllers;
 public class ContentItemAsyncEditorController : Controller
 {
     [HttpGet("{providerName}/{contentType}/{contentItemId?}")]
-    public ActionResult Index(string providerName, string contentType, string contentItemId) =>
-        View(new ContentItemAsyncEditorViewModel
+    public ActionResult Index(string providerName, string contentType, string contentItemId)
+    {
+        if (!ModelState.IsValid) return BadRequest(ModelState);
+
+        return View(new ContentItemAsyncEditorViewModel
         {
             ProviderName = providerName,
             ContentType = contentType,
             ContentItemId = contentItemId,
         });
+    }
 }

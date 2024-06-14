@@ -25,6 +25,7 @@ public class FrontEndDemoContentItemAsyncEditorController : Controller
     {
         if (!await _authorizationService.AuthorizeAsync(User, EditContent)) return this.ChallengeOrForbid();
 
+
         // You can use the existing ContentItemAsyncEditorViewModel to pass the required data.
         return View(
             new ContentItemAsyncEditorViewModel
