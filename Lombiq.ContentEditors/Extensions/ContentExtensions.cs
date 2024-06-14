@@ -18,7 +18,7 @@ public static class ContentExtensions
         content
             .GetOrWeldAsyncEditorPart()
             .FilledEditorGroups
-            .GetMaybe(asyncEditorId) ?? Enumerable.Empty<string>();
+            .GetMaybe(asyncEditorId) ?? [];
 
     public static bool IsEditorGroupFilled(this IContent content, string asyncEditorId, string editorGroup) =>
         content.GetFilledEditorGroups(asyncEditorId).Contains(editorGroup);
