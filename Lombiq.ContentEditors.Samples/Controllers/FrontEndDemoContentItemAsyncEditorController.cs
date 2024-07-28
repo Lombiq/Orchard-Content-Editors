@@ -3,9 +3,9 @@ using Lombiq.ContentEditors.Samples.Services;
 using Lombiq.ContentEditors.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using OrchardCore.Contents;
 using OrchardCore.Modules;
 using System.Threading.Tasks;
+using static OrchardCore.Contents.CommonPermissions;
 
 namespace Lombiq.ContentEditors.Samples.Controllers;
 
@@ -25,7 +25,7 @@ public class FrontEndDemoContentItemAsyncEditorController : Controller
     {
         if (!ModelState.IsValid) return BadRequest(ModelState);
 
-        if (!await _authorizationService.AuthorizeAsync(User, Permissions.EditContent)) return this.ChallengeOrForbid();
+        if (!await _authorizationService.AuthorizeAsync(User, EditContent)) return this.ChallengeOrForbid();
 
         // You can use the existing ContentItemAsyncEditorViewModel to pass the required data.
         return View(
