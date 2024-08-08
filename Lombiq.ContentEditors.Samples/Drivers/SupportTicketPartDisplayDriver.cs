@@ -4,7 +4,6 @@ using Lombiq.ContentEditors.Samples.ViewModels;
 using OrchardCore.ContentManagement.Display.ContentDisplay;
 using OrchardCore.ContentManagement.Display.Models;
 using OrchardCore.DisplayManagement.Handlers;
-using OrchardCore.DisplayManagement.ModelBinding;
 using OrchardCore.DisplayManagement.Views;
 using System.Threading.Tasks;
 
@@ -28,7 +27,7 @@ public class SupportTicketPartDisplayDriver : ContentPartDisplayDriver<SupportTi
                 viewModel.Description = part.Description;
             }).OnGroup(EditorGroups.SupportTicket.Details).Location("Content"));
 
-    public override async Task<IDisplayResult> UpdateAsync(SupportTicketPart part, IUpdateModel updater, UpdatePartEditorContext context)
+    public override async Task<IDisplayResult> UpdateAsync(SupportTicketPart part, UpdatePartEditorContext context)
     {
         // It's a good idea to check what editor group is being updated. This way you can have different update logic
         // for different editor groups, and you won't update properties that aren't on the current editor group.
