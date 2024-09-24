@@ -11,7 +11,7 @@ namespace Lombiq.ContentEditors.Samples.Drivers;
 
 // This is the driver for the SupportTicketPart. It'll generate and place editor shapes for the respective editor
 // groups.
-public class SupportTicketPartDisplayDriver : ContentPartDisplayDriver<SupportTicketPart>
+public sealed class SupportTicketPartDisplayDriver : ContentPartDisplayDriver<SupportTicketPart>
 {
     // The editor shapes are generated here. The shape is placed from here instead of using the placement.json file.
     public override IDisplayResult Edit(SupportTicketPart part, BuildPartEditorContext context) =>

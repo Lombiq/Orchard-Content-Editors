@@ -14,7 +14,7 @@ namespace Lombiq.ContentEditors.Controllers;
 
 [Feature(FeatureIds.AsyncEditor)]
 [Route(Routes.ContentItemAsyncEditorApi)]
-public class ContentItemAsyncEditorApiController : Controller
+public sealed class ContentItemAsyncEditorApiController : Controller
 {
     private readonly IEnumerable<IAsyncEditorProvider<ContentItem>> _providers;
     private readonly IContentManager _contentManager;

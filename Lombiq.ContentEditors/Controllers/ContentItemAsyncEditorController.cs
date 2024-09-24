@@ -9,7 +9,7 @@ namespace Lombiq.ContentEditors.Controllers;
 [Feature(FeatureIds.AsyncEditor)]
 [Admin]
 [Route(Routes.ContentItemAsyncEditor)]
-public class ContentItemAsyncEditorController : Controller
+public sealed class ContentItemAsyncEditorController : Controller
 {
     [HttpGet("{providerName}/{contentType}/{contentItemId?}")]
     public ActionResult Index(string providerName, string contentType, string contentItemId)

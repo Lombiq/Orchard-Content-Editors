@@ -13,7 +13,7 @@ namespace Lombiq.ContentEditors.Samples.Controllers;
 // to this one.
 [Feature(FeatureIds.Samples)]
 [Route(Routes.FrontEndContentItemAsyncEditor)]
-public class FrontEndDemoContentItemAsyncEditorController : Controller
+public sealed class FrontEndDemoContentItemAsyncEditorController : Controller
 {
     private readonly IAuthorizationService _authorizationService;
 
