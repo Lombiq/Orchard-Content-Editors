@@ -33,6 +33,6 @@ public class Startup : StartupBase
 
         services.AddTransient<IConfigureOptions<ResourceManagementOptions>, ResourceManagementOptionsConfiguration>();
 
-        services.AddScoped<INavigationProvider, ContentEditorsSamplesNavigationProvider>();
+        services.AddNavigationProvider<ContentEditorsSamplesNavigationProvider>();
     }
 }
