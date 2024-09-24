@@ -11,7 +11,7 @@ using static Lombiq.ContentEditors.Samples.Constants.ContentTypes;
 namespace Lombiq.ContentEditors.Samples.Migrations;
 
 // This is the migration class for the Employee content type. Nothing specific to async editors here.
-public class EmployeeMigrations : DataMigration
+public sealed class EmployeeMigrations : DataMigration
 {
     private readonly IContentDefinitionManager _contentDefinitionManager;
 

@@ -6,7 +6,7 @@ using YesSql.Sql;
 
 namespace Lombiq.ContentEditors.Migrations;
 
-public class AsyncEditorMigrations : DataMigration
+public sealed class AsyncEditorMigrations : DataMigration
 {
     public async Task<int> CreateAsync()
     {
