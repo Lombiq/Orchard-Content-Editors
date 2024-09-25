@@ -16,7 +16,7 @@ using OrchardCore.ResourceManagement;
 namespace Lombiq.ContentEditors.Samples;
 
 [Feature(FeatureIds.Samples)]
-public class Startup : StartupBase
+public sealed class Startup : StartupBase
 {
     public override void ConfigureServices(IServiceCollection services)
     {
@@ -33,6 +33,6 @@ public class Startup : StartupBase
 
         services.AddTransient<IConfigureOptions<ResourceManagementOptions>, ResourceManagementOptionsConfiguration>();
 
-        services.AddScoped<INavigationProvider, ContentEditorsSamplesNavigationProvider>();
+        services.AddNavigationProvider<ContentEditorsSamplesNavigationProvider>();
     }
 }

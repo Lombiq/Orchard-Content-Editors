@@ -1,9 +1,11 @@
 using Lombiq.ContentEditors.Constants;
 using Lombiq.ContentEditors.Models;
 using Lombiq.ContentEditors.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OrchardCore.ContentManagement;
 using OrchardCore.Modules;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,7 +14,7 @@ namespace Lombiq.ContentEditors.Controllers;
 
 [Feature(FeatureIds.AsyncEditor)]
 [Route(Routes.ContentItemAsyncEditorApi)]
-public class ContentItemAsyncEditorApiController : Controller
+public sealed class ContentItemAsyncEditorApiController : Controller
 {
     private readonly IEnumerable<IAsyncEditorProvider<ContentItem>> _providers;
     private readonly IContentManager _contentManager;
@@ -46,32 +48,42 @@ public class ContentItemAsyncEditorApiController : Controller
     [ValidateAntiForgeryToken]
     public async Task<ActionResult> Post([FromQuery] SubmitAsyncEditorRequest request)
     {
-        var provider = GetProvider(request.ProviderName);
-        if (provider == null) return NotFound();
-
-        var item = await _contentManager.GetOrCreateAsync(request.ContentId, request.ContentType, VersionOptions.Latest);
-        if (item == null) return NotFound();
-
-        var context = PopulateContext(request, item);
-        if (!await provider.CanRenderEditorGroupAsync(context)) return NotFound();
-
-        var result = await provider.UpdateEditorAsync(context);
-        if (!result.ModelState.IsValid ||
-            string.IsNullOrEmpty(request.NextEditorGroup) ||
-            request.NextEditorGroup == request.EditorGroup)
+        try
         {
+            var provider = GetProvider(request.ProviderName);
+            if (provider == null) return Fail($"Couldn't get the provider \"{request.ProviderName}\".");
+
+            var item = await _contentManager.GetOrCreateAsync(request.ContentId, request.ContentType, VersionOptions.Latest);
+            if (item == null) return Fail($"Couldn't find the content item \"{request.ContentId}\".");
+
+            var context = PopulateContext(request, item);
+            if (!await provider.CanRenderEditorGroupAsync(context))
+            {
+                return Fail($"The editor group of provider \"{request.ProviderName}\" can't be rendered.");
+            }
+
+            var result = await provider.UpdateEditorAsync(context);
+            if (!result.ModelState.IsValid ||
+                string.IsNullOrEmpty(request.NextEditorGroup) ||
+                request.NextEditorGroup == request.EditorGroup)
+            {
+                return await AsyncEditorResultAsync(
+                    context,
+                    provider,
+                    renderedEditor: await result.RenderedEditorShapeFactory(),
+                    message: result.Message);
+            }
+
+            var nextEditorContext = PopulateContext(request, item, request.NextEditorGroup);
             return await AsyncEditorResultAsync(
-                context,
+                !await provider.CanRenderEditorGroupAsync(nextEditorContext) ? context : nextEditorContext,
                 provider,
-                renderedEditor: await result.RenderedEditorShapeFactory(),
                 message: result.Message);
         }
-
-        var nextEditorContext = PopulateContext(request, item, request.NextEditorGroup);
-        return await AsyncEditorResultAsync(
-            !await provider.CanRenderEditorGroupAsync(nextEditorContext) ? context : nextEditorContext,
-            provider,
-            message: result.Message);
+        catch (Exception exception)
+        {
+            return Fail(exception);
+        }
     }
 
     private IAsyncEditorProvider<ContentItem> GetProvider(string name) =>
@@ -116,4 +128,14 @@ public class ContentItemAsyncEditorApiController : Controller
             Message = message,
         });
     }
+
+    /// <summary>
+    /// Provides serialized JSON information during local development, but ony a generic error message in production.
+    /// It's useful to always return JSON, regardless whether the request succeeded or failed.
+    /// </summary>
+    private JsonResult Fail(object data) => Json(new
+    {
+        Type = "Error",
+        Content = HttpContext.IsDevelopmentAndLocalhost() ? data : "Something went wrong.",
+    });
 }

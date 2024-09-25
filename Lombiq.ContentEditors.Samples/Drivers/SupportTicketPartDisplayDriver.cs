@@ -3,7 +3,7 @@ using Lombiq.ContentEditors.Samples.Models;
 using Lombiq.ContentEditors.Samples.ViewModels;
 using OrchardCore.ContentManagement.Display.ContentDisplay;
 using OrchardCore.ContentManagement.Display.Models;
-using OrchardCore.DisplayManagement.ModelBinding;
+using OrchardCore.DisplayManagement.Handlers;
 using OrchardCore.DisplayManagement.Views;
 using System.Threading.Tasks;
 
@@ -11,7 +11,7 @@ namespace Lombiq.ContentEditors.Samples.Drivers;
 
 // This is the driver for the SupportTicketPart. It'll generate and place editor shapes for the respective editor
 // groups.
-public class SupportTicketPartDisplayDriver : ContentPartDisplayDriver<SupportTicketPart>
+public sealed class SupportTicketPartDisplayDriver : ContentPartDisplayDriver<SupportTicketPart>
 {
     // The editor shapes are generated here. The shape is placed from here instead of using the placement.json file.
     public override IDisplayResult Edit(SupportTicketPart part, BuildPartEditorContext context) =>
@@ -27,23 +27,21 @@ public class SupportTicketPartDisplayDriver : ContentPartDisplayDriver<SupportTi
                 viewModel.Description = part.Description;
             }).OnGroup(EditorGroups.SupportTicket.Details).Location("Content"));
 
-    public override async Task<IDisplayResult> UpdateAsync(SupportTicketPart part, IUpdateModel updater, UpdatePartEditorContext context)
+    public override async Task<IDisplayResult> UpdateAsync(SupportTicketPart part, UpdatePartEditorContext context)
     {
         // It's a good idea to check what editor group is being updated. This way you can have different update logic
-        // for different editor groups and you won't update properties that aren't on the current editor group.
+        // for different editor groups, and you won't update properties that aren't on the current editor group.
         switch (context.GroupId)
         {
             case EditorGroups.SupportTicket.Reporter:
-                var reporterViewModel = new EditSupportTicketReporterViewModel();
-                await updater.TryUpdateModelAsync(reporterViewModel, Prefix);
+                var reporterViewModel = await context.CreateModelAsync<EditSupportTicketReporterViewModel>(Prefix);
 
                 part.Name = reporterViewModel.Name;
                 part.Email = reporterViewModel.Email;
 
                 break;
             case EditorGroups.SupportTicket.Details:
-                var detailsViewModel = new EditSupportTicketDetailsViewModel();
-                await updater.TryUpdateModelAsync(detailsViewModel, Prefix);
+                var detailsViewModel = await context.CreateModelAsync<EditSupportTicketDetailsViewModel>(Prefix);
 
                 part.Url = detailsViewModel.Url;
                 part.Description = detailsViewModel.Description;
