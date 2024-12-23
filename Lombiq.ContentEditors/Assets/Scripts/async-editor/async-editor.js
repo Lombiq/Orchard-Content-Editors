@@ -21,7 +21,7 @@ class AsyncEditorApiClient {
             if (!success) return;
 
             if (raiseEvent) {
-                const submittedEditorEvent = new CustomEvent('asyncEditorSubmittedEditor', {
+                const submittedEditorEvent = new CustomEvent("asyncEditorSubmittedEditor", {
                     bubbles: true,
                     cancelable: true,
                     detail: { asyncEditor: window.asyncEditor },
