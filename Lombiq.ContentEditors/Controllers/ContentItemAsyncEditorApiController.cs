@@ -130,7 +130,7 @@ public sealed class ContentItemAsyncEditorApiController : Controller
     }
 
     /// <summary>
-    /// Provides serialized JSON information during local development, but ony a generic error message in production.
+    /// Provides serialized JSON information during local development, but only a generic error message in production.
     /// It's useful to always return JSON, regardless whether the request succeeded or failed.
     /// </summary>
     private JsonResult Fail(object data) => Json(new
