@@ -18,7 +18,7 @@ public class ResourceManagementOptionsConfiguration : IConfigureOptions<Resource
             .SetUrl(
                 $"~/{Area}/vendors/vue-router/vue-router.min.js",
                 $"~/{Area}/vendors/vue-router/vue-router.js")
-            .SetVersion("3.5.3");
+            .SetVersion("3.6.5");
 
         _manifest
             .DefineScript(ResourceNames.AsyncEditor)
