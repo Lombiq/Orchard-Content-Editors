@@ -3,6 +3,7 @@ using Lombiq.ContentEditors.Samples.Services;
 using Lombiq.ContentEditors.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
 using OrchardCore.Modules;
 using System.Threading.Tasks;
 using static OrchardCore.Contents.CommonPermissions;
@@ -21,6 +22,7 @@ public sealed class FrontEndDemoContentItemAsyncEditorController : Controller
         _authorizationService = authorizationService;
 
     [HttpGet("{contentItemId?}")]
+    [ScriptUnsafeEval]
     public async Task<IActionResult> Index(string contentItemId)
     {
         if (!ModelState.IsValid) return BadRequest(ModelState);

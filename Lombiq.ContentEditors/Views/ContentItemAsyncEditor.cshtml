@@ -43,20 +43,20 @@
     }
 }
 
-<script asp-name="@ResourceNames.AsyncEditor" at="Foot"></script>
+@Orchard.GetScriptModuleImportMap()
 
 <shape type="AsyncEditor_Component_Editor"></shape>
 
 <div id="@elementId"></div>
 
-<script at="Foot" depends-on="@ResourceNames.AsyncEditor">
-    document.addEventListener("DOMContentLoaded", function() {
-        window.initAsyncEditor('@asyncEditorId', {
-            element: '#@elementId',
-            apiUrl: '@Href("~/" + Routes.ContentItemAsyncEditorApi)',
-            providerName: '@providerName',
-            contentType: '@contentType',
-            editorGroup: '@editorGroup',
-        });
+<script type="module" defer>
+    import { initAsyncEditor } from '@ResourceNames.AsyncEditor';
+
+    initAsyncEditor('@asyncEditorId', {
+        element: '#@elementId',
+        apiUrl: '@Href("~/" + Routes.ContentItemAsyncEditorApi)',
+        providerName: '@providerName',
+        contentType: '@contentType',
+        editorGroup: '@editorGroup',
     });
 </script>

@@ -9,14 +9,5 @@
     "watch": "npm explore nodejs-extensions -- pnpm watch"
   },
   "nodejsExtensions": {
-    "assetsToCopy": [
-      {
-        "sources": [
-          "node_modules/vue-router/dist"
-        ],
-        "pattern": "*",
-        "target": "wwwroot/vendors/vue-router"
-      }
-    ]
   }
 }
