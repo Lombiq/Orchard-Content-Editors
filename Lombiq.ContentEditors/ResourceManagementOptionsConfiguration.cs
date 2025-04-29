@@ -5,7 +5,7 @@ using static Lombiq.ContentEditors.Constants.FeatureIds;
 
 namespace Lombiq.ContentEditors;
 
-public partial class ResourceManagementOptionsConfiguration : IConfigureOptions<ResourceManagementOptions>
+public class ResourceManagementOptionsConfiguration : IConfigureOptions<ResourceManagementOptions>
 {
     private const string Root = $"~/{Area}/";
 
