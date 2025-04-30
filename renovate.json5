@@ -10,9 +10,5 @@
                 'vue*',
             ],
         },
-        {
-            "groupName": "All packages",
-            "matchUpdateTypes": ["*"],
-        },
     ],
 }
