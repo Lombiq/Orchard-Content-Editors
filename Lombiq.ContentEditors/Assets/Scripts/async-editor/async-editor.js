@@ -1,7 +1,7 @@
-/* global Vue */
-/* global VueRouter */
-
-if (!window.asyncEditor) window.asyncEditor = { editors: [] };
+/* eslint-disable import/no-unresolved -- ESLint does not know where to find external modules. */
+import { createApp, defineComponent } from 'vue';
+import { createRouter, createWebHistory } from 'vue-router';
+/* eslint-enable import/no-unresolved */
 
 class AsyncEditorApiClient {
     constructor(parameters) {
@@ -60,202 +60,193 @@ class AsyncEditorApiClient {
         if (editorGroup) query.editorGroup = editorGroup;
         if (nextEditorGroup) query.nextEditorGroup = nextEditorGroup;
         url.search = new URLSearchParams(query).toString();
-
         return url;
     }
 }
 
-const router = new VueRouter();
-
-// Making the Vue object more readable.
-// eslint-disable-next-line object-shorthand
-window.asyncEditor.editor = {
-    template: '#async-editor-template',
-    data() {
-        return {
-            asyncEditorId: '',
-            api: null,
-            message: '',
-            errorText: '',
-            errorJson: '',
-            contentId: '',
-            editorHtml: '',
-            validationSummaryHtml: '',
-            editorGroup: '',
-            editorGroups: [],
-            defaultErrorText: '',
-            scriptsHtml: '',
-        };
-    },
-    computed: {
-        progress(self) {
-            if (self.editorGroups.length < 1) return 0;
-            return (self.editorGroups.filter((group) => group.isFilled).length / self.editorGroups.length) * 100;
-        },
-        showProgressBar(self) {
-            return self.editorGroups.length > 1;
-        },
-    },
-    watch: {
-        '$route.query'() {
-            this.processQuery();
-        },
-    },
-    router,
-    updated() {
-        const self = this;
-        if (self.scriptsHtml) {
-            const scripts = new DOMParser()
-                .parseFromString(self.scriptsHtml, 'text/html')
-                .getElementsByTagName('script');
-            for (let i = 0; i < scripts.length; i++) {
-                const script = document.createElement('script');
-                script.text = scripts[i].text;
-                document.head.appendChild(script).parentNode.removeChild(script);
-            }
-
-            self.scriptsHtml = '';
-        }
-    },
-    methods: {
-        initEditor(parameters) {
-            const self = this;
-
-            self.api = new AsyncEditorApiClient(parameters);
-            self.contentId = parameters.contentId;
-            self.editorGroup = parameters.editorGroup;
-            self.defaultErrorText = parameters.defaultErrorText ?? 'Something went wrong.';
-            self.asyncEditorId = parameters.asyncEditorId;
-
-            if (!self.processQuery()) self.loadEditor();
-        },
-        loadEditor(editorGroup) {
-            const self = this;
-
-            self.editorGroup = editorGroup ?? self.editorGroup;
-
-            self.api.loadEditor(
-                self.contentId,
-                self.editorGroup,
-                (success, data) => { self.processApiData(success, data); });
-        },
-        submitEditor(nextEditorGroup) {
-            const self = this;
-            const submittingEditorEvent = new CustomEvent('asyncEditorSubmittingEditor', {
-                bubbles: true,
-                cancelable: true,
-                detail: { asyncEditor: window.asyncEditor },
-            });
-
-            const successful = document.dispatchEvent(submittingEditorEvent);
-            if (successful) {
-                self.api.submitEditor(
-                    self.contentId,
-                    self.editorGroup,
-                    nextEditorGroup,
-                    new FormData(self.$refs.editorForm),
-                    (success, data) => { self.processApiData(success, data); });
-            }
-        },
-        processApiData(success, data) {
-            const self = this;
-
-            if (success) {
-                const shouldUpdateQuery = self.contentId !== data.contentId || self.editorGroup !== data.editorGroup;
-
-                self.errorText = '';
-                self.validationSummaryHtml = data.validationSummaryHtml;
-                self.contentId = data.contentId;
-                self.editorHtml = data.editorHtml;
-                self.editorGroup = data.editorGroup;
-                self.editorGroups = data.editorGroups;
-                self.scriptsHtml = data.scriptsHtml;
-                self.message = data.message;
-
-                window.asyncEditor.editors[self.asyncEditorId].contentId = data.contentId;
-
-                if (shouldUpdateQuery) self.updateQuery();
-            }
-            else {
-                self.errorJson = JSON.stringify({ error: data, string: data.toString() });
-                self.errorText = self.defaultErrorText;
-            }
-        },
-        updateQuery() {
-            const self = this;
-
-            const query = { ...self.$route.query };
-            query[self.asyncEditorId + '.contentId'] = self.contentId;
-            query[self.asyncEditorId + '.editorGroup'] = self.editorGroup;
-
-            router.push({ path: '/', query: query });
-        },
-        processQuery() {
-            const self = this;
-
-            let shouldLoadEditor = false;
-
-            const contentIdKey = self.asyncEditorId + '.contentId';
-            if (Object.prototype.hasOwnProperty.call(self.$route.query, contentIdKey) &&
-                self.$route.query[contentIdKey] !== self.contentId) {
-                self.contentId = self.$route.query[contentIdKey];
-                shouldLoadEditor = true;
-            }
-
-            const editorGroupKey = self.asyncEditorId + '.editorGroup';
-            if (Object.prototype.hasOwnProperty.call(self.$route.query, editorGroupKey) &&
-                self.$route.query[editorGroupKey] !== self.editorGroup) {
-                self.editorGroup = self.$route.query[editorGroupKey];
-                shouldLoadEditor = true;
-            }
-
-            if (shouldLoadEditor) {
-                self.loadEditor();
-            }
-
-            return shouldLoadEditor;
-        },
-        isCurrentGroup(editorGroup) {
-            return editorGroup === this.editorGroup;
-        },
-        isFirstGroup(editorGroup) {
-            const self = this;
-
-            return self.editorGroups.at(0)?.name === (editorGroup ?? self.editorGroup);
-        },
-        isLastGroup(editorGroup) {
-            const self = this;
-
-            return self.editorGroups.at(-1)?.name === (editorGroup ?? self.editorGroup);
-        },
-        getPreviousEditor(editorGroup) {
-            const editorGroups = this.editorGroups.map((group) => group.name);
-            const index = editorGroups.indexOf(editorGroup ?? this.editorGroup);
-
-            return editorGroups[index - 1];
-        },
-        getNextEditor(editorGroup) {
-            const editorGroups = this.editorGroups.map((group) => group.name);
-            const index = editorGroups.indexOf(editorGroup ?? this.editorGroup);
-
-            return editorGroups[index + 1];
-        },
-    },
-};
-
-window.initAsyncEditor = (asyncEditorId, parameters) => {
+export default function initAsyncEditor(asyncEditorId, parameters) {
     if (!parameters) return;
 
-    window.asyncEditor.editors[asyncEditorId] = new Vue({
-        el: parameters.element,
-        data: { id: asyncEditorId },
+    if (!window.asyncEditor) window.asyncEditor = { editors: [] };
+
+    const basePath = window.location.pathname.split('?')[0];
+    const router = createRouter({
+        history: createWebHistory(basePath),
+        routes: [
+            {
+                path: '/:pathMatch(.*)*',
+                name: 'any',
+                component: {
+                    template: '<div></div>',
+                },
+            },
+        ],
+    });
+
+    const asyncEditorComponent = defineComponent({
+        template: '#async-editor-template',
+        data: function () {
+            return {
+                asyncEditorId: '',
+                api: null,
+                message: '',
+                errorText: '',
+                errorJson: '',
+                contentId: '',
+                editorHtml: '',
+                validationSummaryHtml: '',
+                editorGroup: '',
+                editorGroups: [],
+                defaultErrorText: '',
+                scriptsHtml: '',
+            };
+        },
+        computed: {
+            progress() {
+                return this.editorGroups.length < 1 ? 0 : (this.editorGroups.filter((g) => g.isFilled).length / this.editorGroups.length) * 100;
+            },
+            showProgressBar() {
+                return this.editorGroups.length > 1;
+            },
+        },
+        watch: {
+            '$route.query'() {
+                this.processQuery();
+            },
+        },
+        updated: function () {
+            if (this.scriptsHtml) {
+                const scripts = new DOMParser()
+                    .parseFromString(this.scriptsHtml, 'text/html')
+                    .getElementsByTagName('script');
+                for (let i = 0; i < scripts.length; i++) {
+                    const script = document.createElement('script');
+                    script.text = scripts[i].text;
+                    document.head.appendChild(script).parentNode.removeChild(script);
+                }
+                this.scriptsHtml = '';
+            }
+        },
+        methods: {
+            initEditor(editorParameters) {
+                this.api = new AsyncEditorApiClient(editorParameters);
+                this.contentId = editorParameters.contentId;
+                this.editorGroup = editorParameters.editorGroup;
+                this.defaultErrorText = editorParameters.defaultErrorText ?? 'Something went wrong.';
+                this.asyncEditorId = editorParameters.asyncEditorId;
+
+                if (!this.processQuery()) this.loadEditor();
+            },
+            loadEditor(editorGroup) {
+                this.editorGroup = editorGroup ?? this.editorGroup;
+                this.api.loadEditor(this.contentId, this.editorGroup, (success, data) => {
+                    this.processApiData(success, data);
+                });
+            },
+            submitEditor(nextEditorGroup) {
+                const submittingEditorEvent = new CustomEvent('asyncEditorSubmittingEditor', {
+                    bubbles: true,
+                    cancelable: true,
+                    detail: { asyncEditor: window.asyncEditor },
+                });
+
+                const successful = document.dispatchEvent(submittingEditorEvent);
+                if (successful) {
+                    this.api.submitEditor(
+                        this.contentId,
+                        this.editorGroup,
+                        nextEditorGroup,
+                        new FormData(this.$refs.editorForm),
+                        (success, data) => this.processApiData(success, data)
+                    );
+                }
+            },
+            processApiData(success, data) {
+                if (success) {
+                    const shouldUpdateQuery = this.contentId !== data.contentId || this.editorGroup !== data.editorGroup;
+
+                    this.errorText = '';
+                    this.validationSummaryHtml = data.validationSummaryHtml;
+                    this.contentId = data.contentId;
+                    this.editorHtml = data.editorHtml;
+                    this.editorGroup = data.editorGroup;
+                    this.editorGroups = data.editorGroups;
+                    this.scriptsHtml = data.scriptsHtml;
+                    this.message = data.message;
+
+                    window.asyncEditor.editors[this.asyncEditorId].contentId = data.contentId;
+
+                    if (shouldUpdateQuery) this.updateQuery();
+                }
+                else {
+                    this.errorJson = JSON.stringify({ error: data, string: data.toString() });
+                    this.errorText = this.defaultErrorText;
+                }
+            },
+            async updateQuery() {
+                const query = { ...this.$route.query };
+                query[this.asyncEditorId + '.contentId'] = this.contentId;
+                query[this.asyncEditorId + '.editorGroup'] = this.editorGroup;
+                await router.push({ query });
+            },
+            processQuery() {
+                let shouldLoadEditor = false;
+
+                const contentIdKey = this.asyncEditorId + '.contentId';
+                if (Object.prototype.hasOwnProperty.call(this.$route.query, contentIdKey) &&
+                    this.$route.query[contentIdKey] !== this.contentId) {
+                    this.contentId = this.$route.query[contentIdKey];
+                    shouldLoadEditor = true;
+                }
+
+                const editorGroupKey = this.asyncEditorId + '.editorGroup';
+                if (Object.prototype.hasOwnProperty.call(this.$route.query, editorGroupKey) &&
+                    this.$route.query[editorGroupKey] !== this.editorGroup) {
+                    this.editorGroup = this.$route.query[editorGroupKey];
+                    shouldLoadEditor = true;
+                }
+
+                if (shouldLoadEditor) this.loadEditor();
+                return shouldLoadEditor;
+            },
+            isCurrentGroup(editorGroup) {
+                return editorGroup === this.editorGroup;
+            },
+            isFirstGroup(editorGroup) {
+                return this.editorGroups.at(0)?.name === (editorGroup ?? this.editorGroup);
+            },
+            isLastGroup(editorGroup) {
+                return this.editorGroups.at(-1)?.name === (editorGroup ?? this.editorGroup);
+            },
+            getPreviousEditor(editorGroup) {
+                const editorGroups = this.editorGroups.map((group) => group.name);
+                const index = editorGroups.indexOf(editorGroup ?? this.editorGroup);
+                return editorGroups[index - 1];
+            },
+            getNextEditor(editorGroup) {
+                const editorGroups = this.editorGroups.map((group) => group.name);
+                const index = editorGroups.indexOf(editorGroup ?? this.editorGroup);
+                return editorGroups[index + 1];
+            },
+        },
+    });
+
+    const app = createApp({
+        data: function () {
+            return { id: asyncEditorId };
+        },
         mounted: function () {
             parameters.asyncEditorId = asyncEditorId;
             this.$refs.editor.initEditor(parameters);
         },
         components: {
-            'async-editor': window.asyncEditor.editor,
+            'async-editor': asyncEditorComponent,
         },
         template: '<async-editor ref="editor"></async-editor>',
     });
-};
+
+    app.use(router);
+    const vm = app.mount(parameters.element);
+
+    window.asyncEditor.editors[asyncEditorId] = vm;
+}
