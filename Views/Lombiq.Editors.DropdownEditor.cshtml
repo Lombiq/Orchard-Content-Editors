@@ -88,6 +88,11 @@
     <div class="@(DefaultBlockName)__selectContainer">
         @Html.DropDownList(viewModel.Name, viewModel.SelectList, dropdownAttributes)
     </div>
+
+    @if (!string.IsNullOrEmpty(viewModel.Hint))
+    {
+        <div class="editorHint @(BlockName) @(BlockName)__editorHint">@viewModel.Hint</div>
+    }
 </div>
 
 @if (hasParent)
