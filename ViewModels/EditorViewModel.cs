@@ -37,5 +37,10 @@
         /// Indicates whether the HTML field is Disabled.
         /// </summary>
         public bool Disabled { get; set; }
+
+        /// <summary>
+        /// Display Hint text as raw HTML.
+        /// </summary>
+        public bool HintAsRawHtml { get; set; }
     }
 }
