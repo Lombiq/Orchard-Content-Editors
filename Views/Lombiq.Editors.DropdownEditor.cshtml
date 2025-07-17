@@ -91,7 +91,16 @@
 
     @if (!string.IsNullOrEmpty(viewModel.Hint))
     {
-        <div class="editorHint @(BlockName) @(BlockName)__editorHint">@viewModel.Hint</div>
+        <div class="editorHint @(BlockName) @(BlockName)__editorHint">
+            @if (viewModel.HintAsRawHtml)
+            {
+                @Html.Raw(viewModel.Hint)
+            }
+            else
+            {
+                @viewModel.Hint
+            }
+        </div>
     }
 </div>
 
