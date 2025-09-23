@@ -23,6 +23,14 @@
         { "data-beforebuttontext", viewModel.Placeholder },
     });
 
+    if (Model.AdditionalAttributes != null)
+    {
+        foreach (var attribute in Model.AdditionalAttributes)
+        {
+            fileUploadAttributes[attribute.Key] = attribute.Value;
+        }
+    }
+
     var labelAttributes = new Dictionary<string, object>
     {
         { "class", "editorLabel " + DefaultBlockName + "__label" }
