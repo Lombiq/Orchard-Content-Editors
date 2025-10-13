@@ -1,7 +1,5 @@
-/* eslint-disable import/no-unresolved -- ESLint does not know where to find external modules. */
 import { createApp, defineComponent } from 'vue';
 import { createRouter, createWebHistory } from 'vue-router';
-/* eslint-enable import/no-unresolved */
 
 class AsyncEditorApiClient {
     constructor(parameters) {
