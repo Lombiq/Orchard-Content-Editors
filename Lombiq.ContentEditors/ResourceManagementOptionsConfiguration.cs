@@ -13,6 +13,7 @@ public class ResourceManagementOptionsConfiguration : IConfigureOptions<Resource
         _manifest
             .DefineScriptModule(ResourceNames.AsyncEditor)
             .SetUrl($"~/{Area}/js/async-editor.mjs")
+            .SetDependencies("vue-router")
             .SetVersion("2.0.0");
 
     public void Configure(ResourceManagementOptions options) => options.ResourceManifests.Add(_manifest);

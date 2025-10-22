@@ -3,6 +3,5 @@ namespace Lombiq.ContentEditors.Constants;
 public static class ResourceNames
 {
     private const string Base = FeatureIds.Area;
-    public const string AsyncEditor = Base + "." + nameof(AsyncEditor);
-    public const string VueRouter = Base + "." + nameof(VueRouter);
+    public const string AsyncEditor = $"{Base}.{nameof(AsyncEditor)}";
 }
