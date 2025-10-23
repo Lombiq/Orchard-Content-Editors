@@ -8,4 +8,11 @@
     <Right>lib/net8.0/Lombiq.ContentEditors.dll</Right>
     <IsBaselineSuppression>true</IsBaselineSuppression>
   </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0002</DiagnosticId>
+    <Target>F:Lombiq.ContentEditors.Constants.ResourceNames.VueRouter</Target>
+    <Left>lib/net8.0/Lombiq.ContentEditors.dll</Left>
+    <Right>lib/net8.0/Lombiq.ContentEditors.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
 </Suppressions>
