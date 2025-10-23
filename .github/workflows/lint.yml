@@ -13,5 +13,5 @@ jobs:
     uses: Lombiq/NodeJs-Extensions/.github/workflows/lint.yml@dev
     with:
       scripts:  >-
-        Lombiq.ContentEditors
+        Lombiq.ContentEditors,
         Lombiq.ContentEditors.Samples
