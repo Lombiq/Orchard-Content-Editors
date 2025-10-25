@@ -12,9 +12,8 @@ public class ResourceManagementOptionsConfiguration : IConfigureOptions<Resource
     static ResourceManagementOptionsConfiguration() =>
         _manifest
             .DefineScript(SampleAsyncEditorGroupScript)
-            .SetDependencies("jQuery")
-            .SetUrl($"~/{Area}/js/sample/sample.js")
-            .SetVersion("1.0.0");
+            .SetUrl($"~/{Area}/js/sample.js")
+            .SetVersion("2.0.0");
 
     public void Configure(ResourceManagementOptions options) => options.ResourceManifests.Add(_manifest);
 }
