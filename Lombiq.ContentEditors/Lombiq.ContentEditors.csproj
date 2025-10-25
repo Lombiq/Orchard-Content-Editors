@@ -49,7 +49,7 @@
 
   <ItemGroup Condition="'$(NuGetBuild)' == 'true'">
     <PackageReference Include="Lombiq.HelpfulLibraries.OrchardCore" Version="12.3.0" />
-    <PackageReference Include="Lombiq.NodeJs.Extensions" Version="2.2.1-alpha.2.osoe-1010" />
+    <PackageReference Include="Lombiq.NodeJs.Extensions" Version="3.0.0" />
     <PackageReference Include="Lombiq.VueJs" Version="8.0.0" />
   </ItemGroup>
 
