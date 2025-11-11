@@ -191,14 +191,14 @@ export default function initAsyncEditor(asyncEditorId, parameters) {
                 let shouldLoadEditor = false;
 
                 const contentIdKey = this.asyncEditorId + '.contentId';
-                if (Object.prototype.hasOwnProperty.call(this.$route.query, contentIdKey) &&
+                if (Object.hasOwn(this.$route.query, contentIdKey) &&
                     this.$route.query[contentIdKey] !== this.contentId) {
                     this.contentId = this.$route.query[contentIdKey];
                     shouldLoadEditor = true;
                 }
 
                 const editorGroupKey = this.asyncEditorId + '.editorGroup';
-                if (Object.prototype.hasOwnProperty.call(this.$route.query, editorGroupKey) &&
+                if (Object.hasOwn(this.$route.query, editorGroupKey) &&
                     this.$route.query[editorGroupKey] !== this.editorGroup) {
                     this.editorGroup = this.$route.query[editorGroupKey];
                     shouldLoadEditor = true;
