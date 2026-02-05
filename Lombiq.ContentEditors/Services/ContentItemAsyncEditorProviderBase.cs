@@ -151,7 +151,7 @@ public abstract class ContentItemAsyncEditorProviderBase<TProvider> : IAsyncEdit
 
     protected virtual void AddEditorShapeAlternates(AsyncEditorContext<ContentItem> context, IShape editorShape)
     {
-        editorShape.Metadata.Alternates.Add($"AsyncEditor_Content");
+        editorShape.Metadata.Alternates.Add("AsyncEditor_Content");
         editorShape.Metadata.Alternates.Add($"AsyncEditor_Content__{context.AsyncEditorId}");
         editorShape.Metadata.Alternates.Add($"AsyncEditor_Content__{context.EditorGroup}");
         editorShape.Metadata.Alternates.Add($"AsyncEditor_Content__{context.AsyncEditorId}__{context.EditorGroup}");
