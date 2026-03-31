@@ -8,7 +8,6 @@
   <Import Condition="'$(NuGetBuild)' == 'true'" Project="Sdk.props" Sdk="Lombiq.MSBuild.OrchardCore.Module.Sdk" Version="1.0.1-alpha.6.osoe-1208" />
 
   <PropertyGroup>
-    <IsLombiqProject>true</IsLombiqProject>
     <Title>Lombiq Content Editors for Orchard Core - Samples</Title>
     <CopyrightYear>2021</CopyrightYear>
     <DescriptionBody>Lombiq Content Editors for Orchard Core - Samples: Sample content that demonstrates the features of Lombiq Content Editors for Orchard Core.</DescriptionBody>
