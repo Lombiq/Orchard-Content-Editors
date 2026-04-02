@@ -1,0 +1,18 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".gitignore" />
+    <File Path="License.md" />
+    <File Path="Readme.md" />
+  </Folder>
+  <Folder Name="/Solution Items/.github/" />
+  <Folder Name="/Solution Items/.github/workflows/">
+    <File Path=".github/workflows/create-jira-issues-for-community-activities.yml" />
+    <File Path=".github/workflows/lint.yml" />
+    <File Path=".github/workflows/publish-nuget.yml" />
+    <File Path=".github/workflows/validate-nuget-publish.yml" />
+    <File Path=".github/workflows/validate-pull-request.yml" />
+  </Folder>
+  <Project Path="Lombiq.ContentEditors.Samples/Lombiq.ContentEditors.Samples.csproj" />
+  <Project Path="Lombiq.ContentEditors.Tests.UI/Lombiq.ContentEditors.Tests.UI.csproj" />
+  <Project Path="Lombiq.ContentEditors/Lombiq.ContentEditors.csproj" />
+</Solution>
