@@ -9,7 +9,7 @@
   <PropertyGroup>
     <Title>Lombiq Content Editors for Orchard Core</Title>
     <CopyrightYear>2021</CopyrightYear>
-    <DescriptionBody>Module for managing advanced content editing processes based on editor groups and asynchronous operations. See the project website for detailed documentation.</DescriptionBody>
+    <DescriptionBody>Module for managing advanced content editing processes based on editor groups and asynchronous operations.</DescriptionBody>
     <PackageTags>OrchardCore;Lombiq;AspNetCore;Editor;ContentEditor;AsyncEditor</PackageTags>
     <RepositoryUrl>https://github.com/Lombiq/Orchard-Content-Editors</RepositoryUrl>
   </PropertyGroup>
