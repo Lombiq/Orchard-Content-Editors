@@ -12,7 +12,7 @@ public class AsyncEditorPartIndexProvider : IndexProvider<ContentItem>
             .When(contentItem => contentItem.Has<AsyncEditorPart>())
             .Map(contentItem =>
             {
-                var asyncEditorPart = contentItem.As<AsyncEditorPart>();
+                var asyncEditorPart = contentItem.GetOrCreate<AsyncEditorPart>();
 
                 return asyncEditorPart?.FilledEditorGroups.SelectMany(
                     filledEditorGroup => filledEditorGroup.Value,
