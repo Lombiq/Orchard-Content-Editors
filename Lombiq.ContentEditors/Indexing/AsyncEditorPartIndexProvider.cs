@@ -14,7 +14,7 @@ public class AsyncEditorPartIndexProvider : IndexProvider<ContentItem>
             {
                 var asyncEditorPart = contentItem.GetOrCreate<AsyncEditorPart>();
 
-                return asyncEditorPart?.FilledEditorGroups.SelectMany(
+                return asyncEditorPart.FilledEditorGroups.SelectMany(
                     filledEditorGroup => filledEditorGroup.Value,
                     (filledEditorGroup, editorGroup) => new AsyncEditorPartIndex
                     {
