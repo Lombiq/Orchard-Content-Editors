@@ -4,23 +4,23 @@
   </PropertyGroup>
 
   <Import Condition="'$(NuGetBuild)' != 'true'" Project="../../../Utilities/Lombiq.MSBuild.Targets/Lombiq.MSBuild.OrchardCore.Module.Sdk/Sdk/Import.props" />
-  <Import Condition="'$(NuGetBuild)' == 'true'" Project="Sdk.props" Sdk="Lombiq.MSBuild.OrchardCore.Module.Sdk" Version="1.0.1-alpha.7.osoe-1208" />
+  <Import Condition="'$(NuGetBuild)' == 'true'" Project="Sdk.props" Sdk="Lombiq.MSBuild.OrchardCore.Module.Sdk" Version="1.0.1-alpha.10.osoe-1208" />
 
   <PropertyGroup>
     <Title>Lombiq Content Editors for Orchard Core</Title>
     <CopyrightYear>2021</CopyrightYear>
-    <DescriptionBody>Module for managing advanced content editing processes based on editor groups and asynchronous operations. See the project website for detailed documentation.</DescriptionBody>
+    <DescriptionBody>Module for managing advanced content editing processes based on editor groups and asynchronous operations.</DescriptionBody>
     <PackageTags>OrchardCore;Lombiq;AspNetCore;Editor;ContentEditor;AsyncEditor</PackageTags>
     <RepositoryUrl>https://github.com/Lombiq/Orchard-Content-Editors</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="OrchardCore.ContentFields" Version="3.0.0-preview-18960" />
-    <PackageReference Include="OrchardCore.ContentManagement" Version="3.0.0-preview-18960" />
-    <PackageReference Include="OrchardCore.ContentTypes.Abstractions" Version="3.0.0-preview-18960" />
-    <PackageReference Include="OrchardCore.DisplayManagement" Version="3.0.0-preview-18960" />
-    <PackageReference Include="OrchardCore.Media" Version="3.0.0-preview-18960" />
-    <PackageReference Include="OrchardCore.ResourceManagement" Version="3.0.0-preview-18960" />
+    <PackageReference Include="OrchardCore.ContentFields" Version="3.0.0-preview-18975" />
+    <PackageReference Include="OrchardCore.ContentManagement" Version="3.0.0-preview-18975" />
+    <PackageReference Include="OrchardCore.ContentTypes.Abstractions" Version="3.0.0-preview-18975" />
+    <PackageReference Include="OrchardCore.DisplayManagement" Version="3.0.0-preview-18975" />
+    <PackageReference Include="OrchardCore.Media" Version="3.0.0-preview-18975" />
+    <PackageReference Include="OrchardCore.ResourceManagement" Version="3.0.0-preview-18975" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(NuGetBuild)' != 'true'">
@@ -32,5 +32,5 @@
   </ItemGroup>
 
   <Import Condition="'$(NuGetBuild)' != 'true'" Project="../../../Utilities/Lombiq.MSBuild.Targets/Lombiq.MSBuild.OrchardCore.Module.Sdk/Sdk/Import.targets" />
-  <Import Condition="'$(NuGetBuild)' == 'true'" Project="Sdk.targets" Sdk="Lombiq.MSBuild.OrchardCore.Module.Sdk" Version="1.0.1-alpha.7.osoe-1208" />
+  <Import Condition="'$(NuGetBuild)' == 'true'" Project="Sdk.targets" Sdk="Lombiq.MSBuild.OrchardCore.Module.Sdk" Version="1.0.1-alpha.10.osoe-1208" />
 </Project>

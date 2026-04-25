@@ -1,16 +1,15 @@
 <Project>
-
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
   </PropertyGroup>
 
   <Import Condition="'$(NuGetBuild)' != 'true'" Project="../../../Utilities/Lombiq.MSBuild.Targets/Lombiq.MSBuild.OrchardCore.Module.Sdk/Sdk/Import.props" />
-  <Import Condition="'$(NuGetBuild)' == 'true'" Project="Sdk.props" Sdk="Lombiq.MSBuild.OrchardCore.Module.Sdk" Version="1.0.1-alpha.7.osoe-1208" />
+  <Import Condition="'$(NuGetBuild)' == 'true'" Project="Sdk.props" Sdk="Lombiq.MSBuild.OrchardCore.Module.Sdk" Version="1.0.1-alpha.10.osoe-1208" />
 
   <PropertyGroup>
     <Title>Lombiq Content Editors for Orchard Core - Samples</Title>
     <CopyrightYear>2021</CopyrightYear>
-    <DescriptionBody>Lombiq Content Editors for Orchard Core - Samples: Sample content that demonstrates the features of Lombiq Content Editors for Orchard Core.</DescriptionBody>
+    <DescriptionBody>Sample content that demonstrates the features of Lombiq Content Editors for Orchard Core.</DescriptionBody>
     <PackageTags>OrchardCore;Lombiq;AspNetCore;Editor;ContentEditor;AsyncEditor;Sample;Example;Training</PackageTags>
     <RepositoryUrl>https://github.com/Lombiq/Orchard-Content-Editors</RepositoryUrl>
     <PackageProjectUrl>https://github.com/Lombiq/Orchard-Content-Editors/tree/dev/Lombiq.ContentEditors.Samples</PackageProjectUrl>
@@ -21,6 +20,5 @@
   </ItemGroup>
 
   <Import Condition="'$(NuGetBuild)' != 'true'" Project="../../../Utilities/Lombiq.MSBuild.Targets/Lombiq.MSBuild.OrchardCore.Module.Sdk/Sdk/Import.targets" />
-  <Import Condition="'$(NuGetBuild)' == 'true'" Project="Sdk.targets" Sdk="Lombiq.MSBuild.OrchardCore.Module.Sdk" Version="1.0.1-alpha.7.osoe-1208" />
-
+  <Import Condition="'$(NuGetBuild)' == 'true'" Project="Sdk.targets" Sdk="Lombiq.MSBuild.OrchardCore.Module.Sdk" Version="1.0.1-alpha.10.osoe-1208" />
 </Project>
