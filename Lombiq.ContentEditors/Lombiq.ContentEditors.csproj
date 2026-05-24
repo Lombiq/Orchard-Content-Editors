@@ -15,12 +15,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="OrchardCore.ContentFields" Version="3.0.0-preview-19009" />
-    <PackageReference Include="OrchardCore.ContentManagement" Version="3.0.0-preview-19009" />
-    <PackageReference Include="OrchardCore.ContentTypes.Abstractions" Version="3.0.0-preview-19009" />
-    <PackageReference Include="OrchardCore.DisplayManagement" Version="3.0.0-preview-19009" />
-    <PackageReference Include="OrchardCore.Media" Version="3.0.0-preview-19009" />
-    <PackageReference Include="OrchardCore.ResourceManagement" Version="3.0.0-preview-19009" />
+    <PackageReference Include="OrchardCore.ContentFields" Version="3.0.0-preview-19023" />
+    <PackageReference Include="OrchardCore.ContentManagement" Version="3.0.0-preview-19023" />
+    <PackageReference Include="OrchardCore.ContentTypes.Abstractions" Version="3.0.0-preview-19023" />
+    <PackageReference Include="OrchardCore.DisplayManagement" Version="3.0.0-preview-19023" />
+    <PackageReference Include="OrchardCore.Media" Version="3.0.0-preview-19023" />
+    <PackageReference Include="OrchardCore.ResourceManagement" Version="3.0.0-preview-19023" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(NuGetBuild)' != 'true'">
