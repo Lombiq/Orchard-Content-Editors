@@ -24,12 +24,15 @@ public class ContentEditorsSamplesNavigationProvider : MainMenuNavigationProvide
     protected override void Build(NavigationBuilder builder)
     {
         var context = _hca.HttpContext;
+
+#pragma warning disable IDE0055 // Fix formatting, but the extra inline comments are helpful here.
         builder
             .Add(T["Content Editors Samples"], builder => builder
                 // It adds a menu item with a link to the front-end async editor demo page.
                 // Alternatively you can open the page using this URL: /FrontEndContentItemAsyncEditor
                 .Add(T["Support Ticket (front-end)"], itemBuilder => itemBuilder
-                    .ActionTask<FrontEndDemoContentItemAsyncEditorController>(context, controller => controller.Index(null)))
+                    .ActionTask<FrontEndDemoContentItemAsyncEditorController>(context, controller => controller
+                        .Index(contentItemId: null)))
                 // It adds a menu item with a link to the content item async editor demo page.
                 // Alternatively you can open the page using this URL: /Admin/ContentItemAsyncEditor/EmployeeAsyncEditorProvider/Employee
                 .Add(T["Employee (admin)"], itemBuilder => itemBuilder
@@ -38,8 +41,9 @@ public class ContentEditorsSamplesNavigationProvider : MainMenuNavigationProvide
                         controller => controller.Index(
                             nameof(EmployeeAsyncEditorProvider),
                             ContentTypes.Employee,
-                            null)))
+                            contentItemId: null)))
             );
+#pragma warning restore IDE0055 // Fix formatting.
     }
 }
 

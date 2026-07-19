@@ -30,6 +30,6 @@ public static class ContentExtensions
             content.Weld(new AsyncEditorPart());
         }
 
-        return content.As<AsyncEditorPart>();
+        return content.GetOrCreate<AsyncEditorPart>();
     }
 }
