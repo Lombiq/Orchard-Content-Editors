@@ -25,7 +25,6 @@ public class ContentEditorsSamplesNavigationProvider : MainMenuNavigationProvide
     {
         var context = _hca.HttpContext;
 
-#pragma warning disable IDE0055 // Fix formatting, but the extra inline comments are helpful here.
         builder
             .Add(T["Content Editors Samples"], builder => builder
                 // It adds a menu item with a link to the front-end async editor demo page.
@@ -43,7 +42,6 @@ public class ContentEditorsSamplesNavigationProvider : MainMenuNavigationProvide
                             ContentTypes.Employee,
                             contentItemId: null)))
             );
-#pragma warning restore IDE0055 // Fix formatting.
     }
 }
 
