@@ -6,6 +6,7 @@ using Lombiq.HelpfulLibraries.OrchardCore.Navigation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Localization;
 using OrchardCore.Navigation;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Lombiq.ContentEditors.Samples.Navigation;
 
@@ -21,28 +22,24 @@ public class ContentEditorsSamplesNavigationProvider : MainMenuNavigationProvide
     {
     }
 
-    protected override void Build(NavigationBuilder builder)
-    {
-        var context = _hca.HttpContext;
-
-        builder
-            .Add(T["Content Editors Samples"], builder => builder
-                // It adds a menu item with a link to the front-end async editor demo page.
-                // Alternatively you can open the page using this URL: /FrontEndContentItemAsyncEditor
-                .Add(T["Support Ticket (front-end)"], itemBuilder => itemBuilder
-                    .ActionTask<FrontEndDemoContentItemAsyncEditorController>(context, controller => controller
-                        .Index(contentItemId: null)))
-                // It adds a menu item with a link to the content item async editor demo page.
-                // Alternatively you can open the page using this URL: /Admin/ContentItemAsyncEditor/EmployeeAsyncEditorProvider/Employee
-                .Add(T["Employee (admin)"], itemBuilder => itemBuilder
-                    .Action<ContentItemAsyncEditorController>(
-                        _hca.HttpContext,
-                        controller => controller.Index(
-                            nameof(EmployeeAsyncEditorProvider),
-                            ContentTypes.Employee,
-                            contentItemId: null)))
-            );
-    }
+    [SuppressMessage("Style", "IDE0055:Fix formatting", Justification = "Needed for inline comments.")]
+    protected override void Build(NavigationBuilder builder) => builder
+        .Add(T["Content Editors Samples"], builder => builder
+            // It adds a menu item with a link to the front-end async editor demo page.
+            // Alternatively you can open the page using this URL: /FrontEndContentItemAsyncEditor
+            .Add(T["Support Ticket (front-end)"], itemBuilder => itemBuilder
+                .ActionTask<FrontEndDemoContentItemAsyncEditorController>(_hca.HttpContext, controller => controller
+                    .Index(contentItemId: null)))
+            // It adds a menu item with a link to the content item async editor demo page.
+            // Alternatively you can open the page using this URL: /Admin/ContentItemAsyncEditor/EmployeeAsyncEditorProvider/Employee
+            .Add(T["Employee (admin)"], itemBuilder => itemBuilder
+                .Action<ContentItemAsyncEditorController>(
+                    _hca.HttpContext,
+                    controller => controller.Index(
+                        nameof(EmployeeAsyncEditorProvider),
+                        ContentTypes.Employee,
+                        contentItemId: null)))
+        );
 }
 
 // END OF TRAINING SECTION: Content item async editor
